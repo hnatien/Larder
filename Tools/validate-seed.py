@@ -26,6 +26,7 @@ NUTRIENTS = {"energyKcal", "proteinG", "fatG", "saturatedFatG", "monounsaturated
              "sodiumMg", "potassiumMg", "calciumMg", "ironMg", "vitaminDMcg", "vitaminB12Mcg"}
 FOOD_KEYS = {"slug", "name", "source", "foodGroup", "tags", "allergens", "portions", "densityGPerMl",
              "per100g"}
+FDC_SOURCES = {"fdcFoundation", "srLegacy"}
 RECIPE_KEYS = {"slug", "title", "servings", "prepMinutes", "cookMinutes", "cuisine", "mealTypes",
                "equipment", "dietFlags", "ingredients", "steps"}
 INGREDIENT_KEYS = {"text", "quantity", "unit", "food", "optional", "garnish"}
@@ -48,11 +49,11 @@ def is_number(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool)
 
 
-def check_keys(slug, obj, allowed, where):
+def check_keys(slug, obj, allowed, where, optional=frozenset()):
     if not isinstance(obj, dict):
         fail(slug, where, "expected an object")
         return False
-    for k in sorted(set(obj) - allowed):
+    for k in sorted(set(obj) - allowed - optional):
         fail(slug, f"{where}.{k}" if where else k, "unexpected key")
     for k in sorted(allowed - set(obj)):
         fail(slug, f"{where}.{k}" if where else k, "missing key")
@@ -82,11 +83,18 @@ def check_slug(slug, seen, kind):
 
 def check_food(food):
     slug = food.get("slug", "?")
-    if not check_keys(slug, food, FOOD_KEYS, ""):
+    if not check_keys(slug, food, FOOD_KEYS, "", optional={"fdcId"}):
         return
     check_copy(slug, "name", food["name"])
     if food["source"] not in SOURCES:
         fail(slug, "source", f"invalid value {food['source']!r}")
+    fdc_id = food.get("fdcId")
+    if "fdcId" in food and (isinstance(fdc_id, bool) or not isinstance(fdc_id, int) or fdc_id <= 0):
+        fail(slug, "fdcId", "must be a positive integer")
+    if food["source"] in FDC_SOURCES and "fdcId" not in food:
+        fail(slug, "fdcId", f"required when source is {food['source']}")
+    if food["source"] == "seedApproximate" and "fdcId" in food:
+        fail(slug, "fdcId", "must be absent when source is seedApproximate")
     if food["foodGroup"] not in FOOD_GROUPS:
         fail(slug, "foodGroup", f"invalid value {food['foodGroup']!r}")
     if not isinstance(food["tags"], list) or any(t not in TAGS for t in food["tags"]):
@@ -121,10 +129,12 @@ def check_food(food):
     for k, v in per.items():
         if k not in NUTRIENTS:
             fail(slug, f"per100g.{k}", "unknown nutrient")
-        elif not is_number(v) or v < 0:
-            fail(slug, f"per100g.{k}", "must be a non-negative number")
-    if any(k in per and not is_number(per[k]) for k in per):
+        elif v is not None and (not is_number(v) or v < 0):
+            fail(slug, f"per100g.{k}", "must be null or a non-negative number")
+    if any(v is not None and not is_number(v) for v in per.values()):
         return
+    # null means the source has no value; the checks below only compare known amounts.
+    per = {k: v for k, v in per.items() if v is not None}
     kcal = per.get("energyKcal")
     if kcal is not None and not 0 <= kcal <= 900:
         fail(slug, "per100g.energyKcal", "outside 0-900")
@@ -134,17 +144,26 @@ def check_food(food):
     p, fat, c, fib = (per.get(k, 0) for k in ("proteinG", "fatG", "carbohydrateG", "fiberG"))
     if p + fat + c > 105:
         fail(slug, "per100g", f"protein+fat+carbohydrate is {p + fat + c:.1f} g, above 105")
-    if kcal is not None and all(k in per for k in ("proteinG", "fatG", "carbohydrateG")):
+    # FDC energy uses food-specific Atwater factors, which sit further from 4-9-4 for some foods (cayenne pepper is
+    # 15.4% under the fibre-adjusted estimate), and FDC measures sugars separately from carbohydrate by difference,
+    # so whole milk lists slightly more sugar than carbohydrate. Hand-entered values get the tighter limits.
+    from_fdc = food["source"] in FDC_SOURCES
+    energy_tolerance = 0.2 if from_fdc else 0.15
+    # Ethanol energy (7 kcal/g) is not a tracked nutrient, so alcoholic foods skip the energy check.
+    alcoholic = isinstance(food["tags"], list) and "alcohol" in food["tags"]
+    if kcal is not None and not alcoholic and all(k in per for k in ("proteinG", "fatG", "carbohydrateG")):
         plain = 4 * p + 9 * fat + 4 * c
         adjusted = 4 * p + 9 * fat + 4 * max(c - fib, 0) + 2 * fib
-        if not any(abs(kcal - e) <= max(0.15 * e, 12 if e <= 60 else 0) for e in (plain, adjusted)):
+        if not any(abs(kcal - e) <= max(energy_tolerance * e, 12 if e <= 60 else 0) for e in (plain, adjusted)):
             fail(slug, "per100g.energyKcal",
-                 f"{kcal} is not within 15% of 4p+9f+4c = {plain:.0f} (fibre-adjusted {adjusted:.0f})")
+                 f"{kcal} is not within {energy_tolerance:.0%} of 4p+9f+4c = {plain:.0f} (fibre-adjusted {adjusted:.0f})")
     for k, v in per.items():
         if k in ("saturatedFatG", "monounsaturatedFatG", "polyunsaturatedFatG") and "fatG" in per and v > per["fatG"] + 0.01:
             fail(slug, f"per100g.{k}", "exceeds total fat")
-        if k in ("totalSugarG", "addedSugarG", "fiberG") and "carbohydrateG" in per and v > per["carbohydrateG"] + 0.01:
-            fail(slug, f"per100g.{k}", "exceeds total carbohydrate")
+        if k in ("totalSugarG", "addedSugarG", "fiberG") and "carbohydrateG" in per:
+            slack = max(0.01, 0.05 * per["carbohydrateG"]) if from_fdc else 0.01
+            if v > per["carbohydrateG"] + slack:
+                fail(slug, f"per100g.{k}", "exceeds total carbohydrate")
 
 
 def check_ingredient(slug, i, ing, foods):

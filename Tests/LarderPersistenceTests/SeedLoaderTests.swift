@@ -23,9 +23,16 @@ struct SeedLoaderTests {
         try await loader.load(foodsJSON: Data(foods.utf8), recipesJSON: Data(recipes.utf8))
     }
 
-    private static func food(slug: String, foodGroup: String = "produce", extra: String = "") -> String {
+    /// `fdcID` is inserted as raw JSON, so a test can pass a malformed value.
+    private static func food(
+        slug: String,
+        foodGroup: String = "produce",
+        source: String = "seedApproximate",
+        fdcID: String? = nil,
+        extra: String = ""
+    ) -> String {
         """
-        { "slug": "\(slug)", "name": "\(slug)", "source": "seedApproximate", "foodGroup": "\(foodGroup)",
+        { "slug": "\(slug)", "name": "\(slug)", "source": "\(source)", \(fdcID.map { #""fdcId": \#($0), "# } ?? "")"foodGroup": "\(foodGroup)",
           "tags": [], "allergens": {}, "portions": [], "densityGPerMl": null, "per100g": { \(extra) } }
         """
     }
@@ -51,6 +58,7 @@ struct SeedLoaderTests {
         let chicken = try #require(try await foods.food(by: DeterministicID.foodID(slug: "chicken-breast")))
         #expect(chicken.name == "Chicken breast, raw")
         #expect(chicken.source == .seedApproximate)
+        #expect(chicken.fdcID == nil)
         #expect(chicken.foodGroup == .protein)
         #expect(chicken.portions == [Portion(label: "breast", grams: 170)])
         #expect(chicken.allergens.presence(of: .milk) == .verifiedFree)
@@ -58,6 +66,9 @@ struct SeedLoaderTests {
         #expect(chicken.nutrientsPer100g.proteinG == 22.5)
         #expect(chicken.nutrientsPer100g.carbohydrateG == 0)
         #expect(chicken.nutrientsPer100g.vitaminDMcg == nil)
+        let oliveOil = try #require(try await foods.food(by: DeterministicID.foodID(slug: "olive-oil")))
+        #expect(oliveOil.source == .srLegacy)
+        #expect(oliveOil.fdcID == 171413)
         let chickpeas = try #require(try await foods.food(by: DeterministicID.foodID(slug: "chickpeas-canned")))
         #expect(chickpeas.nutrientsPer100g.sodiumMg == nil)
         #expect(try await foods.search(text: "chick", limit: 10).count == 2)
@@ -141,6 +152,73 @@ struct SeedLoaderTests {
             try await load(recipes: #"{ "recipes": [\#(Self.recipe(slug: "soup", mealType: "brunch"))] }"#)
         }
         #expect(try await Fixtures.count("food", in: database) == 0)
+    }
+
+    @Test(arguments: FoodSource.allCases)
+    func everySourceNameLoadsAsItsCase(source: FoodSource) async throws {
+        _ = try await load(foods: #"{ "foods": [\#(Self.food(slug: "onion", source: source.rawValue))] }"#)
+        let onion = try #require(try await GRDBFoodRepository(database: database).food(by: DeterministicID.foodID(slug: "onion")))
+        #expect(onion.source == source)
+    }
+
+    @Test func unknownSourceIsRejected() async throws {
+        await #expect(throws: SeedError.invalidValue(slug: "onion", key: "source", value: "usda")) {
+            try await load(foods: #"{ "foods": [\#(Self.food(slug: "onion", source: "usda"))] }"#)
+        }
+    }
+
+    @Test(arguments: [("fdcFoundation", FoodSource.fdcFoundation, 2346393), ("srLegacy", .srLegacy, 170567)])
+    func fdcIdentifierIsStoredWithTheFood(source: String, expected: FoodSource, fdcID: Int) async throws {
+        _ = try await load(foods: #"{ "foods": [\#(Self.food(slug: "almonds", source: source, fdcID: String(fdcID)))] }"#)
+        let almonds = try #require(try await GRDBFoodRepository(database: database).food(by: DeterministicID.foodID(slug: "almonds")))
+        #expect(almonds.source == expected)
+        #expect(almonds.fdcID == fdcID)
+    }
+
+    @Test func approximateFoodLoadsWithoutAnFdcIdentifier() async throws {
+        _ = try await load(foods: #"{ "foods": [\#(Self.food(slug: "mixed-seeds", extra: #""energyKcal": 560"#))] }"#)
+        let seeds = try #require(try await GRDBFoodRepository(database: database).food(by: DeterministicID.foodID(slug: "mixed-seeds")))
+        #expect(seeds.source == .seedApproximate)
+        #expect(seeds.fdcID == nil)
+        #expect(seeds.nutrientsPer100g.energyKcal == 560)
+    }
+
+    @Test func nonIntegerFdcIdentifierIsMalformed() async throws {
+        await #expect {
+            try await load(foods: #"{ "foods": [\#(Self.food(slug: "onion", source: "srLegacy", fdcID: #""170000""#))] }"#)
+        } throws: { error in
+            guard case let SeedError.malformed(file, reason) = error else { return false }
+            return file == "seed-foods.json" && reason.contains("fdcId")
+        }
+        #expect(try await Fixtures.count("food", in: database) == 0)
+    }
+
+    /// The bundled seed decodes, resolves every recipe food, and stores each FDC identifier unchanged.
+    @Test func shippedSeedStoresEveryFdcIdentifier() async throws {
+        let directory = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appending(path: "App/Larder/Resources/Seed")
+        let foodsURL = directory.appending(path: "seed-foods.json")
+        let report = try await loader.load(foodsURL: foodsURL, recipesURL: directory.appending(path: "seed-recipes.json"))
+        #expect(report.unresolvedFoodSlugs.isEmpty)
+
+        let seeds = try JSONDecoder().decode(SeedFoodsFile.self, from: Data(contentsOf: foodsURL)).foods
+        let stored = try await GRDBFoodRepository(database: database).foods(byIDs: seeds.map { DeterministicID.foodID(slug: $0.slug) })
+        #expect(stored.count == seeds.count)
+        for (seed, food) in zip(seeds, stored) {
+            #expect(food.fdcID == seed.fdcId, "\(seed.slug)")
+            switch food.source {
+            case .fdcFoundation, .srLegacy:
+                #expect(food.fdcID != nil, "\(seed.slug)")
+                #expect(food.nutrientsPer100g.energyKcal != nil, "\(seed.slug)")
+            case .seedApproximate:
+                #expect(food.fdcID == nil, "\(seed.slug)")
+            case .fdcBranded, .offUnverified:
+                Issue.record("\(seed.slug) has source \(food.source), which the seed does not use")
+            }
+        }
     }
 
     @Test func unknownNutrientKeysAreRejected() async throws {

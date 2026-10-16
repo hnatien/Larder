@@ -9,6 +9,8 @@ struct SeedFood: Decodable {
     var slug: String
     var name: String
     var source: String
+    /// USDA FoodData Central identifier; present for `fdcFoundation` and `srLegacy` foods.
+    var fdcId: Int?
     var foodGroup: String
     var tags: [String]
     var allergens: [String: String]

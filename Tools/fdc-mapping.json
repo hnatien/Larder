@@ -1,0 +1,791 @@
+{
+  "policy": [
+    "Each seed food maps to one FDC food in the state the seed and its recipes use: raw unless the seed names a state, canned legumes drained, grains, pasta and dry legumes dry.",
+    "Foundation Foods is preferred. SR Legacy is used when Foundation has no matching food, or when the Foundation record lacks a nutrient the planner scores that SR has: energy, protein, fat, carbohydrate, sodium and potassium, fibre for plant foods, and saturated fat when total fat is 1 g or more.",
+    "A matching state outweighs completeness: black-beans-canned keeps Foundation without saturated fat because SR has no drained black beans.",
+    "When Foundation splits a generic seed food into cultivars, the clear market default is used (yellow onion, navel orange); otherwise SR's generic food is (apple, tomato).",
+    "Where enriched and unenriched grain products both exist, unenriched is used: enrichment is a US practice, so iron and B vitamins are a floor rather than a ceiling.",
+    "description is FDC's own description; Tools/import-fdc.py fails when it does not match the data, so a mistyped fdcId cannot pass.",
+    "A food with no defensible match has no dataset and keeps its seedApproximate values; unmatched gives the reason.",
+    "portions and densityGPerMl, when present, replace the seed's values; portionNote says why. Use them only for a gram weight FDC shows to be wrong."
+  ],
+  "foods": [
+    {
+      "slug": "onion",
+      "dataset": "foundation",
+      "fdcId": 790646,
+      "description": "Onions, yellow, raw",
+      "note": "Yellow onion is the everyday cooking onion; Foundation also lists red and white."
+    },
+    {
+      "slug": "garlic",
+      "dataset": "srLegacy",
+      "fdcId": 169230,
+      "description": "Garlic, raw",
+      "note": "Foundation 1104647 has no sodium, potassium, calcium or iron."
+    },
+    {
+      "slug": "carrot",
+      "dataset": "foundation",
+      "fdcId": 2258586,
+      "description": "Carrots, mature, raw",
+      "note": "Mature carrots, not baby carrots."
+    },
+    {
+      "slug": "celery",
+      "dataset": "srLegacy",
+      "fdcId": 169988,
+      "description": "Celery, raw",
+      "note": "Foundation 2346405 has no fibre."
+    },
+    {
+      "slug": "potato",
+      "dataset": "srLegacy",
+      "fdcId": 170026,
+      "description": "Potatoes, flesh and skin, raw",
+      "note": "The seed food is flesh and skin; Foundation lists only peeled russet, red and gold potatoes, and its raw-potato fibre (14.9 g for russet) counts resistant starch that cooking gelatinises."
+    },
+    {
+      "slug": "sweet-potato",
+      "dataset": "foundation",
+      "fdcId": 2346404,
+      "description": "Sweet potatoes, orange flesh, without skin, raw",
+      "note": "Orange-fleshed and peeled, the usual sweet potato."
+    },
+    {
+      "slug": "tomato",
+      "dataset": "srLegacy",
+      "fdcId": 170457,
+      "description": "Tomatoes, red, ripe, raw, year round average",
+      "note": "Foundation lists only roma and grape tomatoes; SR's year-round average of red ripe tomatoes matches a generic tomato and its medium and cherry portions."
+    },
+    {
+      "slug": "canned-tomatoes",
+      "dataset": "srLegacy",
+      "fdcId": 170051,
+      "description": "Tomatoes, red, ripe, canned, packed in tomato juice",
+      "note": "Chopped canned tomatoes are packed in juice; Foundation 333281 (diced) has no fibre."
+    },
+    {
+      "slug": "spinach",
+      "dataset": "foundation",
+      "fdcId": 1999632,
+      "description": "Spinach, baby",
+      "note": "Recipes call for baby spinach."
+    },
+    {
+      "slug": "kale",
+      "dataset": "srLegacy",
+      "fdcId": 168421,
+      "description": "Kale, raw",
+      "note": "Foundation 323505 repeats these values but has no saturated fat (1.5 g fat)."
+    },
+    {
+      "slug": "broccoli",
+      "dataset": "foundation",
+      "fdcId": 747447,
+      "description": "Broccoli, raw"
+    },
+    {
+      "slug": "cauliflower",
+      "dataset": "foundation",
+      "fdcId": 2685573,
+      "description": "Cauliflower, raw"
+    },
+    {
+      "slug": "bell-pepper",
+      "dataset": "foundation",
+      "fdcId": 2258590,
+      "description": "Peppers, bell, red, raw"
+    },
+    {
+      "slug": "courgette",
+      "dataset": "foundation",
+      "fdcId": 2685568,
+      "description": "Squash, summer, green, zucchini, includes skin, raw",
+      "note": "Courgette is zucchini."
+    },
+    {
+      "slug": "mushroom",
+      "dataset": "foundation",
+      "fdcId": 1999629,
+      "description": "Mushrooms, white button"
+    },
+    {
+      "slug": "cucumber",
+      "dataset": "srLegacy",
+      "fdcId": 168409,
+      "description": "Cucumber, with peel, raw",
+      "note": "Foundation 2346406 has no fibre."
+    },
+    {
+      "slug": "lettuce",
+      "dataset": "srLegacy",
+      "fdcId": 169247,
+      "description": "Lettuce, cos or romaine, raw",
+      "note": "Foundation 746769 has no sodium and 2346389 has no fibre."
+    },
+    {
+      "slug": "cabbage",
+      "dataset": "srLegacy",
+      "fdcId": 169975,
+      "description": "Cabbage, raw",
+      "note": "Foundation 2346407 has no fibre; SR's plain cabbage is green head cabbage."
+    },
+    {
+      "slug": "leek",
+      "dataset": "srLegacy",
+      "fdcId": 169246,
+      "description": "Leeks, (bulb and lower leaf-portion), raw",
+      "note": "Foundation 2727584 has no energy, fat or carbohydrate."
+    },
+    {
+      "slug": "green-beans",
+      "dataset": "foundation",
+      "fdcId": 2346400,
+      "description": "Beans, snap, green, raw"
+    },
+    {
+      "slug": "peas",
+      "dataset": "srLegacy",
+      "fdcId": 170016,
+      "description": "Peas, green, frozen, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "note": "The seed food is frozen peas; Foundation lists only canned peas."
+    },
+    {
+      "slug": "sweetcorn",
+      "dataset": "srLegacy",
+      "fdcId": 169998,
+      "description": "Corn, sweet, yellow, raw",
+      "note": "Foundation 2710826 has no saturated fat (1.6 g fat)."
+    },
+    {
+      "slug": "avocado",
+      "dataset": "srLegacy",
+      "fdcId": 171705,
+      "description": "Avocados, raw, all commercial varieties",
+      "note": "Foundation 2710824 (Hass) has no fibre or saturated fat."
+    },
+    {
+      "slug": "lemon",
+      "dataset": "srLegacy",
+      "fdcId": 167746,
+      "description": "Lemons, raw, without peel",
+      "note": "Whole lemon flesh, matching the seed food; recipes mostly use the juice, which SR lists separately (167747, less fibre)."
+    },
+    {
+      "slug": "lime",
+      "dataset": "srLegacy",
+      "fdcId": 168155,
+      "description": "Limes, raw",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "apple",
+      "dataset": "srLegacy",
+      "fdcId": 171688,
+      "description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+      "note": "Foundation splits apples into five cultivars; SR has the generic apple with skin."
+    },
+    {
+      "slug": "banana",
+      "dataset": "foundation",
+      "fdcId": 1105314,
+      "description": "Bananas, ripe and slightly ripe, raw"
+    },
+    {
+      "slug": "blueberries",
+      "dataset": "srLegacy",
+      "fdcId": 171711,
+      "description": "Blueberries, raw",
+      "note": "Foundation 2346411 has no fibre."
+    },
+    {
+      "slug": "orange",
+      "dataset": "foundation",
+      "fdcId": 746771,
+      "description": "Oranges, raw, navels",
+      "note": "Navel is the usual eating orange."
+    },
+    {
+      "slug": "ginger",
+      "dataset": "srLegacy",
+      "fdcId": 169231,
+      "description": "Ginger root, raw",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "chilli",
+      "dataset": "srLegacy",
+      "fdcId": 170106,
+      "description": "Peppers, hot chili, red, raw",
+      "note": "Foundation has only seeded jalapeno, serrano, poblano and wax peppers, no red chilli."
+    },
+    {
+      "slug": "parsley",
+      "dataset": "srLegacy",
+      "fdcId": 170416,
+      "description": "Parsley, fresh",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "coriander",
+      "dataset": "srLegacy",
+      "fdcId": 169997,
+      "description": "Coriander (cilantro) leaves, raw",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "basil",
+      "dataset": "srLegacy",
+      "fdcId": 172232,
+      "description": "Basil, fresh",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "mint",
+      "dataset": "srLegacy",
+      "fdcId": 173475,
+      "description": "Spearmint, fresh",
+      "note": "Culinary fresh mint is spearmint; the approximate values were peppermint (173474)."
+    },
+    {
+      "slug": "spring-onion",
+      "dataset": "srLegacy",
+      "fdcId": 170005,
+      "description": "Onions, spring or scallions (includes tops and bulb), raw",
+      "note": "Foundation 2727585 has no energy, fat or carbohydrate."
+    },
+    {
+      "slug": "aubergine",
+      "dataset": "foundation",
+      "fdcId": 2685577,
+      "description": "Eggplant, raw",
+      "note": "Aubergine is eggplant."
+    },
+    {
+      "slug": "white-rice",
+      "dataset": "srLegacy",
+      "fdcId": 169756,
+      "description": "Rice, white, long-grain, regular, raw, unenriched",
+      "note": "Foundation 2512381 has no saturated fat (1.0 g fat). Unenriched, since enrichment is a US practice; iron is then a floor."
+    },
+    {
+      "slug": "brown-rice",
+      "dataset": "srLegacy",
+      "fdcId": 169703,
+      "description": "Rice, brown, long-grain, raw (Includes foods for USDA's Food Distribution Program)",
+      "note": "Foundation 2512380 has no saturated fat (3.3 g fat)."
+    },
+    {
+      "slug": "pasta",
+      "dataset": "srLegacy",
+      "fdcId": 168927,
+      "description": "Pasta, dry, unenriched",
+      "note": "No Foundation entry. Unenriched, as for white rice."
+    },
+    {
+      "slug": "wholewheat-pasta",
+      "dataset": "srLegacy",
+      "fdcId": 169738,
+      "description": "Pasta, whole-wheat, dry (Includes foods for USDA's Food Distribution Program)",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "bread",
+      "dataset": "srLegacy",
+      "fdcId": 174924,
+      "description": "Bread, white, commercially prepared (includes soft bread crumbs)",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "wholegrain-bread",
+      "dataset": "srLegacy",
+      "fdcId": 172688,
+      "description": "Bread, whole-wheat, commercially prepared",
+      "note": "No Foundation entry; whole-wheat (wholemeal) bread is the closest SR food, multi-grain (168013) is a mix."
+    },
+    {
+      "slug": "tortilla",
+      "dataset": "srLegacy",
+      "fdcId": 167535,
+      "description": "Tortillas, ready-to-bake or -fry, flour, shelf stable",
+      "note": "No Foundation entry; shelf-stable packaged flour tortillas."
+    },
+    {
+      "slug": "pita",
+      "dataset": "srLegacy",
+      "fdcId": 172816,
+      "description": "Bread, pita, white, unenriched",
+      "note": "No Foundation entry. Unenriched, as for white rice."
+    },
+    {
+      "slug": "oats",
+      "dataset": "srLegacy",
+      "fdcId": 173904,
+      "description": "Cereals, oats, regular and quick, not fortified, dry",
+      "note": "Foundation 2346396 has no saturated fat (5.9 g fat).",
+      "portions": [
+        {
+          "grams": 81,
+          "label": "cup"
+        },
+        {
+          "grams": 40,
+          "label": "serving"
+        }
+      ],
+      "densityGPerMl": 0.34,
+      "portionNote": "The seed had 98 g per cup (density 0.41). SR 173904 weighs a cup of rolled oats at 81 g, which agrees with the seed's own 40 g half-cup serving; density follows as 81 g per 236.6 ml."
+    },
+    {
+      "slug": "quinoa",
+      "dataset": "srLegacy",
+      "fdcId": 168874,
+      "description": "Quinoa, uncooked",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "couscous",
+      "dataset": "srLegacy",
+      "fdcId": 169699,
+      "description": "Couscous, dry",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "flour",
+      "dataset": "srLegacy",
+      "fdcId": 169761,
+      "description": "Wheat flour, white, all-purpose, unenriched",
+      "note": "Foundation 790018 has no saturated fat (1.7 g fat). Unenriched, as for white rice."
+    },
+    {
+      "slug": "breadcrumbs",
+      "dataset": "srLegacy",
+      "fdcId": 174928,
+      "description": "Bread, crumbs, dry, grated, plain",
+      "note": "No Foundation entry; plain, not seasoned."
+    },
+    {
+      "slug": "rice-noodles",
+      "dataset": "srLegacy",
+      "fdcId": 169742,
+      "description": "Rice noodles, dry",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "egg-noodles",
+      "dataset": "srLegacy",
+      "fdcId": 169755,
+      "description": "Noodles, egg, dry, unenriched",
+      "note": "No Foundation entry. Unenriched, as for white rice."
+    },
+    {
+      "slug": "chicken-breast",
+      "dataset": "foundation",
+      "fdcId": 2646170,
+      "description": "Chicken, breast, boneless, skinless, raw"
+    },
+    {
+      "slug": "chicken-thigh",
+      "dataset": "foundation",
+      "fdcId": 2646171,
+      "description": "Chicken, thigh, boneless, skinless, raw"
+    },
+    {
+      "slug": "minced-beef",
+      "dataset": "srLegacy",
+      "fdcId": 171796,
+      "description": "Beef, ground, 85% lean meat / 15% fat, raw (Includes foods for USDA's Food Distribution Program)",
+      "note": "Foundation has 80/20 and 90/10 ground beef but not 85/15."
+    },
+    {
+      "slug": "pork-loin",
+      "dataset": "foundation",
+      "fdcId": 2646168,
+      "description": "Pork, loin, boneless, raw",
+      "note": "Boneless loin as sold, lean and fat; the approximate values were SR lean only."
+    },
+    {
+      "slug": "salmon",
+      "dataset": "foundation",
+      "fdcId": 2684441,
+      "description": "Fish, salmon, Atlantic, farm raised, raw",
+      "note": "Farmed Atlantic salmon, the usual fillet. This record has no vitamin D."
+    },
+    {
+      "slug": "white-fish",
+      "dataset": "foundation",
+      "fdcId": 2684444,
+      "description": "Fish, cod, Atlantic, wild caught, raw",
+      "note": "Atlantic cod."
+    },
+    {
+      "slug": "canned-tuna",
+      "dataset": "foundation",
+      "fdcId": 334194,
+      "description": "Fish, tuna, light, canned in water, drained solids"
+    },
+    {
+      "slug": "prawns",
+      "dataset": "foundation",
+      "fdcId": 2684443,
+      "description": "Crustaceans, shrimp, farm raised, raw",
+      "note": "Farmed raw shrimp, the usual retail prawn. Its sodium (475 mg) is four times SR's 119 mg."
+    },
+    {
+      "slug": "eggs",
+      "dataset": "foundation",
+      "fdcId": 748967,
+      "description": "Eggs, Grade A, Large, egg whole",
+      "note": "Large whole egg."
+    },
+    {
+      "slug": "tofu",
+      "dataset": "srLegacy",
+      "fdcId": 172475,
+      "description": "Tofu, raw, firm, prepared with calcium sulfate",
+      "note": "No Foundation entry; firm tofu set with calcium sulfate (the nigari entry 172448 is a softer, lower-protein tofu)."
+    },
+    {
+      "slug": "tempeh",
+      "dataset": "srLegacy",
+      "fdcId": 174272,
+      "description": "Tempeh",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "milk",
+      "dataset": "foundation",
+      "fdcId": 746782,
+      "description": "Milk, whole, 3.25% milkfat, with added vitamin D"
+    },
+    {
+      "slug": "yoghurt",
+      "dataset": "foundation",
+      "fdcId": 2259793,
+      "description": "Yogurt, plain, whole milk"
+    },
+    {
+      "slug": "greek-yoghurt",
+      "dataset": "srLegacy",
+      "fdcId": 170903,
+      "description": "Yogurt, Greek, plain, lowfat",
+      "note": "Foundation has only nonfat and whole-milk Greek yoghurt."
+    },
+    {
+      "slug": "cheddar",
+      "dataset": "foundation",
+      "fdcId": 328637,
+      "description": "Cheese, cheddar"
+    },
+    {
+      "slug": "feta",
+      "dataset": "foundation",
+      "fdcId": 2259796,
+      "description": "Cheese, feta, whole milk, crumbled"
+    },
+    {
+      "slug": "parmesan",
+      "dataset": "foundation",
+      "fdcId": 2259795,
+      "description": "Cheese, parmesan, grated, refrigerated",
+      "note": "Grated parmesan from the chiller; Foundation 325036 is the shelf-stable grated kind with 12 g carbohydrate."
+    },
+    {
+      "slug": "mozzarella",
+      "dataset": "srLegacy",
+      "fdcId": 170845,
+      "description": "Cheese, mozzarella, whole milk",
+      "note": "Fresh whole-milk mozzarella, as the ball portion implies; Foundation has only low-moisture part-skim."
+    },
+    {
+      "slug": "butter",
+      "dataset": "srLegacy",
+      "fdcId": 173430,
+      "description": "Butter, without salt",
+      "note": "Foundation 789828 has no energy, protein or carbohydrate."
+    },
+    {
+      "slug": "cream",
+      "unmatched": "FDC has no double cream (about 48% fat). Heavy cream (Foundation 2346386, SR 170859) has about 36% fat and would understate fat and energy by a quarter; the approximate values are SR heavy cream."
+    },
+    {
+      "slug": "olive-oil",
+      "dataset": "srLegacy",
+      "fdcId": 171413,
+      "description": "Oil, olive, salad or cooking",
+      "note": "Foundation 748608 lists fatty acids only, with no energy."
+    },
+    {
+      "slug": "vegetable-oil",
+      "dataset": "srLegacy",
+      "fdcId": 172336,
+      "description": "Oil, canola",
+      "note": "Canola (rapeseed) oil, the usual vegetable oil in the UK; US vegetable oil is often soybean (171411). Foundation 748278 has no energy."
+    },
+    {
+      "slug": "sesame-oil",
+      "dataset": "srLegacy",
+      "fdcId": 171016,
+      "description": "Oil, sesame, salad or cooking",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "tahini",
+      "dataset": "srLegacy",
+      "fdcId": 170189,
+      "description": "Seeds, sesame butter, tahini, from roasted and toasted kernels (most common type)",
+      "note": "No Foundation entry; roasted, the most common type."
+    },
+    {
+      "slug": "peanut-butter",
+      "dataset": "foundation",
+      "fdcId": 2262072,
+      "description": "Peanut butter, creamy",
+      "note": "Creamy is smooth peanut butter."
+    },
+    {
+      "slug": "almonds",
+      "dataset": "foundation",
+      "fdcId": 2346393,
+      "description": "Nuts, almonds, whole, raw"
+    },
+    {
+      "slug": "walnuts",
+      "dataset": "foundation",
+      "fdcId": 2346394,
+      "description": "Nuts, walnuts, English, halves, raw"
+    },
+    {
+      "slug": "mixed-seeds",
+      "unmatched": "A blend: FDC lists sunflower (170562) and pumpkin (170556) kernels but no mix, and the seed does not fix the ratio."
+    },
+    {
+      "slug": "sesame-seeds",
+      "dataset": "srLegacy",
+      "fdcId": 170150,
+      "description": "Seeds, sesame seeds, whole, dried",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "chickpeas-canned",
+      "dataset": "srLegacy",
+      "fdcId": 173800,
+      "description": "Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained solids",
+      "note": "Drained solids. Foundation 2644288 has no saturated fat (3.1 g fat)."
+    },
+    {
+      "slug": "black-beans-canned",
+      "dataset": "foundation",
+      "fdcId": 2644285,
+      "description": "Beans, black, canned, sodium added, drained and rinsed",
+      "note": "Drained and rinsed. It has no saturated fat (1.3 g fat), but SR has no drained black beans, only solids and liquid."
+    },
+    {
+      "slug": "kidney-beans-canned",
+      "dataset": "srLegacy",
+      "fdcId": 174285,
+      "description": "Beans, kidney, red, mature seeds, canned, drained solids",
+      "note": "Drained solids. Foundation 2644289 and 2644290 have no saturated fat (1.3 g fat)."
+    },
+    {
+      "slug": "lentils-dry",
+      "dataset": "srLegacy",
+      "fdcId": 172420,
+      "description": "Lentils, raw",
+      "note": "Foundation 2644283 has no fibre or saturated fat."
+    },
+    {
+      "slug": "red-lentils-dry",
+      "dataset": "srLegacy",
+      "fdcId": 174284,
+      "description": "Lentils, pink or red, raw",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "baked-beans",
+      "dataset": "srLegacy",
+      "fdcId": 175182,
+      "description": "Beans, baked, canned, plain or vegetarian",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "hummus",
+      "dataset": "foundation",
+      "fdcId": 321358,
+      "description": "Hummus, commercial"
+    },
+    {
+      "slug": "soy-sauce",
+      "dataset": "srLegacy",
+      "fdcId": 174277,
+      "description": "Soy sauce made from soy and wheat (shoyu)",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "chicken-stock",
+      "dataset": "srLegacy",
+      "fdcId": 174536,
+      "description": "Soup, chicken broth, ready-to-serve",
+      "note": "No Foundation entry; ready-to-serve chicken broth."
+    },
+    {
+      "slug": "vegetable-stock",
+      "dataset": "srLegacy",
+      "fdcId": 171583,
+      "description": "Soup, vegetable broth, ready to serve",
+      "note": "No Foundation entry; ready-to-serve vegetable broth."
+    },
+    {
+      "slug": "coconut-milk-canned",
+      "dataset": "srLegacy",
+      "fdcId": 170173,
+      "description": "Nuts, coconut milk, canned (liquid expressed from grated meat and water)",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "honey",
+      "dataset": "srLegacy",
+      "fdcId": 169640,
+      "description": "Honey",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "sugar",
+      "dataset": "srLegacy",
+      "fdcId": 169655,
+      "description": "Sugars, granulated",
+      "note": "Foundation 746784 has no fibre or saturated fat values; SR gives zeros."
+    },
+    {
+      "slug": "salt",
+      "dataset": "srLegacy",
+      "fdcId": 173468,
+      "description": "Salt, table",
+      "note": "Foundation 746775 has minerals only, no energy or macronutrients."
+    },
+    {
+      "slug": "black-pepper",
+      "dataset": "srLegacy",
+      "fdcId": 170931,
+      "description": "Spices, pepper, black",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "cumin",
+      "dataset": "srLegacy",
+      "fdcId": 170923,
+      "description": "Spices, cumin seed",
+      "note": "No Foundation entry; ground cumin is ground cumin seed."
+    },
+    {
+      "slug": "paprika",
+      "dataset": "srLegacy",
+      "fdcId": 171329,
+      "description": "Spices, paprika",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "curry-powder",
+      "dataset": "srLegacy",
+      "fdcId": 170924,
+      "description": "Spices, curry powder",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "turmeric",
+      "dataset": "srLegacy",
+      "fdcId": 172231,
+      "description": "Spices, turmeric, ground",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "oregano",
+      "dataset": "srLegacy",
+      "fdcId": 171328,
+      "description": "Spices, oregano, dried",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "cinnamon",
+      "dataset": "srLegacy",
+      "fdcId": 171320,
+      "description": "Spices, cinnamon, ground",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "chilli-flakes",
+      "dataset": "srLegacy",
+      "fdcId": 170932,
+      "description": "Spices, pepper, red or cayenne",
+      "note": "No Foundation entry; chilli flakes are crushed dried red chilli, which FDC lists as red or cayenne pepper."
+    },
+    {
+      "slug": "vinegar",
+      "unmatched": "FDC has no white wine vinegar. Red wine vinegar (SR 172240) is the nearest food and the approximate values follow it."
+    },
+    {
+      "slug": "mustard",
+      "dataset": "foundation",
+      "fdcId": 326698,
+      "description": "Mustard, prepared, yellow",
+      "note": "Prepared yellow mustard; FDC has no Dijon or English mustard."
+    },
+    {
+      "slug": "mayonnaise",
+      "dataset": "srLegacy",
+      "fdcId": 171009,
+      "description": "Salad dressing, mayonnaise, regular",
+      "note": "No Foundation entry; regular full-fat mayonnaise."
+    },
+    {
+      "slug": "ketchup",
+      "dataset": "srLegacy",
+      "fdcId": 168556,
+      "description": "Catsup",
+      "note": "Foundation 747693 was sampled in restaurants and has no fibre; SR catsup is retail ketchup."
+    },
+    {
+      "slug": "miso",
+      "dataset": "srLegacy",
+      "fdcId": 172442,
+      "description": "Miso",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "fish-sauce",
+      "dataset": "srLegacy",
+      "fdcId": 174531,
+      "description": "Sauce, fish, ready-to-serve",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "worcestershire-sauce",
+      "dataset": "srLegacy",
+      "fdcId": 171610,
+      "description": "Sauce, worcestershire",
+      "note": "No Foundation entry."
+    },
+    {
+      "slug": "tomato-paste",
+      "dataset": "foundation",
+      "fdcId": 2685580,
+      "description": "Tomato, paste, canned, without salt added"
+    },
+    {
+      "slug": "white-wine",
+      "dataset": "srLegacy",
+      "fdcId": 174837,
+      "description": "Alcoholic beverage, wine, table, white",
+      "note": "No Foundation entry; generic dry white table wine."
+    },
+    {
+      "slug": "water",
+      "dataset": "srLegacy",
+      "fdcId": 173647,
+      "description": "Beverages, water, tap, drinking",
+      "note": "No Foundation entry; tap drinking water."
+    }
+  ]
+}

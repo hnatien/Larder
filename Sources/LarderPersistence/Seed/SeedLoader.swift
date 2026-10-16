@@ -140,7 +140,7 @@ public struct SeedLoader: Sendable {
             id: DeterministicID.foodID(slug: seed.slug).rawValue,
             name: seed.name,
             source: try parse(seed.source, slug: seed.slug, key: "source"),
-            fdcID: nil,
+            fdcID: seed.fdcId,
             gtin: nil,
             nutrientsPer100g: nutrients,
             portions: seed.portions.map { Portion(label: $0.label, grams: $0.grams) },

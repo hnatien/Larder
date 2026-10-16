@@ -19,20 +19,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 790646,
       "foodGroup": "produce",
       "name": "Onion, raw",
       "per100g": {
-        "calciumMg": 23,
-        "carbohydrateG": 9.3,
-        "energyKcal": 40,
-        "fatG": 0.1,
-        "fiberG": 1.7,
-        "ironMg": 0.2,
-        "potassiumMg": 146,
-        "proteinG": 1.1,
-        "saturatedFatG": 0,
-        "sodiumMg": 4,
-        "totalSugarG": 4.2
+        "addedSugarG": null,
+        "calciumMg": 15,
+        "carbohydrateG": 8.61,
+        "energyKcal": 38,
+        "fatG": 0.05,
+        "fiberG": 1.9,
+        "ironMg": 0.28,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 182,
+        "proteinG": 0.83,
+        "saturatedFatG": null,
+        "sodiumMg": 1,
+        "totalSugarG": 5.82,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -45,7 +51,7 @@
         }
       ],
       "slug": "onion",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -67,20 +73,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169230,
       "foodGroup": "produce",
       "name": "Garlic, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 181,
-        "carbohydrateG": 33,
+        "carbohydrateG": 33.1,
         "energyKcal": 149,
         "fatG": 0.5,
         "fiberG": 2.1,
         "ironMg": 1.7,
+        "monounsaturatedFatG": 0.011,
+        "polyunsaturatedFatG": 0.249,
         "potassiumMg": 401,
-        "proteinG": 6.4,
-        "saturatedFatG": 0.1,
+        "proteinG": 6.36,
+        "saturatedFatG": 0.089,
         "sodiumMg": 17,
-        "totalSugarG": 1
+        "totalSugarG": 1,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -93,7 +105,7 @@
         }
       ],
       "slug": "garlic",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -115,20 +127,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2258586,
       "foodGroup": "produce",
       "name": "Carrot, raw",
       "per100g": {
-        "calciumMg": 33,
-        "carbohydrateG": 9.6,
-        "energyKcal": 41,
-        "fatG": 0.2,
-        "fiberG": 2.8,
-        "ironMg": 0.3,
-        "potassiumMg": 320,
-        "proteinG": 0.9,
-        "saturatedFatG": 0,
-        "sodiumMg": 69,
-        "totalSugarG": 4.7
+        "addedSugarG": null,
+        "calciumMg": 30.5,
+        "carbohydrateG": 10.3,
+        "energyKcal": 45,
+        "fatG": 0.351,
+        "fiberG": 3.1,
+        "ironMg": 0.15,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 280,
+        "proteinG": 0.941,
+        "saturatedFatG": null,
+        "sodiumMg": 86.6,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -141,7 +159,7 @@
         }
       ],
       "slug": "carrot",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -163,20 +181,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169988,
       "foodGroup": "produce",
       "name": "Celery, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 40,
-        "carbohydrateG": 3,
-        "energyKcal": 16,
-        "fatG": 0.2,
+        "carbohydrateG": 2.97,
+        "energyKcal": 14,
+        "fatG": 0.17,
         "fiberG": 1.6,
         "ironMg": 0.2,
+        "monounsaturatedFatG": 0.032,
+        "polyunsaturatedFatG": 0.079,
         "potassiumMg": 260,
-        "proteinG": 0.7,
-        "saturatedFatG": 0,
+        "proteinG": 0.69,
+        "saturatedFatG": 0.042,
         "sodiumMg": 80,
-        "totalSugarG": 1.3
+        "totalSugarG": 1.34,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -189,7 +213,7 @@
         }
       ],
       "slug": "celery",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -211,20 +235,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170026,
       "foodGroup": "produce",
       "name": "Potato, raw, flesh and skin",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 12,
-        "carbohydrateG": 17,
+        "carbohydrateG": 17.5,
         "energyKcal": 77,
-        "fatG": 0.1,
-        "fiberG": 2.2,
-        "ironMg": 0.8,
-        "potassiumMg": 421,
-        "proteinG": 2,
-        "saturatedFatG": 0,
+        "fatG": 0.09,
+        "fiberG": 2.1,
+        "ironMg": 0.81,
+        "monounsaturatedFatG": 0.002,
+        "polyunsaturatedFatG": 0.042,
+        "potassiumMg": 425,
+        "proteinG": 2.05,
+        "saturatedFatG": 0.025,
         "sodiumMg": 6,
-        "totalSugarG": 0.8
+        "totalSugarG": 0.82,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -237,7 +267,7 @@
         }
       ],
       "slug": "potato",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -259,20 +289,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2346404,
       "foodGroup": "produce",
       "name": "Sweet potato, raw",
       "per100g": {
-        "calciumMg": 30,
-        "carbohydrateG": 20,
-        "energyKcal": 86,
-        "fatG": 0.1,
-        "fiberG": 3,
-        "ironMg": 0.6,
-        "potassiumMg": 337,
-        "proteinG": 1.6,
-        "saturatedFatG": 0,
-        "sodiumMg": 55,
-        "totalSugarG": 4.2
+        "addedSugarG": null,
+        "calciumMg": 22.3,
+        "carbohydrateG": 17.3,
+        "energyKcal": 77.4,
+        "fatG": 0.375,
+        "fiberG": 4.44,
+        "ironMg": 0.398,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 486,
+        "proteinG": 1.58,
+        "saturatedFatG": null,
+        "sodiumMg": 0,
+        "totalSugarG": 6.06,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -285,7 +321,7 @@
         }
       ],
       "slug": "sweet-potato",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -307,20 +343,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170457,
       "foodGroup": "produce",
       "name": "Tomato, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 10,
-        "carbohydrateG": 3.9,
+        "carbohydrateG": 3.89,
         "energyKcal": 18,
         "fatG": 0.2,
         "fiberG": 1.2,
-        "ironMg": 0.3,
+        "ironMg": 0.27,
+        "monounsaturatedFatG": 0.031,
+        "polyunsaturatedFatG": 0.083,
         "potassiumMg": 237,
-        "proteinG": 0.9,
-        "saturatedFatG": 0,
+        "proteinG": 0.88,
+        "saturatedFatG": 0.028,
         "sodiumMg": 5,
-        "totalSugarG": 2.6
+        "totalSugarG": 2.63,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -337,7 +379,7 @@
         }
       ],
       "slug": "tomato",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -359,20 +401,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.0,
+      "fdcId": 170051,
       "foodGroup": "produce",
       "name": "Tomatoes, canned, chopped",
       "per100g": {
-        "calciumMg": 32,
-        "carbohydrateG": 4.3,
-        "energyKcal": 21,
-        "fatG": 0.2,
-        "fiberG": 1.4,
-        "ironMg": 0.8,
-        "potassiumMg": 230,
-        "proteinG": 1.1,
-        "saturatedFatG": 0,
-        "sodiumMg": 130,
-        "totalSugarG": 2.9
+        "addedSugarG": null,
+        "calciumMg": 33,
+        "carbohydrateG": 3.47,
+        "energyKcal": 16,
+        "fatG": 0.25,
+        "fiberG": 1.9,
+        "ironMg": 0.57,
+        "monounsaturatedFatG": 0.04,
+        "polyunsaturatedFatG": 0.101,
+        "potassiumMg": 191,
+        "proteinG": 0.79,
+        "saturatedFatG": 0.034,
+        "sodiumMg": 115,
+        "totalSugarG": 2.55,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -385,7 +433,7 @@
         }
       ],
       "slug": "canned-tomatoes",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -407,20 +455,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 1999632,
       "foodGroup": "produce",
       "name": "Spinach, raw",
       "per100g": {
-        "calciumMg": 99,
-        "carbohydrateG": 3.6,
-        "energyKcal": 23,
-        "fatG": 0.4,
-        "fiberG": 2.2,
-        "ironMg": 2.7,
-        "potassiumMg": 558,
-        "proteinG": 2.9,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 79,
-        "totalSugarG": 0.4
+        "addedSugarG": null,
+        "calciumMg": 68.4,
+        "carbohydrateG": 2.41,
+        "energyKcal": 20.7,
+        "fatG": 0.619,
+        "fiberG": 1.56,
+        "ironMg": 1.26,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 582,
+        "proteinG": 2.85,
+        "saturatedFatG": null,
+        "sodiumMg": 111,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -433,7 +487,7 @@
         }
       ],
       "slug": "spinach",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -455,20 +509,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 168421,
       "foodGroup": "produce",
       "name": "Kale, raw",
       "per100g": {
-        "calciumMg": 150,
-        "carbohydrateG": 8.8,
-        "energyKcal": 49,
-        "fatG": 0.9,
-        "fiberG": 3.6,
-        "ironMg": 1.5,
-        "potassiumMg": 491,
-        "proteinG": 4.3,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 38,
-        "totalSugarG": 2.3
+        "addedSugarG": null,
+        "calciumMg": 254,
+        "carbohydrateG": 4.42,
+        "energyKcal": 35,
+        "fatG": 1.49,
+        "fiberG": 4.1,
+        "ironMg": 1.6,
+        "monounsaturatedFatG": 0.104,
+        "polyunsaturatedFatG": 0.673,
+        "potassiumMg": 348,
+        "proteinG": 2.92,
+        "saturatedFatG": 0.178,
+        "sodiumMg": 53,
+        "totalSugarG": 0.99,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -481,7 +541,7 @@
         }
       ],
       "slug": "kale",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -503,20 +563,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 747447,
       "foodGroup": "produce",
       "name": "Broccoli, raw",
       "per100g": {
-        "calciumMg": 47,
-        "carbohydrateG": 6.6,
-        "energyKcal": 34,
-        "fatG": 0.4,
-        "fiberG": 2.6,
-        "ironMg": 0.7,
-        "potassiumMg": 316,
-        "proteinG": 2.8,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 33,
-        "totalSugarG": 1.7
+        "addedSugarG": null,
+        "calciumMg": 46,
+        "carbohydrateG": 6.27,
+        "energyKcal": 31,
+        "fatG": 0.34,
+        "fiberG": 2.4,
+        "ironMg": 0.69,
+        "monounsaturatedFatG": 0.011,
+        "polyunsaturatedFatG": 0.017,
+        "potassiumMg": 303,
+        "proteinG": 2.57,
+        "saturatedFatG": 0.039,
+        "sodiumMg": 36,
+        "totalSugarG": 1.4,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -529,7 +595,7 @@
         }
       ],
       "slug": "broccoli",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -551,20 +617,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2685573,
       "foodGroup": "produce",
       "name": "Cauliflower, raw",
       "per100g": {
-        "calciumMg": 22,
-        "carbohydrateG": 5,
-        "energyKcal": 25,
-        "fatG": 0.3,
-        "fiberG": 2,
-        "ironMg": 0.4,
-        "potassiumMg": 299,
-        "proteinG": 1.9,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 30,
-        "totalSugarG": 1.9
+        "addedSugarG": null,
+        "calciumMg": 20.4,
+        "carbohydrateG": 4.72,
+        "energyKcal": 22.9,
+        "fatG": 0.238,
+        "fiberG": 1.95,
+        "ironMg": 0.334,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 274,
+        "proteinG": 1.64,
+        "saturatedFatG": null,
+        "sodiumMg": 20,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -577,7 +649,7 @@
         }
       ],
       "slug": "cauliflower",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -599,20 +671,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2258590,
       "foodGroup": "produce",
       "name": "Bell pepper, red, raw",
       "per100g": {
-        "calciumMg": 7,
-        "carbohydrateG": 6,
-        "energyKcal": 26,
-        "fatG": 0.3,
-        "fiberG": 2.1,
-        "ironMg": 0.4,
-        "potassiumMg": 211,
-        "proteinG": 1,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 3,
-        "totalSugarG": 4.2
+        "addedSugarG": null,
+        "calciumMg": 6.36,
+        "carbohydrateG": 6.65,
+        "energyKcal": 27,
+        "fatG": 0.126,
+        "fiberG": 1.16,
+        "ironMg": 0.353,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 213,
+        "proteinG": 0.896,
+        "saturatedFatG": null,
+        "sodiumMg": 0,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -625,7 +703,7 @@
         }
       ],
       "slug": "bell-pepper",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -647,20 +725,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2685568,
       "foodGroup": "produce",
       "name": "Courgette, raw",
       "per100g": {
-        "calciumMg": 16,
-        "carbohydrateG": 3.1,
-        "energyKcal": 17,
-        "fatG": 0.3,
-        "fiberG": 1,
-        "ironMg": 0.4,
-        "potassiumMg": 261,
-        "proteinG": 1.2,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 8,
-        "totalSugarG": 2.5
+        "addedSugarG": null,
+        "calciumMg": 20.8,
+        "carbohydrateG": 3.27,
+        "energyKcal": 16,
+        "fatG": 0.205,
+        "fiberG": 0.752,
+        "ironMg": 0.194,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 226,
+        "proteinG": 0.984,
+        "saturatedFatG": null,
+        "sodiumMg": 0,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -673,7 +757,7 @@
         }
       ],
       "slug": "courgette",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -695,20 +779,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 1999629,
       "foodGroup": "produce",
       "name": "Mushrooms, white, raw",
       "per100g": {
-        "calciumMg": 3,
-        "carbohydrateG": 3.3,
-        "energyKcal": 22,
-        "fatG": 0.3,
-        "fiberG": 1,
-        "ironMg": 0.5,
-        "potassiumMg": 318,
-        "proteinG": 3.1,
-        "saturatedFatG": 0,
-        "sodiumMg": 5,
-        "totalSugarG": 2
+        "addedSugarG": null,
+        "calciumMg": 5.46,
+        "carbohydrateG": 4.08,
+        "energyKcal": 24.9,
+        "fatG": 0.371,
+        "fiberG": 1.72,
+        "ironMg": 0.227,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 373,
+        "proteinG": 2.89,
+        "saturatedFatG": null,
+        "sodiumMg": 6.44,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": 0.022
       },
       "portions": [
         {
@@ -721,7 +811,7 @@
         }
       ],
       "slug": "mushroom",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -743,20 +833,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 168409,
       "foodGroup": "produce",
       "name": "Cucumber, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 16,
-        "carbohydrateG": 3.6,
+        "carbohydrateG": 3.63,
         "energyKcal": 15,
-        "fatG": 0.1,
+        "fatG": 0.11,
         "fiberG": 0.5,
-        "ironMg": 0.3,
+        "ironMg": 0.28,
+        "monounsaturatedFatG": 0.005,
+        "polyunsaturatedFatG": 0.032,
         "potassiumMg": 147,
-        "proteinG": 0.7,
-        "saturatedFatG": 0,
+        "proteinG": 0.65,
+        "saturatedFatG": 0.037,
         "sodiumMg": 2,
-        "totalSugarG": 1.7
+        "totalSugarG": 1.67,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -769,7 +865,7 @@
         }
       ],
       "slug": "cucumber",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -791,20 +887,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169247,
       "foodGroup": "produce",
       "name": "Lettuce, romaine, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 33,
-        "carbohydrateG": 3.3,
+        "carbohydrateG": 3.29,
         "energyKcal": 17,
         "fatG": 0.3,
         "fiberG": 2.1,
-        "ironMg": 1,
+        "ironMg": 0.97,
+        "monounsaturatedFatG": 0.012,
+        "polyunsaturatedFatG": 0.16,
         "potassiumMg": 247,
-        "proteinG": 1.2,
-        "saturatedFatG": 0,
+        "proteinG": 1.23,
+        "saturatedFatG": 0.039,
         "sodiumMg": 8,
-        "totalSugarG": 1.2
+        "totalSugarG": 1.19,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -817,7 +919,7 @@
         }
       ],
       "slug": "lettuce",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -839,20 +941,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169975,
       "foodGroup": "produce",
       "name": "Cabbage, green, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 40,
         "carbohydrateG": 5.8,
         "energyKcal": 25,
         "fatG": 0.1,
         "fiberG": 2.5,
-        "ironMg": 0.5,
+        "ironMg": 0.47,
+        "monounsaturatedFatG": 0.017,
+        "polyunsaturatedFatG": 0.017,
         "potassiumMg": 170,
-        "proteinG": 1.3,
-        "saturatedFatG": 0,
+        "proteinG": 1.28,
+        "saturatedFatG": 0.034,
         "sodiumMg": 18,
-        "totalSugarG": 3.2
+        "totalSugarG": 3.2,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -865,7 +973,7 @@
         }
       ],
       "slug": "cabbage",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -887,20 +995,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169246,
       "foodGroup": "produce",
       "name": "Leek, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 59,
         "carbohydrateG": 14.2,
         "energyKcal": 61,
         "fatG": 0.3,
         "fiberG": 1.8,
         "ironMg": 2.1,
+        "monounsaturatedFatG": 0.004,
+        "polyunsaturatedFatG": 0.166,
         "potassiumMg": 180,
         "proteinG": 1.5,
-        "saturatedFatG": 0,
+        "saturatedFatG": 0.04,
         "sodiumMg": 20,
-        "totalSugarG": 3.9
+        "totalSugarG": 3.9,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -913,7 +1027,7 @@
         }
       ],
       "slug": "leek",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -935,20 +1049,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2346400,
       "foodGroup": "produce",
       "name": "Green beans, raw",
       "per100g": {
-        "calciumMg": 37,
-        "carbohydrateG": 7,
-        "energyKcal": 31,
-        "fatG": 0.2,
-        "fiberG": 2.7,
-        "ironMg": 1,
-        "potassiumMg": 211,
-        "proteinG": 1.8,
-        "saturatedFatG": 0,
-        "sodiumMg": 6,
-        "totalSugarG": 3.3
+        "addedSugarG": null,
+        "calciumMg": 40,
+        "carbohydrateG": 7.41,
+        "energyKcal": 33.6,
+        "fatG": 0.275,
+        "fiberG": 3.01,
+        "ironMg": 0.652,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 290,
+        "proteinG": 1.97,
+        "saturatedFatG": null,
+        "sodiumMg": 0,
+        "totalSugarG": 2.33,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -961,7 +1081,7 @@
         }
       ],
       "slug": "green-beans",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -983,20 +1103,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170016,
       "foodGroup": "produce",
       "name": "Peas, green, frozen",
       "per100g": {
-        "calciumMg": 24,
+        "addedSugarG": null,
+        "calciumMg": 22,
         "carbohydrateG": 13.6,
         "energyKcal": 77,
         "fatG": 0.4,
-        "fiberG": 5,
-        "ironMg": 1.5,
-        "potassiumMg": 200,
-        "proteinG": 5.2,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 5,
-        "totalSugarG": 4.7
+        "fiberG": 4.5,
+        "ironMg": 1.53,
+        "monounsaturatedFatG": 0.033,
+        "polyunsaturatedFatG": 0.175,
+        "potassiumMg": 153,
+        "proteinG": 5.22,
+        "saturatedFatG": 0.066,
+        "sodiumMg": 108,
+        "totalSugarG": 5,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1009,7 +1135,7 @@
         }
       ],
       "slug": "peas",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1031,20 +1157,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169998,
       "foodGroup": "produce",
       "name": "Sweetcorn kernels",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 2,
-        "carbohydrateG": 18.5,
-        "energyKcal": 88,
-        "fatG": 1.2,
+        "carbohydrateG": 18.7,
+        "energyKcal": 86,
+        "fatG": 1.35,
         "fiberG": 2,
-        "ironMg": 0.5,
+        "ironMg": 0.52,
+        "monounsaturatedFatG": 0.432,
+        "polyunsaturatedFatG": 0.487,
         "potassiumMg": 270,
-        "proteinG": 3.2,
-        "saturatedFatG": 0.2,
+        "proteinG": 3.27,
+        "saturatedFatG": 0.325,
         "sodiumMg": 15,
-        "totalSugarG": 6.3
+        "totalSugarG": 6.26,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1057,7 +1189,7 @@
         }
       ],
       "slug": "sweetcorn",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1079,20 +1211,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171705,
       "foodGroup": "produce",
       "name": "Avocado, raw flesh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 12,
-        "carbohydrateG": 8.5,
+        "carbohydrateG": 8.53,
         "energyKcal": 160,
         "fatG": 14.7,
         "fiberG": 6.7,
-        "ironMg": 0.6,
+        "ironMg": 0.55,
+        "monounsaturatedFatG": 9.8,
+        "polyunsaturatedFatG": 1.82,
         "potassiumMg": 485,
         "proteinG": 2,
-        "saturatedFatG": 2.1,
+        "saturatedFatG": 2.13,
         "sodiumMg": 7,
-        "totalSugarG": 0.7
+        "totalSugarG": 0.66,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1105,7 +1243,7 @@
         }
       ],
       "slug": "avocado",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1127,20 +1265,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 167746,
       "foodGroup": "produce",
       "name": "Lemon, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 26,
-        "carbohydrateG": 9.3,
+        "carbohydrateG": 9.32,
         "energyKcal": 29,
         "fatG": 0.3,
         "fiberG": 2.8,
         "ironMg": 0.6,
+        "monounsaturatedFatG": 0.011,
+        "polyunsaturatedFatG": 0.089,
         "potassiumMg": 138,
         "proteinG": 1.1,
-        "saturatedFatG": 0,
+        "saturatedFatG": 0.039,
         "sodiumMg": 2,
-        "totalSugarG": 2.5
+        "totalSugarG": 2.5,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1153,7 +1297,7 @@
         }
       ],
       "slug": "lemon",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1175,20 +1319,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 168155,
       "foodGroup": "produce",
       "name": "Lime, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 33,
         "carbohydrateG": 10.5,
         "energyKcal": 30,
         "fatG": 0.2,
         "fiberG": 2.8,
         "ironMg": 0.6,
+        "monounsaturatedFatG": 0.019,
+        "polyunsaturatedFatG": 0.055,
         "potassiumMg": 102,
         "proteinG": 0.7,
-        "saturatedFatG": 0,
+        "saturatedFatG": 0.022,
         "sodiumMg": 2,
-        "totalSugarG": 1.7
+        "totalSugarG": 1.69,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1201,7 +1351,7 @@
         }
       ],
       "slug": "lime",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1223,20 +1373,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171688,
       "foodGroup": "produce",
       "name": "Apple, raw, with skin",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 6,
         "carbohydrateG": 13.8,
         "energyKcal": 52,
-        "fatG": 0.2,
+        "fatG": 0.17,
         "fiberG": 2.4,
-        "ironMg": 0.1,
+        "ironMg": 0.12,
+        "monounsaturatedFatG": 0.007,
+        "polyunsaturatedFatG": 0.051,
         "potassiumMg": 107,
-        "proteinG": 0.3,
-        "saturatedFatG": 0,
+        "proteinG": 0.26,
+        "saturatedFatG": 0.028,
         "sodiumMg": 1,
-        "totalSugarG": 10.4
+        "totalSugarG": 10.4,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1249,7 +1405,7 @@
         }
       ],
       "slug": "apple",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1271,20 +1427,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 1105314,
       "foodGroup": "produce",
       "name": "Banana, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 5,
-        "carbohydrateG": 22.8,
-        "energyKcal": 89,
-        "fatG": 0.3,
-        "fiberG": 2.6,
-        "ironMg": 0.3,
-        "potassiumMg": 358,
-        "proteinG": 1.1,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 1,
-        "totalSugarG": 12.2
+        "carbohydrateG": 23,
+        "energyKcal": 97,
+        "fatG": 0.29,
+        "fiberG": 1.7,
+        "ironMg": 0,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 326,
+        "proteinG": 0.74,
+        "saturatedFatG": null,
+        "sodiumMg": 0,
+        "totalSugarG": 15.8,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -1297,7 +1459,7 @@
         }
       ],
       "slug": "banana",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -1319,20 +1481,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171711,
       "foodGroup": "produce",
       "name": "Blueberries, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 6,
         "carbohydrateG": 14.5,
         "energyKcal": 57,
-        "fatG": 0.3,
+        "fatG": 0.33,
         "fiberG": 2.4,
-        "ironMg": 0.3,
+        "ironMg": 0.28,
+        "monounsaturatedFatG": 0.047,
+        "polyunsaturatedFatG": 0.146,
         "potassiumMg": 77,
-        "proteinG": 0.7,
-        "saturatedFatG": 0,
+        "proteinG": 0.74,
+        "saturatedFatG": 0.028,
         "sodiumMg": 1,
-        "totalSugarG": 10
+        "totalSugarG": 9.96,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1345,7 +1513,7 @@
         }
       ],
       "slug": "blueberries",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1367,20 +1535,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 746771,
       "foodGroup": "produce",
       "name": "Orange, raw",
       "per100g": {
-        "calciumMg": 40,
+        "addedSugarG": null,
+        "calciumMg": 43,
         "carbohydrateG": 11.8,
         "energyKcal": 47,
-        "fatG": 0.1,
-        "fiberG": 2.4,
-        "ironMg": 0.1,
-        "potassiumMg": 181,
-        "proteinG": 0.9,
-        "saturatedFatG": 0,
-        "sodiumMg": 0,
-        "totalSugarG": 9.4
+        "fatG": 0.15,
+        "fiberG": 2,
+        "ironMg": 0.33,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 166,
+        "proteinG": 0.91,
+        "saturatedFatG": null,
+        "sodiumMg": 9,
+        "totalSugarG": 8.57,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -1389,7 +1563,7 @@
         }
       ],
       "slug": "orange",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -1411,20 +1585,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169231,
       "foodGroup": "produce",
       "name": "Ginger root, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 16,
         "carbohydrateG": 17.8,
         "energyKcal": 80,
-        "fatG": 0.8,
+        "fatG": 0.75,
         "fiberG": 2,
         "ironMg": 0.6,
+        "monounsaturatedFatG": 0.154,
+        "polyunsaturatedFatG": 0.154,
         "potassiumMg": 415,
-        "proteinG": 1.8,
-        "saturatedFatG": 0.2,
+        "proteinG": 1.82,
+        "saturatedFatG": 0.203,
         "sodiumMg": 13,
-        "totalSugarG": 1.7
+        "totalSugarG": 1.7,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1437,7 +1617,7 @@
         }
       ],
       "slug": "ginger",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1459,20 +1639,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170106,
       "foodGroup": "produce",
       "name": "Chilli pepper, red, fresh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 14,
-        "carbohydrateG": 8.8,
+        "carbohydrateG": 8.81,
         "energyKcal": 40,
-        "fatG": 0.4,
+        "fatG": 0.44,
         "fiberG": 1.5,
-        "ironMg": 1,
+        "ironMg": 1.03,
+        "monounsaturatedFatG": 0.024,
+        "polyunsaturatedFatG": 0.239,
         "potassiumMg": 322,
-        "proteinG": 1.9,
-        "saturatedFatG": 0.1,
+        "proteinG": 1.87,
+        "saturatedFatG": 0.042,
         "sodiumMg": 9,
-        "totalSugarG": 5.3
+        "totalSugarG": 5.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1481,7 +1667,7 @@
         }
       ],
       "slug": "chilli",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1503,20 +1689,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170416,
       "foodGroup": "produce",
       "name": "Parsley, fresh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 138,
-        "carbohydrateG": 6.3,
+        "carbohydrateG": 6.33,
         "energyKcal": 36,
-        "fatG": 0.8,
+        "fatG": 0.79,
         "fiberG": 3.3,
         "ironMg": 6.2,
+        "monounsaturatedFatG": 0.295,
+        "polyunsaturatedFatG": 0.124,
         "potassiumMg": 554,
-        "proteinG": 3,
-        "saturatedFatG": 0.1,
+        "proteinG": 2.97,
+        "saturatedFatG": 0.132,
         "sodiumMg": 56,
-        "totalSugarG": 0.9
+        "totalSugarG": 0.85,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1529,7 +1721,7 @@
         }
       ],
       "slug": "parsley",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1551,20 +1743,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 169997,
       "foodGroup": "produce",
       "name": "Coriander leaves, fresh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 67,
-        "carbohydrateG": 3.7,
+        "carbohydrateG": 3.67,
         "energyKcal": 23,
-        "fatG": 0.5,
+        "fatG": 0.52,
         "fiberG": 2.8,
-        "ironMg": 1.8,
+        "ironMg": 1.77,
+        "monounsaturatedFatG": 0.275,
+        "polyunsaturatedFatG": 0.04,
         "potassiumMg": 521,
-        "proteinG": 2.1,
-        "saturatedFatG": 0,
+        "proteinG": 2.13,
+        "saturatedFatG": 0.014,
         "sodiumMg": 46,
-        "totalSugarG": 0.9
+        "totalSugarG": 0.87,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1577,7 +1775,7 @@
         }
       ],
       "slug": "coriander",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1599,20 +1797,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 172232,
       "foodGroup": "produce",
       "name": "Basil, fresh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 177,
-        "carbohydrateG": 2.7,
+        "carbohydrateG": 2.65,
         "energyKcal": 23,
-        "fatG": 0.6,
+        "fatG": 0.64,
         "fiberG": 1.6,
-        "ironMg": 3.2,
+        "ironMg": 3.17,
+        "monounsaturatedFatG": 0.088,
+        "polyunsaturatedFatG": 0.389,
         "potassiumMg": 295,
-        "proteinG": 3.2,
-        "saturatedFatG": 0,
+        "proteinG": 3.15,
+        "saturatedFatG": 0.041,
         "sodiumMg": 4,
-        "totalSugarG": 0.3
+        "totalSugarG": 0.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1625,7 +1829,7 @@
         }
       ],
       "slug": "basil",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1647,19 +1851,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 173475,
       "foodGroup": "produce",
       "name": "Mint, fresh",
       "per100g": {
-        "calciumMg": 243,
-        "carbohydrateG": 14.9,
-        "energyKcal": 70,
-        "fatG": 0.9,
-        "fiberG": 8,
-        "ironMg": 5.1,
-        "potassiumMg": 569,
-        "proteinG": 3.8,
-        "saturatedFatG": 0.2,
-        "sodiumMg": 31
+        "addedSugarG": null,
+        "calciumMg": 199,
+        "carbohydrateG": 8.41,
+        "energyKcal": 44,
+        "fatG": 0.73,
+        "fiberG": 6.8,
+        "ironMg": 11.9,
+        "monounsaturatedFatG": 0.025,
+        "polyunsaturatedFatG": 0.394,
+        "potassiumMg": 458,
+        "proteinG": 3.29,
+        "saturatedFatG": 0.191,
+        "sodiumMg": 30,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1672,7 +1883,7 @@
         }
       ],
       "slug": "mint",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1694,20 +1905,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170005,
       "foodGroup": "produce",
       "name": "Spring onion, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 72,
-        "carbohydrateG": 7.3,
+        "carbohydrateG": 7.34,
         "energyKcal": 32,
-        "fatG": 0.2,
+        "fatG": 0.19,
         "fiberG": 2.6,
-        "ironMg": 1.5,
+        "ironMg": 1.48,
+        "monounsaturatedFatG": 0.027,
+        "polyunsaturatedFatG": 0.074,
         "potassiumMg": 276,
-        "proteinG": 1.8,
-        "saturatedFatG": 0,
+        "proteinG": 1.83,
+        "saturatedFatG": 0.032,
         "sodiumMg": 16,
-        "totalSugarG": 2.3
+        "totalSugarG": 2.33,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1720,7 +1937,7 @@
         }
       ],
       "slug": "spring-onion",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1742,20 +1959,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2685577,
       "foodGroup": "produce",
       "name": "Aubergine, raw",
       "per100g": {
-        "calciumMg": 9,
-        "carbohydrateG": 5.9,
-        "energyKcal": 25,
-        "fatG": 0.2,
-        "fiberG": 3,
-        "ironMg": 0.2,
-        "potassiumMg": 229,
-        "proteinG": 1,
-        "saturatedFatG": 0,
-        "sodiumMg": 2,
-        "totalSugarG": 3.5
+        "addedSugarG": null,
+        "calciumMg": 11.1,
+        "carbohydrateG": 5.4,
+        "energyKcal": 22.4,
+        "fatG": 0.12,
+        "fiberG": 2.45,
+        "ironMg": 0,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 222,
+        "proteinG": 0.852,
+        "saturatedFatG": null,
+        "sodiumMg": 0.442,
+        "totalSugarG": 2.35,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -1768,7 +1991,7 @@
         }
       ],
       "slug": "aubergine",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -1790,20 +2013,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 0.85,
+      "fdcId": 169756,
       "foodGroup": "grains",
       "name": "White rice, long grain, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 28,
         "carbohydrateG": 80,
         "energyKcal": 365,
-        "fatG": 0.7,
+        "fatG": 0.66,
         "fiberG": 1.3,
         "ironMg": 0.8,
+        "monounsaturatedFatG": 0.206,
+        "polyunsaturatedFatG": 0.177,
         "potassiumMg": 115,
-        "proteinG": 7.1,
-        "saturatedFatG": 0.2,
+        "proteinG": 7.13,
+        "saturatedFatG": 0.18,
         "sodiumMg": 5,
-        "totalSugarG": 0.1
+        "totalSugarG": 0.12,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1816,7 +2045,7 @@
         }
       ],
       "slug": "white-rice",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1838,20 +2067,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 0.85,
+      "fdcId": 169703,
       "foodGroup": "grains",
       "name": "Brown rice, raw",
       "per100g": {
-        "calciumMg": 23,
-        "carbohydrateG": 77.2,
-        "energyKcal": 370,
-        "fatG": 2.9,
-        "fiberG": 3.5,
-        "ironMg": 1.5,
-        "potassiumMg": 223,
-        "proteinG": 7.9,
-        "saturatedFatG": 0.6,
-        "sodiumMg": 7,
-        "totalSugarG": 0.9
+        "addedSugarG": null,
+        "calciumMg": 9,
+        "carbohydrateG": 76.2,
+        "energyKcal": 367,
+        "fatG": 3.2,
+        "fiberG": 3.6,
+        "ironMg": 1.29,
+        "monounsaturatedFatG": 1.05,
+        "polyunsaturatedFatG": 1,
+        "potassiumMg": 250,
+        "proteinG": 7.54,
+        "saturatedFatG": 0.591,
+        "sodiumMg": 5,
+        "totalSugarG": 0.66,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1864,7 +2099,7 @@
         }
       ],
       "slug": "brown-rice",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -1873,20 +2108,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 168927,
       "foodGroup": "grains",
       "name": "Pasta, dried, plain",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 21,
         "carbohydrateG": 74.7,
         "energyKcal": 371,
-        "fatG": 1.5,
+        "fatG": 1.51,
         "fiberG": 3.2,
-        "ironMg": 3.3,
+        "ironMg": 1.3,
+        "monounsaturatedFatG": 0.171,
+        "polyunsaturatedFatG": 0.564,
         "potassiumMg": 223,
         "proteinG": 13,
-        "saturatedFatG": 0.3,
+        "saturatedFatG": 0.277,
         "sodiumMg": 6,
-        "totalSugarG": 2.7
+        "totalSugarG": 2.67,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1899,7 +2140,7 @@
         }
       ],
       "slug": "pasta",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -1910,20 +2151,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 169738,
       "foodGroup": "grains",
       "name": "Pasta, dried, wholewheat",
       "per100g": {
-        "calciumMg": 30,
-        "carbohydrateG": 67,
+        "addedSugarG": null,
+        "calciumMg": 29,
+        "carbohydrateG": 73.4,
         "energyKcal": 352,
-        "fatG": 2.5,
-        "fiberG": 8,
-        "ironMg": 3.5,
-        "potassiumMg": 360,
-        "proteinG": 14.6,
-        "saturatedFatG": 0.4,
-        "sodiumMg": 7,
-        "totalSugarG": 2.7
+        "fatG": 2.93,
+        "fiberG": 9.2,
+        "ironMg": 3.62,
+        "monounsaturatedFatG": 0.361,
+        "polyunsaturatedFatG": 1.14,
+        "potassiumMg": 434,
+        "proteinG": 13.9,
+        "saturatedFatG": 0.428,
+        "sodiumMg": 6,
+        "totalSugarG": 2.74,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1936,7 +2183,7 @@
         }
       ],
       "slug": "wholewheat-pasta",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -1949,20 +2196,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 174924,
       "foodGroup": "grains",
       "name": "Bread, white, sliced",
       "per100g": {
-        "calciumMg": 260,
-        "carbohydrateG": 49,
-        "energyKcal": 265,
-        "fatG": 3.2,
+        "addedSugarG": null,
+        "calciumMg": 144,
+        "carbohydrateG": 49.4,
+        "energyKcal": 266,
+        "fatG": 3.33,
         "fiberG": 2.7,
-        "ironMg": 3.6,
-        "potassiumMg": 115,
-        "proteinG": 9,
-        "saturatedFatG": 0.7,
-        "sodiumMg": 491,
-        "totalSugarG": 5
+        "ironMg": 3.61,
+        "monounsaturatedFatG": 0.599,
+        "polyunsaturatedFatG": 1.6,
+        "potassiumMg": 126,
+        "proteinG": 8.85,
+        "saturatedFatG": 0.698,
+        "sodiumMg": 490,
+        "totalSugarG": 5.67,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -1971,7 +2224,7 @@
         }
       ],
       "slug": "bread",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -1984,20 +2237,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 172688,
       "foodGroup": "grains",
       "name": "Bread, wholegrain, sliced",
       "per100g": {
-        "calciumMg": 160,
-        "carbohydrateG": 41,
-        "energyKcal": 247,
-        "fatG": 3.4,
-        "fiberG": 7,
-        "ironMg": 2.5,
-        "potassiumMg": 250,
-        "proteinG": 13,
-        "saturatedFatG": 0.7,
-        "sodiumMg": 450,
-        "totalSugarG": 6
+        "addedSugarG": null,
+        "calciumMg": 161,
+        "carbohydrateG": 42.7,
+        "energyKcal": 252,
+        "fatG": 3.5,
+        "fiberG": 6,
+        "ironMg": 2.47,
+        "monounsaturatedFatG": 0.62,
+        "polyunsaturatedFatG": 1.59,
+        "potassiumMg": 254,
+        "proteinG": 12.4,
+        "saturatedFatG": 0.722,
+        "sodiumMg": 455,
+        "totalSugarG": 4.34,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2006,7 +2265,7 @@
         }
       ],
       "slug": "wholegrain-bread",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2019,20 +2278,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 167535,
       "foodGroup": "grains",
       "name": "Tortilla, flour",
       "per100g": {
-        "calciumMg": 150,
-        "carbohydrateG": 52,
-        "energyKcal": 310,
-        "fatG": 7.6,
-        "fiberG": 3,
-        "ironMg": 3.6,
-        "potassiumMg": 140,
-        "proteinG": 8.3,
-        "saturatedFatG": 2.5,
-        "sodiumMg": 700,
-        "totalSugarG": 3
+        "addedSugarG": null,
+        "calciumMg": 163,
+        "carbohydrateG": 49.3,
+        "energyKcal": 297,
+        "fatG": 7.58,
+        "fiberG": 2.4,
+        "ironMg": 3.32,
+        "monounsaturatedFatG": 3.8,
+        "polyunsaturatedFatG": 2.15,
+        "potassiumMg": 133,
+        "proteinG": 8.01,
+        "saturatedFatG": 1.22,
+        "sodiumMg": 742,
+        "totalSugarG": 2.66,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2045,7 +2310,7 @@
         }
       ],
       "slug": "tortilla",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2057,20 +2322,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 172816,
       "foodGroup": "grains",
       "name": "Pita bread, white",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 86,
         "carbohydrateG": 55.7,
         "energyKcal": 275,
         "fatG": 1.2,
         "fiberG": 2.2,
-        "ironMg": 1.6,
+        "ironMg": 1.4,
+        "monounsaturatedFatG": 0.105,
+        "polyunsaturatedFatG": 0.535,
         "potassiumMg": 120,
         "proteinG": 9.1,
-        "saturatedFatG": 0.2,
+        "saturatedFatG": 0.166,
         "sodiumMg": 536,
-        "totalSugarG": 1.3
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2079,7 +2350,7 @@
         }
       ],
       "slug": "pita",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2089,25 +2360,31 @@
         "gluten": "mayContain",
         "wheat": "mayContain"
       },
-      "densityGPerMl": 0.41,
+      "densityGPerMl": 0.34,
+      "fdcId": 173904,
       "foodGroup": "grains",
       "name": "Oats, rolled",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 52,
         "carbohydrateG": 67.7,
         "energyKcal": 379,
-        "fatG": 6.5,
+        "fatG": 6.52,
         "fiberG": 10.1,
-        "ironMg": 4.3,
+        "ironMg": 4.25,
+        "monounsaturatedFatG": 1.98,
+        "polyunsaturatedFatG": 2.3,
         "potassiumMg": 362,
         "proteinG": 13.2,
-        "saturatedFatG": 1.1,
+        "saturatedFatG": 1.11,
         "sodiumMg": 6,
-        "totalSugarG": 1
+        "totalSugarG": 0.99,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
-          "grams": 98,
+          "grams": 81,
           "label": "cup"
         },
         {
@@ -2116,7 +2393,7 @@
         }
       ],
       "slug": "oats",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -2138,20 +2415,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 168874,
       "foodGroup": "grains",
       "name": "Quinoa, raw",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 47,
         "carbohydrateG": 64.2,
         "energyKcal": 368,
-        "fatG": 6.1,
+        "fatG": 6.07,
         "fiberG": 7,
-        "ironMg": 4.6,
+        "ironMg": 4.57,
+        "monounsaturatedFatG": 1.61,
+        "polyunsaturatedFatG": 3.29,
         "potassiumMg": 563,
         "proteinG": 14.1,
-        "saturatedFatG": 0.7,
+        "saturatedFatG": 0.706,
         "sodiumMg": 5,
-        "totalSugarG": 0
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2164,7 +2447,7 @@
         }
       ],
       "slug": "quinoa",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -2173,20 +2456,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 169699,
       "foodGroup": "grains",
       "name": "Couscous, dry",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 24,
         "carbohydrateG": 77.4,
         "energyKcal": 376,
-        "fatG": 0.6,
+        "fatG": 0.64,
         "fiberG": 5,
-        "ironMg": 1.1,
+        "ironMg": 1.08,
+        "monounsaturatedFatG": 0.089,
+        "polyunsaturatedFatG": 0.252,
         "potassiumMg": 166,
         "proteinG": 12.8,
-        "saturatedFatG": 0.1,
+        "saturatedFatG": 0.117,
         "sodiumMg": 10,
-        "totalSugarG": 0.1
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2199,7 +2488,7 @@
         }
       ],
       "slug": "couscous",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2210,20 +2499,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": 0.53,
+      "fdcId": 169761,
       "foodGroup": "grains",
       "name": "Flour, plain wheat",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 15,
         "carbohydrateG": 76.3,
         "energyKcal": 364,
-        "fatG": 1,
+        "fatG": 0.98,
         "fiberG": 2.7,
-        "ironMg": 1.2,
+        "ironMg": 1.17,
+        "monounsaturatedFatG": 0.087,
+        "polyunsaturatedFatG": 0.413,
         "potassiumMg": 107,
         "proteinG": 10.3,
-        "saturatedFatG": 0.2,
+        "saturatedFatG": 0.155,
         "sodiumMg": 2,
-        "totalSugarG": 0.3
+        "totalSugarG": 0.27,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2236,7 +2531,7 @@
         }
       ],
       "slug": "flour",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2247,20 +2542,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 174928,
       "foodGroup": "grains",
       "name": "Breadcrumbs, dried",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 183,
         "carbohydrateG": 72,
         "energyKcal": 395,
         "fatG": 5.3,
         "fiberG": 4.5,
-        "ironMg": 4.5,
+        "ironMg": 4.83,
+        "monounsaturatedFatG": 1.02,
+        "polyunsaturatedFatG": 2.06,
         "potassiumMg": 196,
         "proteinG": 13.4,
         "saturatedFatG": 1.2,
         "sodiumMg": 732,
-        "totalSugarG": 6.2
+        "totalSugarG": 6.2,
+        "vitaminB12Mcg": 0.35,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2273,7 +2574,7 @@
         }
       ],
       "slug": "breadcrumbs",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain"
       ]
@@ -2281,20 +2582,26 @@
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 169742,
       "foodGroup": "grains",
       "name": "Rice noodles, dried",
       "per100g": {
-        "calciumMg": 12,
-        "carbohydrateG": 83,
+        "addedSugarG": null,
+        "calciumMg": 18,
+        "carbohydrateG": 80.2,
         "energyKcal": 364,
-        "fatG": 0.6,
+        "fatG": 0.56,
         "fiberG": 1.6,
-        "ironMg": 0.9,
-        "potassiumMg": 25,
-        "proteinG": 3.4,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 20,
-        "totalSugarG": 0
+        "ironMg": 0.7,
+        "monounsaturatedFatG": 0.175,
+        "polyunsaturatedFatG": 0.15,
+        "potassiumMg": 30,
+        "proteinG": 5.95,
+        "saturatedFatG": 0.153,
+        "sodiumMg": 182,
+        "totalSugarG": 0.12,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2303,7 +2610,7 @@
         }
       ],
       "slug": "rice-noodles",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -2313,20 +2620,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 169755,
       "foodGroup": "grains",
       "name": "Egg noodles, dried",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 35,
         "carbohydrateG": 71.3,
         "energyKcal": 384,
-        "fatG": 4.4,
+        "fatG": 4.44,
         "fiberG": 3.3,
-        "ironMg": 3.3,
-        "potassiumMg": 223,
+        "ironMg": 1.9,
+        "monounsaturatedFatG": 1.25,
+        "polyunsaturatedFatG": 1.33,
+        "potassiumMg": 244,
         "proteinG": 14.2,
-        "saturatedFatG": 1,
+        "saturatedFatG": 1.18,
         "sodiumMg": 21,
-        "totalSugarG": 2.3
+        "totalSugarG": 1.88,
+        "vitaminB12Mcg": 0.29,
+        "vitaminDMcg": 0.3
       },
       "portions": [
         {
@@ -2339,7 +2652,7 @@
         }
       ],
       "slug": "egg-noodles",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "glutenGrain",
         "egg"
@@ -2364,20 +2677,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2646170,
       "foodGroup": "protein",
       "name": "Chicken breast, raw",
       "per100g": {
-        "calciumMg": 5,
+        "addedSugarG": null,
+        "calciumMg": 3.94,
         "carbohydrateG": 0,
-        "energyKcal": 120,
-        "fatG": 2.6,
-        "fiberG": 0,
-        "ironMg": 0.4,
-        "potassiumMg": 334,
+        "energyKcal": 112,
+        "fatG": 1.93,
+        "fiberG": null,
+        "ironMg": 0.354,
+        "monounsaturatedFatG": 0.369,
+        "polyunsaturatedFatG": 0.296,
+        "potassiumMg": 330,
         "proteinG": 22.5,
-        "saturatedFatG": 0.6,
-        "sodiumMg": 45,
-        "totalSugarG": 0
+        "saturatedFatG": 0.349,
+        "sodiumMg": 65.8,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2386,7 +2705,7 @@
         }
       ],
       "slug": "chicken-breast",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "poultry",
         "meat"
@@ -2411,20 +2730,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2646171,
       "foodGroup": "protein",
       "name": "Chicken thigh, boneless skinless, raw",
       "per100g": {
-        "calciumMg": 9,
+        "addedSugarG": null,
+        "calciumMg": 5.65,
         "carbohydrateG": 0,
-        "energyKcal": 121,
-        "fatG": 4.1,
-        "fiberG": 0,
-        "ironMg": 0.9,
-        "potassiumMg": 222,
-        "proteinG": 19.7,
-        "saturatedFatG": 1.1,
-        "sodiumMg": 95,
-        "totalSugarG": 0
+        "energyKcal": 149,
+        "fatG": 7.92,
+        "fiberG": null,
+        "ironMg": 0.602,
+        "monounsaturatedFatG": 2.24,
+        "polyunsaturatedFatG": 1.42,
+        "potassiumMg": 272,
+        "proteinG": 18.6,
+        "saturatedFatG": 1.66,
+        "sodiumMg": 62.3,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2433,7 +2758,7 @@
         }
       ],
       "slug": "chicken-thigh",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "poultry",
         "meat"
@@ -2458,20 +2783,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171796,
       "foodGroup": "protein",
       "name": "Beef, minced, 15% fat, raw",
       "per100g": {
-        "calciumMg": 18,
+        "addedSugarG": null,
+        "calciumMg": 15,
         "carbohydrateG": 0,
         "energyKcal": 215,
         "fatG": 15,
         "fiberG": 0,
-        "ironMg": 2,
-        "potassiumMg": 270,
+        "ironMg": 2.09,
+        "monounsaturatedFatG": 6.47,
+        "polyunsaturatedFatG": 0.433,
+        "potassiumMg": 295,
         "proteinG": 18.6,
-        "saturatedFatG": 6,
+        "saturatedFatG": 5.72,
         "sodiumMg": 66,
-        "totalSugarG": 0
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 2.17,
+        "vitaminDMcg": 0.1
       },
       "portions": [
         {
@@ -2484,7 +2815,7 @@
         }
       ],
       "slug": "minced-beef",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "beef",
         "meat"
@@ -2509,20 +2840,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2646168,
       "foodGroup": "protein",
       "name": "Pork loin, raw",
       "per100g": {
-        "calciumMg": 6,
+        "addedSugarG": null,
+        "calciumMg": 4.11,
         "carbohydrateG": 0,
-        "energyKcal": 143,
-        "fatG": 5.9,
-        "fiberG": 0,
-        "ironMg": 0.7,
-        "potassiumMg": 350,
-        "proteinG": 21,
-        "saturatedFatG": 2.1,
-        "sodiumMg": 55,
-        "totalSugarG": 0
+        "energyKcal": 174,
+        "fatG": 9.47,
+        "fiberG": null,
+        "ironMg": 0.452,
+        "monounsaturatedFatG": 3.95,
+        "polyunsaturatedFatG": 1.38,
+        "potassiumMg": 361,
+        "proteinG": 21.1,
+        "saturatedFatG": 3.28,
+        "sodiumMg": 40.2,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2535,7 +2872,7 @@
         }
       ],
       "slug": "pork-loin",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "pork",
         "meat"
@@ -2560,20 +2897,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2684441,
       "foodGroup": "protein",
       "name": "Salmon fillet, raw",
       "per100g": {
-        "calciumMg": 9,
+        "addedSugarG": null,
+        "calciumMg": 9.42,
         "carbohydrateG": 0,
-        "energyKcal": 208,
-        "fatG": 13.4,
-        "fiberG": 0,
-        "ironMg": 0.3,
-        "potassiumMg": 363,
-        "proteinG": 20.4,
-        "saturatedFatG": 3.1,
-        "sodiumMg": 59,
-        "totalSugarG": 0
+        "energyKcal": 203,
+        "fatG": 13.1,
+        "fiberG": null,
+        "ironMg": 0.259,
+        "monounsaturatedFatG": 5.01,
+        "polyunsaturatedFatG": 4.06,
+        "potassiumMg": 378,
+        "proteinG": 20.3,
+        "saturatedFatG": 2.28,
+        "sodiumMg": 49.5,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 5.7,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2582,7 +2925,7 @@
         }
       ],
       "slug": "salmon",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "fish"
       ]
@@ -2606,20 +2949,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2684444,
       "foodGroup": "protein",
       "name": "White fish (cod), raw",
       "per100g": {
-        "calciumMg": 16,
+        "addedSugarG": null,
+        "calciumMg": 6.59,
         "carbohydrateG": 0,
-        "energyKcal": 82,
-        "fatG": 0.7,
-        "fiberG": 0,
-        "ironMg": 0.4,
-        "potassiumMg": 413,
-        "proteinG": 17.8,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 54,
-        "totalSugarG": 0
+        "energyKcal": 70.5,
+        "fatG": 0.668,
+        "fiberG": null,
+        "ironMg": 0.065,
+        "monounsaturatedFatG": 0.026,
+        "polyunsaturatedFatG": 0.081,
+        "potassiumMg": 245,
+        "proteinG": 16.1,
+        "saturatedFatG": 0.044,
+        "sodiumMg": 299,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 1.25,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2628,7 +2977,7 @@
         }
       ],
       "slug": "white-fish",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "fish"
       ]
@@ -2638,20 +2987,26 @@
         "fish": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 334194,
       "foodGroup": "protein",
       "name": "Tuna, canned in water, drained",
       "per100g": {
-        "calciumMg": 11,
-        "carbohydrateG": 0,
-        "energyKcal": 116,
-        "fatG": 0.8,
-        "fiberG": 0,
-        "ironMg": 1,
-        "potassiumMg": 237,
-        "proteinG": 25.5,
-        "saturatedFatG": 0.2,
-        "sodiumMg": 247,
-        "totalSugarG": 0
+        "addedSugarG": null,
+        "calciumMg": 18,
+        "carbohydrateG": 0.08,
+        "energyKcal": 90,
+        "fatG": 0.94,
+        "fiberG": null,
+        "ironMg": 1.67,
+        "monounsaturatedFatG": 0.114,
+        "polyunsaturatedFatG": 0.259,
+        "potassiumMg": 176,
+        "proteinG": 19,
+        "saturatedFatG": 0.224,
+        "sodiumMg": 219,
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 2.57,
+        "vitaminDMcg": 1.2
       },
       "portions": [
         {
@@ -2660,7 +3015,7 @@
         }
       ],
       "slug": "canned-tuna",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "fish"
       ]
@@ -2684,20 +3039,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2684443,
       "foodGroup": "protein",
       "name": "Prawns, raw",
       "per100g": {
-        "calciumMg": 64,
-        "carbohydrateG": 0,
-        "energyKcal": 85,
-        "fatG": 0.5,
-        "fiberG": 0,
-        "ironMg": 0.5,
-        "potassiumMg": 259,
-        "proteinG": 20.1,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 119,
-        "totalSugarG": 0
+        "addedSugarG": null,
+        "calciumMg": 64.6,
+        "carbohydrateG": 0.485,
+        "energyKcal": 75.7,
+        "fatG": 0.801,
+        "fiberG": null,
+        "ironMg": 0.522,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 146,
+        "proteinG": 15.6,
+        "saturatedFatG": null,
+        "sodiumMg": 475,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0.996,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -2710,7 +3071,7 @@
         }
       ],
       "slug": "prawns",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "shellfish"
       ]
@@ -2734,20 +3095,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 748967,
       "foodGroup": "protein",
       "name": "Egg, whole, raw",
       "per100g": {
-        "calciumMg": 56,
-        "carbohydrateG": 0.7,
-        "energyKcal": 143,
-        "fatG": 9.5,
+        "addedSugarG": null,
+        "calciumMg": 48,
+        "carbohydrateG": 0.96,
+        "energyKcal": 148,
+        "fatG": 9.96,
         "fiberG": 0,
-        "ironMg": 1.8,
-        "potassiumMg": 138,
-        "proteinG": 12.6,
-        "saturatedFatG": 3.1,
-        "sodiumMg": 142,
-        "totalSugarG": 0.4
+        "ironMg": 1.67,
+        "monounsaturatedFatG": 3.63,
+        "polyunsaturatedFatG": 1.82,
+        "potassiumMg": 132,
+        "proteinG": 12.4,
+        "saturatedFatG": 3.2,
+        "sodiumMg": 129,
+        "totalSugarG": 0.2,
+        "vitaminB12Mcg": 1.02,
+        "vitaminDMcg": 2.46
       },
       "portions": [
         {
@@ -2756,7 +3123,7 @@
         }
       ],
       "slug": "eggs",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "egg"
       ]
@@ -2766,20 +3133,26 @@
         "soy": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 172475,
       "foodGroup": "protein",
       "name": "Tofu, firm",
       "per100g": {
-        "calciumMg": 350,
-        "carbohydrateG": 2.8,
+        "addedSugarG": null,
+        "calciumMg": 683,
+        "carbohydrateG": 2.78,
         "energyKcal": 144,
-        "fatG": 8.7,
+        "fatG": 8.72,
         "fiberG": 2.3,
-        "ironMg": 2.7,
+        "ironMg": 2.66,
+        "monounsaturatedFatG": 1.92,
+        "polyunsaturatedFatG": 4.92,
         "potassiumMg": 237,
         "proteinG": 17.3,
-        "saturatedFatG": 1.3,
+        "saturatedFatG": 1.26,
         "sodiumMg": 14,
-        "totalSugarG": 0.6
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2792,7 +3165,7 @@
         }
       ],
       "slug": "tofu",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -2800,18 +3173,26 @@
         "soy": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 174272,
       "foodGroup": "protein",
       "name": "Tempeh",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 111,
-        "carbohydrateG": 7.6,
+        "carbohydrateG": 7.64,
         "energyKcal": 192,
         "fatG": 10.8,
+        "fiberG": null,
         "ironMg": 2.7,
+        "monounsaturatedFatG": 3.2,
+        "polyunsaturatedFatG": 4.3,
         "potassiumMg": 412,
         "proteinG": 20.3,
-        "saturatedFatG": 2.2,
-        "sodiumMg": 9
+        "saturatedFatG": 2.54,
+        "sodiumMg": 9,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0.08,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2824,7 +3205,7 @@
         }
       ],
       "slug": "tempeh",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -2846,20 +3227,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.03,
+      "fdcId": 746782,
       "foodGroup": "dairy",
       "name": "Milk, whole",
       "per100g": {
-        "calciumMg": 113,
-        "carbohydrateG": 4.8,
-        "energyKcal": 61,
-        "fatG": 3.3,
-        "fiberG": 0,
+        "addedSugarG": null,
+        "calciumMg": 123,
+        "carbohydrateG": 4.63,
+        "energyKcal": 60,
+        "fatG": 3.2,
+        "fiberG": null,
         "ironMg": 0,
-        "potassiumMg": 132,
-        "proteinG": 3.2,
-        "saturatedFatG": 1.9,
-        "sodiumMg": 43,
-        "totalSugarG": 4.8
+        "monounsaturatedFatG": 0.688,
+        "polyunsaturatedFatG": 0.108,
+        "potassiumMg": 150,
+        "proteinG": 3.27,
+        "saturatedFatG": 1.86,
+        "sodiumMg": 38,
+        "totalSugarG": 4.81,
+        "vitaminB12Mcg": 0.54,
+        "vitaminDMcg": 0.96
       },
       "portions": [
         {
@@ -2872,7 +3259,7 @@
         }
       ],
       "slug": "milk",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "dairy"
       ]
@@ -2896,20 +3283,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.03,
+      "fdcId": 2259793,
       "foodGroup": "dairy",
       "name": "Yoghurt, plain, whole milk",
       "per100g": {
-        "calciumMg": 121,
-        "carbohydrateG": 4.7,
-        "energyKcal": 61,
-        "fatG": 3.3,
-        "fiberG": 0,
-        "ironMg": 0.1,
-        "potassiumMg": 155,
-        "proteinG": 3.5,
-        "saturatedFatG": 2.1,
-        "sodiumMg": 46,
-        "totalSugarG": 4.7
+        "addedSugarG": null,
+        "calciumMg": 127,
+        "carbohydrateG": 5.57,
+        "energyKcal": 77.3,
+        "fatG": 4.48,
+        "fiberG": null,
+        "ironMg": 0,
+        "monounsaturatedFatG": 0.874,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 164,
+        "proteinG": 3.82,
+        "saturatedFatG": 2.32,
+        "sodiumMg": 41.8,
+        "totalSugarG": 4.09,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": 0.778
       },
       "portions": [
         {
@@ -2922,7 +3315,7 @@
         }
       ],
       "slug": "yoghurt",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "dairy"
       ]
@@ -2946,20 +3339,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.03,
+      "fdcId": 170903,
       "foodGroup": "dairy",
       "name": "Greek yoghurt, plain, low fat",
       "per100g": {
-        "calciumMg": 100,
-        "carbohydrateG": 3.9,
+        "addedSugarG": null,
+        "calciumMg": 115,
+        "carbohydrateG": 3.94,
         "energyKcal": 73,
-        "fatG": 1.9,
+        "fatG": 1.92,
         "fiberG": 0,
-        "ironMg": 0,
-        "potassiumMg": 150,
-        "proteinG": 10,
-        "saturatedFatG": 1.2,
+        "ironMg": 0.04,
+        "monounsaturatedFatG": 0.486,
+        "polyunsaturatedFatG": 0.076,
+        "potassiumMg": 141,
+        "proteinG": 9.95,
+        "saturatedFatG": 1.23,
         "sodiumMg": 34,
-        "totalSugarG": 3.6
+        "totalSugarG": 3.56,
+        "vitaminB12Mcg": 0.52,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -2972,7 +3371,7 @@
         }
       ],
       "slug": "greek-yoghurt",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "dairy"
       ]
@@ -2982,20 +3381,26 @@
         "milk": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 328637,
       "foodGroup": "dairy",
       "name": "Cheddar cheese",
       "per100g": {
-        "calciumMg": 721,
-        "carbohydrateG": 1.3,
-        "energyKcal": 403,
-        "fatG": 33.1,
-        "fiberG": 0,
-        "ironMg": 0.7,
-        "potassiumMg": 98,
-        "proteinG": 24.9,
-        "saturatedFatG": 18.9,
-        "sodiumMg": 653,
-        "totalSugarG": 0.5
+        "addedSugarG": null,
+        "calciumMg": 707,
+        "carbohydrateG": 2.44,
+        "energyKcal": 408,
+        "fatG": 34,
+        "fiberG": null,
+        "ironMg": 0.16,
+        "monounsaturatedFatG": 7.44,
+        "polyunsaturatedFatG": 1.18,
+        "potassiumMg": 77,
+        "proteinG": 23.3,
+        "saturatedFatG": 19.2,
+        "sodiumMg": 654,
+        "totalSugarG": 0.33,
+        "vitaminB12Mcg": 1.06,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3008,7 +3413,7 @@
         }
       ],
       "slug": "cheddar",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "dairy"
       ]
@@ -3018,20 +3423,26 @@
         "milk": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 2259796,
       "foodGroup": "dairy",
       "name": "Feta cheese",
       "per100g": {
-        "calciumMg": 493,
-        "carbohydrateG": 4.1,
-        "energyKcal": 264,
-        "fatG": 21.3,
-        "fiberG": 0,
-        "ironMg": 0.7,
-        "potassiumMg": 62,
-        "proteinG": 14.2,
-        "saturatedFatG": 14.9,
-        "sodiumMg": 917,
-        "totalSugarG": 4.1
+        "addedSugarG": null,
+        "calciumMg": 371,
+        "carbohydrateG": 5.58,
+        "energyKcal": 273,
+        "fatG": 19.1,
+        "fiberG": null,
+        "ironMg": 0.068,
+        "monounsaturatedFatG": 4.18,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 105,
+        "proteinG": 19.7,
+        "saturatedFatG": 11.2,
+        "sodiumMg": 1030,
+        "totalSugarG": 1.63,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3044,7 +3455,7 @@
         }
       ],
       "slug": "feta",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "dairy",
         "highSodium"
@@ -3055,20 +3466,26 @@
         "milk": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 2259795,
       "foodGroup": "dairy",
       "name": "Parmesan cheese",
       "per100g": {
-        "calciumMg": 1184,
-        "carbohydrateG": 4.1,
-        "energyKcal": 431,
-        "fatG": 29,
-        "fiberG": 0,
-        "ironMg": 0.8,
-        "potassiumMg": 92,
-        "proteinG": 38,
-        "saturatedFatG": 19,
-        "sodiumMg": 1529,
-        "totalSugarG": 0.9
+        "addedSugarG": null,
+        "calciumMg": 950,
+        "carbohydrateG": 4.33,
+        "energyKcal": 405,
+        "fatG": 29.5,
+        "fiberG": null,
+        "ironMg": 0.14,
+        "monounsaturatedFatG": 6.02,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 74,
+        "proteinG": 30.1,
+        "saturatedFatG": 17.2,
+        "sodiumMg": 1050,
+        "totalSugarG": 0.638,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3081,7 +3498,7 @@
         }
       ],
       "slug": "parmesan",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "dairy",
         "highSodium"
@@ -3092,20 +3509,26 @@
         "milk": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 170845,
       "foodGroup": "dairy",
       "name": "Mozzarella cheese",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 505,
-        "carbohydrateG": 2.2,
-        "energyKcal": 280,
-        "fatG": 22.4,
+        "carbohydrateG": 2.4,
+        "energyKcal": 299,
+        "fatG": 22.1,
         "fiberG": 0,
-        "ironMg": 0.4,
+        "ironMg": 0.44,
+        "monounsaturatedFatG": 6.57,
+        "polyunsaturatedFatG": 0.765,
         "potassiumMg": 76,
         "proteinG": 22.2,
-        "saturatedFatG": 13.2,
-        "sodiumMg": 627,
-        "totalSugarG": 1
+        "saturatedFatG": 13.9,
+        "sodiumMg": 486,
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 2.28,
+        "vitaminDMcg": 0.4
       },
       "portions": [
         {
@@ -3118,7 +3541,7 @@
         }
       ],
       "slug": "mozzarella",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "dairy"
       ]
@@ -3128,20 +3551,26 @@
         "milk": "contains"
       },
       "densityGPerMl": 0.91,
+      "fdcId": 173430,
       "foodGroup": "dairy",
       "name": "Butter, unsalted",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 24,
-        "carbohydrateG": 0.1,
+        "carbohydrateG": 0.06,
         "energyKcal": 717,
         "fatG": 81.1,
         "fiberG": 0,
-        "ironMg": 0,
+        "ironMg": 0.02,
+        "monounsaturatedFatG": 23.4,
+        "polyunsaturatedFatG": 3.01,
         "potassiumMg": 24,
-        "proteinG": 0.9,
-        "saturatedFatG": 51.4,
+        "proteinG": 0.85,
+        "saturatedFatG": 50.5,
         "sodiumMg": 11,
-        "totalSugarG": 0.1
+        "totalSugarG": 0.06,
+        "vitaminB12Mcg": 0.17,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3154,7 +3583,7 @@
         }
       ],
       "slug": "butter",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "dairy"
       ]
@@ -3214,22 +3643,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 0.91,
+      "fdcId": 171413,
       "foodGroup": "fats",
       "name": "Olive oil",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 1,
         "carbohydrateG": 0,
         "energyKcal": 884,
         "fatG": 100,
         "fiberG": 0,
-        "ironMg": 0.6,
+        "ironMg": 0.56,
         "monounsaturatedFatG": 73,
         "polyunsaturatedFatG": 10.5,
         "potassiumMg": 1,
         "proteinG": 0,
         "saturatedFatG": 13.8,
         "sodiumMg": 2,
-        "totalSugarG": 0
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3242,26 +3675,32 @@
         }
       ],
       "slug": "olive-oil",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
       "allergens": {},
       "densityGPerMl": 0.92,
+      "fdcId": 172336,
       "foodGroup": "fats",
       "name": "Vegetable oil",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 0,
         "carbohydrateG": 0,
         "energyKcal": 884,
         "fatG": 100,
         "fiberG": 0,
         "ironMg": 0,
+        "monounsaturatedFatG": 63.3,
+        "polyunsaturatedFatG": 28.1,
         "potassiumMg": 0,
         "proteinG": 0,
-        "saturatedFatG": 7,
+        "saturatedFatG": 7.36,
         "sodiumMg": 0,
-        "totalSugarG": 0
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3274,7 +3713,7 @@
         }
       ],
       "slug": "vegetable-oil",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -3282,20 +3721,26 @@
         "sesame": "contains"
       },
       "densityGPerMl": 0.92,
+      "fdcId": 171016,
       "foodGroup": "fats",
       "name": "Sesame oil",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 0,
         "carbohydrateG": 0,
         "energyKcal": 884,
         "fatG": 100,
         "fiberG": 0,
         "ironMg": 0,
+        "monounsaturatedFatG": 39.7,
+        "polyunsaturatedFatG": 41.7,
         "potassiumMg": 0,
         "proteinG": 0,
         "saturatedFatG": 14.2,
         "sodiumMg": 0,
-        "totalSugarG": 0
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3308,7 +3753,7 @@
         }
       ],
       "slug": "sesame-oil",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -3316,20 +3761,26 @@
         "sesame": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 170189,
       "foodGroup": "fats",
       "name": "Tahini (sesame paste)",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 426,
         "carbohydrateG": 21.2,
         "energyKcal": 595,
         "fatG": 53.8,
         "fiberG": 9.3,
-        "ironMg": 8.9,
+        "ironMg": 8.95,
+        "monounsaturatedFatG": 20.3,
+        "polyunsaturatedFatG": 23.6,
         "potassiumMg": 414,
         "proteinG": 17,
-        "saturatedFatG": 7.5,
+        "saturatedFatG": 7.53,
         "sodiumMg": 115,
-        "totalSugarG": 0.5
+        "totalSugarG": 0.49,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3338,7 +3789,7 @@
         }
       ],
       "slug": "tahini",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -3346,20 +3797,26 @@
         "peanut": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 2262072,
       "foodGroup": "fats",
       "name": "Peanut butter, smooth",
       "per100g": {
-        "calciumMg": 49,
-        "carbohydrateG": 20,
-        "energyKcal": 588,
-        "fatG": 50,
-        "fiberG": 6,
-        "ironMg": 1.7,
-        "potassiumMg": 649,
-        "proteinG": 25,
-        "saturatedFatG": 10,
-        "sodiumMg": 430,
-        "totalSugarG": 9
+        "addedSugarG": null,
+        "calciumMg": 49.8,
+        "carbohydrateG": 22.7,
+        "energyKcal": 589,
+        "fatG": 49.4,
+        "fiberG": 6.32,
+        "ironMg": 1.85,
+        "monounsaturatedFatG": 30.7,
+        "polyunsaturatedFatG": 9.78,
+        "potassiumMg": 654,
+        "proteinG": 24,
+        "saturatedFatG": 8.42,
+        "sodiumMg": 221,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3368,7 +3825,7 @@
         }
       ],
       "slug": "peanut-butter",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -3390,20 +3847,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2346393,
       "foodGroup": "fats",
       "name": "Almonds",
       "per100g": {
-        "calciumMg": 269,
-        "carbohydrateG": 21.6,
-        "energyKcal": 579,
-        "fatG": 49.9,
-        "fiberG": 12.5,
-        "ironMg": 3.7,
+        "addedSugarG": null,
+        "calciumMg": 254,
+        "carbohydrateG": 20,
+        "energyKcal": 584,
+        "fatG": 51.1,
+        "fiberG": 10.8,
+        "ironMg": 3.74,
+        "monounsaturatedFatG": 31.3,
+        "polyunsaturatedFatG": 11.2,
         "potassiumMg": 733,
-        "proteinG": 21.2,
-        "saturatedFatG": 3.8,
-        "sodiumMg": 1,
-        "totalSugarG": 4.4
+        "proteinG": 21.5,
+        "saturatedFatG": 3.78,
+        "sodiumMg": 0,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3416,7 +3879,7 @@
         }
       ],
       "slug": "almonds",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -3438,20 +3901,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2346394,
       "foodGroup": "fats",
       "name": "Walnuts",
       "per100g": {
-        "calciumMg": 98,
-        "carbohydrateG": 13.7,
-        "energyKcal": 654,
-        "fatG": 65.2,
-        "fiberG": 6.7,
-        "ironMg": 2.9,
-        "potassiumMg": 441,
-        "proteinG": 15.2,
-        "saturatedFatG": 6.1,
-        "sodiumMg": 2,
-        "totalSugarG": 2.6
+        "addedSugarG": null,
+        "calciumMg": 88.3,
+        "carbohydrateG": 10.9,
+        "energyKcal": 679,
+        "fatG": 69.7,
+        "fiberG": 5.21,
+        "ironMg": 2.24,
+        "monounsaturatedFatG": 9.62,
+        "polyunsaturatedFatG": 49.3,
+        "potassiumMg": 424,
+        "proteinG": 14.6,
+        "saturatedFatG": 6.05,
+        "sodiumMg": 0,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3464,7 +3933,7 @@
         }
       ],
       "slug": "walnuts",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -3504,20 +3973,26 @@
         "sesame": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 170150,
       "foodGroup": "fats",
       "name": "Sesame seeds",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 975,
-        "carbohydrateG": 23.5,
+        "carbohydrateG": 23.4,
         "energyKcal": 573,
         "fatG": 49.7,
         "fiberG": 11.8,
         "ironMg": 14.6,
+        "monounsaturatedFatG": 18.8,
+        "polyunsaturatedFatG": 21.8,
         "potassiumMg": 468,
         "proteinG": 17.7,
-        "saturatedFatG": 7,
+        "saturatedFatG": 6.96,
         "sodiumMg": 11,
-        "totalSugarG": 0.3
+        "totalSugarG": 0.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3530,26 +4005,32 @@
         }
       ],
       "slug": "sesame-seeds",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 173800,
       "foodGroup": "legumes",
       "name": "Chickpeas, canned, drained",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 45,
         "carbohydrateG": 22.5,
         "energyKcal": 139,
-        "fatG": 2.8,
+        "fatG": 2.77,
         "fiberG": 6.4,
-        "ironMg": 1.9,
-        "potassiumMg": 172,
-        "proteinG": 7,
-        "saturatedFatG": 0.3,
-        "sodiumMg": 243,
-        "totalSugarG": 4.3
+        "ironMg": 1.07,
+        "monounsaturatedFatG": 0.488,
+        "polyunsaturatedFatG": 0.967,
+        "potassiumMg": 126,
+        "proteinG": 7.05,
+        "saturatedFatG": 0.214,
+        "sodiumMg": 246,
+        "totalSugarG": 4.01,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3562,7 +4043,7 @@
         }
       ],
       "slug": "chickpeas-canned",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium"
       ]
@@ -3570,20 +4051,26 @@
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 2644285,
       "foodGroup": "legumes",
       "name": "Black beans, canned, drained",
       "per100g": {
-        "calciumMg": 38,
-        "carbohydrateG": 16.6,
-        "energyKcal": 91,
-        "fatG": 0.3,
-        "fiberG": 6,
-        "ironMg": 1.9,
-        "potassiumMg": 305,
-        "proteinG": 6,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 237,
-        "totalSugarG": 0.3
+        "addedSugarG": null,
+        "calciumMg": 43.3,
+        "carbohydrateG": 19.8,
+        "energyKcal": 115,
+        "fatG": 1.27,
+        "fiberG": 6.69,
+        "ironMg": 1.69,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 253,
+        "proteinG": 6.91,
+        "saturatedFatG": null,
+        "sodiumMg": 218,
+        "totalSugarG": null,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3596,7 +4083,7 @@
         }
       ],
       "slug": "black-beans-canned",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": [
         "highSodium"
       ]
@@ -3604,20 +4091,26 @@
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 174285,
       "foodGroup": "legumes",
       "name": "Kidney beans, canned, drained",
       "per100g": {
-        "calciumMg": 35,
-        "carbohydrateG": 15.3,
-        "energyKcal": 84,
-        "fatG": 0.5,
+        "addedSugarG": null,
+        "calciumMg": 57,
+        "carbohydrateG": 21.5,
+        "energyKcal": 124,
+        "fatG": 1.05,
         "fiberG": 5.5,
-        "ironMg": 1.7,
-        "potassiumMg": 300,
-        "proteinG": 5.2,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 258,
-        "totalSugarG": 0.8
+        "ironMg": 1.5,
+        "monounsaturatedFatG": 0.029,
+        "polyunsaturatedFatG": 0.193,
+        "potassiumMg": 277,
+        "proteinG": 7.98,
+        "saturatedFatG": 0.181,
+        "sodiumMg": 231,
+        "totalSugarG": 3.8,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3630,7 +4123,7 @@
         }
       ],
       "slug": "kidney-beans-canned",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium"
       ]
@@ -3654,20 +4147,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 172420,
       "foodGroup": "legumes",
       "name": "Lentils, brown or green, dry",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 35,
         "carbohydrateG": 63.4,
         "energyKcal": 352,
-        "fatG": 1.1,
+        "fatG": 1.06,
         "fiberG": 10.7,
-        "ironMg": 6.5,
+        "ironMg": 6.51,
+        "monounsaturatedFatG": 0.193,
+        "polyunsaturatedFatG": 0.526,
         "potassiumMg": 677,
         "proteinG": 24.6,
-        "saturatedFatG": 0.2,
+        "saturatedFatG": 0.154,
         "sodiumMg": 6,
-        "totalSugarG": 2
+        "totalSugarG": 2.03,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3680,7 +4179,7 @@
         }
       ],
       "slug": "lentils-dry",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -3702,20 +4201,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 174284,
       "foodGroup": "legumes",
       "name": "Red lentils, split, dry",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 48,
-        "carbohydrateG": 60.1,
+        "carbohydrateG": 63.1,
         "energyKcal": 358,
-        "fatG": 1.1,
+        "fatG": 2.17,
         "fiberG": 10.8,
-        "ironMg": 7.5,
-        "potassiumMg": 677,
+        "ironMg": 7.39,
+        "monounsaturatedFatG": 0.5,
+        "polyunsaturatedFatG": 1.14,
+        "potassiumMg": 668,
         "proteinG": 23.9,
-        "saturatedFatG": 0.2,
-        "sodiumMg": 6,
-        "totalSugarG": 2
+        "saturatedFatG": 0.379,
+        "sodiumMg": 7,
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3728,26 +4233,32 @@
         }
       ],
       "slug": "red-lentils-dry",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 175182,
       "foodGroup": "legumes",
       "name": "Baked beans in tomato sauce, canned",
       "per100g": {
-        "calciumMg": 40,
-        "carbohydrateG": 17.5,
+        "addedSugarG": null,
+        "calciumMg": 34,
+        "carbohydrateG": 21.1,
         "energyKcal": 94,
-        "fatG": 0.3,
-        "fiberG": 3.7,
-        "ironMg": 1.4,
-        "potassiumMg": 330,
-        "proteinG": 4.7,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 380,
-        "totalSugarG": 5.7
+        "fatG": 0.37,
+        "fiberG": 4.1,
+        "ironMg": 1.19,
+        "monounsaturatedFatG": 0.095,
+        "polyunsaturatedFatG": 0.121,
+        "potassiumMg": 224,
+        "proteinG": 4.75,
+        "saturatedFatG": 0.071,
+        "sodiumMg": 343,
+        "totalSugarG": 7.96,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3760,7 +4271,7 @@
         }
       ],
       "slug": "baked-beans",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "addedSugarSource",
         "highSodium"
@@ -3771,20 +4282,26 @@
         "sesame": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 321358,
       "foodGroup": "legumes",
       "name": "Hummus",
       "per100g": {
-        "calciumMg": 49,
-        "carbohydrateG": 11,
-        "energyKcal": 230,
-        "fatG": 17.5,
-        "fiberG": 5.5,
-        "ironMg": 2.3,
-        "potassiumMg": 190,
-        "proteinG": 7.6,
-        "saturatedFatG": 3.4,
-        "sodiumMg": 480,
-        "totalSugarG": 0.5
+        "addedSugarG": null,
+        "calciumMg": 41,
+        "carbohydrateG": 14.9,
+        "energyKcal": 229,
+        "fatG": 17.1,
+        "fiberG": 5.4,
+        "ironMg": 2.41,
+        "monounsaturatedFatG": 6.37,
+        "polyunsaturatedFatG": 7.48,
+        "potassiumMg": 289,
+        "proteinG": 7.35,
+        "saturatedFatG": 2.22,
+        "sodiumMg": 438,
+        "totalSugarG": 0.34,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -3797,7 +4314,7 @@
         }
       ],
       "slug": "hummus",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -3807,20 +4324,26 @@
         "wheat": "contains"
       },
       "densityGPerMl": 1.15,
+      "fdcId": 174277,
       "foodGroup": "other",
       "name": "Soy sauce",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 33,
-        "carbohydrateG": 4.9,
+        "carbohydrateG": 4.93,
         "energyKcal": 53,
-        "fatG": 0.6,
+        "fatG": 0.57,
         "fiberG": 0.8,
-        "ironMg": 2.4,
+        "ironMg": 1.45,
+        "monounsaturatedFatG": 0.088,
+        "polyunsaturatedFatG": 0.263,
         "potassiumMg": 435,
-        "proteinG": 8.1,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 5493,
-        "totalSugarG": 0.4
+        "proteinG": 8.14,
+        "saturatedFatG": 0.073,
+        "sodiumMg": 5490,
+        "totalSugarG": 0.4,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3833,7 +4356,7 @@
         }
       ],
       "slug": "soy-sauce",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium"
       ]
@@ -3843,20 +4366,26 @@
         "celery": "mayContain"
       },
       "densityGPerMl": 1.0,
+      "fdcId": 174536,
       "foodGroup": "other",
       "name": "Chicken stock, ready-made",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 4,
-        "carbohydrateG": 0.3,
-        "energyKcal": 5,
-        "fatG": 0.2,
+        "carbohydrateG": 0.44,
+        "energyKcal": 6,
+        "fatG": 0.21,
         "fiberG": 0,
-        "ironMg": 0.1,
-        "potassiumMg": 40,
-        "proteinG": 0.6,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 343,
-        "totalSugarG": 0
+        "ironMg": 0.07,
+        "monounsaturatedFatG": 0.019,
+        "polyunsaturatedFatG": 0.009,
+        "potassiumMg": 18,
+        "proteinG": 0.64,
+        "saturatedFatG": 0.013,
+        "sodiumMg": 371,
+        "totalSugarG": 0.43,
+        "vitaminB12Mcg": 0.02,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3865,7 +4394,7 @@
         }
       ],
       "slug": "chicken-stock",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "poultry",
         "meat",
@@ -3877,20 +4406,26 @@
         "celery": "mayContain"
       },
       "densityGPerMl": 1.0,
+      "fdcId": 171583,
       "foodGroup": "other",
       "name": "Vegetable stock, ready-made",
       "per100g": {
-        "calciumMg": 4,
-        "carbohydrateG": 1.2,
-        "energyKcal": 6,
-        "fatG": 0.1,
+        "addedSugarG": null,
+        "calciumMg": 3,
+        "carbohydrateG": 0.93,
+        "energyKcal": 5,
+        "fatG": 0.07,
         "fiberG": 0,
-        "ironMg": 0.1,
-        "potassiumMg": 40,
-        "proteinG": 0.2,
-        "saturatedFatG": 0,
-        "sodiumMg": 370,
-        "totalSugarG": 0.7
+        "ironMg": 0.06,
+        "monounsaturatedFatG": 0.005,
+        "polyunsaturatedFatG": 0.004,
+        "potassiumMg": 19,
+        "proteinG": 0.24,
+        "saturatedFatG": 0.028,
+        "sodiumMg": 296,
+        "totalSugarG": 0.55,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3899,7 +4434,7 @@
         }
       ],
       "slug": "vegetable-stock",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium"
       ]
@@ -3907,20 +4442,26 @@
     {
       "allergens": {},
       "densityGPerMl": 0.97,
+      "fdcId": 170173,
       "foodGroup": "other",
       "name": "Coconut milk, canned",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 18,
-        "carbohydrateG": 2.8,
+        "carbohydrateG": 2.81,
         "energyKcal": 197,
         "fatG": 21.3,
-        "fiberG": 0,
-        "ironMg": 1.6,
+        "fiberG": null,
+        "ironMg": 3.3,
+        "monounsaturatedFatG": 0.907,
+        "polyunsaturatedFatG": 0.233,
         "potassiumMg": 220,
-        "proteinG": 2,
+        "proteinG": 2.02,
         "saturatedFatG": 18.9,
         "sodiumMg": 13,
-        "totalSugarG": 2.8
+        "totalSugarG": null,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3937,7 +4478,7 @@
         }
       ],
       "slug": "coconut-milk-canned",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -3959,20 +4500,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.42,
+      "fdcId": 169640,
       "foodGroup": "other",
       "name": "Honey",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 6,
         "carbohydrateG": 82.4,
         "energyKcal": 304,
         "fatG": 0,
         "fiberG": 0.2,
-        "ironMg": 0.4,
+        "ironMg": 0.42,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 52,
         "proteinG": 0.3,
         "saturatedFatG": 0,
         "sodiumMg": 4,
-        "totalSugarG": 82.1
+        "totalSugarG": 82.1,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -3985,7 +4532,7 @@
         }
       ],
       "slug": "honey",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "honey",
         "addedSugarSource"
@@ -4010,20 +4557,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 0.85,
+      "fdcId": 169655,
       "foodGroup": "other",
       "name": "Sugar, white",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 1,
         "carbohydrateG": 100,
         "energyKcal": 387,
         "fatG": 0,
         "fiberG": 0,
-        "ironMg": 0.1,
+        "ironMg": 0.05,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 2,
         "proteinG": 0,
         "saturatedFatG": 0,
         "sodiumMg": 1,
-        "totalSugarG": 100
+        "totalSugarG": 99.8,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4036,7 +4589,7 @@
         }
       ],
       "slug": "sugar",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "addedSugarSource"
       ]
@@ -4060,20 +4613,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 173468,
       "foodGroup": "other",
       "name": "Salt, table",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 24,
         "carbohydrateG": 0,
         "energyKcal": 0,
         "fatG": 0,
         "fiberG": 0,
-        "ironMg": 0.3,
+        "ironMg": 0.33,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 8,
         "proteinG": 0,
         "saturatedFatG": 0,
-        "sodiumMg": 38758,
-        "totalSugarG": 0
+        "sodiumMg": 38800,
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4086,7 +4645,7 @@
         }
       ],
       "slug": "salt",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4108,20 +4667,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170931,
       "foodGroup": "other",
       "name": "Black pepper, ground",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 443,
         "carbohydrateG": 64,
         "energyKcal": 251,
-        "fatG": 3.3,
+        "fatG": 3.26,
         "fiberG": 25.3,
-        "ironMg": 9.7,
-        "potassiumMg": 1329,
+        "ironMg": 9.71,
+        "monounsaturatedFatG": 0.739,
+        "polyunsaturatedFatG": 0.998,
+        "potassiumMg": 1330,
         "proteinG": 10.4,
-        "saturatedFatG": 1.4,
+        "saturatedFatG": 1.39,
         "sodiumMg": 20,
-        "totalSugarG": 0.6
+        "totalSugarG": 0.64,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4134,7 +4699,7 @@
         }
       ],
       "slug": "black-pepper",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4156,20 +4721,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170923,
       "foodGroup": "other",
       "name": "Cumin, ground",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 931,
         "carbohydrateG": 44.2,
         "energyKcal": 375,
         "fatG": 22.3,
         "fiberG": 10.5,
         "ironMg": 66.4,
-        "potassiumMg": 1788,
+        "monounsaturatedFatG": 14,
+        "polyunsaturatedFatG": 3.28,
+        "potassiumMg": 1790,
         "proteinG": 17.8,
-        "saturatedFatG": 1.5,
+        "saturatedFatG": 1.54,
         "sodiumMg": 168,
-        "totalSugarG": 2.3
+        "totalSugarG": 2.25,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4182,7 +4753,7 @@
         }
       ],
       "slug": "cumin",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4204,20 +4775,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171329,
       "foodGroup": "other",
       "name": "Paprika, ground",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 229,
         "carbohydrateG": 54,
         "energyKcal": 282,
         "fatG": 12.9,
         "fiberG": 34.9,
         "ironMg": 21.1,
+        "monounsaturatedFatG": 1.7,
+        "polyunsaturatedFatG": 7.77,
         "potassiumMg": 2280,
         "proteinG": 14.1,
-        "saturatedFatG": 2.1,
+        "saturatedFatG": 2.14,
         "sodiumMg": 68,
-        "totalSugarG": 10.3
+        "totalSugarG": 10.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4230,26 +4807,32 @@
         }
       ],
       "slug": "paprika",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
       "allergens": {},
       "densityGPerMl": null,
+      "fdcId": 170924,
       "foodGroup": "other",
       "name": "Curry powder",
       "per100g": {
-        "calciumMg": 478,
+        "addedSugarG": null,
+        "calciumMg": 525,
         "carbohydrateG": 55.8,
         "energyKcal": 325,
         "fatG": 14,
         "fiberG": 53.2,
         "ironMg": 19.1,
+        "monounsaturatedFatG": 8.78,
+        "polyunsaturatedFatG": 3.06,
         "potassiumMg": 1170,
         "proteinG": 14.3,
-        "saturatedFatG": 2.2,
+        "saturatedFatG": 1.65,
         "sodiumMg": 52,
-        "totalSugarG": 2.8
+        "totalSugarG": 2.76,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4262,7 +4845,7 @@
         }
       ],
       "slug": "curry-powder",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4284,20 +4867,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 172231,
       "foodGroup": "other",
       "name": "Turmeric, ground",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 168,
         "carbohydrateG": 67.1,
         "energyKcal": 312,
-        "fatG": 3.3,
+        "fatG": 3.25,
         "fiberG": 22.7,
         "ironMg": 55,
-        "potassiumMg": 2525,
-        "proteinG": 9.7,
-        "saturatedFatG": 1.8,
+        "monounsaturatedFatG": 0.449,
+        "polyunsaturatedFatG": 0.756,
+        "potassiumMg": 2080,
+        "proteinG": 9.68,
+        "saturatedFatG": 1.84,
         "sodiumMg": 27,
-        "totalSugarG": 3.2
+        "totalSugarG": 3.21,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4310,7 +4899,7 @@
         }
       ],
       "slug": "turmeric",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4332,20 +4921,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171328,
       "foodGroup": "other",
       "name": "Oregano, dried",
       "per100g": {
-        "calciumMg": 1597,
+        "addedSugarG": null,
+        "calciumMg": 1600,
         "carbohydrateG": 68.9,
         "energyKcal": 265,
-        "fatG": 4.3,
+        "fatG": 4.28,
         "fiberG": 42.5,
         "ironMg": 36.8,
+        "monounsaturatedFatG": 0.716,
+        "polyunsaturatedFatG": 1.37,
         "potassiumMg": 1260,
         "proteinG": 9,
-        "saturatedFatG": 1.6,
+        "saturatedFatG": 1.55,
         "sodiumMg": 25,
-        "totalSugarG": 4.1
+        "totalSugarG": 4.09,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4358,7 +4953,7 @@
         }
       ],
       "slug": "oregano",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4380,20 +4975,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 171320,
       "foodGroup": "other",
       "name": "Cinnamon, ground",
       "per100g": {
-        "calciumMg": 1002,
+        "addedSugarG": null,
+        "calciumMg": 1000,
         "carbohydrateG": 80.6,
         "energyKcal": 247,
-        "fatG": 1.2,
+        "fatG": 1.24,
         "fiberG": 53.1,
-        "ironMg": 8.3,
+        "ironMg": 8.32,
+        "monounsaturatedFatG": 0.246,
+        "polyunsaturatedFatG": 0.068,
         "potassiumMg": 431,
-        "proteinG": 4,
-        "saturatedFatG": 0.3,
+        "proteinG": 3.99,
+        "saturatedFatG": 0.345,
         "sodiumMg": 10,
-        "totalSugarG": 2.2
+        "totalSugarG": 2.17,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4406,7 +5007,7 @@
         }
       ],
       "slug": "cinnamon",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4428,20 +5029,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 170932,
       "foodGroup": "other",
       "name": "Chilli flakes, dried",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 148,
         "carbohydrateG": 56.6,
         "energyKcal": 318,
         "fatG": 17.3,
-        "fiberG": 28.7,
+        "fiberG": 27.2,
         "ironMg": 7.8,
-        "potassiumMg": 1870,
+        "monounsaturatedFatG": 2.75,
+        "polyunsaturatedFatG": 8.37,
+        "potassiumMg": 2010,
         "proteinG": 12,
-        "saturatedFatG": 3.3,
+        "saturatedFatG": 3.26,
         "sodiumMg": 30,
-        "totalSugarG": 10.3
+        "totalSugarG": 10.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4454,7 +5061,7 @@
         }
       ],
       "slug": "chilli-flakes",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     },
     {
@@ -4495,20 +5102,26 @@
         "sulphites": "mayContain"
       },
       "densityGPerMl": null,
+      "fdcId": 326698,
       "foodGroup": "other",
       "name": "Mustard, prepared",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 63,
-        "carbohydrateG": 5.8,
-        "energyKcal": 66,
-        "fatG": 3.3,
-        "fiberG": 3.2,
-        "ironMg": 1.6,
-        "potassiumMg": 138,
-        "proteinG": 4.4,
-        "saturatedFatG": 0.2,
-        "sodiumMg": 1135,
-        "totalSugarG": 2.7
+        "carbohydrateG": 5.3,
+        "energyKcal": 61,
+        "fatG": 3.38,
+        "fiberG": 4.3,
+        "ironMg": 1.59,
+        "monounsaturatedFatG": 2.59,
+        "polyunsaturatedFatG": 0.903,
+        "potassiumMg": 150,
+        "proteinG": 4.25,
+        "saturatedFatG": 0.252,
+        "sodiumMg": 1100,
+        "totalSugarG": 1.42,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -4521,7 +5134,7 @@
         }
       ],
       "slug": "mustard",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -4531,20 +5144,26 @@
         "sulphites": "mayContain"
       },
       "densityGPerMl": 0.91,
+      "fdcId": 171009,
       "foodGroup": "other",
       "name": "Mayonnaise",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 8,
-        "carbohydrateG": 0.6,
+        "carbohydrateG": 0.57,
         "energyKcal": 680,
-        "fatG": 75,
+        "fatG": 74.8,
         "fiberG": 0,
-        "ironMg": 0.2,
+        "ironMg": 0.21,
+        "monounsaturatedFatG": 16.8,
+        "polyunsaturatedFatG": 44.7,
         "potassiumMg": 20,
-        "proteinG": 1,
-        "saturatedFatG": 11,
+        "proteinG": 0.96,
+        "saturatedFatG": 11.7,
         "sodiumMg": 635,
-        "totalSugarG": 0.6
+        "totalSugarG": 0.57,
+        "vitaminB12Mcg": 0.12,
+        "vitaminDMcg": 0.2
       },
       "portions": [
         {
@@ -4557,7 +5176,7 @@
         }
       ],
       "slug": "mayonnaise",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "egg"
       ]
@@ -4565,20 +5184,26 @@
     {
       "allergens": {},
       "densityGPerMl": 1.15,
+      "fdcId": 168556,
       "foodGroup": "other",
       "name": "Tomato ketchup",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 15,
         "carbohydrateG": 27.4,
         "energyKcal": 101,
         "fatG": 0.1,
         "fiberG": 0.3,
-        "ironMg": 0.4,
-        "potassiumMg": 380,
-        "proteinG": 1,
-        "saturatedFatG": 0,
+        "ironMg": 0.35,
+        "monounsaturatedFatG": 0.015,
+        "polyunsaturatedFatG": 0.041,
+        "potassiumMg": 281,
+        "proteinG": 1.04,
+        "saturatedFatG": 0.014,
         "sodiumMg": 907,
-        "totalSugarG": 21.3
+        "totalSugarG": 21.3,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4591,7 +5216,7 @@
         }
       ],
       "slug": "ketchup",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium",
         "addedSugarSource"
@@ -4602,20 +5227,26 @@
         "soy": "contains"
       },
       "densityGPerMl": null,
+      "fdcId": 172442,
       "foodGroup": "other",
       "name": "Miso paste",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 57,
-        "carbohydrateG": 26.5,
-        "energyKcal": 199,
-        "fatG": 6,
+        "carbohydrateG": 25.4,
+        "energyKcal": 198,
+        "fatG": 6.01,
         "fiberG": 5.4,
-        "ironMg": 2.5,
+        "ironMg": 2.49,
+        "monounsaturatedFatG": 1.12,
+        "polyunsaturatedFatG": 2.88,
         "potassiumMg": 210,
-        "proteinG": 11.7,
-        "saturatedFatG": 1,
-        "sodiumMg": 3728,
-        "totalSugarG": 6.2
+        "proteinG": 12.8,
+        "saturatedFatG": 1.02,
+        "sodiumMg": 3730,
+        "totalSugarG": 6.2,
+        "vitaminB12Mcg": 0.08,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4628,7 +5259,7 @@
         }
       ],
       "slug": "miso",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "highSodium"
       ]
@@ -4638,20 +5269,26 @@
         "fish": "contains"
       },
       "densityGPerMl": 1.2,
+      "fdcId": 174531,
       "foodGroup": "other",
       "name": "Fish sauce",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 43,
-        "carbohydrateG": 3.6,
+        "carbohydrateG": 3.64,
         "energyKcal": 35,
-        "fatG": 0,
+        "fatG": 0.01,
         "fiberG": 0,
-        "ironMg": 0.8,
-        "potassiumMg": 356,
-        "proteinG": 5.1,
-        "saturatedFatG": 0,
-        "sodiumMg": 7851,
-        "totalSugarG": 3.6
+        "ironMg": 0.78,
+        "monounsaturatedFatG": 0.002,
+        "polyunsaturatedFatG": 0.003,
+        "potassiumMg": 288,
+        "proteinG": 5.06,
+        "saturatedFatG": 0.003,
+        "sodiumMg": 7850,
+        "totalSugarG": 3.64,
+        "vitaminB12Mcg": 0.48,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4664,7 +5301,7 @@
         }
       ],
       "slug": "fish-sauce",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "fish",
         "highSodium"
@@ -4675,20 +5312,26 @@
         "fish": "contains"
       },
       "densityGPerMl": 1.1,
+      "fdcId": 171610,
       "foodGroup": "other",
       "name": "Worcestershire sauce",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 107,
-        "carbohydrateG": 19.5,
-        "energyKcal": 78,
+        "carbohydrateG": 19.2,
+        "energyKcal": 77,
         "fatG": 0,
         "fiberG": 0,
         "ironMg": 5.3,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 800,
         "proteinG": 0,
         "saturatedFatG": 0,
-        "sodiumMg": 980,
-        "totalSugarG": 10
+        "sodiumMg": 1300,
+        "totalSugarG": 10,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4701,7 +5344,7 @@
         }
       ],
       "slug": "worcestershire-sauce",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "fish",
         "highSodium"
@@ -4726,20 +5369,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": null,
+      "fdcId": 2685580,
       "foodGroup": "other",
       "name": "Tomato paste",
       "per100g": {
-        "calciumMg": 36,
-        "carbohydrateG": 18.9,
-        "energyKcal": 82,
-        "fatG": 0.5,
-        "fiberG": 4.1,
-        "ironMg": 3,
-        "potassiumMg": 1014,
-        "proteinG": 4.3,
-        "saturatedFatG": 0.1,
-        "sodiumMg": 59,
-        "totalSugarG": 12.2
+        "addedSugarG": null,
+        "calciumMg": 36.8,
+        "carbohydrateG": 20.2,
+        "energyKcal": 88.5,
+        "fatG": 0.732,
+        "fiberG": 4.7,
+        "ironMg": 3.18,
+        "monounsaturatedFatG": null,
+        "polyunsaturatedFatG": null,
+        "potassiumMg": 972,
+        "proteinG": 4.23,
+        "saturatedFatG": null,
+        "sodiumMg": 61.2,
+        "totalSugarG": 11.7,
+        "vitaminB12Mcg": null,
+        "vitaminDMcg": null
       },
       "portions": [
         {
@@ -4752,7 +5401,7 @@
         }
       ],
       "slug": "tomato-paste",
-      "source": "seedApproximate",
+      "source": "fdcFoundation",
       "tags": []
     },
     {
@@ -4760,18 +5409,26 @@
         "sulphites": "contains"
       },
       "densityGPerMl": 0.99,
+      "fdcId": 174837,
       "foodGroup": "other",
       "name": "White wine, dry",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 9,
         "carbohydrateG": 2.6,
         "energyKcal": 82,
+        "fatG": 0,
         "fiberG": 0,
-        "ironMg": 0.3,
+        "ironMg": 0.27,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 71,
+        "proteinG": 0.07,
         "saturatedFatG": 0,
         "sodiumMg": 5,
-        "totalSugarG": 1
+        "totalSugarG": 0.96,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4784,7 +5441,7 @@
         }
       ],
       "slug": "white-wine",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": [
         "alcohol"
       ]
@@ -4808,20 +5465,26 @@
         "wheat": "verifiedFree"
       },
       "densityGPerMl": 1.0,
+      "fdcId": 173647,
       "foodGroup": "other",
       "name": "Water",
       "per100g": {
+        "addedSugarG": null,
         "calciumMg": 3,
         "carbohydrateG": 0,
         "energyKcal": 0,
         "fatG": 0,
         "fiberG": 0,
         "ironMg": 0,
+        "monounsaturatedFatG": 0,
+        "polyunsaturatedFatG": 0,
         "potassiumMg": 0,
         "proteinG": 0,
         "saturatedFatG": 0,
-        "sodiumMg": 5,
-        "totalSugarG": 0
+        "sodiumMg": 4,
+        "totalSugarG": 0,
+        "vitaminB12Mcg": 0,
+        "vitaminDMcg": 0
       },
       "portions": [
         {
@@ -4830,7 +5493,7 @@
         }
       ],
       "slug": "water",
-      "source": "seedApproximate",
+      "source": "srLegacy",
       "tags": []
     }
   ]

@@ -14,7 +14,8 @@
     {
       "slug": "olive-oil",
       "name": "Olive oil",
-      "source": "seedApproximate",
+      "source": "srLegacy",
+      "fdcId": 171413,
       "foodGroup": "fats",
       "tags": [],
       "allergens": {},
