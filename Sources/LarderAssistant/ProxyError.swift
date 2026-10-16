@@ -11,6 +11,8 @@ public enum ProxyError: Error, Hashable, Sendable {
     case transport(URLError)
     /// No session token could be obtained because no attestation is configured.
     case noSession
+    /// The device could not attest or assert its App Attest key.
+    case attestation(AppAttestError)
 
     /// The shared error the UI acts on.
     public func toLarderError() -> LarderError {
@@ -31,7 +33,7 @@ public enum ProxyError: Error, Hashable, Sendable {
             .invalidResponse
         case .decoding:
             .invalidResponse
-        case .transport, .noSession:
+        case .transport, .noSession, .attestation:
             .assistantUnavailable
         }
     }

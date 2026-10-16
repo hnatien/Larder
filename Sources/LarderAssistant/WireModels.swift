@@ -4,10 +4,31 @@ import LarderCore
 struct SessionRequestBody: Encodable, Sendable {
     var attestation: Attestation
 
+    /// One of the proxy's attestation kinds; fields a kind does not use stay `nil` and are omitted.
     struct Attestation: Encodable, Sendable {
         var kind: String
-        var clientSecret: String
+        var clientSecret: String?
+        var keyId: String?
+        var attestationObject: String?
+        var assertion: String?
+        var challenge: String?
+
+        static func dev(clientSecret: String) -> Self {
+            Self(kind: "dev", clientSecret: clientSecret)
+        }
+
+        static func appAttest(keyID: String, attestationObject: Data, challenge: String) -> Self {
+            Self(kind: "appAttest", keyId: keyID, attestationObject: attestationObject.base64EncodedString(), challenge: challenge)
+        }
+
+        static func appAssert(keyID: String, assertion: Data, challenge: String) -> Self {
+            Self(kind: "appAssert", keyId: keyID, assertion: assertion.base64EncodedString(), challenge: challenge)
+        }
     }
+}
+
+struct ChallengeResponseBody: Decodable, Sendable {
+    var challenge: String
 }
 
 struct SessionResponseBody: Decodable, Sendable {

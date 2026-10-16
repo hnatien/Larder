@@ -22,6 +22,7 @@ enum Fixtures {
     /// 2026-10-16T09:00:00Z.
     static let now = Date(timeIntervalSince1970: 1_792_141_200)
     static let sessionPath = "/v1/session"
+    static let challengePath = "/v1/challenge"
     static let explainPath = "/v1/assist/explain"
     static let pantryPath = "/v1/assist/parse-pantry"
     static let recipePath = "/v1/assist/parse-recipe"
@@ -29,6 +30,10 @@ enum Fixtures {
 
     static func sessionReply(token: String = "token-1", expiresAt: String = "2026-10-16T10:00:00.000Z") -> Stub.Reply {
         .json(200, #"{"token":"\#(token)","expiresAt":"\#(expiresAt)"}"#)
+    }
+
+    static func challengeReply(_ challenge: String = "challenge-1") -> Stub.Reply {
+        .json(200, #"{"challenge":"\#(challenge)","expiresAt":"2026-10-16T09:05:00.000Z"}"#)
     }
 
     static func date(_ year: Int, _ month: Int, _ day: Int) -> Date {
@@ -44,12 +49,14 @@ enum Fixtures {
         _ stub: Stub,
         clock: TestClock = TestClock(),
         secret: String? = "dev-secret",
-        entitlement: String? = nil
+        entitlement: String? = nil,
+        appAttest: AppAttestConfiguration? = nil
     ) -> ProxyClient {
         let configuration = ProxyConfiguration(
             baseURL: stub.baseURL,
             clientSecretProvider: { secret },
-            entitlementProvider: { entitlement }
+            entitlementProvider: { entitlement },
+            appAttest: appAttest
         )
         return ProxyClient(configuration: configuration, urlSession: stub.session(), dateProvider: clock)
     }

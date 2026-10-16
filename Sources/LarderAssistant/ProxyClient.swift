@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import LarderCore
 
@@ -67,38 +68,96 @@ public actor ProxyClient {
 
     private func requestSession() async -> Result<SessionToken, ProxyError> {
         defer { pendingSession = nil }
-        guard let clientSecret = await configuration.clientSecretProvider() else {
-            return .failure(.noSession)
-        }
         do throws(ProxyError) {
-            let body = SessionRequestBody(attestation: .init(kind: "dev", clientSecret: clientSecret))
-            let payload: Data
-            do {
-                payload = try encoder.encode(body)
-            } catch {
-                throw .decoding
+            let token: SessionToken
+            if let appAttest = configuration.appAttest, appAttest.attester.isSupported {
+                token = try await appAttestSession(appAttest)
+            } else if let clientSecret = await configuration.clientSecretProvider() {
+                token = try await postSession(.dev(clientSecret: clientSecret))
+            } else {
+                throw .noSession
             }
-            var request = URLRequest(url: configuration.baseURL.appending(path: "v1/session"))
-            request.httpMethod = "POST"
-            request.timeoutInterval = 20
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = payload
-            let (data, status) = try await perform(request)
-            guard (200..<300).contains(status) else {
-                throw Self.httpError(status: status, data: data)
-            }
-            guard
-                let response = try? JSONDecoder().decode(SessionResponseBody.self, from: data),
-                let expiresAt = Self.parseTimestamp(response.expiresAt)
-            else {
-                throw .decoding
-            }
-            let token = SessionToken(value: response.token, expiresAt: expiresAt)
             cachedToken = token
             return .success(token)
         } catch {
             return .failure(error)
         }
+    }
+
+    /// Asserts with the stored key. Attests a new key when none is stored, or when the device or the
+    /// proxy no longer knows the stored one; the key id is saved only once the proxy has accepted it.
+    private func appAttestSession(_ appAttest: AppAttestConfiguration) async throws(ProxyError) -> SessionToken {
+        if let keyID = appAttest.keyStore.load() {
+            do throws(ProxyError) {
+                let challenge = try await fetchChallenge()
+                let assertion: Data
+                do throws(AppAttestError) {
+                    assertion = try await appAttest.attester.generateAssertion(keyID, clientDataHash: Self.clientDataHash(challenge))
+                } catch {
+                    throw .attestation(error)
+                }
+                return try await postSession(.appAssert(keyID: keyID, assertion: assertion, challenge: challenge))
+            } catch .attestation(.invalidKey), .http(401, "unknown_key", _) {
+                appAttest.keyStore.save(nil)
+            }
+        }
+        let keyID: String
+        let attestation: Data
+        let challenge = try await fetchChallenge()
+        do throws(AppAttestError) {
+            keyID = try await appAttest.attester.generateKey()
+            attestation = try await appAttest.attester.attestKey(keyID, clientDataHash: Self.clientDataHash(challenge))
+        } catch {
+            throw .attestation(error)
+        }
+        let token = try await postSession(.appAttest(keyID: keyID, attestationObject: attestation, challenge: challenge))
+        appAttest.keyStore.save(keyID)
+        return token
+    }
+
+    private func fetchChallenge() async throws(ProxyError) -> String {
+        let (data, status) = try await perform(sessionRequest(path: "v1/challenge", body: Data("{}".utf8)))
+        guard (200..<300).contains(status) else {
+            throw Self.httpError(status: status, data: data)
+        }
+        guard let response = try? JSONDecoder().decode(ChallengeResponseBody.self, from: data) else {
+            throw .decoding
+        }
+        return response.challenge
+    }
+
+    private func postSession(_ attestation: SessionRequestBody.Attestation) async throws(ProxyError) -> SessionToken {
+        let payload: Data
+        do {
+            payload = try encoder.encode(SessionRequestBody(attestation: attestation))
+        } catch {
+            throw .decoding
+        }
+        let (data, status) = try await perform(sessionRequest(path: "v1/session", body: payload))
+        guard (200..<300).contains(status) else {
+            throw Self.httpError(status: status, data: data)
+        }
+        guard
+            let response = try? JSONDecoder().decode(SessionResponseBody.self, from: data),
+            let expiresAt = Self.parseTimestamp(response.expiresAt)
+        else {
+            throw .decoding
+        }
+        return SessionToken(value: response.token, expiresAt: expiresAt)
+    }
+
+    private func sessionRequest(path: String, body: Data) -> URLRequest {
+        var request = URLRequest(url: configuration.baseURL.appending(path: path))
+        request.httpMethod = "POST"
+        request.timeoutInterval = 20
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        return request
+    }
+
+    /// Apple's `clientDataHash`: SHA-256 of the challenge's UTF-8 bytes, as the proxy recomputes it.
+    static func clientDataHash(_ challenge: String) -> Data {
+        Data(SHA256.hash(data: Data(challenge.utf8)))
     }
 
     private func post(_ payload: Data, to route: AssistantRoute, token: String) async throws(ProxyError) -> (Data, Int) {

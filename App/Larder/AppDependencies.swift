@@ -170,7 +170,9 @@ final class AppDependencies {
                 nil
                 #endif
             },
-            entitlementProvider: { await entitlements.entitlementJWS() }
+            entitlementProvider: { await entitlements.entitlementJWS() },
+            // The Simulator has no App Attest, so Debug runs there use the development secret above.
+            appAttest: AppAttestConfiguration(attester: LiveAppAttester(), keyStore: UserDefaultsAttestedKeyStore())
         )
         let client = ProxyClient(configuration: configuration, urlSession: URLSession(configuration: .ephemeral), dateProvider: dates)
         let proxy = ProxyAssistantBackend(client: client, dateProvider: dates) {
