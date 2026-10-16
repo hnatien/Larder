@@ -15,18 +15,20 @@ enum LedgerSheet: Identifiable, Hashable {
     }
 }
 
-/// The week as a ledger: a row per day, a jar label per meal, a tape label per leftover, and the week's shelf.
+/// The Plan tab: the week as a list of days, a meal row per dinner, a leftovers row per leftover, and the week's balance.
 public struct LedgerView: View {
     private let model: LedgerModel
     private let onOpenRecipe: (RecipeID) -> Void
     private let onShowPaywall: () -> Void
     private let onOpenAccount: (() -> Void)?
     @State private var sheet: LedgerSheet?
+    @State private var isConfirmingReplan = false
+    @State private var showsSavedToast = false
     @AccessibilityFocusState private var headingFocused: Bool
     @Namespace private var dayRotor
 
     /// Creates the tab root; `onShowPaywall` runs when a free user has no free week left, and `onOpenAccount`
-    /// adds an Account button to the toolbar.
+    /// adds the Settings button to the toolbar.
     public init(
         model: LedgerModel,
         onOpenRecipe: @escaping (RecipeID) -> Void,
@@ -42,33 +44,39 @@ public struct LedgerView: View {
     public var body: some View {
         NavigationStack {
             list
+                .navigationTitle(Copy.Tab.ledger)
+                .navigationSubtitle(LedgerCopy.planSubtitle)
+                .settingsButton(onOpenAccount)
                 .toolbar {
-                    if let onOpenAccount {
-                        ToolbarItem(placement: .navigation) {
-                            Button(Copy.Tab.account, systemImage: "gearshape", action: onOpenAccount)
-                        }
-                    }
                     if model.plan != nil {
                         ToolbarItem(placement: .primaryAction) {
-                            Button(LedgerCopy.replan) {
-                                Task { await model.replan(keepingLocked: true) }
+                            Button(LedgerCopy.replan, systemImage: "arrow.triangle.2.circlepath") {
+                                isConfirmingReplan = true
                             }
                             .disabled(model.isPlanning)
                         }
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
-                    if model.plan == nil, !model.isPlanning {
-                        FloatingAction(Copy.Action.planMyWeek, systemImage: "calendar") {
-                            Task { await model.planWeek() }
-                        }
-                        .padding(.bottom, LarderSpacing.s)
+                    if showsSavedToast {
+                        ToastBar(LedgerCopy.planSaved)
+                            .padding(.horizontal, LarderSpacing.l)
+                            .padding(.bottom, LarderSpacing.s)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
+                }
+                .confirmationDialog(LedgerCopy.replanQuestion, isPresented: $isConfirmingReplan, titleVisibility: .visible) {
+                    Button(LedgerCopy.replan) { Task { await model.replan(keepingLocked: true) } }
+                    Button(Copy.Action.notNow, role: .cancel) {}
+                } message: {
+                    Text(LedgerCopy.replanMessage)
                 }
         }
         .task { await model.load() }
         .sheet(item: $sheet) { target in
             MealSheet(model: model, target: target, onOpenRecipe: onOpenRecipe)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .onChange(of: model.paywallRequested) { _, requested in
             guard requested else { return }
@@ -78,7 +86,15 @@ public struct LedgerView: View {
         .onChange(of: model.savedPlanCount) {
             AccessibilityNotification.Announcement(Copy.Voice.planSaved).post()
             headingFocused = true
+            showsSavedToast = true
         }
+        .task(id: showsSavedToast) {
+            guard showsSavedToast else { return }
+            try? await Task.sleep(for: .seconds(3))
+            showsSavedToast = false
+        }
+        .sensoryFeedback(.success, trigger: model.savedPlanCount)
+        .larderAnimation(LarderMotion.tap, value: showsSavedToast)
     }
 
     private var list: some View {
@@ -87,14 +103,14 @@ public struct LedgerView: View {
                 .ledgerListRow()
             if model.showsExplanation, model.plan != nil {
                 explanationCard
-                    .ledgerListRow(horizontal: LarderSpacing.l)
+                    .ledgerListRow()
             }
             ForEach(model.days) { day in
                 dayRow(day)
             }
             if let balance = model.shelfBalance, !balance.levels.isEmpty {
                 ShelfBalanceCard(balance: balance, sentence: model.balanceSentence, averages: model.averages)
-                    .ledgerListRow(horizontal: LarderSpacing.l)
+                    .ledgerListRow()
             }
         }
         .listStyle(.plain)
@@ -109,11 +125,6 @@ public struct LedgerView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.m) {
-            Text(Copy.Tab.ledger)
-                .font(LarderFont.display(.largeTitle))
-                .foregroundStyle(LarderColor.ink.primary)
-                .accessibilityAddTraits(.isHeader)
-                .accessibilityFocused($headingFocused)
             if model.isPlanning {
                 HStack(spacing: LarderSpacing.s) {
                     ProgressView()
@@ -122,27 +133,35 @@ public struct LedgerView: View {
                         .foregroundStyle(LarderColor.ink.secondary)
                 }
                 .accessibilityElement(children: .combine)
+                .accessibilityFocused($headingFocused)
             }
             if let error = model.error {
                 LedgerNotice(error: error, onDismiss: model.clearError)
             }
             if model.plan == nil, !model.isPlanning {
-                EmptyShelf(title: LedgerCopy.noPlanTitle, message: LedgerCopy.noPlanMessage)
+                EmptyShelf(
+                    title: LedgerCopy.noPlanTitle,
+                    message: LedgerCopy.noPlanMessage,
+                    illustration: .plan,
+                    systemImage: "calendar.badge.plus",
+                    action: .init(title: Copy.Action.planMyWeek) { Task { await model.planWeek() } }
+                )
             }
             if model.plan != nil {
-                Button(LedgerCopy.whyThisWeek) {
+                Button {
                     if model.showsExplanation {
                         model.hideExplanation()
                     } else {
                         Task { await model.requestExplanation() }
                     }
+                } label: {
+                    Label(LedgerCopy.whyThisWeek, systemImage: "info.circle")
                 }
                 .buttonStyle(.larderQuiet)
                 .accessibilityValue(model.showsExplanation ? Text(LedgerCopy.shown) : Text(LedgerCopy.hidden))
+                .accessibilityFocused($headingFocused)
             }
         }
-        .padding(.horizontal, LarderSpacing.l)
-        .padding(.top, LarderSpacing.s)
     }
 
     private var explanationCard: some View {
@@ -174,9 +193,12 @@ public struct LedgerView: View {
     }
 
     private func dayRow(_ day: LedgerDay) -> some View {
-        LedgerRow(day: Self.shortDay(day.date), isToday: day.isToday) {
-            ForEach(day.meals) { entry in
-                mealLabel(entry, isToday: day.isToday)
+        LedgerRow(day: Self.dayHeading(day.date), isToday: day.isToday) {
+            ForEach(Array(day.meals.enumerated()), id: \.element.id) { index, entry in
+                if index > 0 {
+                    Divider().overlay(LarderColor.line.hairline)
+                }
+                mealLabel(entry)
             }
             ForEach(day.openSlots, id: \.self) { slot in
                 OpenSlotLabel(slot: slot) { sheet = .openSlot(day.date, slot) }
@@ -186,45 +208,46 @@ public struct LedgerView: View {
         .ledgerListRow()
         .swipeActions(edge: .leading) {
             if let meal = day.meals.first?.meal {
-                Button(Copy.Action.markCooked) { Task { await model.markCooked(meal) } }
+                Button(Copy.Action.markCooked, systemImage: "checkmark") { Task { await model.markCooked(meal) } }
                     .tint(LarderColor.accent.second)
             }
         }
         .swipeActions(edge: .trailing) {
             if let meal = day.meals.first?.meal {
-                Button(Copy.Action.skip) { Task { await model.skip(meal) } }
+                Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
                     .tint(LarderColor.ink.secondary)
-                Button(Copy.Action.swap) { sheet = .meal(meal.id, swapping: true) }
-                    .tint(LarderColor.accent.second)
+                Button(Copy.Action.swap, systemImage: "arrow.left.arrow.right") { sheet = .meal(meal.id, swapping: true) }
+                    .tint(LarderColor.accent.brand)
             }
         }
     }
 
-    private func mealLabel(_ entry: LedgerMeal, isToday: Bool) -> some View {
+    private func mealLabel(_ entry: LedgerMeal) -> some View {
         let meal = entry.meal
         return Button {
             sheet = .meal(meal.id, swapping: false)
         } label: {
-            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+            Group {
                 if let tag = entry.leftoverTag {
                     TapeLabel(text: tag)
                 } else {
-                    JarLabel(
-                        title: entry.title,
-                        minutes: entry.minutes,
-                        tone: meal.isLocked ? .second : isToday ? .brand : .ink,
-                        slot: LedgerCopy.name(of: meal.slot)
-                    )
-                }
-                if !Self.statusWords(meal).isEmpty {
-                    Text(Self.statusWords(meal).joined(separator: " \u{B7} "))
-                        .stamp()
-                        .foregroundStyle(LarderColor.ink.secondary)
+                    JarLabel(title: entry.title, minutes: entry.minutes, slot: LedgerCopy.name(of: meal.slot)) {
+                        StatusPills(meal: meal)
+                    }
                 }
             }
             .opacity(meal.status == .skipped ? Self.skippedOpacity : 1)
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button(Copy.Action.swap, systemImage: "arrow.left.arrow.right") { sheet = .meal(meal.id, swapping: true) }
+            Button(Copy.Action.markCooked, systemImage: "checkmark") { Task { await model.markCooked(meal) } }
+            Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
+            Button(meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock, systemImage: meal.isLocked ? "lock.open" : "lock") {
+                Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }
+            }
+            Button(LedgerCopy.seeRecipe, systemImage: "book") { onOpenRecipe(meal.recipeID) }
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(entry.leftoverTag ?? [LedgerCopy.name(of: meal.slot), entry.title, Copy.Ledger.spokenMinutes(entry.minutes)].joined(separator: ", "))
         .accessibilityValue(Self.statusWords(meal).joined(separator: ", "))
@@ -261,44 +284,73 @@ public struct LedgerView: View {
         date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated))
     }
 
+    /// The visible day heading, such as "Saturday 17 October".
+    static func dayHeading(_ date: Date) -> String {
+        date.formatted(.dateTime.weekday(.wide).day().month(.wide))
+    }
+
     static func spokenDay(_ date: Date) -> String {
         date.formatted(.dateTime.weekday(.wide).day().month(.wide))
     }
 }
 
-/// A quiet placeholder for a slot nothing fits yet, with a way to pick one.
+/// The statuses a meal carries, as small badges with icons.
+private struct StatusPills: View {
+    let meal: PlannedMeal
+
+    var body: some View {
+        let cooked = meal.status == .cooked
+        let skipped = meal.status == .skipped
+        if cooked || skipped || meal.isLocked {
+            HStack(spacing: LarderSpacing.xs) {
+                if cooked { Pill(LedgerCopy.cooked, systemImage: "checkmark", tone: .second) }
+                if skipped { Pill(LedgerCopy.skipped, systemImage: "forward", tone: .neutral) }
+                if meal.isLocked { Pill(LedgerCopy.locked, systemImage: "lock", tone: .neutral) }
+            }
+            .padding(.top, LarderSpacing.xxs)
+        }
+    }
+}
+
+/// A dashed placeholder for a day with no dinner, with a way to choose one.
 private struct OpenSlotLabel: View {
     @Environment(\.displayScale) private var displayScale
     let slot: MealType
     let onPick: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
-            Text(LedgerCopy.name(of: slot))
-                .stamp()
-                .foregroundStyle(LarderColor.ink.secondary)
-            Text(LedgerCopy.nothingFits)
-                .font(LarderFont.body(.body))
-                .foregroundStyle(LarderColor.ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Button(LedgerCopy.pickOne, action: onPick)
-                .buttonStyle(.larderQuiet)
+        Button(action: onPick) {
+            HStack(spacing: LarderSpacing.m) {
+                Image(systemName: "plus")
+                    .font(LarderFont.body(.body, weight: .semibold))
+                    .foregroundStyle(LarderColor.accent.brand)
+                    .frame(width: 44, height: 44)
+                    .background(LarderColor.accent.brand.opacity(0.1), in: RoundedRectangle(cornerRadius: LarderRadius.tile, style: .continuous))
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
+                    Text(LedgerCopy.pickOne)
+                        .font(LarderFont.body(.body, weight: .semibold))
+                        .foregroundStyle(LarderColor.accent.brand)
+                    Text([LedgerCopy.name(of: slot), LedgerCopy.nothingFits].joined(separator: " \u{B7} "))
+                        .font(LarderFont.body(.subheadline))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, LarderSpacing.s)
-        .padding(.vertical, LarderSpacing.xs)
-        .overlay {
-            RoundedRectangle(cornerRadius: LarderRadius.stamp)
-                .strokeBorder(LarderColor.line.strong, style: StrokeStyle(lineWidth: 1 / displayScale, dash: [4, 3]))
-                .accessibilityHidden(true)
-        }
-        .accessibilityElement(children: .contain)
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(LedgerCopy.name(of: slot) + ", " + LedgerCopy.nothingFits)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(LedgerCopy.pickOne)
     }
 }
 
 private extension View {
-    /// A ledger list row: edge to edge on the canvas, with the row drawing its own hairline.
-    func ledgerListRow(horizontal: CGFloat = 0) -> some View {
-        listRowInsets(EdgeInsets(top: LarderSpacing.s, leading: horizontal, bottom: LarderSpacing.s, trailing: horizontal))
+    /// A plan list row on the canvas, inset from the edges; the row draws its own card.
+    func ledgerListRow() -> some View {
+        listRowInsets(EdgeInsets(top: LarderSpacing.s, leading: LarderSpacing.l, bottom: LarderSpacing.s, trailing: LarderSpacing.l))
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
     }

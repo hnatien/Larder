@@ -2,7 +2,7 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// The week's shelf: one band per food group and a sentence about the gap. Numbers only when the profile asks for them.
+/// The week's nutrition balance: one band per food group and a sentence about the gap. Numbers only when the profile asks for them.
 struct ShelfBalanceCard: View {
     let balance: ShelfBalance
     let sentence: String?
@@ -12,7 +12,13 @@ struct ShelfBalanceCard: View {
     var body: some View {
         PaperCard {
             VStack(alignment: .leading, spacing: LarderSpacing.m) {
-                SectionHeading(LedgerCopy.shelfHeading)
+                VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                    SectionHeading(LedgerCopy.shelfHeading)
+                    Text(LedgerCopy.balanceLegend)
+                        .font(LarderFont.body(.footnote))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 ForEach(FoodGroup.allCases.filter { balance.levels[$0] != nil }, id: \.self) { group in
                     ShelfBand(group: group, level: Self.level(balance.levels[group] ?? .comfortable))
                 }

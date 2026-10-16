@@ -24,10 +24,8 @@ struct MealSheet: View {
                             mealContent(entry)
                         }
                     case .openSlot(let date, let slot):
-                        SectionHeading(LedgerCopy.nothingFits)
-                        Text(LedgerView.spokenDay(date))
-                            .stamp()
-                            .foregroundStyle(LarderColor.ink.secondary)
+                        SectionHeading(LedgerCopy.pickOne)
+                        MetaLabel(LedgerView.spokenDay(date), systemImage: "calendar")
                         swapList { option in
                             Task {
                                 await model.fill(slot, on: date, with: option)
@@ -57,20 +55,51 @@ struct MealSheet: View {
 
     @ViewBuilder private func mealContent(_ entry: LedgerMeal) -> some View {
         let meal = entry.meal
-        SectionHeading(entry.title)
-        HStack(spacing: LarderSpacing.s) {
-            Stamp(text: LedgerCopy.name(of: meal.slot))
-            Stamp(text: Copy.Ledger.minutes(entry.minutes))
-                .accessibilityLabel(Copy.Ledger.spokenMinutes(entry.minutes))
-            ForEach(LedgerView.statusWords(meal), id: \.self) { word in
-                Stamp(text: word)
+        HStack(alignment: .top, spacing: LarderSpacing.m) {
+            RecipeTile(title: entry.title, size: .large)
+            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                Text(entry.title)
+                    .font(LarderFont.display(.title2))
+                    .foregroundStyle(LarderColor.ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                MetaLabel(
+                    [LedgerCopy.name(of: meal.slot), Copy.Ledger.minutes(entry.minutes)].joined(separator: " \u{B7} "),
+                    systemImage: "clock",
+                    spoken: [LedgerCopy.name(of: meal.slot), Copy.Ledger.spokenMinutes(entry.minutes)].joined(separator: ", ")
+                )
+                MetaLabel(LedgerView.spokenDay(meal.date), systemImage: "calendar")
+                if !LedgerView.statusWords(meal).isEmpty {
+                    HStack(spacing: LarderSpacing.xs) {
+                        ForEach(LedgerView.statusWords(meal), id: \.self) { Pill($0) }
+                    }
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         if let tag = entry.leftoverTag {
             TapeLabel(text: tag)
         }
-        Button(LedgerCopy.seeRecipe) { onOpenRecipe(meal.recipeID) }
-            .buttonStyle(.larderQuiet)
+        AdaptiveStack(spacing: LarderSpacing.s, stacksFrom: .xLarge) {
+            Button {
+                onOpenRecipe(meal.recipeID)
+            } label: {
+                Label(LedgerCopy.seeRecipe, systemImage: "book").frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.larderPrimary)
+            Button {
+                Task { await loadSwaps(for: meal) }
+            } label: {
+                Label(Copy.Action.swap, systemImage: "arrow.left.arrow.right").frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.larderSecondary)
+        }
+        if showsSwaps {
+            swapList { option in
+                Task { await model.swap(meal, with: option) }
+                showsSwaps = false
+            }
+        }
 
         let reasons = model.reasons(for: meal)
         let note = model.explanationNote(for: meal)
@@ -87,37 +116,40 @@ struct MealSheet: View {
             }
         }
 
-        VStack(alignment: .leading, spacing: LarderSpacing.s) {
-            Button(Copy.Action.swap) {
-                Task { await loadSwaps(for: meal) }
-            }
-            .buttonStyle(.larderSecondary)
-            if showsSwaps {
-                swapList { option in
-                    Task { await model.swap(meal, with: option) }
-                    showsSwaps = false
+        PaperCard(padded: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                ActionRow(title: Copy.Action.markCooked, systemImage: "checkmark.circle") {
+                    Task { await model.markCooked(meal) }
                 }
-            }
-            Button(Copy.Action.markCooked) { Task { await model.markCooked(meal) } }
-                .buttonStyle(.larderSecondary)
                 .disabled(meal.status == .cooked)
-            Button(Copy.Action.skip) { Task { await model.skip(meal) } }
-                .buttonStyle(.larderSecondary)
-                .disabled(meal.status == .skipped)
-            Button(meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock) {
-                Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }
-            }
-            .buttonStyle(.larderSecondary)
-            Picker(LedgerCopy.moveToAnotherDay, selection: moveBinding(for: meal)) {
-                ForEach(model.days) { day in
-                    Text(LedgerView.spokenDay(day.date)).tag(day.date)
+                Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
+                ActionRow(title: Copy.Action.skip, systemImage: "forward") {
+                    Task { await model.skip(meal) }
                 }
-            }
-            .pickerStyle(.menu)
-            .frame(minHeight: 44)
-            if meal.leftoverOf != nil {
-                Button(LedgerCopy.removeLeftover) { Task { await model.removeLeftover(meal) } }
-                    .buttonStyle(.larderQuiet)
+                .disabled(meal.status == .skipped)
+                Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
+                ActionRow(title: meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock, systemImage: meal.isLocked ? "lock.open" : "lock") {
+                    Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }
+                }
+                Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
+                Picker(selection: moveBinding(for: meal)) {
+                    ForEach(model.days) { day in
+                        Text(LedgerView.spokenDay(day.date)).tag(day.date)
+                    }
+                } label: {
+                    Label(LedgerCopy.moveToAnotherDay, systemImage: "calendar")
+                }
+                .pickerStyle(.menu)
+                .tint(LarderColor.accent.brand)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .padding(.horizontal, LarderSpacing.l)
+                .padding(.vertical, LarderSpacing.xs)
+                if meal.leftoverOf != nil {
+                    Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
+                    ActionRow(title: LedgerCopy.removeLeftover, systemImage: "minus.circle") {
+                        Task { await model.removeLeftover(meal) }
+                    }
+                }
             }
         }
     }
@@ -140,22 +172,31 @@ struct MealSheet: View {
         } else {
             VStack(alignment: .leading, spacing: LarderSpacing.m) {
                 ForEach(model.swapCandidates, id: \.recipeID) { option in
-                    VStack(alignment: .leading, spacing: LarderSpacing.s) {
-                        Text(option.candidate.recipe.title)
-                            .font(LarderFont.body(.body, weight: .semibold))
-                            .foregroundStyle(LarderColor.ink.primary)
-                        Stamp(text: Copy.Ledger.minutes(option.candidate.totalMinutes))
-                            .accessibilityLabel(Copy.Ledger.spokenMinutes(option.candidate.totalMinutes))
-                        if let reason = model.reasons(for: option, limit: 1).first {
-                            ReasonLine(text: reason)
+                    PaperCard {
+                        VStack(alignment: .leading, spacing: LarderSpacing.s) {
+                            HStack(spacing: LarderSpacing.m) {
+                                RecipeTile(title: option.candidate.recipe.title, size: .small)
+                                VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
+                                    Text(option.candidate.recipe.title)
+                                        .font(LarderFont.body(.body, weight: .semibold))
+                                        .foregroundStyle(LarderColor.ink.primary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    MetaLabel(
+                                        Copy.Ledger.minutes(option.candidate.totalMinutes),
+                                        systemImage: "clock",
+                                        spoken: Copy.Ledger.spokenMinutes(option.candidate.totalMinutes)
+                                    )
+                                }
+                            }
+                            if let reason = model.reasons(for: option, limit: 1).first {
+                                ReasonLine(text: reason)
+                            }
+                            Button(LedgerCopy.useThis) { onChoose(option) }
+                                .buttonStyle(.larderPrimary)
+                                .accessibilityLabel(LedgerCopy.useRecipe(option.candidate.recipe.title))
                         }
-                        Button(LedgerCopy.useThis) { onChoose(option) }
-                            .buttonStyle(.larderPrimary)
-                            .accessibilityLabel(LedgerCopy.useRecipe(option.candidate.recipe.title))
                     }
                     .accessibilityElement(children: .contain)
-                    Divider()
-                        .overlay(LarderColor.line.hairline)
                 }
             }
         }
@@ -177,6 +218,27 @@ struct MealSheet: View {
         isLoadingSwaps = true
         await model.loadSwapCandidates(for: meal)
         isLoadingSwaps = false
+    }
+}
+
+/// One row in the meal sheet's action list: an icon and a verb, the whole row tappable.
+private struct ActionRow: View {
+    @Environment(\.isEnabled) private var isEnabled
+    let title: String
+    let systemImage: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(title, systemImage: systemImage)
+                .font(LarderFont.body(.body))
+                .foregroundStyle(isEnabled ? LarderColor.ink.primary : LarderColor.ink.tertiary)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .padding(.horizontal, LarderSpacing.l)
+                .padding(.vertical, LarderSpacing.xs)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 

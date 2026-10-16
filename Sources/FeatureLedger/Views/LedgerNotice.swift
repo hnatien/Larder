@@ -25,6 +25,9 @@ struct LedgerNotice: View {
             Button(LedgerCopy.dismiss, action: onDismiss)
                 .buttonStyle(.larderQuiet)
         }
+        .padding(LarderSpacing.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(LarderColor.status(.info).opacity(0.08), in: RoundedRectangle(cornerRadius: LarderRadius.card, style: .continuous))
         .accessibilityElement(children: .contain)
     }
 }

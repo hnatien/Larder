@@ -2,86 +2,107 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// The home tab: up to three dinner ideas from what is on the shelves, and a "Pick for me" for tired evenings.
+/// The home tab: tonight's dinner when one is planned, and pantry-first ideas three at a time.
 public struct TonightView: View {
     /// Ideas show at most this many reasons each.
     static let reasonLimit = 2
 
     private let model: TonightModel
     private let onOpenRecipe: (RecipeID) -> Void
+    private let onStartCooking: (RecipeID) -> Void
     private let onAddToPantry: () -> Void
-    @AccessibilityFocusState private var focusedOption: RecipeID?
+    private let onBrowseRecipes: (() -> Void)?
+    private let onOpenSettings: (() -> Void)?
 
-    /// Creates the tab root; `onAddToPantry` runs from the empty state.
-    public init(model: TonightModel, onOpenRecipe: @escaping (RecipeID) -> Void, onAddToPantry: @escaping () -> Void = {}) {
+    /// Creates the tab root. `onAddToPantry` and `onBrowseRecipes` run from the empty state; `onOpenSettings` adds
+    /// the Settings button.
+    public init(
+        model: TonightModel,
+        onOpenRecipe: @escaping (RecipeID) -> Void,
+        onStartCooking: @escaping (RecipeID) -> Void = { _ in },
+        onAddToPantry: @escaping () -> Void = {},
+        onBrowseRecipes: (() -> Void)? = nil,
+        onOpenSettings: (() -> Void)? = nil
+    ) {
         self.model = model
         self.onOpenRecipe = onOpenRecipe
+        self.onStartCooking = onStartCooking
         self.onAddToPantry = onAddToPantry
+        self.onBrowseRecipes = onBrowseRecipes
+        self.onOpenSettings = onOpenSettings
     }
 
     public var body: some View {
-        ScrollViewReader { proxy in
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: LarderSpacing.xl) {
-                    Text(Copy.Tab.tonight)
-                        .font(LarderFont.display(.largeTitle))
-                        .foregroundStyle(LarderColor.ink.primary)
-                        .accessibilityAddTraits(.isHeader)
                     if let error = model.error {
                         LedgerNotice(error: error, onDismiss: model.clearError)
                     }
-                    content(proxy)
+                    if let dinner = model.dinner {
+                        DinnerCard(dinner: dinner) { onStartCooking(dinner.recipeID) } onOpenRecipe: {
+                            onOpenRecipe(dinner.recipeID)
+                        }
+                    }
+                    content
                 }
-                .padding(LarderSpacing.l)
+                .padding(.horizontal, LarderSpacing.l)
+                .padding(.bottom, LarderSpacing.xl)
             }
             .background(LarderColor.surface.canvas)
+            .navigationTitle(Copy.Tab.tonight)
+            .navigationSubtitle(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+            .settingsButton(onOpenSettings)
+            .refreshable { await model.load() }
         }
         .task { await model.load() }
     }
 
-    @ViewBuilder private func content(_ proxy: ScrollViewProxy) -> some View {
+    @ViewBuilder private var content: some View {
         if model.isLoading, model.options.isEmpty {
             ProgressView()
                 .frame(maxWidth: .infinity)
+                .padding(.vertical, LarderSpacing.xxl)
         } else if model.shelvesAreEmpty || model.options.isEmpty {
             EmptyShelf(
                 title: model.shelvesAreEmpty ? LedgerCopy.emptyShelvesTitle : LedgerCopy.nothingFits,
                 message: model.shelvesAreEmpty ? Copy.Voice.emptyPantry : LedgerCopy.nothingFitsTonight,
-                action: .init(title: Copy.Action.addWhatYouHave, perform: onAddToPantry)
+                illustration: .tonight,
+                systemImage: "refrigerator",
+                action: .init(title: Copy.Action.addWhatYouHave, perform: onAddToPantry),
+                secondaryAction: onBrowseRecipes.map { .init(title: LedgerCopy.browseRecipes, perform: $0) }
             )
         } else {
-            Text(LedgerCopy.tonightContext(count: model.options.count))
-                .font(LarderFont.body(.body))
-                .foregroundStyle(LarderColor.ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Button {
-                pick(proxy)
-            } label: {
-                Text(Copy.Action.pickForMe)
-                    .frame(maxWidth: .infinity)
+            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                SectionHeading(model.dinner == nil ? LedgerCopy.ideasTitle : LedgerCopy.otherIdeasTitle)
+                Text(LedgerCopy.ideasDetail)
+                    .font(LarderFont.body(.subheadline))
+                    .foregroundStyle(LarderColor.ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .buttonStyle(.larderPrimary)
             ForEach(model.options, id: \.recipeID) { option in
                 TonightCard(
                     option: option,
                     reasons: model.reasons(for: option, limit: Self.reasonLimit),
-                    isPicked: model.pickedID == option.recipeID,
                     isCooking: model.cookingID == option.recipeID,
                     onCook: { cook(option) },
+                    onStartCooking: { onStartCooking(option.recipeID) },
                     onOpenRecipe: { onOpenRecipe(option.recipeID) }
                 )
-                .id(option.recipeID)
-                .accessibilityFocused($focusedOption, equals: option.recipeID)
+                .transition(.opacity)
             }
-            .larderAnimation(LarderMotion.tap, value: model.pickedID)
+            .larderAnimation(LarderMotion.layout, value: model.page)
+            if model.hasOtherIdeas {
+                Button {
+                    model.showOtherIdeas()
+                } label: {
+                    Label(Copy.Action.otherIdeas, systemImage: "arrow.triangle.2.circlepath")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.larderSecondary)
+                .sensoryFeedback(.selection, trigger: model.page)
+            }
         }
-    }
-
-    private func pick(_ proxy: ScrollViewProxy) {
-        guard let top = model.pickForMe() else { return }
-        proxy.scrollTo(top.recipeID, anchor: .top)
-        focusedOption = top.recipeID
-        AccessibilityNotification.Announcement(LedgerCopy.pickedAnnouncement(top.candidate.recipe.title)).post()
     }
 
     private func cook(_ option: ScoredRecipe) {
@@ -94,40 +115,79 @@ public struct TonightView: View {
     }
 }
 
-/// One idea: title, minutes, up to two reasons, and the two choices.
+/// Tonight's planned dinner, first on the screen, with the way to start cooking it.
+private struct DinnerCard: View {
+    let dinner: TonightDinner
+    let onStartCooking: () -> Void
+    let onOpenRecipe: () -> Void
+
+    var body: some View {
+        PaperCard(padded: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                RecipeTile(title: dinner.title, size: .banner)
+                VStack(alignment: .leading, spacing: LarderSpacing.m) {
+                    Pill(LedgerCopy.tonightsDinner, systemImage: "fork.knife", tone: .brand)
+                    Text(dinner.title)
+                        .font(LarderFont.display(.title2))
+                        .foregroundStyle(LarderColor.ink.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                    MetaLabel(Copy.Ledger.minutes(dinner.minutes), systemImage: "clock", spoken: Copy.Ledger.spokenMinutes(dinner.minutes))
+                    AdaptiveStack(spacing: LarderSpacing.s, stacksFrom: .xLarge) {
+                        Button(action: onStartCooking) {
+                            Label(LedgerCopy.startCooking, systemImage: "flame")
+                        }
+                        .buttonStyle(.larderPrimary)
+                        Button(LedgerCopy.seeRecipe, action: onOpenRecipe)
+                            .buttonStyle(.larderQuiet)
+                    }
+                }
+                .padding(LarderSpacing.l)
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+}
+
+/// One idea: a dish band, the title, time, up to two reasons, and what to do with it.
 private struct TonightCard: View {
     let option: ScoredRecipe
     let reasons: [String]
-    let isPicked: Bool
     let isCooking: Bool
     let onCook: () -> Void
+    let onStartCooking: () -> Void
     let onOpenRecipe: () -> Void
+
+    private var minutes: Int { option.candidate.totalMinutes }
 
     var body: some View {
         PaperCard {
             VStack(alignment: .leading, spacing: LarderSpacing.m) {
-                if isCooking {
-                    Stamp(text: LedgerCopy.onForTonight)
-                } else if isPicked {
-                    Stamp(text: LedgerCopy.picked)
+                HStack(alignment: .top, spacing: LarderSpacing.m) {
+                    RecipeTile(title: option.candidate.recipe.title, size: .large)
+                    VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                        if isCooking {
+                            Pill(LedgerCopy.onForTonight, systemImage: "checkmark", tone: .second)
+                        }
+                        Text(option.candidate.recipe.title)
+                            .font(LarderFont.body(.title3, weight: .semibold))
+                            .foregroundStyle(LarderColor.ink.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
+                        MetaLabel(Copy.Ledger.minutes(minutes), systemImage: "clock", spoken: Copy.Ledger.spokenMinutes(minutes))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                Text(option.candidate.recipe.title)
-                    .font(LarderFont.body(.body, weight: .semibold))
-                    .foregroundStyle(LarderColor.ink.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityAddTraits(.isHeader)
-                Stamp(text: Copy.Ledger.minutes(option.candidate.totalMinutes))
-                    .accessibilityLabel(Copy.Ledger.spokenMinutes(option.candidate.totalMinutes))
                 ForEach(reasons, id: \.self) { reason in
                     ReasonLine(text: reason)
                 }
-                AdaptiveStack(spacing: LarderSpacing.m, stacksFrom: .xLarge) { buttons }
+                AdaptiveStack(spacing: LarderSpacing.s, stacksFrom: .xLarge) { buttons }
             }
         }
         .overlay {
-            if isPicked {
-                RoundedRectangle(cornerRadius: LarderRadius.card)
-                    .strokeBorder(LarderColor.accent.brand, lineWidth: 2)
+            if isCooking {
+                RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous)
+                    .strokeBorder(LarderColor.accent.second, lineWidth: 2)
                     .accessibilityHidden(true)
             }
         }
@@ -135,9 +195,15 @@ private struct TonightCard: View {
     }
 
     @ViewBuilder private var buttons: some View {
-        Button(LedgerCopy.cookThis, action: onCook)
+        if isCooking {
+            Button(action: onStartCooking) {
+                Label(LedgerCopy.startCooking, systemImage: "flame")
+            }
             .buttonStyle(.larderPrimary)
-            .disabled(isCooking)
+        } else {
+            Button(LedgerCopy.cookThis, action: onCook)
+                .buttonStyle(.larderPrimary)
+        }
         Button(LedgerCopy.seeRecipe, action: onOpenRecipe)
             .buttonStyle(.larderQuiet)
     }
