@@ -18,14 +18,14 @@ public struct GroceryView: View {
                 VStack(alignment: .leading, spacing: LarderSpacing.xl) {
                     AddItemField { model.addManual(name: $0) }
                     if let error = model.error {
-                        Text(message(for: error))
+                        Text(GroceryCopy.message(for: error))
                             .font(LarderFont.body(.body))
                             .foregroundStyle(LarderColor.status(.warning))
                     }
                     if model.isEmpty && !model.isLoading {
                         EmptyShelf(
-                            title: String(localized: "Nothing to buy"),
-                            message: String(localized: "Plan a week or add items by hand.")
+                            title: GroceryCopy.emptyTitle,
+                            message: GroceryCopy.emptyMessage
                         )
                     }
                     ForEach(model.toBuy) { section in
@@ -55,18 +55,18 @@ public struct GroceryView: View {
                 ForEach(model.basket.flatMap(\.entries)) { entry in
                     row(entry)
                 }
-                Button(String(localized: "Clear basket")) { model.clearChecked() }
+                Button(GroceryCopy.clearBasket) { model.clearChecked() }
                     .buttonStyle(.larderQuiet)
             }
         } label: {
-            SectionHeading(String(localized: "In the basket"))
+            SectionHeading(GroceryCopy.inTheBasket)
         }
         .tint(LarderColor.ink.primary)
     }
 
     private func aisleSection(_ section: GroceryEntrySection) -> some View {
         VStack(alignment: .leading, spacing: LarderSpacing.xs) {
-            SectionHeading(section.aisle.title)
+            SectionHeading(GroceryCopy.name(of: section.aisle))
             ForEach(section.entries) { entry in
                 row(entry)
             }
@@ -81,13 +81,6 @@ public struct GroceryView: View {
             isChecked: model.checked.contains(entry.key)
         ) {
             Task { await model.toggle(entry) }
-        }
-    }
-
-    private func message(for error: GroceryError) -> String {
-        switch error {
-        case .loadFailed: String(localized: "Couldn't load the list. Pull to try again later.")
-        case .pantryUpdateFailed: String(localized: "Couldn't update the shelves. The item is unchanged.")
         }
     }
 }

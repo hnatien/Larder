@@ -13,7 +13,7 @@ struct AddItemField: View {
     }
 
     private var field: some View {
-        TextField(String(localized: "Item to buy"), text: $text, prompt: Text(String(localized: "Add an item")))
+        TextField(GroceryCopy.itemToBuy, text: $text, prompt: Text(GroceryCopy.addAnItem))
             .font(LarderFont.body(.body))
             .textFieldStyle(.plain)
             .submitLabel(.done)
@@ -25,7 +25,7 @@ struct AddItemField: View {
     }
 
     private var addButton: some View {
-        Button(String(localized: "Add"), action: submit)
+        Button(GroceryCopy.add, action: submit)
             .buttonStyle(.larderSecondary)
             .disabled(isBlank)
     }

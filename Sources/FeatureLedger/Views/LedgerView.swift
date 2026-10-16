@@ -99,7 +99,7 @@ public struct LedgerView: View {
         }
         .listStyle(.plain)
         .larderList()
-        .accessibilityRotor("Days") {
+        .accessibilityRotor(LedgerCopy.daysRotor) {
             ForEach(model.days) { day in
                 AccessibilityRotorEntry(Text(Self.spokenDay(day.date)), id: day.id, in: dayRotor)
             }

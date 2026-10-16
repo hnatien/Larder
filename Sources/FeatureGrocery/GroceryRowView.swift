@@ -19,9 +19,9 @@ struct GroceryRowView: View {
                     .contentShape(Circle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(String(localized: "Mark bought: \(name)"))
+            .accessibilityLabel(GroceryCopy.markBought(name))
             .accessibilityAddTraits(.isButton)
-            .accessibilityValue(isChecked ? String(localized: "bought") : String(localized: "to buy"))
+            .accessibilityValue(isChecked ? GroceryCopy.bought : GroceryCopy.toBuy)
 
             VStack(alignment: .leading, spacing: LarderSpacing.xs) {
                 Text(name)
@@ -31,7 +31,7 @@ struct GroceryRowView: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                 if partiallyInPantry {
-                    ReasonLine(text: String(localized: "You have some already."))
+                    ReasonLine(text: GroceryCopy.haveSome)
                 }
             }
             .padding(.top, LarderSpacing.m)

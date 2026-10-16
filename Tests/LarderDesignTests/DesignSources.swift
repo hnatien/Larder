@@ -10,6 +10,9 @@ enum DesignSources {
     static let resources = module.appending(path: "Resources")
     static let colors = resources.appending(path: "Colors.xcassets")
     static let catalogue = resources.appending(path: "Localizable.xcstrings")
+    /// The feature modules, whose strings resolve through this module's catalogue.
+    static let features = ["FeatureShelves", "FeatureLedger", "FeatureRecipes", "FeatureGrocery", "FeatureAccount"]
+        .map { repoRoot.appending(path: "Sources/\($0)") }
 
     static func files(withExtension ext: String, under root: URL = module) -> [URL] {
         guard let walker = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil) else { return [] }

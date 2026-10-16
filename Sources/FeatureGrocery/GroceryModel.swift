@@ -271,7 +271,7 @@ public final class GroceryModel {
                 let quantity = entry.quantityText(locale: locale)
                 return quantity.isEmpty ? "- \(entry.name)" : "- \(quantity) \(entry.name)"
             }
-            return ([section.aisle.title] + lines).joined(separator: "\n")
+            return ([GroceryCopy.name(of: section.aisle)] + lines).joined(separator: "\n")
         }
         .joined(separator: "\n\n")
     }
@@ -301,22 +301,5 @@ public final class GroceryModel {
             foodID: foodID, rawName: item.name, quantityGrams: grams, location: location,
             source: .manual, addedOn: dates.now
         )
-    }
-}
-
-extension Aisle {
-    /// The heading shown above this aisle.
-    var title: String {
-        switch self {
-        case .produce: String(localized: "Produce")
-        case .bakery: String(localized: "Bakery")
-        case .meatAndFish: String(localized: "Meat and fish")
-        case .dairyAndEggs: String(localized: "Dairy and eggs")
-        case .pantryDry: String(localized: "Dry goods")
-        case .cannedAndJarred: String(localized: "Canned and jarred")
-        case .frozen: String(localized: "Frozen")
-        case .spicesAndOils: String(localized: "Spices and oils")
-        case .other: String(localized: "Other")
-        }
     }
 }

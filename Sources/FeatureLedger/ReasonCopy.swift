@@ -1,5 +1,6 @@
 import Foundation
 import LarderCore
+import LarderDesign
 
 /// Turns reason codes into the one-line reasons shown on cards and in the ledger. Pure, so it is testable without SwiftUI.
 nonisolated enum ReasonCopy {
@@ -20,24 +21,25 @@ nonisolated enum ReasonCopy {
     static func line(for code: ReasonCode, lookup: Lookup) -> String {
         switch code {
         case .usesExpiring(let food, let bestBy):
-            let day = weekday(bestBy, lookup: lookup)
+            let dayName = weekday(bestBy, lookup: lookup)
             guard let name = lookup.foodNames[food].map(displayName), !name.isEmpty else {
-                return String(localized: "Uses what's best by \(day)")
+                return String(localized: "Uses what's best by \(dayName)", bundle: Copy.bundle)
             }
-            return String(localized: "Uses the \(name) before \(day)")
+            return String(localized: "Uses the \(name) before \(dayName)", bundle: Copy.bundle)
         case .pantryOverlap(let count):
-            return String(localized: "Uses \(count) things you have")
+            return String(localized: "Uses \(count) things you have", bundle: Copy.bundle)
         case .quick(let minutes):
-            return String(localized: "On the table in \(minutes) minutes")
+            return String(localized: "On the table in \(minutes) minutes", bundle: Copy.bundle)
         case .varietyCuisine:
-            return String(localized: "Something different from this week")
+            return String(localized: "Something different from this week", bundle: Copy.bundle)
         case .leftoverOf(let meal):
-            guard let date = lookup.mealDates[meal] else { return String(localized: "Leftovers from earlier this week") }
-            return String(localized: "Leftovers from \(weekday(date, lookup: lookup))")
+            guard let date = lookup.mealDates[meal] else { return String(localized: "Leftovers from earlier this week", bundle: Copy.bundle) }
+            let dayName = weekday(date, lookup: lookup)
+            return String(localized: "Leftovers from \(dayName)", bundle: Copy.bundle)
         case .underBudget:
-            return String(localized: "Easy on the budget")
+            return String(localized: "Easy on the budget", bundle: Copy.bundle)
         case .fibreGap:
-            return String(localized: "Adds the fibre this week is short of")
+            return String(localized: "Adds the fibre this week is short of", bundle: Copy.bundle)
         }
     }
 

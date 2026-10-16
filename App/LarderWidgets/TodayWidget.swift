@@ -11,7 +11,7 @@ struct TodayWidget: Widget {
                 .containerBackground(LarderColor.surface.canvas, for: .widget)
         }
         .configurationDisplayName(Copy.Tab.tonight)
-        .description(String(localized: "Tonight's dinner from your Ledger."))
+        .description(Copy.Widget.description)
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -71,11 +71,11 @@ struct TodayWidgetView: View {
                 Stamp(text: Copy.Ledger.minutes(dinner.minutes))
                     .accessibilityLabel(Copy.Ledger.spokenMinutes(dinner.minutes))
             } else {
-                Text(String(localized: "Nothing planned"))
+                Text(Copy.Widget.nothingPlanned)
                     .font(LarderFont.display(.title3))
                     .foregroundStyle(LarderColor.ink.primary)
                 Spacer(minLength: 0)
-                Text(String(localized: "Open Larder for three ideas."))
+                Text(Copy.Widget.openForIdeas)
                     .font(LarderFont.body(.footnote))
                     .foregroundStyle(LarderColor.ink.secondary)
             }

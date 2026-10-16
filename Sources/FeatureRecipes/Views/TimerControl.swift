@@ -52,7 +52,7 @@ struct TimerControl: View {
             Text(primaryTitle).frame(maxWidth: .infinity)
         }
         .buttonStyle(.larderPrimary)
-        .accessibilityLabel("\(primaryTitle) \(name)")
+        .accessibilityLabel(RecipesCopy.timerAction(primaryTitle, name: name))
         Button {
             timer.reset()
         } label: {
@@ -60,7 +60,7 @@ struct TimerControl: View {
         }
         .buttonStyle(.larderSecondary)
         .disabled(timer.state == .idle)
-        .accessibilityLabel("\(RecipesCopy.reset) \(name)")
+        .accessibilityLabel(RecipesCopy.timerAction(RecipesCopy.reset, name: name))
     }
 }
 

@@ -74,26 +74,49 @@ struct CopyTests {
         }
     }
 
+    /// `Copy.swift` and every feature module source: the files whose literals are the catalogue's keys.
+    private static func copySources() throws -> [String] {
+        let files = [DesignSources.module.appending(path: "Tokens/Copy.swift")]
+            + DesignSources.features.flatMap { DesignSources.files(withExtension: "swift", under: $0) }
+        return try files.map(DesignSources.text)
+    }
+
     @Test func catalogueKeysMatchTheLiteralsInCopy() throws {
-        let source = try DesignSources.text(DesignSources.module.appending(path: "Tokens/Copy.swift"))
         let literal = try NSRegularExpression(pattern: #"String\(\s*localized:\s*"((?:[^"\\]|\\.)*)""#)
         let interpolation = try NSRegularExpression(pattern: #"\\\((\w+)\)"#)
-        let integerArguments: Set<String> = ["count", "nights", "day", "total"]
-        let range = NSRange(source.startIndex..., in: source)
+        // Interpolations are plain identifiers; these names are always integers, every other name is a string.
+        let integerArguments: Set<String> = ["count", "nights", "day", "total", "minutes", "number", "step"]
         var keys = Set<String>()
-        for match in literal.matches(in: source, range: range) {
-            var key = String(source[try #require(Range(match.range(at: 1), in: source))])
-            let spans = interpolation.matches(in: key, range: NSRange(key.startIndex..., in: key))
-            for span in spans.reversed() {
-                let name = String(key[try #require(Range(span.range(at: 1), in: key))])
-                key.replaceSubrange(try #require(Range(span.range, in: key)), with: integerArguments.contains(name) ? "%lld" : "%@")
+        for source in try Self.copySources() {
+            let range = NSRange(source.startIndex..., in: source)
+            for match in literal.matches(in: source, range: range) {
+                var key = String(source[try #require(Range(match.range(at: 1), in: source))])
+                let spans = interpolation.matches(in: key, range: NSRange(key.startIndex..., in: key))
+                for span in spans.reversed() {
+                    let name = String(key[try #require(Range(span.range(at: 1), in: key))])
+                    key.replaceSubrange(try #require(Range(span.range, in: key)), with: integerArguments.contains(name) ? "%lld" : "%@")
+                }
+                keys.insert(key)
             }
-            keys.insert(key)
         }
         let plain = Set(try catalogueStrings().keys)
         #expect(keys.count > 40)
         #expect(keys.subtracting(plain).isEmpty, "missing from the catalogue: \(keys.subtracting(plain))")
         #expect(plain.subtracting(keys).isEmpty, "unused in Copy: \(plain.subtracting(keys))")
+    }
+
+    @Test func featureStringsResolveThroughTheCatalogue() throws {
+        let local = try Regex(#"String\(\s*localized:\s*"(?:[^"\\]|\\.)*"\s*\)"#)
+        let bundled = try Regex(#"String\(\s*localized:\s*"(?:[^"\\]|\\.)*",\s*bundle:\s*Copy\.bundle\s*\)"#)
+        let sources = DesignSources.features.flatMap { DesignSources.files(withExtension: "swift", under: $0) }
+        #expect(sources.count > 40)
+        var bundledCount = 0
+        for url in sources {
+            let text = try DesignSources.text(url)
+            #expect(text.matches(of: local).isEmpty, "\(url.lastPathComponent) has a string outside the catalogue")
+            bundledCount += text.matches(of: bundled).count
+        }
+        #expect(bundledCount > 300)
     }
 
     @Test func specifiedStringsAreExact() {

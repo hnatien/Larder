@@ -1,7 +1,12 @@
+import Foundation
 import LarderCore
 
 /// Every user-facing string in the design module. Dry, plain, no exclamation marks, no moralising.
 public nonisolated enum Copy {
+    /// The bundle holding the string catalogue. Feature modules pass it to `String(localized:bundle:)` so every
+    /// user-facing string resolves through this one catalogue.
+    public static var bundle: Bundle { .module }
+
     /// Tab bar titles.
     public enum Tab {
         public static var tonight: String { String(localized: "Tonight", bundle: .module) }
@@ -109,6 +114,13 @@ public nonisolated enum Copy {
         }
         public static var subscribe: String { String(localized: "Get Larder Plus", bundle: .module) }
         public static var restore: String { String(localized: "Restore purchases", bundle: .module) }
+    }
+
+    /// The Today widget.
+    public enum Widget {
+        public static var description: String { String(localized: "Tonight's dinner from your Ledger.", bundle: .module) }
+        public static var nothingPlanned: String { String(localized: "Nothing planned", bundle: .module) }
+        public static var openForIdeas: String { String(localized: "Open Larder for three ideas.", bundle: .module) }
     }
 
     /// Microcopy for empty states, plans, expiry and errors.

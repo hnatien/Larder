@@ -161,7 +161,7 @@ private struct PreviewCard: View {
             }
             SectionHeading(RecipesCopy.method)
             ForEach(Array(result.recipe.steps.enumerated()), id: \.offset) { offset, step in
-                Text("\(offset + 1). \(step.text)")
+                Text(RecipesCopy.numberedStep(offset + 1, text: step.text))
                     .font(LarderFont.body(.body))
                     .foregroundStyle(LarderColor.ink.primary)
                     .multilineTextAlignment(.leading)
