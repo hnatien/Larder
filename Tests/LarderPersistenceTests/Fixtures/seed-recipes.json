@@ -1,0 +1,24 @@
+{
+  "recipes": [
+    {
+      "slug": "weeknight-chana-masala",
+      "title": "Weeknight chana masala",
+      "servings": 4,
+      "prepMinutes": 10,
+      "cookMinutes": 25,
+      "cuisine": "Indian",
+      "mealTypes": ["dinner"],
+      "equipment": ["stovetop"],
+      "dietFlags": ["vegan", "vegetarian"],
+      "ingredients": [
+        { "text": "2 tbsp olive oil", "quantity": 2, "unit": "tablespoon", "food": "olive-oil", "optional": false, "garnish": false },
+        { "text": "2 cans chickpeas, drained", "quantity": 480, "unit": "gram", "food": "chickpeas-canned", "optional": false, "garnish": false },
+        { "text": "1 cup water", "quantity": 1, "unit": "cup", "food": null, "optional": false, "garnish": false }
+      ],
+      "steps": [
+        { "text": "Warm the oil over medium heat.", "timerSeconds": null },
+        { "text": "Simmer the chickpeas.", "timerSeconds": 900 }
+      ]
+    }
+  ]
+}

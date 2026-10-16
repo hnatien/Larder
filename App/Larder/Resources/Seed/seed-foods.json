@@ -1,0 +1,4837 @@
+{
+  "foods": [
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Onion, raw",
+      "per100g": {
+        "calciumMg": 23,
+        "carbohydrateG": 9.3,
+        "energyKcal": 40,
+        "fatG": 0.1,
+        "fiberG": 1.7,
+        "ironMg": 0.2,
+        "potassiumMg": 146,
+        "proteinG": 1.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 4,
+        "totalSugarG": 4.2
+      },
+      "portions": [
+        {
+          "grams": 110,
+          "label": "medium onion"
+        },
+        {
+          "grams": 160,
+          "label": "cup chopped"
+        }
+      ],
+      "slug": "onion",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Garlic, raw",
+      "per100g": {
+        "calciumMg": 181,
+        "carbohydrateG": 33,
+        "energyKcal": 149,
+        "fatG": 0.5,
+        "fiberG": 2.1,
+        "ironMg": 1.7,
+        "potassiumMg": 401,
+        "proteinG": 6.4,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 17,
+        "totalSugarG": 1
+      },
+      "portions": [
+        {
+          "grams": 3,
+          "label": "clove"
+        },
+        {
+          "grams": 40,
+          "label": "bulb"
+        }
+      ],
+      "slug": "garlic",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Carrot, raw",
+      "per100g": {
+        "calciumMg": 33,
+        "carbohydrateG": 9.6,
+        "energyKcal": 41,
+        "fatG": 0.2,
+        "fiberG": 2.8,
+        "ironMg": 0.3,
+        "potassiumMg": 320,
+        "proteinG": 0.9,
+        "saturatedFatG": 0,
+        "sodiumMg": 69,
+        "totalSugarG": 4.7
+      },
+      "portions": [
+        {
+          "grams": 61,
+          "label": "medium carrot"
+        },
+        {
+          "grams": 128,
+          "label": "cup chopped"
+        }
+      ],
+      "slug": "carrot",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "contains",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Celery, raw",
+      "per100g": {
+        "calciumMg": 40,
+        "carbohydrateG": 3,
+        "energyKcal": 16,
+        "fatG": 0.2,
+        "fiberG": 1.6,
+        "ironMg": 0.2,
+        "potassiumMg": 260,
+        "proteinG": 0.7,
+        "saturatedFatG": 0,
+        "sodiumMg": 80,
+        "totalSugarG": 1.3
+      },
+      "portions": [
+        {
+          "grams": 40,
+          "label": "stalk"
+        },
+        {
+          "grams": 101,
+          "label": "cup chopped"
+        }
+      ],
+      "slug": "celery",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Potato, raw, flesh and skin",
+      "per100g": {
+        "calciumMg": 12,
+        "carbohydrateG": 17,
+        "energyKcal": 77,
+        "fatG": 0.1,
+        "fiberG": 2.2,
+        "ironMg": 0.8,
+        "potassiumMg": 421,
+        "proteinG": 2,
+        "saturatedFatG": 0,
+        "sodiumMg": 6,
+        "totalSugarG": 0.8
+      },
+      "portions": [
+        {
+          "grams": 170,
+          "label": "medium potato"
+        },
+        {
+          "grams": 150,
+          "label": "cup diced"
+        }
+      ],
+      "slug": "potato",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Sweet potato, raw",
+      "per100g": {
+        "calciumMg": 30,
+        "carbohydrateG": 20,
+        "energyKcal": 86,
+        "fatG": 0.1,
+        "fiberG": 3,
+        "ironMg": 0.6,
+        "potassiumMg": 337,
+        "proteinG": 1.6,
+        "saturatedFatG": 0,
+        "sodiumMg": 55,
+        "totalSugarG": 4.2
+      },
+      "portions": [
+        {
+          "grams": 130,
+          "label": "medium sweet potato"
+        },
+        {
+          "grams": 133,
+          "label": "cup cubed"
+        }
+      ],
+      "slug": "sweet-potato",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Tomato, raw",
+      "per100g": {
+        "calciumMg": 10,
+        "carbohydrateG": 3.9,
+        "energyKcal": 18,
+        "fatG": 0.2,
+        "fiberG": 1.2,
+        "ironMg": 0.3,
+        "potassiumMg": 237,
+        "proteinG": 0.9,
+        "saturatedFatG": 0,
+        "sodiumMg": 5,
+        "totalSugarG": 2.6
+      },
+      "portions": [
+        {
+          "grams": 120,
+          "label": "medium tomato"
+        },
+        {
+          "grams": 180,
+          "label": "cup chopped"
+        },
+        {
+          "grams": 17,
+          "label": "cherry tomato"
+        }
+      ],
+      "slug": "tomato",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.0,
+      "foodGroup": "produce",
+      "name": "Tomatoes, canned, chopped",
+      "per100g": {
+        "calciumMg": 32,
+        "carbohydrateG": 4.3,
+        "energyKcal": 21,
+        "fatG": 0.2,
+        "fiberG": 1.4,
+        "ironMg": 0.8,
+        "potassiumMg": 230,
+        "proteinG": 1.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 130,
+        "totalSugarG": 2.9
+      },
+      "portions": [
+        {
+          "grams": 400,
+          "label": "can"
+        },
+        {
+          "grams": 240,
+          "label": "cup"
+        }
+      ],
+      "slug": "canned-tomatoes",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Spinach, raw",
+      "per100g": {
+        "calciumMg": 99,
+        "carbohydrateG": 3.6,
+        "energyKcal": 23,
+        "fatG": 0.4,
+        "fiberG": 2.2,
+        "ironMg": 2.7,
+        "potassiumMg": 558,
+        "proteinG": 2.9,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 79,
+        "totalSugarG": 0.4
+      },
+      "portions": [
+        {
+          "grams": 30,
+          "label": "cup"
+        },
+        {
+          "grams": 25,
+          "label": "handful"
+        }
+      ],
+      "slug": "spinach",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Kale, raw",
+      "per100g": {
+        "calciumMg": 150,
+        "carbohydrateG": 8.8,
+        "energyKcal": 49,
+        "fatG": 0.9,
+        "fiberG": 3.6,
+        "ironMg": 1.5,
+        "potassiumMg": 491,
+        "proteinG": 4.3,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 38,
+        "totalSugarG": 2.3
+      },
+      "portions": [
+        {
+          "grams": 21,
+          "label": "cup chopped"
+        },
+        {
+          "grams": 10,
+          "label": "leaf"
+        }
+      ],
+      "slug": "kale",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Broccoli, raw",
+      "per100g": {
+        "calciumMg": 47,
+        "carbohydrateG": 6.6,
+        "energyKcal": 34,
+        "fatG": 0.4,
+        "fiberG": 2.6,
+        "ironMg": 0.7,
+        "potassiumMg": 316,
+        "proteinG": 2.8,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 33,
+        "totalSugarG": 1.7
+      },
+      "portions": [
+        {
+          "grams": 91,
+          "label": "cup florets"
+        },
+        {
+          "grams": 300,
+          "label": "head"
+        }
+      ],
+      "slug": "broccoli",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Cauliflower, raw",
+      "per100g": {
+        "calciumMg": 22,
+        "carbohydrateG": 5,
+        "energyKcal": 25,
+        "fatG": 0.3,
+        "fiberG": 2,
+        "ironMg": 0.4,
+        "potassiumMg": 299,
+        "proteinG": 1.9,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 30,
+        "totalSugarG": 1.9
+      },
+      "portions": [
+        {
+          "grams": 107,
+          "label": "cup florets"
+        },
+        {
+          "grams": 575,
+          "label": "head"
+        }
+      ],
+      "slug": "cauliflower",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Bell pepper, red, raw",
+      "per100g": {
+        "calciumMg": 7,
+        "carbohydrateG": 6,
+        "energyKcal": 26,
+        "fatG": 0.3,
+        "fiberG": 2.1,
+        "ironMg": 0.4,
+        "potassiumMg": 211,
+        "proteinG": 1,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 3,
+        "totalSugarG": 4.2
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "medium pepper"
+        },
+        {
+          "grams": 92,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "bell-pepper",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Courgette, raw",
+      "per100g": {
+        "calciumMg": 16,
+        "carbohydrateG": 3.1,
+        "energyKcal": 17,
+        "fatG": 0.3,
+        "fiberG": 1,
+        "ironMg": 0.4,
+        "potassiumMg": 261,
+        "proteinG": 1.2,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 8,
+        "totalSugarG": 2.5
+      },
+      "portions": [
+        {
+          "grams": 200,
+          "label": "medium courgette"
+        },
+        {
+          "grams": 113,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "courgette",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Mushrooms, white, raw",
+      "per100g": {
+        "calciumMg": 3,
+        "carbohydrateG": 3.3,
+        "energyKcal": 22,
+        "fatG": 0.3,
+        "fiberG": 1,
+        "ironMg": 0.5,
+        "potassiumMg": 318,
+        "proteinG": 3.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 5,
+        "totalSugarG": 2
+      },
+      "portions": [
+        {
+          "grams": 18,
+          "label": "mushroom"
+        },
+        {
+          "grams": 70,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "mushroom",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Cucumber, raw",
+      "per100g": {
+        "calciumMg": 16,
+        "carbohydrateG": 3.6,
+        "energyKcal": 15,
+        "fatG": 0.1,
+        "fiberG": 0.5,
+        "ironMg": 0.3,
+        "potassiumMg": 147,
+        "proteinG": 0.7,
+        "saturatedFatG": 0,
+        "sodiumMg": 2,
+        "totalSugarG": 1.7
+      },
+      "portions": [
+        {
+          "grams": 200,
+          "label": "medium cucumber"
+        },
+        {
+          "grams": 104,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "cucumber",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Lettuce, romaine, raw",
+      "per100g": {
+        "calciumMg": 33,
+        "carbohydrateG": 3.3,
+        "energyKcal": 17,
+        "fatG": 0.3,
+        "fiberG": 2.1,
+        "ironMg": 1,
+        "potassiumMg": 247,
+        "proteinG": 1.2,
+        "saturatedFatG": 0,
+        "sodiumMg": 8,
+        "totalSugarG": 1.2
+      },
+      "portions": [
+        {
+          "grams": 47,
+          "label": "cup shredded"
+        },
+        {
+          "grams": 10,
+          "label": "leaf"
+        }
+      ],
+      "slug": "lettuce",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Cabbage, green, raw",
+      "per100g": {
+        "calciumMg": 40,
+        "carbohydrateG": 5.8,
+        "energyKcal": 25,
+        "fatG": 0.1,
+        "fiberG": 2.5,
+        "ironMg": 0.5,
+        "potassiumMg": 170,
+        "proteinG": 1.3,
+        "saturatedFatG": 0,
+        "sodiumMg": 18,
+        "totalSugarG": 3.2
+      },
+      "portions": [
+        {
+          "grams": 70,
+          "label": "cup shredded"
+        },
+        {
+          "grams": 250,
+          "label": "quarter head"
+        }
+      ],
+      "slug": "cabbage",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Leek, raw",
+      "per100g": {
+        "calciumMg": 59,
+        "carbohydrateG": 14.2,
+        "energyKcal": 61,
+        "fatG": 0.3,
+        "fiberG": 1.8,
+        "ironMg": 2.1,
+        "potassiumMg": 180,
+        "proteinG": 1.5,
+        "saturatedFatG": 0,
+        "sodiumMg": 20,
+        "totalSugarG": 3.9
+      },
+      "portions": [
+        {
+          "grams": 90,
+          "label": "medium leek"
+        },
+        {
+          "grams": 89,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "leek",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Green beans, raw",
+      "per100g": {
+        "calciumMg": 37,
+        "carbohydrateG": 7,
+        "energyKcal": 31,
+        "fatG": 0.2,
+        "fiberG": 2.7,
+        "ironMg": 1,
+        "potassiumMg": 211,
+        "proteinG": 1.8,
+        "saturatedFatG": 0,
+        "sodiumMg": 6,
+        "totalSugarG": 3.3
+      },
+      "portions": [
+        {
+          "grams": 110,
+          "label": "cup"
+        },
+        {
+          "grams": 60,
+          "label": "handful"
+        }
+      ],
+      "slug": "green-beans",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Peas, green, frozen",
+      "per100g": {
+        "calciumMg": 24,
+        "carbohydrateG": 13.6,
+        "energyKcal": 77,
+        "fatG": 0.4,
+        "fiberG": 5,
+        "ironMg": 1.5,
+        "potassiumMg": 200,
+        "proteinG": 5.2,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 5,
+        "totalSugarG": 4.7
+      },
+      "portions": [
+        {
+          "grams": 134,
+          "label": "cup"
+        },
+        {
+          "grams": 40,
+          "label": "handful"
+        }
+      ],
+      "slug": "peas",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Sweetcorn kernels",
+      "per100g": {
+        "calciumMg": 2,
+        "carbohydrateG": 18.5,
+        "energyKcal": 88,
+        "fatG": 1.2,
+        "fiberG": 2,
+        "ironMg": 0.5,
+        "potassiumMg": 270,
+        "proteinG": 3.2,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 15,
+        "totalSugarG": 6.3
+      },
+      "portions": [
+        {
+          "grams": 154,
+          "label": "cup"
+        },
+        {
+          "grams": 90,
+          "label": "cob"
+        }
+      ],
+      "slug": "sweetcorn",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Avocado, raw flesh",
+      "per100g": {
+        "calciumMg": 12,
+        "carbohydrateG": 8.5,
+        "energyKcal": 160,
+        "fatG": 14.7,
+        "fiberG": 6.7,
+        "ironMg": 0.6,
+        "potassiumMg": 485,
+        "proteinG": 2,
+        "saturatedFatG": 2.1,
+        "sodiumMg": 7,
+        "totalSugarG": 0.7
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "avocado"
+        },
+        {
+          "grams": 75,
+          "label": "half avocado"
+        }
+      ],
+      "slug": "avocado",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Lemon, raw",
+      "per100g": {
+        "calciumMg": 26,
+        "carbohydrateG": 9.3,
+        "energyKcal": 29,
+        "fatG": 0.3,
+        "fiberG": 2.8,
+        "ironMg": 0.6,
+        "potassiumMg": 138,
+        "proteinG": 1.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 2,
+        "totalSugarG": 2.5
+      },
+      "portions": [
+        {
+          "grams": 60,
+          "label": "lemon"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp juice"
+        }
+      ],
+      "slug": "lemon",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Lime, raw",
+      "per100g": {
+        "calciumMg": 33,
+        "carbohydrateG": 10.5,
+        "energyKcal": 30,
+        "fatG": 0.2,
+        "fiberG": 2.8,
+        "ironMg": 0.6,
+        "potassiumMg": 102,
+        "proteinG": 0.7,
+        "saturatedFatG": 0,
+        "sodiumMg": 2,
+        "totalSugarG": 1.7
+      },
+      "portions": [
+        {
+          "grams": 45,
+          "label": "lime"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp juice"
+        }
+      ],
+      "slug": "lime",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Apple, raw, with skin",
+      "per100g": {
+        "calciumMg": 6,
+        "carbohydrateG": 13.8,
+        "energyKcal": 52,
+        "fatG": 0.2,
+        "fiberG": 2.4,
+        "ironMg": 0.1,
+        "potassiumMg": 107,
+        "proteinG": 0.3,
+        "saturatedFatG": 0,
+        "sodiumMg": 1,
+        "totalSugarG": 10.4
+      },
+      "portions": [
+        {
+          "grams": 180,
+          "label": "medium apple"
+        },
+        {
+          "grams": 109,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "apple",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Banana, raw",
+      "per100g": {
+        "calciumMg": 5,
+        "carbohydrateG": 22.8,
+        "energyKcal": 89,
+        "fatG": 0.3,
+        "fiberG": 2.6,
+        "ironMg": 0.3,
+        "potassiumMg": 358,
+        "proteinG": 1.1,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 1,
+        "totalSugarG": 12.2
+      },
+      "portions": [
+        {
+          "grams": 118,
+          "label": "medium banana"
+        },
+        {
+          "grams": 150,
+          "label": "cup sliced"
+        }
+      ],
+      "slug": "banana",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Blueberries, raw",
+      "per100g": {
+        "calciumMg": 6,
+        "carbohydrateG": 14.5,
+        "energyKcal": 57,
+        "fatG": 0.3,
+        "fiberG": 2.4,
+        "ironMg": 0.3,
+        "potassiumMg": 77,
+        "proteinG": 0.7,
+        "saturatedFatG": 0,
+        "sodiumMg": 1,
+        "totalSugarG": 10
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "cup"
+        },
+        {
+          "grams": 50,
+          "label": "handful"
+        }
+      ],
+      "slug": "blueberries",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Orange, raw",
+      "per100g": {
+        "calciumMg": 40,
+        "carbohydrateG": 11.8,
+        "energyKcal": 47,
+        "fatG": 0.1,
+        "fiberG": 2.4,
+        "ironMg": 0.1,
+        "potassiumMg": 181,
+        "proteinG": 0.9,
+        "saturatedFatG": 0,
+        "sodiumMg": 0,
+        "totalSugarG": 9.4
+      },
+      "portions": [
+        {
+          "grams": 130,
+          "label": "medium orange"
+        }
+      ],
+      "slug": "orange",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Ginger root, raw",
+      "per100g": {
+        "calciumMg": 16,
+        "carbohydrateG": 17.8,
+        "energyKcal": 80,
+        "fatG": 0.8,
+        "fiberG": 2,
+        "ironMg": 0.6,
+        "potassiumMg": 415,
+        "proteinG": 1.8,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 13,
+        "totalSugarG": 1.7
+      },
+      "portions": [
+        {
+          "grams": 10,
+          "label": "thumb-sized piece"
+        },
+        {
+          "grams": 6,
+          "label": "tbsp grated"
+        }
+      ],
+      "slug": "ginger",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Chilli pepper, red, fresh",
+      "per100g": {
+        "calciumMg": 14,
+        "carbohydrateG": 8.8,
+        "energyKcal": 40,
+        "fatG": 0.4,
+        "fiberG": 1.5,
+        "ironMg": 1,
+        "potassiumMg": 322,
+        "proteinG": 1.9,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 9,
+        "totalSugarG": 5.3
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "chilli"
+        }
+      ],
+      "slug": "chilli",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Parsley, fresh",
+      "per100g": {
+        "calciumMg": 138,
+        "carbohydrateG": 6.3,
+        "energyKcal": 36,
+        "fatG": 0.8,
+        "fiberG": 3.3,
+        "ironMg": 6.2,
+        "potassiumMg": 554,
+        "proteinG": 3,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 56,
+        "totalSugarG": 0.9
+      },
+      "portions": [
+        {
+          "grams": 4,
+          "label": "tbsp chopped"
+        },
+        {
+          "grams": 20,
+          "label": "handful"
+        }
+      ],
+      "slug": "parsley",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Coriander leaves, fresh",
+      "per100g": {
+        "calciumMg": 67,
+        "carbohydrateG": 3.7,
+        "energyKcal": 23,
+        "fatG": 0.5,
+        "fiberG": 2.8,
+        "ironMg": 1.8,
+        "potassiumMg": 521,
+        "proteinG": 2.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 46,
+        "totalSugarG": 0.9
+      },
+      "portions": [
+        {
+          "grams": 2,
+          "label": "tbsp chopped"
+        },
+        {
+          "grams": 20,
+          "label": "handful"
+        }
+      ],
+      "slug": "coriander",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Basil, fresh",
+      "per100g": {
+        "calciumMg": 177,
+        "carbohydrateG": 2.7,
+        "energyKcal": 23,
+        "fatG": 0.6,
+        "fiberG": 1.6,
+        "ironMg": 3.2,
+        "potassiumMg": 295,
+        "proteinG": 3.2,
+        "saturatedFatG": 0,
+        "sodiumMg": 4,
+        "totalSugarG": 0.3
+      },
+      "portions": [
+        {
+          "grams": 3,
+          "label": "tbsp chopped"
+        },
+        {
+          "grams": 20,
+          "label": "handful"
+        }
+      ],
+      "slug": "basil",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Mint, fresh",
+      "per100g": {
+        "calciumMg": 243,
+        "carbohydrateG": 14.9,
+        "energyKcal": 70,
+        "fatG": 0.9,
+        "fiberG": 8,
+        "ironMg": 5.1,
+        "potassiumMg": 569,
+        "proteinG": 3.8,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 31
+      },
+      "portions": [
+        {
+          "grams": 3,
+          "label": "tbsp chopped"
+        },
+        {
+          "grams": 15,
+          "label": "handful"
+        }
+      ],
+      "slug": "mint",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Spring onion, raw",
+      "per100g": {
+        "calciumMg": 72,
+        "carbohydrateG": 7.3,
+        "energyKcal": 32,
+        "fatG": 0.2,
+        "fiberG": 2.6,
+        "ironMg": 1.5,
+        "potassiumMg": 276,
+        "proteinG": 1.8,
+        "saturatedFatG": 0,
+        "sodiumMg": 16,
+        "totalSugarG": 2.3
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "spring onion"
+        },
+        {
+          "grams": 6,
+          "label": "tbsp sliced"
+        }
+      ],
+      "slug": "spring-onion",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "produce",
+      "name": "Aubergine, raw",
+      "per100g": {
+        "calciumMg": 9,
+        "carbohydrateG": 5.9,
+        "energyKcal": 25,
+        "fatG": 0.2,
+        "fiberG": 3,
+        "ironMg": 0.2,
+        "potassiumMg": 229,
+        "proteinG": 1,
+        "saturatedFatG": 0,
+        "sodiumMg": 2,
+        "totalSugarG": 3.5
+      },
+      "portions": [
+        {
+          "grams": 400,
+          "label": "medium aubergine"
+        },
+        {
+          "grams": 82,
+          "label": "cup cubed"
+        }
+      ],
+      "slug": "aubergine",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 0.85,
+      "foodGroup": "grains",
+      "name": "White rice, long grain, raw",
+      "per100g": {
+        "calciumMg": 28,
+        "carbohydrateG": 80,
+        "energyKcal": 365,
+        "fatG": 0.7,
+        "fiberG": 1.3,
+        "ironMg": 0.8,
+        "potassiumMg": 115,
+        "proteinG": 7.1,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 5,
+        "totalSugarG": 0.1
+      },
+      "portions": [
+        {
+          "grams": 185,
+          "label": "cup dry"
+        },
+        {
+          "grams": 75,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "white-rice",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 0.85,
+      "foodGroup": "grains",
+      "name": "Brown rice, raw",
+      "per100g": {
+        "calciumMg": 23,
+        "carbohydrateG": 77.2,
+        "energyKcal": 370,
+        "fatG": 2.9,
+        "fiberG": 3.5,
+        "ironMg": 1.5,
+        "potassiumMg": 223,
+        "proteinG": 7.9,
+        "saturatedFatG": 0.6,
+        "sodiumMg": 7,
+        "totalSugarG": 0.9
+      },
+      "portions": [
+        {
+          "grams": 190,
+          "label": "cup dry"
+        },
+        {
+          "grams": 75,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "brown-rice",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Pasta, dried, plain",
+      "per100g": {
+        "calciumMg": 21,
+        "carbohydrateG": 74.7,
+        "energyKcal": 371,
+        "fatG": 1.5,
+        "fiberG": 3.2,
+        "ironMg": 3.3,
+        "potassiumMg": 223,
+        "proteinG": 13,
+        "saturatedFatG": 0.3,
+        "sodiumMg": 6,
+        "totalSugarG": 2.7
+      },
+      "portions": [
+        {
+          "grams": 85,
+          "label": "serving dry"
+        },
+        {
+          "grams": 100,
+          "label": "cup dry"
+        }
+      ],
+      "slug": "pasta",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Pasta, dried, wholewheat",
+      "per100g": {
+        "calciumMg": 30,
+        "carbohydrateG": 67,
+        "energyKcal": 352,
+        "fatG": 2.5,
+        "fiberG": 8,
+        "ironMg": 3.5,
+        "potassiumMg": 360,
+        "proteinG": 14.6,
+        "saturatedFatG": 0.4,
+        "sodiumMg": 7,
+        "totalSugarG": 2.7
+      },
+      "portions": [
+        {
+          "grams": 85,
+          "label": "serving dry"
+        },
+        {
+          "grams": 100,
+          "label": "cup dry"
+        }
+      ],
+      "slug": "wholewheat-pasta",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "sesame": "mayContain",
+        "soy": "mayContain",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Bread, white, sliced",
+      "per100g": {
+        "calciumMg": 260,
+        "carbohydrateG": 49,
+        "energyKcal": 265,
+        "fatG": 3.2,
+        "fiberG": 2.7,
+        "ironMg": 3.6,
+        "potassiumMg": 115,
+        "proteinG": 9,
+        "saturatedFatG": 0.7,
+        "sodiumMg": 491,
+        "totalSugarG": 5
+      },
+      "portions": [
+        {
+          "grams": 36,
+          "label": "slice"
+        }
+      ],
+      "slug": "bread",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "sesame": "mayContain",
+        "soy": "mayContain",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Bread, wholegrain, sliced",
+      "per100g": {
+        "calciumMg": 160,
+        "carbohydrateG": 41,
+        "energyKcal": 247,
+        "fatG": 3.4,
+        "fiberG": 7,
+        "ironMg": 2.5,
+        "potassiumMg": 250,
+        "proteinG": 13,
+        "saturatedFatG": 0.7,
+        "sodiumMg": 450,
+        "totalSugarG": 6
+      },
+      "portions": [
+        {
+          "grams": 40,
+          "label": "slice"
+        }
+      ],
+      "slug": "wholegrain-bread",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "sesame": "mayContain",
+        "soy": "mayContain",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Tortilla, flour",
+      "per100g": {
+        "calciumMg": 150,
+        "carbohydrateG": 52,
+        "energyKcal": 310,
+        "fatG": 7.6,
+        "fiberG": 3,
+        "ironMg": 3.6,
+        "potassiumMg": 140,
+        "proteinG": 8.3,
+        "saturatedFatG": 2.5,
+        "sodiumMg": 700,
+        "totalSugarG": 3
+      },
+      "portions": [
+        {
+          "grams": 45,
+          "label": "medium tortilla"
+        },
+        {
+          "grams": 65,
+          "label": "large tortilla"
+        }
+      ],
+      "slug": "tortilla",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "sesame": "mayContain",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Pita bread, white",
+      "per100g": {
+        "calciumMg": 86,
+        "carbohydrateG": 55.7,
+        "energyKcal": 275,
+        "fatG": 1.2,
+        "fiberG": 2.2,
+        "ironMg": 1.6,
+        "potassiumMg": 120,
+        "proteinG": 9.1,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 536,
+        "totalSugarG": 1.3
+      },
+      "portions": [
+        {
+          "grams": 60,
+          "label": "pita"
+        }
+      ],
+      "slug": "pita",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "mayContain",
+        "wheat": "mayContain"
+      },
+      "densityGPerMl": 0.41,
+      "foodGroup": "grains",
+      "name": "Oats, rolled",
+      "per100g": {
+        "calciumMg": 52,
+        "carbohydrateG": 67.7,
+        "energyKcal": 379,
+        "fatG": 6.5,
+        "fiberG": 10.1,
+        "ironMg": 4.3,
+        "potassiumMg": 362,
+        "proteinG": 13.2,
+        "saturatedFatG": 1.1,
+        "sodiumMg": 6,
+        "totalSugarG": 1
+      },
+      "portions": [
+        {
+          "grams": 98,
+          "label": "cup"
+        },
+        {
+          "grams": 40,
+          "label": "serving"
+        }
+      ],
+      "slug": "oats",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Quinoa, raw",
+      "per100g": {
+        "calciumMg": 47,
+        "carbohydrateG": 64.2,
+        "energyKcal": 368,
+        "fatG": 6.1,
+        "fiberG": 7,
+        "ironMg": 4.6,
+        "potassiumMg": 563,
+        "proteinG": 14.1,
+        "saturatedFatG": 0.7,
+        "sodiumMg": 5,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 170,
+          "label": "cup dry"
+        },
+        {
+          "grams": 60,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "quinoa",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Couscous, dry",
+      "per100g": {
+        "calciumMg": 24,
+        "carbohydrateG": 77.4,
+        "energyKcal": 376,
+        "fatG": 0.6,
+        "fiberG": 5,
+        "ironMg": 1.1,
+        "potassiumMg": 166,
+        "proteinG": 12.8,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 10,
+        "totalSugarG": 0.1
+      },
+      "portions": [
+        {
+          "grams": 173,
+          "label": "cup dry"
+        },
+        {
+          "grams": 70,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "couscous",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": 0.53,
+      "foodGroup": "grains",
+      "name": "Flour, plain wheat",
+      "per100g": {
+        "calciumMg": 15,
+        "carbohydrateG": 76.3,
+        "energyKcal": 364,
+        "fatG": 1,
+        "fiberG": 2.7,
+        "ironMg": 1.2,
+        "potassiumMg": 107,
+        "proteinG": 10.3,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 2,
+        "totalSugarG": 0.3
+      },
+      "portions": [
+        {
+          "grams": 125,
+          "label": "cup"
+        },
+        {
+          "grams": 8,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "flour",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Breadcrumbs, dried",
+      "per100g": {
+        "calciumMg": 183,
+        "carbohydrateG": 72,
+        "energyKcal": 395,
+        "fatG": 5.3,
+        "fiberG": 4.5,
+        "ironMg": 4.5,
+        "potassiumMg": 196,
+        "proteinG": 13.4,
+        "saturatedFatG": 1.2,
+        "sodiumMg": 732,
+        "totalSugarG": 6.2
+      },
+      "portions": [
+        {
+          "grams": 108,
+          "label": "cup"
+        },
+        {
+          "grams": 7,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "breadcrumbs",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain"
+      ]
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Rice noodles, dried",
+      "per100g": {
+        "calciumMg": 12,
+        "carbohydrateG": 83,
+        "energyKcal": 364,
+        "fatG": 0.6,
+        "fiberG": 1.6,
+        "ironMg": 0.9,
+        "potassiumMg": 25,
+        "proteinG": 3.4,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 20,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 85,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "rice-noodles",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "egg": "contains",
+        "gluten": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "grains",
+      "name": "Egg noodles, dried",
+      "per100g": {
+        "calciumMg": 35,
+        "carbohydrateG": 71.3,
+        "energyKcal": 384,
+        "fatG": 4.4,
+        "fiberG": 3.3,
+        "ironMg": 3.3,
+        "potassiumMg": 223,
+        "proteinG": 14.2,
+        "saturatedFatG": 1,
+        "sodiumMg": 21,
+        "totalSugarG": 2.3
+      },
+      "portions": [
+        {
+          "grams": 85,
+          "label": "serving dry"
+        },
+        {
+          "grams": 50,
+          "label": "nest"
+        }
+      ],
+      "slug": "egg-noodles",
+      "source": "seedApproximate",
+      "tags": [
+        "glutenGrain",
+        "egg"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Chicken breast, raw",
+      "per100g": {
+        "calciumMg": 5,
+        "carbohydrateG": 0,
+        "energyKcal": 120,
+        "fatG": 2.6,
+        "fiberG": 0,
+        "ironMg": 0.4,
+        "potassiumMg": 334,
+        "proteinG": 22.5,
+        "saturatedFatG": 0.6,
+        "sodiumMg": 45,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 170,
+          "label": "breast"
+        }
+      ],
+      "slug": "chicken-breast",
+      "source": "seedApproximate",
+      "tags": [
+        "poultry",
+        "meat"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Chicken thigh, boneless skinless, raw",
+      "per100g": {
+        "calciumMg": 9,
+        "carbohydrateG": 0,
+        "energyKcal": 121,
+        "fatG": 4.1,
+        "fiberG": 0,
+        "ironMg": 0.9,
+        "potassiumMg": 222,
+        "proteinG": 19.7,
+        "saturatedFatG": 1.1,
+        "sodiumMg": 95,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 110,
+          "label": "thigh"
+        }
+      ],
+      "slug": "chicken-thigh",
+      "source": "seedApproximate",
+      "tags": [
+        "poultry",
+        "meat"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Beef, minced, 15% fat, raw",
+      "per100g": {
+        "calciumMg": 18,
+        "carbohydrateG": 0,
+        "energyKcal": 215,
+        "fatG": 15,
+        "fiberG": 0,
+        "ironMg": 2,
+        "potassiumMg": 270,
+        "proteinG": 18.6,
+        "saturatedFatG": 6,
+        "sodiumMg": 66,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 125,
+          "label": "serving"
+        },
+        {
+          "grams": 225,
+          "label": "cup"
+        }
+      ],
+      "slug": "minced-beef",
+      "source": "seedApproximate",
+      "tags": [
+        "beef",
+        "meat"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Pork loin, raw",
+      "per100g": {
+        "calciumMg": 6,
+        "carbohydrateG": 0,
+        "energyKcal": 143,
+        "fatG": 5.9,
+        "fiberG": 0,
+        "ironMg": 0.7,
+        "potassiumMg": 350,
+        "proteinG": 21,
+        "saturatedFatG": 2.1,
+        "sodiumMg": 55,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "chop"
+        },
+        {
+          "grams": 125,
+          "label": "serving"
+        }
+      ],
+      "slug": "pork-loin",
+      "source": "seedApproximate",
+      "tags": [
+        "pork",
+        "meat"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "contains",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Salmon fillet, raw",
+      "per100g": {
+        "calciumMg": 9,
+        "carbohydrateG": 0,
+        "energyKcal": 208,
+        "fatG": 13.4,
+        "fiberG": 0,
+        "ironMg": 0.3,
+        "potassiumMg": 363,
+        "proteinG": 20.4,
+        "saturatedFatG": 3.1,
+        "sodiumMg": 59,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "fillet"
+        }
+      ],
+      "slug": "salmon",
+      "source": "seedApproximate",
+      "tags": [
+        "fish"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "contains",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "White fish (cod), raw",
+      "per100g": {
+        "calciumMg": 16,
+        "carbohydrateG": 0,
+        "energyKcal": 82,
+        "fatG": 0.7,
+        "fiberG": 0,
+        "ironMg": 0.4,
+        "potassiumMg": 413,
+        "proteinG": 17.8,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 54,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 140,
+          "label": "fillet"
+        }
+      ],
+      "slug": "white-fish",
+      "source": "seedApproximate",
+      "tags": [
+        "fish"
+      ]
+    },
+    {
+      "allergens": {
+        "fish": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Tuna, canned in water, drained",
+      "per100g": {
+        "calciumMg": 11,
+        "carbohydrateG": 0,
+        "energyKcal": 116,
+        "fatG": 0.8,
+        "fiberG": 0,
+        "ironMg": 1,
+        "potassiumMg": 237,
+        "proteinG": 25.5,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 247,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 110,
+          "label": "can drained"
+        }
+      ],
+      "slug": "canned-tuna",
+      "source": "seedApproximate",
+      "tags": [
+        "fish"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "contains",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Prawns, raw",
+      "per100g": {
+        "calciumMg": 64,
+        "carbohydrateG": 0,
+        "energyKcal": 85,
+        "fatG": 0.5,
+        "fiberG": 0,
+        "ironMg": 0.5,
+        "potassiumMg": 259,
+        "proteinG": 20.1,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 119,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 12,
+          "label": "prawn"
+        },
+        {
+          "grams": 120,
+          "label": "serving"
+        }
+      ],
+      "slug": "prawns",
+      "source": "seedApproximate",
+      "tags": [
+        "shellfish"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "contains",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Egg, whole, raw",
+      "per100g": {
+        "calciumMg": 56,
+        "carbohydrateG": 0.7,
+        "energyKcal": 143,
+        "fatG": 9.5,
+        "fiberG": 0,
+        "ironMg": 1.8,
+        "potassiumMg": 138,
+        "proteinG": 12.6,
+        "saturatedFatG": 3.1,
+        "sodiumMg": 142,
+        "totalSugarG": 0.4
+      },
+      "portions": [
+        {
+          "grams": 50,
+          "label": "egg"
+        }
+      ],
+      "slug": "eggs",
+      "source": "seedApproximate",
+      "tags": [
+        "egg"
+      ]
+    },
+    {
+      "allergens": {
+        "soy": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Tofu, firm",
+      "per100g": {
+        "calciumMg": 350,
+        "carbohydrateG": 2.8,
+        "energyKcal": 144,
+        "fatG": 8.7,
+        "fiberG": 2.3,
+        "ironMg": 2.7,
+        "potassiumMg": 237,
+        "proteinG": 17.3,
+        "saturatedFatG": 1.3,
+        "sodiumMg": 14,
+        "totalSugarG": 0.6
+      },
+      "portions": [
+        {
+          "grams": 400,
+          "label": "block"
+        },
+        {
+          "grams": 100,
+          "label": "serving"
+        }
+      ],
+      "slug": "tofu",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "soy": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "protein",
+      "name": "Tempeh",
+      "per100g": {
+        "calciumMg": 111,
+        "carbohydrateG": 7.6,
+        "energyKcal": 192,
+        "fatG": 10.8,
+        "ironMg": 2.7,
+        "potassiumMg": 412,
+        "proteinG": 20.3,
+        "saturatedFatG": 2.2,
+        "sodiumMg": 9
+      },
+      "portions": [
+        {
+          "grams": 225,
+          "label": "block"
+        },
+        {
+          "grams": 100,
+          "label": "serving"
+        }
+      ],
+      "slug": "tempeh",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "contains",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.03,
+      "foodGroup": "dairy",
+      "name": "Milk, whole",
+      "per100g": {
+        "calciumMg": 113,
+        "carbohydrateG": 4.8,
+        "energyKcal": 61,
+        "fatG": 3.3,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 132,
+        "proteinG": 3.2,
+        "saturatedFatG": 1.9,
+        "sodiumMg": 43,
+        "totalSugarG": 4.8
+      },
+      "portions": [
+        {
+          "grams": 245,
+          "label": "cup"
+        },
+        {
+          "grams": 30,
+          "label": "splash"
+        }
+      ],
+      "slug": "milk",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "contains",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.03,
+      "foodGroup": "dairy",
+      "name": "Yoghurt, plain, whole milk",
+      "per100g": {
+        "calciumMg": 121,
+        "carbohydrateG": 4.7,
+        "energyKcal": 61,
+        "fatG": 3.3,
+        "fiberG": 0,
+        "ironMg": 0.1,
+        "potassiumMg": 155,
+        "proteinG": 3.5,
+        "saturatedFatG": 2.1,
+        "sodiumMg": 46,
+        "totalSugarG": 4.7
+      },
+      "portions": [
+        {
+          "grams": 245,
+          "label": "cup"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "yoghurt",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "contains",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.03,
+      "foodGroup": "dairy",
+      "name": "Greek yoghurt, plain, low fat",
+      "per100g": {
+        "calciumMg": 100,
+        "carbohydrateG": 3.9,
+        "energyKcal": 73,
+        "fatG": 1.9,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 150,
+        "proteinG": 10,
+        "saturatedFatG": 1.2,
+        "sodiumMg": 34,
+        "totalSugarG": 3.6
+      },
+      "portions": [
+        {
+          "grams": 245,
+          "label": "cup"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "greek-yoghurt",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "dairy",
+      "name": "Cheddar cheese",
+      "per100g": {
+        "calciumMg": 721,
+        "carbohydrateG": 1.3,
+        "energyKcal": 403,
+        "fatG": 33.1,
+        "fiberG": 0,
+        "ironMg": 0.7,
+        "potassiumMg": 98,
+        "proteinG": 24.9,
+        "saturatedFatG": 18.9,
+        "sodiumMg": 653,
+        "totalSugarG": 0.5
+      },
+      "portions": [
+        {
+          "grams": 28,
+          "label": "slice"
+        },
+        {
+          "grams": 113,
+          "label": "cup shredded"
+        }
+      ],
+      "slug": "cheddar",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "dairy",
+      "name": "Feta cheese",
+      "per100g": {
+        "calciumMg": 493,
+        "carbohydrateG": 4.1,
+        "energyKcal": 264,
+        "fatG": 21.3,
+        "fiberG": 0,
+        "ironMg": 0.7,
+        "potassiumMg": 62,
+        "proteinG": 14.2,
+        "saturatedFatG": 14.9,
+        "sodiumMg": 917,
+        "totalSugarG": 4.1
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "cup crumbled"
+        },
+        {
+          "grams": 30,
+          "label": "slice"
+        }
+      ],
+      "slug": "feta",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "dairy",
+      "name": "Parmesan cheese",
+      "per100g": {
+        "calciumMg": 1184,
+        "carbohydrateG": 4.1,
+        "energyKcal": 431,
+        "fatG": 29,
+        "fiberG": 0,
+        "ironMg": 0.8,
+        "potassiumMg": 92,
+        "proteinG": 38,
+        "saturatedFatG": 19,
+        "sodiumMg": 1529,
+        "totalSugarG": 0.9
+      },
+      "portions": [
+        {
+          "grams": 5,
+          "label": "tbsp grated"
+        },
+        {
+          "grams": 100,
+          "label": "cup grated"
+        }
+      ],
+      "slug": "parmesan",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "dairy",
+      "name": "Mozzarella cheese",
+      "per100g": {
+        "calciumMg": 505,
+        "carbohydrateG": 2.2,
+        "energyKcal": 280,
+        "fatG": 22.4,
+        "fiberG": 0,
+        "ironMg": 0.4,
+        "potassiumMg": 76,
+        "proteinG": 22.2,
+        "saturatedFatG": 13.2,
+        "sodiumMg": 627,
+        "totalSugarG": 1
+      },
+      "portions": [
+        {
+          "grams": 125,
+          "label": "ball"
+        },
+        {
+          "grams": 28,
+          "label": "slice"
+        }
+      ],
+      "slug": "mozzarella",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": 0.91,
+      "foodGroup": "dairy",
+      "name": "Butter, unsalted",
+      "per100g": {
+        "calciumMg": 24,
+        "carbohydrateG": 0.1,
+        "energyKcal": 717,
+        "fatG": 81.1,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 24,
+        "proteinG": 0.9,
+        "saturatedFatG": 51.4,
+        "sodiumMg": 11,
+        "totalSugarG": 0.1
+      },
+      "portions": [
+        {
+          "grams": 14.2,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.7,
+          "label": "tsp"
+        }
+      ],
+      "slug": "butter",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "milk": "contains"
+      },
+      "densityGPerMl": 0.99,
+      "foodGroup": "dairy",
+      "name": "Cream, double",
+      "per100g": {
+        "calciumMg": 65,
+        "carbohydrateG": 2.8,
+        "energyKcal": 340,
+        "fatG": 36.1,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 75,
+        "proteinG": 2.8,
+        "saturatedFatG": 23,
+        "sodiumMg": 27,
+        "totalSugarG": 2.8
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "tbsp"
+        },
+        {
+          "grams": 238,
+          "label": "cup"
+        }
+      ],
+      "slug": "cream",
+      "source": "seedApproximate",
+      "tags": [
+        "dairy"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 0.91,
+      "foodGroup": "fats",
+      "name": "Olive oil",
+      "per100g": {
+        "calciumMg": 1,
+        "carbohydrateG": 0,
+        "energyKcal": 884,
+        "fatG": 100,
+        "fiberG": 0,
+        "ironMg": 0.6,
+        "monounsaturatedFatG": 73,
+        "polyunsaturatedFatG": 10.5,
+        "potassiumMg": 1,
+        "proteinG": 0,
+        "saturatedFatG": 13.8,
+        "sodiumMg": 2,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 13.5,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.5,
+          "label": "tsp"
+        }
+      ],
+      "slug": "olive-oil",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": 0.92,
+      "foodGroup": "fats",
+      "name": "Vegetable oil",
+      "per100g": {
+        "calciumMg": 0,
+        "carbohydrateG": 0,
+        "energyKcal": 884,
+        "fatG": 100,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 0,
+        "proteinG": 0,
+        "saturatedFatG": 7,
+        "sodiumMg": 0,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 13.6,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.5,
+          "label": "tsp"
+        }
+      ],
+      "slug": "vegetable-oil",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "sesame": "contains"
+      },
+      "densityGPerMl": 0.92,
+      "foodGroup": "fats",
+      "name": "Sesame oil",
+      "per100g": {
+        "calciumMg": 0,
+        "carbohydrateG": 0,
+        "energyKcal": 884,
+        "fatG": 100,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 0,
+        "proteinG": 0,
+        "saturatedFatG": 14.2,
+        "sodiumMg": 0,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 13.6,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.5,
+          "label": "tsp"
+        }
+      ],
+      "slug": "sesame-oil",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "sesame": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Tahini (sesame paste)",
+      "per100g": {
+        "calciumMg": 426,
+        "carbohydrateG": 21.2,
+        "energyKcal": 595,
+        "fatG": 53.8,
+        "fiberG": 9.3,
+        "ironMg": 8.9,
+        "potassiumMg": 414,
+        "proteinG": 17,
+        "saturatedFatG": 7.5,
+        "sodiumMg": 115,
+        "totalSugarG": 0.5
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "tahini",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "peanut": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Peanut butter, smooth",
+      "per100g": {
+        "calciumMg": 49,
+        "carbohydrateG": 20,
+        "energyKcal": 588,
+        "fatG": 50,
+        "fiberG": 6,
+        "ironMg": 1.7,
+        "potassiumMg": 649,
+        "proteinG": 25,
+        "saturatedFatG": 10,
+        "sodiumMg": 430,
+        "totalSugarG": 9
+      },
+      "portions": [
+        {
+          "grams": 16,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "peanut-butter",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "contains",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Almonds",
+      "per100g": {
+        "calciumMg": 269,
+        "carbohydrateG": 21.6,
+        "energyKcal": 579,
+        "fatG": 49.9,
+        "fiberG": 12.5,
+        "ironMg": 3.7,
+        "potassiumMg": 733,
+        "proteinG": 21.2,
+        "saturatedFatG": 3.8,
+        "sodiumMg": 1,
+        "totalSugarG": 4.4
+      },
+      "portions": [
+        {
+          "grams": 28,
+          "label": "handful"
+        },
+        {
+          "grams": 143,
+          "label": "cup whole"
+        }
+      ],
+      "slug": "almonds",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "contains",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Walnuts",
+      "per100g": {
+        "calciumMg": 98,
+        "carbohydrateG": 13.7,
+        "energyKcal": 654,
+        "fatG": 65.2,
+        "fiberG": 6.7,
+        "ironMg": 2.9,
+        "potassiumMg": 441,
+        "proteinG": 15.2,
+        "saturatedFatG": 6.1,
+        "sodiumMg": 2,
+        "totalSugarG": 2.6
+      },
+      "portions": [
+        {
+          "grams": 28,
+          "label": "handful"
+        },
+        {
+          "grams": 117,
+          "label": "cup chopped"
+        }
+      ],
+      "slug": "walnuts",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Mixed seeds (sunflower and pumpkin)",
+      "per100g": {
+        "calciumMg": 80,
+        "carbohydrateG": 18,
+        "energyKcal": 560,
+        "fatG": 46,
+        "fiberG": 8,
+        "ironMg": 6,
+        "potassiumMg": 700,
+        "proteinG": 22,
+        "saturatedFatG": 6,
+        "sodiumMg": 5,
+        "totalSugarG": 2
+      },
+      "portions": [
+        {
+          "grams": 9,
+          "label": "tbsp"
+        },
+        {
+          "grams": 28,
+          "label": "handful"
+        }
+      ],
+      "slug": "mixed-seeds",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "sesame": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "fats",
+      "name": "Sesame seeds",
+      "per100g": {
+        "calciumMg": 975,
+        "carbohydrateG": 23.5,
+        "energyKcal": 573,
+        "fatG": 49.7,
+        "fiberG": 11.8,
+        "ironMg": 14.6,
+        "potassiumMg": 468,
+        "proteinG": 17.7,
+        "saturatedFatG": 7,
+        "sodiumMg": 11,
+        "totalSugarG": 0.3
+      },
+      "portions": [
+        {
+          "grams": 9,
+          "label": "tbsp"
+        },
+        {
+          "grams": 3,
+          "label": "tsp"
+        }
+      ],
+      "slug": "sesame-seeds",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Chickpeas, canned, drained",
+      "per100g": {
+        "calciumMg": 45,
+        "carbohydrateG": 22.5,
+        "energyKcal": 139,
+        "fatG": 2.8,
+        "fiberG": 6.4,
+        "ironMg": 1.9,
+        "potassiumMg": 172,
+        "proteinG": 7,
+        "saturatedFatG": 0.3,
+        "sodiumMg": 243,
+        "totalSugarG": 4.3
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "can drained"
+        },
+        {
+          "grams": 164,
+          "label": "cup"
+        }
+      ],
+      "slug": "chickpeas-canned",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Black beans, canned, drained",
+      "per100g": {
+        "calciumMg": 38,
+        "carbohydrateG": 16.6,
+        "energyKcal": 91,
+        "fatG": 0.3,
+        "fiberG": 6,
+        "ironMg": 1.9,
+        "potassiumMg": 305,
+        "proteinG": 6,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 237,
+        "totalSugarG": 0.3
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "can drained"
+        },
+        {
+          "grams": 172,
+          "label": "cup"
+        }
+      ],
+      "slug": "black-beans-canned",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Kidney beans, canned, drained",
+      "per100g": {
+        "calciumMg": 35,
+        "carbohydrateG": 15.3,
+        "energyKcal": 84,
+        "fatG": 0.5,
+        "fiberG": 5.5,
+        "ironMg": 1.7,
+        "potassiumMg": 300,
+        "proteinG": 5.2,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 258,
+        "totalSugarG": 0.8
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "can drained"
+        },
+        {
+          "grams": 177,
+          "label": "cup"
+        }
+      ],
+      "slug": "kidney-beans-canned",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Lentils, brown or green, dry",
+      "per100g": {
+        "calciumMg": 35,
+        "carbohydrateG": 63.4,
+        "energyKcal": 352,
+        "fatG": 1.1,
+        "fiberG": 10.7,
+        "ironMg": 6.5,
+        "potassiumMg": 677,
+        "proteinG": 24.6,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 6,
+        "totalSugarG": 2
+      },
+      "portions": [
+        {
+          "grams": 192,
+          "label": "cup dry"
+        },
+        {
+          "grams": 60,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "lentils-dry",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Red lentils, split, dry",
+      "per100g": {
+        "calciumMg": 48,
+        "carbohydrateG": 60.1,
+        "energyKcal": 358,
+        "fatG": 1.1,
+        "fiberG": 10.8,
+        "ironMg": 7.5,
+        "potassiumMg": 677,
+        "proteinG": 23.9,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 6,
+        "totalSugarG": 2
+      },
+      "portions": [
+        {
+          "grams": 192,
+          "label": "cup dry"
+        },
+        {
+          "grams": 60,
+          "label": "serving dry"
+        }
+      ],
+      "slug": "red-lentils-dry",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Baked beans in tomato sauce, canned",
+      "per100g": {
+        "calciumMg": 40,
+        "carbohydrateG": 17.5,
+        "energyKcal": 94,
+        "fatG": 0.3,
+        "fiberG": 3.7,
+        "ironMg": 1.4,
+        "potassiumMg": 330,
+        "proteinG": 4.7,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 380,
+        "totalSugarG": 5.7
+      },
+      "portions": [
+        {
+          "grams": 400,
+          "label": "can"
+        },
+        {
+          "grams": 200,
+          "label": "half can"
+        }
+      ],
+      "slug": "baked-beans",
+      "source": "seedApproximate",
+      "tags": [
+        "addedSugarSource",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "sesame": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "legumes",
+      "name": "Hummus",
+      "per100g": {
+        "calciumMg": 49,
+        "carbohydrateG": 11,
+        "energyKcal": 230,
+        "fatG": 17.5,
+        "fiberG": 5.5,
+        "ironMg": 2.3,
+        "potassiumMg": 190,
+        "proteinG": 7.6,
+        "saturatedFatG": 3.4,
+        "sodiumMg": 480,
+        "totalSugarG": 0.5
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "tbsp"
+        },
+        {
+          "grams": 60,
+          "label": "serving"
+        }
+      ],
+      "slug": "hummus",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "gluten": "contains",
+        "soy": "contains",
+        "wheat": "contains"
+      },
+      "densityGPerMl": 1.15,
+      "foodGroup": "other",
+      "name": "Soy sauce",
+      "per100g": {
+        "calciumMg": 33,
+        "carbohydrateG": 4.9,
+        "energyKcal": 53,
+        "fatG": 0.6,
+        "fiberG": 0.8,
+        "ironMg": 2.4,
+        "potassiumMg": 435,
+        "proteinG": 8.1,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 5493,
+        "totalSugarG": 0.4
+      },
+      "portions": [
+        {
+          "grams": 17,
+          "label": "tbsp"
+        },
+        {
+          "grams": 6,
+          "label": "tsp"
+        }
+      ],
+      "slug": "soy-sauce",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "mayContain"
+      },
+      "densityGPerMl": 1.0,
+      "foodGroup": "other",
+      "name": "Chicken stock, ready-made",
+      "per100g": {
+        "calciumMg": 4,
+        "carbohydrateG": 0.3,
+        "energyKcal": 5,
+        "fatG": 0.2,
+        "fiberG": 0,
+        "ironMg": 0.1,
+        "potassiumMg": 40,
+        "proteinG": 0.6,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 343,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "cup"
+        }
+      ],
+      "slug": "chicken-stock",
+      "source": "seedApproximate",
+      "tags": [
+        "poultry",
+        "meat",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "mayContain"
+      },
+      "densityGPerMl": 1.0,
+      "foodGroup": "other",
+      "name": "Vegetable stock, ready-made",
+      "per100g": {
+        "calciumMg": 4,
+        "carbohydrateG": 1.2,
+        "energyKcal": 6,
+        "fatG": 0.1,
+        "fiberG": 0,
+        "ironMg": 0.1,
+        "potassiumMg": 40,
+        "proteinG": 0.2,
+        "saturatedFatG": 0,
+        "sodiumMg": 370,
+        "totalSugarG": 0.7
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "cup"
+        }
+      ],
+      "slug": "vegetable-stock",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": 0.97,
+      "foodGroup": "other",
+      "name": "Coconut milk, canned",
+      "per100g": {
+        "calciumMg": 18,
+        "carbohydrateG": 2.8,
+        "energyKcal": 197,
+        "fatG": 21.3,
+        "fiberG": 0,
+        "ironMg": 1.6,
+        "potassiumMg": 220,
+        "proteinG": 2,
+        "saturatedFatG": 18.9,
+        "sodiumMg": 13,
+        "totalSugarG": 2.8
+      },
+      "portions": [
+        {
+          "grams": 400,
+          "label": "can"
+        },
+        {
+          "grams": 240,
+          "label": "cup"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "coconut-milk-canned",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.42,
+      "foodGroup": "other",
+      "name": "Honey",
+      "per100g": {
+        "calciumMg": 6,
+        "carbohydrateG": 82.4,
+        "energyKcal": 304,
+        "fatG": 0,
+        "fiberG": 0.2,
+        "ironMg": 0.4,
+        "potassiumMg": 52,
+        "proteinG": 0.3,
+        "saturatedFatG": 0,
+        "sodiumMg": 4,
+        "totalSugarG": 82.1
+      },
+      "portions": [
+        {
+          "grams": 21,
+          "label": "tbsp"
+        },
+        {
+          "grams": 7,
+          "label": "tsp"
+        }
+      ],
+      "slug": "honey",
+      "source": "seedApproximate",
+      "tags": [
+        "honey",
+        "addedSugarSource"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 0.85,
+      "foodGroup": "other",
+      "name": "Sugar, white",
+      "per100g": {
+        "calciumMg": 1,
+        "carbohydrateG": 100,
+        "energyKcal": 387,
+        "fatG": 0,
+        "fiberG": 0,
+        "ironMg": 0.1,
+        "potassiumMg": 2,
+        "proteinG": 0,
+        "saturatedFatG": 0,
+        "sodiumMg": 1,
+        "totalSugarG": 100
+      },
+      "portions": [
+        {
+          "grams": 12.5,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.2,
+          "label": "tsp"
+        }
+      ],
+      "slug": "sugar",
+      "source": "seedApproximate",
+      "tags": [
+        "addedSugarSource"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Salt, table",
+      "per100g": {
+        "calciumMg": 24,
+        "carbohydrateG": 0,
+        "energyKcal": 0,
+        "fatG": 0,
+        "fiberG": 0,
+        "ironMg": 0.3,
+        "potassiumMg": 8,
+        "proteinG": 0,
+        "saturatedFatG": 0,
+        "sodiumMg": 38758,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 6,
+          "label": "tsp"
+        },
+        {
+          "grams": 0.5,
+          "label": "pinch"
+        }
+      ],
+      "slug": "salt",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Black pepper, ground",
+      "per100g": {
+        "calciumMg": 443,
+        "carbohydrateG": 64,
+        "energyKcal": 251,
+        "fatG": 3.3,
+        "fiberG": 25.3,
+        "ironMg": 9.7,
+        "potassiumMg": 1329,
+        "proteinG": 10.4,
+        "saturatedFatG": 1.4,
+        "sodiumMg": 20,
+        "totalSugarG": 0.6
+      },
+      "portions": [
+        {
+          "grams": 2.3,
+          "label": "tsp"
+        },
+        {
+          "grams": 0.5,
+          "label": "pinch"
+        }
+      ],
+      "slug": "black-pepper",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Cumin, ground",
+      "per100g": {
+        "calciumMg": 931,
+        "carbohydrateG": 44.2,
+        "energyKcal": 375,
+        "fatG": 22.3,
+        "fiberG": 10.5,
+        "ironMg": 66.4,
+        "potassiumMg": 1788,
+        "proteinG": 17.8,
+        "saturatedFatG": 1.5,
+        "sodiumMg": 168,
+        "totalSugarG": 2.3
+      },
+      "portions": [
+        {
+          "grams": 2,
+          "label": "tsp"
+        },
+        {
+          "grams": 6,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "cumin",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Paprika, ground",
+      "per100g": {
+        "calciumMg": 229,
+        "carbohydrateG": 54,
+        "energyKcal": 282,
+        "fatG": 12.9,
+        "fiberG": 34.9,
+        "ironMg": 21.1,
+        "potassiumMg": 2280,
+        "proteinG": 14.1,
+        "saturatedFatG": 2.1,
+        "sodiumMg": 68,
+        "totalSugarG": 10.3
+      },
+      "portions": [
+        {
+          "grams": 2.3,
+          "label": "tsp"
+        },
+        {
+          "grams": 6.8,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "paprika",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Curry powder",
+      "per100g": {
+        "calciumMg": 478,
+        "carbohydrateG": 55.8,
+        "energyKcal": 325,
+        "fatG": 14,
+        "fiberG": 53.2,
+        "ironMg": 19.1,
+        "potassiumMg": 1170,
+        "proteinG": 14.3,
+        "saturatedFatG": 2.2,
+        "sodiumMg": 52,
+        "totalSugarG": 2.8
+      },
+      "portions": [
+        {
+          "grams": 2,
+          "label": "tsp"
+        },
+        {
+          "grams": 6.3,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "curry-powder",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Turmeric, ground",
+      "per100g": {
+        "calciumMg": 168,
+        "carbohydrateG": 67.1,
+        "energyKcal": 312,
+        "fatG": 3.3,
+        "fiberG": 22.7,
+        "ironMg": 55,
+        "potassiumMg": 2525,
+        "proteinG": 9.7,
+        "saturatedFatG": 1.8,
+        "sodiumMg": 27,
+        "totalSugarG": 3.2
+      },
+      "portions": [
+        {
+          "grams": 3,
+          "label": "tsp"
+        },
+        {
+          "grams": 9,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "turmeric",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Oregano, dried",
+      "per100g": {
+        "calciumMg": 1597,
+        "carbohydrateG": 68.9,
+        "energyKcal": 265,
+        "fatG": 4.3,
+        "fiberG": 42.5,
+        "ironMg": 36.8,
+        "potassiumMg": 1260,
+        "proteinG": 9,
+        "saturatedFatG": 1.6,
+        "sodiumMg": 25,
+        "totalSugarG": 4.1
+      },
+      "portions": [
+        {
+          "grams": 1,
+          "label": "tsp"
+        },
+        {
+          "grams": 3,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "oregano",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Cinnamon, ground",
+      "per100g": {
+        "calciumMg": 1002,
+        "carbohydrateG": 80.6,
+        "energyKcal": 247,
+        "fatG": 1.2,
+        "fiberG": 53.1,
+        "ironMg": 8.3,
+        "potassiumMg": 431,
+        "proteinG": 4,
+        "saturatedFatG": 0.3,
+        "sodiumMg": 10,
+        "totalSugarG": 2.2
+      },
+      "portions": [
+        {
+          "grams": 2.6,
+          "label": "tsp"
+        },
+        {
+          "grams": 7.8,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "cinnamon",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Chilli flakes, dried",
+      "per100g": {
+        "calciumMg": 148,
+        "carbohydrateG": 56.6,
+        "energyKcal": 318,
+        "fatG": 17.3,
+        "fiberG": 28.7,
+        "ironMg": 7.8,
+        "potassiumMg": 1870,
+        "proteinG": 12,
+        "saturatedFatG": 3.3,
+        "sodiumMg": 30,
+        "totalSugarG": 10.3
+      },
+      "portions": [
+        {
+          "grams": 1.8,
+          "label": "tsp"
+        },
+        {
+          "grams": 0.5,
+          "label": "pinch"
+        }
+      ],
+      "slug": "chilli-flakes",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "sulphites": "mayContain"
+      },
+      "densityGPerMl": 1.01,
+      "foodGroup": "other",
+      "name": "Vinegar, white wine",
+      "per100g": {
+        "calciumMg": 6,
+        "carbohydrateG": 0.3,
+        "energyKcal": 19,
+        "fiberG": 0,
+        "ironMg": 0.2,
+        "potassiumMg": 39,
+        "saturatedFatG": 0,
+        "sodiumMg": 5,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 15,
+          "label": "tbsp"
+        },
+        {
+          "grams": 5,
+          "label": "tsp"
+        }
+      ],
+      "slug": "vinegar",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "mustard": "contains",
+        "sulphites": "mayContain"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Mustard, prepared",
+      "per100g": {
+        "calciumMg": 63,
+        "carbohydrateG": 5.8,
+        "energyKcal": 66,
+        "fatG": 3.3,
+        "fiberG": 3.2,
+        "ironMg": 1.6,
+        "potassiumMg": 138,
+        "proteinG": 4.4,
+        "saturatedFatG": 0.2,
+        "sodiumMg": 1135,
+        "totalSugarG": 2.7
+      },
+      "portions": [
+        {
+          "grams": 5,
+          "label": "tsp"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "mustard",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "egg": "contains",
+        "mustard": "mayContain",
+        "sulphites": "mayContain"
+      },
+      "densityGPerMl": 0.91,
+      "foodGroup": "other",
+      "name": "Mayonnaise",
+      "per100g": {
+        "calciumMg": 8,
+        "carbohydrateG": 0.6,
+        "energyKcal": 680,
+        "fatG": 75,
+        "fiberG": 0,
+        "ironMg": 0.2,
+        "potassiumMg": 20,
+        "proteinG": 1,
+        "saturatedFatG": 11,
+        "sodiumMg": 635,
+        "totalSugarG": 0.6
+      },
+      "portions": [
+        {
+          "grams": 14,
+          "label": "tbsp"
+        },
+        {
+          "grams": 4.7,
+          "label": "tsp"
+        }
+      ],
+      "slug": "mayonnaise",
+      "source": "seedApproximate",
+      "tags": [
+        "egg"
+      ]
+    },
+    {
+      "allergens": {},
+      "densityGPerMl": 1.15,
+      "foodGroup": "other",
+      "name": "Tomato ketchup",
+      "per100g": {
+        "calciumMg": 15,
+        "carbohydrateG": 27.4,
+        "energyKcal": 101,
+        "fatG": 0.1,
+        "fiberG": 0.3,
+        "ironMg": 0.4,
+        "potassiumMg": 380,
+        "proteinG": 1,
+        "saturatedFatG": 0,
+        "sodiumMg": 907,
+        "totalSugarG": 21.3
+      },
+      "portions": [
+        {
+          "grams": 17,
+          "label": "tbsp"
+        },
+        {
+          "grams": 6,
+          "label": "tsp"
+        }
+      ],
+      "slug": "ketchup",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium",
+        "addedSugarSource"
+      ]
+    },
+    {
+      "allergens": {
+        "soy": "contains"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Miso paste",
+      "per100g": {
+        "calciumMg": 57,
+        "carbohydrateG": 26.5,
+        "energyKcal": 199,
+        "fatG": 6,
+        "fiberG": 5.4,
+        "ironMg": 2.5,
+        "potassiumMg": 210,
+        "proteinG": 11.7,
+        "saturatedFatG": 1,
+        "sodiumMg": 3728,
+        "totalSugarG": 6.2
+      },
+      "portions": [
+        {
+          "grams": 17,
+          "label": "tbsp"
+        },
+        {
+          "grams": 6,
+          "label": "tsp"
+        }
+      ],
+      "slug": "miso",
+      "source": "seedApproximate",
+      "tags": [
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "fish": "contains"
+      },
+      "densityGPerMl": 1.2,
+      "foodGroup": "other",
+      "name": "Fish sauce",
+      "per100g": {
+        "calciumMg": 43,
+        "carbohydrateG": 3.6,
+        "energyKcal": 35,
+        "fatG": 0,
+        "fiberG": 0,
+        "ironMg": 0.8,
+        "potassiumMg": 356,
+        "proteinG": 5.1,
+        "saturatedFatG": 0,
+        "sodiumMg": 7851,
+        "totalSugarG": 3.6
+      },
+      "portions": [
+        {
+          "grams": 18,
+          "label": "tbsp"
+        },
+        {
+          "grams": 6,
+          "label": "tsp"
+        }
+      ],
+      "slug": "fish-sauce",
+      "source": "seedApproximate",
+      "tags": [
+        "fish",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "fish": "contains"
+      },
+      "densityGPerMl": 1.1,
+      "foodGroup": "other",
+      "name": "Worcestershire sauce",
+      "per100g": {
+        "calciumMg": 107,
+        "carbohydrateG": 19.5,
+        "energyKcal": 78,
+        "fatG": 0,
+        "fiberG": 0,
+        "ironMg": 5.3,
+        "potassiumMg": 800,
+        "proteinG": 0,
+        "saturatedFatG": 0,
+        "sodiumMg": 980,
+        "totalSugarG": 10
+      },
+      "portions": [
+        {
+          "grams": 17,
+          "label": "tbsp"
+        },
+        {
+          "grams": 6,
+          "label": "tsp"
+        }
+      ],
+      "slug": "worcestershire-sauce",
+      "source": "seedApproximate",
+      "tags": [
+        "fish",
+        "highSodium"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": null,
+      "foodGroup": "other",
+      "name": "Tomato paste",
+      "per100g": {
+        "calciumMg": 36,
+        "carbohydrateG": 18.9,
+        "energyKcal": 82,
+        "fatG": 0.5,
+        "fiberG": 4.1,
+        "ironMg": 3,
+        "potassiumMg": 1014,
+        "proteinG": 4.3,
+        "saturatedFatG": 0.1,
+        "sodiumMg": 59,
+        "totalSugarG": 12.2
+      },
+      "portions": [
+        {
+          "grams": 16,
+          "label": "tbsp"
+        },
+        {
+          "grams": 5,
+          "label": "tsp"
+        }
+      ],
+      "slug": "tomato-paste",
+      "source": "seedApproximate",
+      "tags": []
+    },
+    {
+      "allergens": {
+        "sulphites": "contains"
+      },
+      "densityGPerMl": 0.99,
+      "foodGroup": "other",
+      "name": "White wine, dry",
+      "per100g": {
+        "calciumMg": 9,
+        "carbohydrateG": 2.6,
+        "energyKcal": 82,
+        "fiberG": 0,
+        "ironMg": 0.3,
+        "potassiumMg": 71,
+        "saturatedFatG": 0,
+        "sodiumMg": 5,
+        "totalSugarG": 1
+      },
+      "portions": [
+        {
+          "grams": 150,
+          "label": "glass"
+        },
+        {
+          "grams": 15,
+          "label": "tbsp"
+        }
+      ],
+      "slug": "white-wine",
+      "source": "seedApproximate",
+      "tags": [
+        "alcohol"
+      ]
+    },
+    {
+      "allergens": {
+        "celery": "verifiedFree",
+        "crustacean": "verifiedFree",
+        "egg": "verifiedFree",
+        "fish": "verifiedFree",
+        "gluten": "verifiedFree",
+        "lupin": "verifiedFree",
+        "milk": "verifiedFree",
+        "mollusc": "verifiedFree",
+        "mustard": "verifiedFree",
+        "peanut": "verifiedFree",
+        "sesame": "verifiedFree",
+        "soy": "verifiedFree",
+        "sulphites": "verifiedFree",
+        "treeNut": "verifiedFree",
+        "wheat": "verifiedFree"
+      },
+      "densityGPerMl": 1.0,
+      "foodGroup": "other",
+      "name": "Water",
+      "per100g": {
+        "calciumMg": 3,
+        "carbohydrateG": 0,
+        "energyKcal": 0,
+        "fatG": 0,
+        "fiberG": 0,
+        "ironMg": 0,
+        "potassiumMg": 0,
+        "proteinG": 0,
+        "saturatedFatG": 0,
+        "sodiumMg": 5,
+        "totalSugarG": 0
+      },
+      "portions": [
+        {
+          "grams": 240,
+          "label": "cup"
+        }
+      ],
+      "slug": "water",
+      "source": "seedApproximate",
+      "tags": []
+    }
+  ]
+}

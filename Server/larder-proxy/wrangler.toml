@@ -1,0 +1,22 @@
+name = "larder-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Secrets are set with `wrangler secret put <NAME>` and never written to this file:
+#   ANTHROPIC_API_KEY    Anthropic API key used for every model call
+#   SESSION_SIGNING_KEY  HMAC-SHA256 key for session tokens, at least 32 characters
+#   DEV_CLIENT_SECRET    shared secret for dev attestation (only read when ALLOW_DEV_ATTESTATION is "true")
+
+[[kv_namespaces]]
+binding = "QUOTAS"
+id = "00000000000000000000000000000000"
+preview_id = "11111111111111111111111111111111"
+
+[vars]
+MODEL_FAST = "claude-haiku-5-5"
+MODEL_CAPABLE = "claude-sonnet-5-5"
+ALLOW_DEV_ATTESTATION = "false"
+FREE_DAILY_LIMIT = "3"
+PLUS_DAILY_LIMIT = "60"
+BUNDLE_ID = "com.larder.app"

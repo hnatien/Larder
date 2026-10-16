@@ -1,0 +1,4386 @@
+{
+  "recipes": [
+    {
+      "cookMinutes": 8,
+      "cuisine": "British",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "oats",
+          "garnish": false,
+          "optional": false,
+          "quantity": 80,
+          "text": "80 g rolled oats",
+          "unit": "gram"
+        },
+        {
+          "food": "milk",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 ml milk",
+          "unit": "millilitre"
+        },
+        {
+          "food": "banana",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 ripe banana",
+          "unit": "piece"
+        },
+        {
+          "food": "cinnamon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp ground cinnamon",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        },
+        {
+          "food": "walnuts",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped walnuts",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "honey",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 tbsp honey",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "banana-oat-porridge",
+      "steps": [
+        {
+          "text": "Stir the oats, milk and salt together in a small pot.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Heat on medium, stirring often, until the porridge thickens and starts to bubble gently.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Mash half the banana with a fork until it looks creamy and smells sweet.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir the mashed banana and cinnamon into the porridge and cook one more minute.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Spoon into bowls and top with sliced banana, walnuts and a drizzle of honey.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Banana oat porridge"
+    },
+    {
+      "cookMinutes": 7,
+      "cuisine": "Greek",
+      "dietFlags": [
+        "mediterranean",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "feta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 50,
+          "text": "50 g feta, crumbled",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "Black pepper",
+          "unit": "pinch"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp chopped parsley",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "spinach-feta-scramble",
+      "steps": [
+        {
+          "text": "Warm the olive oil in a non-stick pan over medium heat until it loosens.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the spinach and stir until it wilts and the pan hisses less.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Beat the eggs with pepper in a bowl until no streaks of white remain.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour the eggs into the pan and stir slowly until just set and creamy.",
+          "timerSeconds": 90
+        },
+        {
+          "text": "Crumble in the feta, fold once and serve at once with parsley on top.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Spinach and feta scramble"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "mediterranean",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red pepper, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, sliced",
+          "unit": "clove"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "canned-tomatoes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g canned chopped tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped parsley",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "tomato-pepper-shakshuka",
+      "steps": [
+        {
+          "text": "Warm the oil in a wide pan over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the onion and pepper until the onion is soft and smells sweet.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Stir in the garlic, cumin and paprika and cook until the spices smell toasty.",
+          "timerSeconds": 45
+        },
+        {
+          "text": "Pour in the tomatoes and simmer until the sauce thickens and mounds on a spoon.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Make four wells in the sauce and crack an egg into each.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cover and cook until the whites are set but the yolks still wobble.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Scatter with parsley and serve straight from the pan with bread.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tomato and pepper shakshuka"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "wholegrain-bread",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 slices wholegrain bread",
+          "unit": "slice"
+        },
+        {
+          "food": "avocado",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 ripe avocado",
+          "unit": "piece"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 120,
+          "text": "120 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "chilli-flakes",
+          "garnish": false,
+          "optional": true,
+          "quantity": 0.25,
+          "text": "1/4 tsp chilli flakes",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "avocado-chickpea-toast",
+      "steps": [
+        {
+          "text": "Toast the bread until it is golden and crisp and smells nutty.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Mash the avocado with the lemon juice and salt until mostly smooth.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Crush the chickpeas lightly with a fork so some stay whole.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spread the avocado over the toast and spoon the chickpeas on top.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Finish with chilli flakes if you like some heat, then eat while the toast is warm.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Avocado chickpea toast"
+    },
+    {
+      "cookMinutes": 8,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "tortilla",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 small tortillas",
+          "unit": "piece"
+        },
+        {
+          "food": "black-beans-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned black beans, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "avocado",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 ripe avocado",
+          "unit": "piece"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tomato, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lime",
+          "unit": "piece"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped coriander",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "black-bean-breakfast-tacos",
+      "steps": [
+        {
+          "text": "Warm the black beans and cumin in a small pan over medium heat.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Mash a third of the beans with a fork until the mixture turns thick and creamy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Heat each tortilla in a dry pan until it is soft and speckled.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Slice the avocado and dice the tomato while the beans finish warming.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fill the tortillas with beans, avocado and tomato, then squeeze lime over each.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Sprinkle with coriander and eat while the beans are still hot.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Black bean breakfast tacos"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "tofu",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g firm tofu",
+          "unit": "gram"
+        },
+        {
+          "food": "turmeric",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp ground turmeric",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red pepper, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 spring onions, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "breakfast"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "turmeric-tofu-scramble",
+      "steps": [
+        {
+          "text": "Heat the oil in a wide pan over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the diced pepper until it softens and the edges start to brown.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Crumble the tofu into the pan with the turmeric and salt.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir often until the tofu looks dry and smells warm and earthy.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Add the spinach and stir until it wilts and the pan sounds quieter.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Serve the scramble hot, topped with the sliced spring onions.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Turmeric tofu scramble"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Greek",
+      "dietFlags": [
+        "mediterranean",
+        "vegetarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 cucumber, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tomatoes, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "feta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g feta, cubed",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp lemon juice",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "oregano",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp dried oregano",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 15,
+      "servings": 2,
+      "slug": "chickpea-greek-salad",
+      "steps": [
+        {
+          "text": "Chop the cucumber and tomatoes into bite-sized chunks and put them in a bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the chickpeas and feta to the bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Whisk the olive oil, lemon juice and oregano in a cup until cloudy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour the dressing over the salad and toss gently until everything glistens.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Let the salad sit for five minutes so the juices mingle, then serve.",
+          "timerSeconds": 300
+        }
+      ],
+      "title": "Chickpea Greek salad"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Spanish",
+      "dietFlags": [
+        "mediterranean",
+        "pescatarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "canned-tuna",
+          "garnish": false,
+          "optional": false,
+          "quantity": 220,
+          "text": "2 cans tuna in water, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tomatoes, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 spring onions, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped parsley",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 12,
+      "servings": 2,
+      "slug": "tuna-chickpea-lemon-salad",
+      "steps": [
+        {
+          "text": "Drain the tuna and chickpeas well and tip them into a large bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Flake the tuna with a fork until the pieces are bite-sized.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the tomatoes and spring onions to the bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir the olive oil and lemon juice together, then pour over the salad.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss gently until the dressing coats everything and smells bright and sharp.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Top with parsley and serve with bread or leaves.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tuna and chickpea lemon salad"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "tortilla",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 large tortillas",
+          "unit": "piece"
+        },
+        {
+          "food": "hummus",
+          "garnish": false,
+          "optional": false,
+          "quantity": 6,
+          "text": "6 tbsp hummus",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 carrot, grated",
+          "unit": "piece"
+        },
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 cucumber, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "lettuce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 handfuls shredded lettuce",
+          "unit": "cup"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 tbsp lemon juice",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "hummus-crunch-wraps",
+      "steps": [
+        {
+          "text": "Grate the carrot and slice the cucumber into thin sticks.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Warm each tortilla in a dry pan for twenty seconds until pliable.",
+          "timerSeconds": 20
+        },
+        {
+          "text": "Spread three tablespoons of hummus down the middle of each tortilla.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pile on the lettuce, carrot and cucumber, with a squeeze of lemon if you like.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the sides, roll tightly and slice in half.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Hummus crunch wraps"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Japanese",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 600,
+          "text": "600 ml water",
+          "unit": "millilitre"
+        },
+        {
+          "food": "rice-noodles",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g rice noodles",
+          "unit": "gram"
+        },
+        {
+          "food": "tofu",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g firm tofu, cubed",
+          "unit": "gram"
+        },
+        {
+          "food": "miso",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp miso paste",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 spring onions, sliced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "miso-tofu-noodle-soup",
+      "steps": [
+        {
+          "text": "Bring the water and ginger to a gentle simmer in a medium pot.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Add the noodles and cook until they are tender but still slightly chewy.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Slide in the tofu and spinach and warm until the spinach wilts.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Turn off the heat and let the broth stop bubbling.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Whisk the miso with a ladle of broth in a cup until smooth.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir the miso back into the pot and serve topped with spring onions.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Miso tofu noodle soup"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "tortilla",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 small tortillas",
+          "unit": "piece"
+        },
+        {
+          "food": "black-beans-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned black beans, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "cheddar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g cheddar, grated",
+          "unit": "gram"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red pepper, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lime",
+          "unit": "piece"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped coriander",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "black-bean-cheddar-quesadillas",
+      "steps": [
+        {
+          "text": "Mash the beans roughly with the paprika and diced pepper in a bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spread the bean mixture over two tortillas and sprinkle with the cheddar.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Top each with a second tortilla and press down firmly.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook one quesadilla in a dry pan until the underside is golden and crisp.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Flip carefully and cook until the cheese melts and you hear a gentle sizzle.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Repeat with the second one, then cut into wedges and squeeze lime over.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Black bean cheddar quesadillas"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "mediterranean",
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 carrots, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "red-lentils-dry",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g red lentils",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-stock",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1000,
+          "text": "1 litre vegetable stock",
+          "unit": "millilitre"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "lemon-red-lentil-soup",
+      "steps": [
+        {
+          "text": "Warm the oil in a large pot over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the onion and carrots until the onion is soft and smells sweet.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Stir in the cumin and cook until the spices smell warm and toasty.",
+          "timerSeconds": 45
+        },
+        {
+          "text": "Add the lentils and stock and bring to a boil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Simmer gently until the lentils collapse and the soup thickens.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Blend roughly with a stick blender, then stir in the lemon juice.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Taste, adjust the lemon, and cool before storing; the soup keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Lemon red lentil soup"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Vietnamese",
+      "dietFlags": [
+        "pescatarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "rice-noodles",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g rice noodles",
+          "unit": "gram"
+        },
+        {
+          "food": "prawns",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g raw prawns, peeled",
+          "unit": "gram"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 carrot, grated",
+          "unit": "piece"
+        },
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 cucumber, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "mint",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 handful mint leaves",
+          "unit": "cup"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 limes, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "fish-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp fish sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp sugar",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 15,
+      "servings": 2,
+      "slug": "prawn-vermicelli-salad",
+      "steps": [
+        {
+          "text": "Soak the noodles in just-boiled water until tender but still springy.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Drain the noodles, rinse under cold water and shake them dry.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Simmer the prawns in a pot of water until they curl and turn pink.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Stir the lime juice, fish sauce and sugar together until the sugar dissolves.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the noodles, prawns, carrot, cucumber and mint with the dressing.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Taste and add more lime if it needs a sharper edge, then serve.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Vietnamese prawn noodle salad"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Chinese",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g white rice",
+          "unit": "gram"
+        },
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "peas",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g frozen peas",
+          "unit": "gram"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 spring onions, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sesame oil",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "egg-fried-rice-peas",
+      "steps": [
+        {
+          "text": "Rinse the rice, then simmer it in twice its volume of water, covered.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Spread the cooked rice on a tray and let it steam off until cool.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Heat the vegetable oil in a wok until it shimmers and just begins to smoke.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Scramble the beaten eggs in the wok until they are just set.",
+          "timerSeconds": 45
+        },
+        {
+          "text": "Add the rice and peas and stir-fry until the grains separate and sizzle.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Splash in the soy sauce and sesame oil and toss through the spring onions.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Egg fried rice with peas"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 5,
+      "servings": 4,
+      "slug": "spiced-roasted-chickpeas",
+      "steps": [
+        {
+          "text": "Heat the oven to 200 C and line a tray with baking paper.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pat the chickpeas very dry with a kitchen towel so they crisp.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the chickpeas with the oil, paprika, cumin and salt on the tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast, shaking the tray halfway, until the chickpeas rattle and smell toasty.",
+          "timerSeconds": 1320
+        },
+        {
+          "text": "Cool for five minutes so they crisp further, then eat within a day.",
+          "timerSeconds": 300
+        }
+      ],
+      "title": "Spiced roasted chickpeas"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "banana",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 ripe banana",
+          "unit": "piece"
+        },
+        {
+          "food": "oats",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g rolled oats",
+          "unit": "gram"
+        },
+        {
+          "food": "peanut-butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp peanut butter",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "honey",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp honey",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "cinnamon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp ground cinnamon",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 10,
+      "servings": 6,
+      "slug": "peanut-banana-oat-bites",
+      "steps": [
+        {
+          "text": "Mash the banana in a bowl until it looks like a smooth paste.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir in the peanut butter, honey and cinnamon until evenly mixed.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the oats until the mixture holds together when pressed.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roll into twelve small balls using damp hands.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Chill the bites until they feel firm to the touch.",
+          "timerSeconds": 900
+        }
+      ],
+      "title": "Peanut butter banana oat bites"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "foodProcessor"
+      ],
+      "ingredients": [
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "tahini",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp tahini",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 clove garlic",
+          "unit": "clove"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp cold water",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 carrots, cut into sticks",
+          "unit": "piece"
+        },
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 cucumber, cut into sticks",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "quick-lemon-hummus",
+      "steps": [
+        {
+          "text": "Blend the tahini and lemon juice in a food processor until pale and thick.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Add the garlic, chickpeas and half the water, then blend until smooth.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add water a spoonful at a time until the hummus loosens and falls from a spoon.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spoon into a bowl and drizzle with the olive oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Serve with the carrot and cucumber sticks for dipping.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Quick lemon hummus with crunchy sticks"
+    },
+    {
+      "cookMinutes": 5,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "blueberries",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g blueberries",
+          "unit": "gram"
+        },
+        {
+          "food": "oats",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "40 g rolled oats",
+          "unit": "gram"
+        },
+        {
+          "food": "cinnamon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp ground cinnamon",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "mixed-seeds",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp mixed seeds",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "toasted-oat-berry-yoghurt",
+      "steps": [
+        {
+          "text": "Toast the oats and cinnamon in a dry pan, stirring, until fragrant and lightly golden.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Tip the oats onto a plate and let them cool until crisp.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Spoon the yoghurt into two bowls while the oats cool.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Top with the blueberries, toasted oats and mixed seeds.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Toasted oat berry yoghurt bowl"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Indian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, finely chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "curry-powder",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp curry powder",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "canned-tomatoes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g canned chopped tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped coriander",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "weeknight-chana-masala",
+      "steps": [
+        {
+          "text": "Warm the oil in a wide pan over medium heat until it loosens and shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the onion until it is soft and smells sweet.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Stir in the garlic, ginger and curry powder and cook until fragrant.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Pour in the tomatoes and simmer until the sauce darkens and thickens.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Add the chickpeas and salt, then simmer until they are tender and the sauce clings.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Scatter with coriander; the curry keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Weeknight chana masala"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Indian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "turmeric",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground turmeric",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "red-lentils-dry",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g red lentils",
+          "unit": "gram"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 750,
+          "text": "750 ml water",
+          "unit": "millilitre"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "spinach-red-lentil-dal",
+      "steps": [
+        {
+          "text": "Warm the oil in a large pot over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the onion until it is soft and smells sweet.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Stir in the garlic, ginger, turmeric and cumin and cook until fragrant.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Add the lentils and water and bring to a boil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Simmer, stirring now and then, until the lentils break down into a thick soup.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Stir in the spinach until it wilts, then add the lemon juice.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Taste for salt; the dal keeps for 3 days and thickens as it cools.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Spinach red lentil dal"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "Indian",
+      "dietFlags": [],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-thigh",
+          "garnish": false,
+          "optional": false,
+          "quantity": 600,
+          "text": "600 g boneless chicken thighs",
+          "unit": "gram"
+        },
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "curry-powder",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp curry powder",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 red peppers, chunked",
+          "unit": "piece"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, wedged",
+          "unit": "piece"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "yoghurt-chicken-tray-bake",
+      "steps": [
+        {
+          "text": "Heat the oven to 220 C and oil a large tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Mix the yoghurt, curry powder, garlic and lemon juice in a large bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Turn the chicken through the marinade until every piece is coated.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spread the chicken, peppers and onion on the tray in one layer.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Drizzle with the oil and roast until the chicken is browned at the edges.",
+          "timerSeconds": 1500
+        },
+        {
+          "text": "Check the thickest piece is white throughout and the juices run clear, then rest.",
+          "timerSeconds": 180
+        }
+      ],
+      "title": "Yoghurt chicken tray bake"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "sweet-potato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 sweet potatoes, cubed",
+          "unit": "piece"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "canned-tomatoes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g canned chopped tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "black-beans-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g canned black beans, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lime, juiced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "sweet-potato-black-bean-chilli",
+      "steps": [
+        {
+          "text": "Warm the oil in a large pot over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the onion until soft and sweet-smelling, then add the garlic.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Stir in the sweet potato, cumin and paprika and cook until the spices smell toasty.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the tomatoes and half a can of water, then bring to a simmer.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cover and cook until a fork slides easily into the sweet potato.",
+          "timerSeconds": 1020
+        },
+        {
+          "text": "Stir in the beans and simmer until the chilli is thick.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Add the lime juice; the chilli keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Sweet potato black bean chilli"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Mexican",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-breast",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g chicken breast, sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 red peppers, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "tortilla",
+          "garnish": false,
+          "optional": false,
+          "quantity": 8,
+          "text": "8 small tortillas",
+          "unit": "piece"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lime",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "chicken-pepper-fajitas",
+      "steps": [
+        {
+          "text": "Toss the chicken with the paprika, cumin and one tablespoon of oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Heat a large pan over high heat until a drop of water spits.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Sear the chicken, turning occasionally, until browned and white throughout.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Move the chicken to a plate and add the remaining oil to the pan.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fry the peppers and onion until the edges char and the onion smells sweet.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Warm the tortillas, then fill with chicken and vegetables and squeeze lime over.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Chicken pepper fajitas"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Italian",
+      "dietFlags": [
+        "mediterranean",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "pasta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 320,
+          "text": "320 g spaghetti",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, sliced",
+          "unit": "clove"
+        },
+        {
+          "food": "canned-tomatoes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 800,
+          "text": "800 g canned chopped tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        },
+        {
+          "food": "basil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 handful basil leaves",
+          "unit": "cup"
+        },
+        {
+          "food": "parmesan",
+          "garnish": true,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g grated parmesan",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 5,
+      "servings": 4,
+      "slug": "spaghetti-pomodoro",
+      "steps": [
+        {
+          "text": "Bring a large pot of salted water to a rolling boil.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Warm the oil and garlic in a pan until the garlic smells sweet, not brown.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Pour in the tomatoes and simmer until the sauce thickens and clings to a spoon.",
+          "timerSeconds": 900
+        },
+        {
+          "text": "Cook the spaghetti until it is tender with a slight bite in the centre.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Toss the drained pasta in the sauce with a splash of cooking water.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Tear in the basil and top with parmesan.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Spaghetti pomodoro"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Italian",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "wholewheat-pasta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 320,
+          "text": "320 g wholewheat pasta",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "mushroom",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g mushrooms, sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "cream",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 ml double cream",
+          "unit": "millilitre"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "parmesan",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g grated parmesan",
+          "unit": "gram"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "Black pepper",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "creamy-mushroom-spinach-pasta",
+      "steps": [
+        {
+          "text": "Cook the pasta in boiling salted water until tender with a slight bite.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Fry the mushrooms in the oil, undisturbed, until golden and the pan stops hissing.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Stir in the garlic and cook until it smells fragrant.",
+          "timerSeconds": 45
+        },
+        {
+          "text": "Pour in the cream and simmer until it thickens slightly.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the spinach and stir until it wilts into the sauce.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Toss in the drained pasta, parmesan and pepper, loosening with cooking water.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Creamy mushroom spinach pasta"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Italian",
+      "dietFlags": [
+        "mediterranean",
+        "pescatarian"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "white-fish",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cod fillets",
+          "unit": "piece"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g cherry tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, sliced",
+          "unit": "clove"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "basil",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 handful basil leaves",
+          "unit": "cup"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "tomato-baked-cod",
+      "steps": [
+        {
+          "text": "Heat the oven to 200 C and find a baking dish.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the tomatoes, garlic, oil and salt in a baking dish.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast the tomatoes until they burst and smell sweet.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Nestle the cod into the tomatoes and lay a lemon slice on each fillet.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Bake until the fish flakes easily and turns opaque all the way through.",
+          "timerSeconds": 480
+        },
+        {
+          "text": "Tear basil over the dish and spoon the juices onto the fish.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tomato baked cod"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Japanese",
+      "dietFlags": [
+        "pescatarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g white rice",
+          "unit": "gram"
+        },
+        {
+          "food": "salmon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 salmon fillets",
+          "unit": "piece"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "honey",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp honey",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "broccoli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g broccoli florets",
+          "unit": "gram"
+        },
+        {
+          "food": "sesame-seeds",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp sesame seeds",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "salmon-teriyaki-rice-bowl",
+      "steps": [
+        {
+          "text": "Rinse the rice, then simmer it covered in twice its volume of water.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Stir the soy sauce, honey and ginger together to make the glaze.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Sear the salmon skin side down in a pan until the skin sounds crisp.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Flip the salmon, pour in the glaze and simmer until it turns sticky.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Steam the broccoli over the rice pot until bright green and just tender.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Serve the salmon and broccoli over the rice with sesame seeds on top.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Salmon teriyaki rice bowl"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Japanese",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g white rice",
+          "unit": "gram"
+        },
+        {
+          "food": "tofu",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g firm tofu, cubed",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "broccoli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g broccoli florets",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sugar",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sesame oil",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "ginger-soy-tofu-broccoli",
+      "steps": [
+        {
+          "text": "Simmer the rice covered in twice its volume of water until it is tender.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Pat the tofu dry and fry in the oil until golden and crisp on every side.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Add the broccoli and two tablespoons of water, then cover.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Steam until the broccoli is bright green and a knife slides in.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Stir the soy sauce, ginger, sugar and sesame oil together, then pour into the pan.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss for one minute until the sauce clings, then serve over the rice.",
+          "timerSeconds": 60
+        }
+      ],
+      "title": "Ginger soy tofu with broccoli"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Thai",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "curry-powder",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp curry powder",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "coconut-milk-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 ml canned coconut milk",
+          "unit": "millilitre"
+        },
+        {
+          "food": "tofu",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g firm tofu, cubed",
+          "unit": "gram"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red pepper, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g green beans, trimmed",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lime, juiced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "thai-coconut-tofu-curry",
+      "steps": [
+        {
+          "text": "Heat the oil in a wide pan and stir in the curry powder and ginger.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook until the spices smell toasty and bloom in the oil.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Pour in the coconut milk and soy sauce and bring to a gentle simmer.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the tofu, pepper and green beans and simmer until the beans are tender-crisp.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Stir in the lime juice, taste, and add more soy sauce if it needs salt.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Serve over steamed rice with extra lime wedges on the side.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Thai-style coconut tofu curry"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Thai",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-breast",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g chicken breast, finely sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 cloves garlic, chopped",
+          "unit": "clove"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 red chillies, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g green beans, cut short",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sugar",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "basil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "1 large handful basil leaves",
+          "unit": "cup"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "thai-basil-chicken-green-beans",
+      "steps": [
+        {
+          "text": "Heat the oil in a wok over high heat until it shimmers and smokes lightly.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fry the garlic and chillies until the aroma hits and they just colour.",
+          "timerSeconds": 20
+        },
+        {
+          "text": "Add the chicken and stir-fry until it is white throughout with browned edges.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Add the green beans and stir-fry until they turn bright and squeak between teeth.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Stir in the soy sauce and sugar until the sauce bubbles and coats everything.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the basil until it wilts and serve with steamed rice.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Thai basil chicken with green beans"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-thigh",
+          "garnish": false,
+          "optional": false,
+          "quantity": 600,
+          "text": "600 g boneless chicken thighs, sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "turmeric",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground turmeric",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "pita",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 pita breads",
+          "unit": "piece"
+        },
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 cucumber, sliced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "chicken-shawarma-pita",
+      "steps": [
+        {
+          "text": "Toss the chicken with the spices, garlic and oil in a bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Heat a large pan over high heat until a drop of water spits.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fry the chicken in two batches until charred at the edges and cooked through.",
+          "timerSeconds": 480
+        },
+        {
+          "text": "Warm the pitas in a dry pan until soft and slightly puffed.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Split the pitas and spread each with yoghurt.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fill with chicken and cucumber and eat while the chicken is hot.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Chicken shawarma pitas"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "mediterranean",
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "aubergine",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 aubergines, cubed",
+          "unit": "piece"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "tahini",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp tahini",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp cold water",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped parsley",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "tahini-roast-aubergine-chickpeas",
+      "steps": [
+        {
+          "text": "Heat the oven to 220 C and line a large tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the aubergine and chickpeas with the oil and cumin on a large tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast, turning once, until the aubergine is deeply golden and creamy inside.",
+          "timerSeconds": 1500
+        },
+        {
+          "text": "Whisk the tahini, lemon juice and water until smooth and pourable.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add water a spoonful at a time if the sauce feels stiff.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spoon the roast vegetables onto plates, drizzle with sauce and scatter parsley.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tahini roast aubergine and chickpeas"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "Greek",
+      "dietFlags": [
+        "mediterranean"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-thigh",
+          "garnish": false,
+          "optional": false,
+          "quantity": 600,
+          "text": "600 g boneless chicken thighs",
+          "unit": "gram"
+        },
+        {
+          "food": "potato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 700,
+          "text": "700 g potatoes, cut small",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 lemons, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "oregano",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp dried oregano",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 cloves garlic, crushed",
+          "unit": "clove"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "greek-lemon-chicken-potatoes",
+      "steps": [
+        {
+          "text": "Heat the oven to 220 C and find a large roasting tin.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Mix the oil, lemon juice, oregano, garlic and salt in a large roasting tin.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the potatoes and chicken and turn until coated.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast, turning once, until the potatoes are golden and the chicken browns.",
+          "timerSeconds": 1500
+        },
+        {
+          "text": "Check the thickest thigh is white throughout and the juices run clear.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Rest for five minutes and spoon the tin juices over the top.",
+          "timerSeconds": 300
+        }
+      ],
+      "title": "Greek lemon chicken and potatoes"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Chinese",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g white rice",
+          "unit": "gram"
+        },
+        {
+          "food": "minced-beef",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g minced beef",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g green beans, trimmed",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sugar",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "garlic-beef-green-beans",
+      "steps": [
+        {
+          "text": "Simmer the rice covered in twice its volume of water until tender.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Heat the oil in a wok until it shimmers and fry the garlic and ginger.",
+          "timerSeconds": 30
+        },
+        {
+          "text": "Add the beef and break it up, cooking until browned and the sizzling quietens.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Add the green beans and stir-fry until bright and tender-crisp.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Stir in the soy sauce and sugar until the sauce bubbles and glazes the beef.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spoon the beef and beans over the rice and serve hot.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Garlic beef and green beans"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Chinese",
+      "dietFlags": [
+        "pescatarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "egg-noodles",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g egg noodles",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "prawns",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g raw prawns, peeled",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "cabbage",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g shredded cabbage",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sesame oil",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "garlic-prawn-cabbage-noodles",
+      "steps": [
+        {
+          "text": "Cook the noodles in boiling water until tender but springy, then drain.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Heat the oil in a wok until it shimmers and add the garlic.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir-fry the prawns until they curl and turn pink and opaque.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the cabbage and stir-fry until it wilts and sounds less crisp.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Toss in the noodles, soy sauce and sesame oil until everything is hot.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Serve straight away while the noodles are glossy.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Garlic prawn and cabbage noodles"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "British",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop",
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "potato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 900,
+          "text": "900 g potatoes, cut small",
+          "unit": "gram"
+        },
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp butter",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "minced-beef",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g minced beef",
+          "unit": "gram"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 carrots, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "tomato-paste",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp tomato paste",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "worcestershire-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp Worcestershire sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "peas",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g frozen peas",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "weeknight-cottage-pie",
+      "steps": [
+        {
+          "text": "Boil the potatoes in salted water until a knife slides in without resistance.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Brown the beef in a wide pan until the sizzling quietens and the liquid is gone.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Add the onion and carrots and cook until the onion is soft and sweet-smelling.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Stir in the tomato paste, Worcestershire sauce, peas and a splash of water, then simmer.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Mash the potatoes with the butter until smooth and spread over the beef.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Grill or bake the pie until the top is golden; it keeps for 3 days in the fridge.",
+          "timerSeconds": 480
+        }
+      ],
+      "title": "Weeknight cottage pie"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "British",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp butter",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "leek",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 leeks, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "potato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g potatoes, diced",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-stock",
+          "garnish": false,
+          "optional": false,
+          "quantity": 750,
+          "text": "750 ml vegetable stock",
+          "unit": "millilitre"
+        },
+        {
+          "food": "milk",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 ml milk",
+          "unit": "millilitre"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "Black pepper",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "leek-potato-soup",
+      "steps": [
+        {
+          "text": "Melt the butter in a large pot over medium-low heat.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the leeks gently until they are soft and smell sweet, without browning.",
+          "timerSeconds": 480
+        },
+        {
+          "text": "Add the potatoes and stock and bring to a simmer.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook until the potatoes fall apart when pressed with a spoon.",
+          "timerSeconds": 900
+        },
+        {
+          "text": "Blend until smooth, then stir in the milk and pepper and reheat gently.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Taste for salt; the soup keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Leek and potato soup"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "pasta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 320,
+          "text": "320 g macaroni",
+          "unit": "gram"
+        },
+        {
+          "food": "broccoli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g broccoli florets",
+          "unit": "gram"
+        },
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp butter",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "flour",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp plain flour",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "milk",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 ml milk",
+          "unit": "millilitre"
+        },
+        {
+          "food": "cheddar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g cheddar, grated",
+          "unit": "gram"
+        },
+        {
+          "food": "mustard",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 tsp mustard",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "broccoli-cheddar-mac",
+      "steps": [
+        {
+          "text": "Boil the macaroni in salted water until tender with a slight bite.",
+          "timerSeconds": 540
+        },
+        {
+          "text": "Add the broccoli for the last two minutes, then drain both.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Melt the butter in a pot, stir in the flour and cook until it smells nutty.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Pour in the milk gradually, whisking, until the sauce coats the back of a spoon.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Take the pot off the heat and stir in the cheddar and mustard until smooth.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the pasta and broccoli and serve while the sauce is silky.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Broccoli cheddar mac"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "American",
+      "dietFlags": [
+        "pescatarian"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "sweet-potato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 sweet potatoes, cubed",
+          "unit": "piece"
+        },
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g green beans, trimmed",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salmon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 salmon fillets",
+          "unit": "piece"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, cut into wedges",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "sheet-pan-salmon-sweet-potato",
+      "steps": [
+        {
+          "text": "Heat the oven to 220 C and line a large tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the sweet potato with half the oil, paprika and salt on a tray.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast until the edges brown and a fork slides in easily.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Push the sweet potato aside and add the beans and salmon with the remaining oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast until the salmon flakes easily and the beans are blistered.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Serve with lemon wedges and squeeze them over everything at the table.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Sheet-pan salmon with sweet potato"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Korean",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g white rice",
+          "unit": "gram"
+        },
+        {
+          "food": "minced-beef",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g minced beef",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp sugar",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 carrots, grated",
+          "unit": "piece"
+        },
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sesame oil",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-seeds",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp sesame seeds",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "beef-spinach-rice-bowl",
+      "steps": [
+        {
+          "text": "Simmer the rice covered in twice its volume of water until tender.",
+          "timerSeconds": 780
+        },
+        {
+          "text": "Cook the beef with the garlic, soy sauce and sugar until browned and glossy.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Wilt the spinach in a pan with the sesame oil, then squeeze out the water.",
+          "timerSeconds": 90
+        },
+        {
+          "text": "Fry the eggs in a lightly oiled pan until the whites are set and edges crisp.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Divide the rice among bowls and arrange the beef, spinach and grated carrot on top.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Crown each bowl with an egg and sprinkle with sesame seeds.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Korean-style beef and spinach rice bowl"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Spanish",
+      "dietFlags": [
+        "mediterranean",
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "bread",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 slices bread, torn",
+          "unit": "slice"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 cloves garlic, sliced",
+          "unit": "clove"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 ml water",
+          "unit": "millilitre"
+        },
+        {
+          "food": "spinach",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g baby spinach",
+          "unit": "gram"
+        },
+        {
+          "food": "vinegar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vinegar",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "spanish-chickpea-spinach-stew",
+      "steps": [
+        {
+          "text": "Heat the oil in a wide pan and fry the bread until golden and crisp.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the garlic, paprika and cumin and cook until fragrant, but do not let them burn.",
+          "timerSeconds": 30
+        },
+        {
+          "text": "Blend half the bread and spices with the water into a thick paste.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Return the paste to the pan with the chickpeas and simmer until thickened.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Stir in the spinach until it wilts, then add the vinegar.",
+          "timerSeconds": 90
+        },
+        {
+          "text": "Taste for salt; the stew keeps for 3 days and tastes better the next day.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Spanish chickpea and spinach stew"
+    },
+    {
+      "cookMinutes": 30,
+      "cuisine": "Ethiopian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 onions, finely chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp grated ginger",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "tomato-paste",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp tomato paste",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "chilli-flakes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp chilli flakes",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "red-lentils-dry",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g red lentils",
+          "unit": "gram"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 750,
+          "text": "750 ml water",
+          "unit": "millilitre"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "ethiopian-style-lentil-stew",
+      "steps": [
+        {
+          "text": "Cook the onions in the oil over medium heat until deep golden and smelling sweet.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Stir in the garlic, ginger and tomato paste and cook until the paste darkens.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the paprika and chilli flakes and stir for thirty seconds until fragrant.",
+          "timerSeconds": 30
+        },
+        {
+          "text": "Add the lentils and water and bring to a boil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Simmer, stirring often, until the lentils melt into a thick stew.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Season with salt; the stew keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Ethiopian-style spiced lentil stew"
+    }
+  ]
+}

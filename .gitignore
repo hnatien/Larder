@@ -1,0 +1,14 @@
+.build/
+Larder.xcodeproj/
+xcuserdata/
+DerivedData/
+.swiftpm/
+Server/larder-proxy/node_modules/
+.env*
+*.xcresult
+.DS_Store
+Server/larder-proxy/.wrangler/
+Server/larder-proxy/dist/
+.dev.vars
+*.p8
+*.mobileprovision

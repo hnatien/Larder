@@ -1,0 +1,268 @@
+import Foundation
+import LarderCore
+import Testing
+@testable import FeatureAccount
+
+@MainActor
+@Suite("OnboardingModel")
+struct OnboardingModelTests {
+    private let repository = FakeProfileRepository()
+    private let flags = InMemoryKeyValueStore()
+
+    private func makeModel() -> OnboardingModel {
+        OnboardingModel(
+            profiles: repository,
+            preferences: ComfortPreferences(store: flags),
+            dates: FixedDates(),
+            locale: Locale(identifier: "en_GB")
+        )
+    }
+
+    @Test func stepsRunInOrderWithProgress() {
+        let model = makeModel()
+        var seen: [OnboardingModel.Step] = []
+        var progress: [String] = []
+        for _ in OnboardingModel.Step.allCases {
+            seen.append(model.step)
+            progress.append(model.progressText)
+            model.next()
+        }
+        #expect(seen == [.welcome, .leaveOut, .eatBy, .goal, .household, .equipment, .easierToUse])
+        #expect(progress.first == "1 of 7")
+        #expect(progress[1] == "2 of 7")
+        #expect(progress.last == "7 of 7")
+        #expect(model.step == .easierToUse)
+        #expect(model.isLastStep)
+    }
+
+    @Test func backStopsAtWelcomeAndKeepsAnswers() {
+        let model = makeModel()
+        model.back()
+        #expect(model.step == .welcome)
+        #expect(model.canGoBack == false)
+        model.next()
+        model.allergens = [.sesame]
+        model.next()
+        model.back()
+        #expect(model.step == .leaveOut)
+        #expect(model.allergens == [.sesame])
+    }
+
+    @Test func welcomeCannotBeSkipped() async {
+        let model = makeModel()
+        model.aiConsent = true
+        #expect(model.canSkip == false)
+        await model.skip()
+        #expect(model.step == .welcome)
+        #expect(model.aiConsent)
+    }
+
+    @Test func sensitiveDefaultsAreOff() {
+        let model = makeModel()
+        #expect(model.aiConsent == false)
+        #expect(model.showsNumbers == false)
+        #expect(model.timersFlashAndVibrate)
+        #expect(model.prefersSimpleLayout == false)
+    }
+
+    @Test func eatingDisorderHistoryIsNeverOffered() {
+        #expect(!OnboardingModel.medicalChoices.contains(.eatingDisorderHistory))
+        #expect(OnboardingModel.allergenChoices.count == Allergen.allCases.count)
+        #expect(Set(OnboardingModel.allergenChoices) == Set(Allergen.allCases))
+    }
+
+    @Test func allergensAreHardMedicalUserConstraints() {
+        let model = makeModel()
+        model.allergens = [.sesame, .peanut]
+        let constraints = model.makeConstraints(at: referenceNow)
+        #expect(constraints.map(\.kind) == [.allergen(.peanut), .allergen(.sesame)])
+        #expect(constraints.allSatisfy { $0.axis == .medical && $0.strictness == .hard && $0.source == .user })
+        #expect(constraints.allSatisfy { $0.lastConfirmed == referenceNow })
+    }
+
+    @Test func intoleranceTextSplitsTrimsAndDropsRepeats() {
+        let model = makeModel()
+        model.intoleranceText = " lactose, ,FODMAPs\nLactose ,  "
+        let constraints = model.makeConstraints(at: referenceNow)
+        #expect(constraints.map(\.kind) == [.intolerance("lactose"), .intolerance("FODMAPs")])
+        #expect(constraints.allSatisfy { $0.axis == .medical && $0.strictness == .hard })
+    }
+
+    @Test(arguments: EatByChoice.all)
+    func eatByChoicesLandOnTheirAxis(choice: EatByChoice) throws {
+        let model = makeModel()
+        model.eatBy = [choice]
+        let constraint = try #require(model.makeConstraints(at: referenceNow).first)
+        switch choice {
+        case .diet(let diet):
+            #expect(constraint.kind == .diet(diet))
+            #expect(constraint.axis == .ethical)
+        case .religious(let rule):
+            #expect(constraint.kind == .religious(rule))
+            #expect(constraint.axis == .religious)
+        }
+        #expect(constraint.strictness == .hard)
+    }
+
+    @Test(arguments: OnboardingModel.medicalChoices)
+    func medicalFlagsAreHardMedical(flag: MedicalFlag) throws {
+        let model = makeModel()
+        model.toggleMedical(flag)
+        let constraint = try #require(model.makeConstraints(at: referenceNow).first)
+        #expect(constraint.kind == .medical(flag))
+        #expect(constraint.axis == .medical)
+        #expect(constraint.strictness == .hard)
+    }
+
+    @Test func preferNotToSayClearsConditionsAndChoosingOneWithdrawsIt() {
+        let model = makeModel()
+        model.toggleMedical(.hypertension)
+        model.preferNotToSayMedical()
+        #expect(model.medicalFlags.isEmpty)
+        #expect(model.medicalPreferNotToSay)
+        model.toggleMedical(.pregnancy)
+        #expect(model.medicalFlags == [.pregnancy])
+        #expect(model.medicalPreferNotToSay == false)
+        model.toggleMedical(.pregnancy)
+        #expect(model.medicalFlags.isEmpty)
+    }
+
+    @Test func skipClearsTheStepAndMovesOn() async {
+        let model = makeModel()
+        model.next()
+        model.allergens = [.milk]
+        model.intoleranceText = "lactose"
+        await model.skip()
+        #expect(model.step == .eatBy)
+        #expect(model.allergens.isEmpty)
+        #expect(model.intoleranceText.isEmpty)
+    }
+
+    @Test func skipKeepsEarlierAnswers() async {
+        let model = makeModel()
+        model.next()
+        model.allergens = [.egg]
+        model.next()
+        model.eatBy = [.diet(.vegan)]
+        await model.skip()
+        #expect(model.allergens == [.egg])
+        #expect(model.eatBy.isEmpty)
+        #expect(model.step == .goal)
+    }
+
+    @Test func skippedEverythingSavesSafeDefaults() async throws {
+        let model = makeModel()
+        model.next()
+        while !model.isFinished {
+            await model.skip()
+        }
+        let profile = try #require(await repository.storedProfile)
+        #expect(profile.birthYear == 2026 - 35)
+        #expect(profile.sex == .unspecified)
+        #expect(profile.heightCm == 170)
+        #expect(profile.weightKg == nil)
+        #expect(profile.goal == .maintain)
+        #expect(profile.householdSize == 2)
+        #expect(profile.maxCookMinutes == 35)
+        #expect(profile.equipment == [.oven, .stovetop])
+        #expect(profile.showsNumbers == false)
+        #expect(profile.consents.aiProcessing == false)
+        #expect(profile.currencyCode == "GBP")
+        #expect(await repository.storedConstraints.isEmpty)
+        #expect(ComfortPreferences(store: flags).birthYearDeclined)
+    }
+
+    @Test func finishSavesAnswers() async throws {
+        let model = makeModel()
+        model.aiConsent = true
+        model.goal = .lessWaste
+        model.householdSize = 4
+        model.maxCookMinutes = 25
+        model.birthYear = 1990
+        model.equipment = [.airFryer]
+        model.showsNumbers = true
+        await model.finish()
+        #expect(model.isFinished)
+        let profile = try #require(await repository.storedProfile)
+        #expect(profile.birthYear == 1990)
+        #expect(profile.goal == .lessWaste)
+        #expect(profile.householdSize == 4)
+        #expect(profile.maxCookMinutes == 25)
+        #expect(profile.equipment == [.airFryer])
+        #expect(profile.showsNumbers)
+        #expect(profile.consents.aiProcessing)
+        #expect(profile.consents.cloudSync == false)
+        #expect(ComfortPreferences(store: flags).birthYearDeclined == false)
+    }
+
+    @Test func outOfRangeAnswersAreClampedOrDeclined() async throws {
+        let model = makeModel()
+        model.householdSize = 12
+        model.maxCookMinutes = 50
+        model.birthYear = 2024
+        await model.finish()
+        let profile = try #require(await repository.storedProfile)
+        #expect(profile.householdSize == 8)
+        #expect(profile.maxCookMinutes == 45)
+        #expect(profile.birthYear == 2026 - 35)
+    }
+
+    @Test func finishStoresDefaultTargetsForTheAnswers() async throws {
+        let model = makeModel()
+        model.birthYear = 1980
+        model.toggleMedical(.chronicKidneyDisease)
+        await model.finish()
+        let profile = try #require(await repository.storedProfile)
+        let constraints = await repository.storedConstraints
+        let expected = NutrientTargets.defaults(for: profile, constraints: constraints, referenceYear: 2026)
+        #expect(await repository.storedTargets == expected)
+        #expect(!expected.isEmpty)
+    }
+
+    @Test func pregnancyLeavesNoEnergyTarget() async {
+        let model = makeModel()
+        model.toggleMedical(.pregnancy)
+        await model.finish()
+        let targets = await repository.storedTargets
+        #expect(!targets.contains { $0.nutrient == .energy })
+        #expect(targets.contains { $0.nutrient == .protein })
+    }
+
+    @Test func finishStoresComfortSettings() async {
+        let model = makeModel()
+        model.prefersSimpleLayout = true
+        model.timersFlashAndVibrate = false
+        await model.finish()
+        let preferences = ComfortPreferences(store: flags)
+        #expect(preferences.prefersSimpleLayout)
+        #expect(preferences.timersFlashAndVibrate == false)
+    }
+
+    @Test func failedSaveLeavesOnboardingUnfinished() async {
+        await repository.setFailsSaves(true)
+        let model = makeModel()
+        model.allergens = [.peanut]
+        await model.finish()
+        #expect(model.isFinished == false)
+        #expect(model.error == .saveFailed)
+        #expect(model.isSaving == false)
+        #expect(await repository.storedProfile == nil)
+        #expect(flags.bool(forKey: AccountKey.prefersSimpleLayout) == nil)
+    }
+
+    @Test func retryAfterFailureSucceeds() async {
+        await repository.setFailsSaves(true)
+        let model = makeModel()
+        await model.finish()
+        await repository.setFailsSaves(false)
+        await model.finish()
+        #expect(model.isFinished)
+        #expect(model.error == nil)
+    }
+
+    @Test func birthYearChoicesAreRecentFirstAndExcludeChildren() {
+        let years = makeModel().birthYearChoices
+        #expect(years.first == 2013)
+        #expect(years.last == 1926)
+    }
+}

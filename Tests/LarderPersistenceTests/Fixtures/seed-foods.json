@@ -1,0 +1,37 @@
+{
+  "foods": [
+    {
+      "slug": "chicken-breast",
+      "name": "Chicken breast, raw",
+      "source": "seedApproximate",
+      "foodGroup": "protein",
+      "tags": ["poultry", "meat"],
+      "allergens": { "milk": "verifiedFree" },
+      "portions": [ { "label": "breast", "grams": 170 } ],
+      "densityGPerMl": null,
+      "per100g": { "energyKcal": 120, "proteinG": 22.5, "fatG": 2.6, "saturatedFatG": 0.6, "carbohydrateG": 0, "fiberG": 0, "totalSugarG": 0, "sodiumMg": 45, "potassiumMg": 334, "calciumMg": 5, "ironMg": 0.4 }
+    },
+    {
+      "slug": "olive-oil",
+      "name": "Olive oil",
+      "source": "seedApproximate",
+      "foodGroup": "fats",
+      "tags": [],
+      "allergens": {},
+      "portions": [ { "label": "tablespoon", "grams": 13.5 } ],
+      "densityGPerMl": 0.91,
+      "per100g": { "energyKcal": 884, "fatG": 100 }
+    },
+    {
+      "slug": "chickpeas-canned",
+      "name": "Chickpeas, canned, drained",
+      "source": "seedApproximate",
+      "foodGroup": "legumes",
+      "tags": [],
+      "allergens": { "sesame": "verifiedFree" },
+      "portions": [],
+      "densityGPerMl": null,
+      "per100g": { "energyKcal": 139, "proteinG": 7.05, "fiberG": 7.6, "sodiumMg": null }
+    }
+  ]
+}

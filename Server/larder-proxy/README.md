@@ -1,0 +1,107 @@
+# larder-proxy
+
+A Cloudflare Worker that sits between the Larder iOS app and the Claude API. It holds the Anthropic key, issues short-lived sessions, resolves the person's tier from their App Store transaction, meters calls per session per day, and turns each assist request into one structured-output call. The deterministic planner on the device makes every decision; this proxy only asks the model to explain or parse.
+
+## Endpoints
+
+All endpoints take and return JSON. Every response carries `content-type: application/json` and an `x-request-id`. Request and response shapes are Zod schemas in `src/schemas.ts`; the iOS client mirrors them.
+
+| Route | Tier | Model (var) | Effort | Max tokens |
+|---|---|---|---|---|
+| `POST /v1/session` | none | none | | |
+| `POST /v1/assist/explain` | free | `MODEL_FAST` | low | 2048 |
+| `POST /v1/assist/parse-pantry` | free | `MODEL_FAST` | low | 1024 |
+| `POST /v1/assist/parse-recipe` | Plus | `MODEL_CAPABLE` | medium | 1024 |
+| `POST /v1/assist/adjust` | Plus | `MODEL_CAPABLE` | medium | 2048 |
+
+Request flow for assist routes: session (401) → entitlement (402 `plus_required` on Plus routes) → body validation (400 with Zod issues) → daily quota (429 `quota_exceeded` with `resetsAt`) → model call → quota increment → route-specific output checks.
+
+Model outcomes: `stop_reason: "refusal"` → 422 `{ error: "declined", category }`; `"max_tokens"` → 502 `truncated`; output that fails the response schema → 502 `unparseable`; SDK `RateLimitError` → 429, `AuthenticationError` → 500 `internal_error` (logged), `APIConnectionError` → 503, other `APIError` → 502. Only successful calls count against the quota.
+
+`/v1/assist/adjust` never applies a removal of a medical-axis constraint (allergens and intolerances live on that axis) or a replace that makes one anything other than hard. Those come back as 422 `protected_constraint`. The system prompt states the same rule.
+
+### Examples
+
+```sh
+# 1. Get a session (dev attestation; needs ALLOW_DEV_ATTESTATION=true)
+curl -s -X POST http://localhost:8787/v1/session \
+  -H 'content-type: application/json' \
+  -d '{"attestation":{"kind":"dev","clientSecret":"<DEV_CLIENT_SECRET>"}}'
+# {"token":"<token>","expiresAt":"2026-10-16T13:00:00.000Z"}
+
+# 2. Explain a plan
+curl -s -X POST http://localhost:8787/v1/assist/explain \
+  -H 'content-type: application/json' -H 'authorization: Bearer <token>' \
+  -d '{"plan":{"days":[{"date":"2026-10-19","meals":[{"slot":"dinner","recipeTitle":"Spinach dal","minutes":25,"reasonCodes":[{"code":"usesExpiring","params":{"food":"spinach"}}]}]}]},
+       "shelfBalance":{"groupsLight":["produce"],"groupsHeavy":[]},
+       "profileSummary":{"goal":"lessWaste","householdSize":2,"maxCookMinutes":30,"showsNumbers":false}}'
+
+# 3. Parse a pantry note
+curl -s -X POST http://localhost:8787/v1/assist/parse-pantry \
+  -H 'content-type: application/json' -H 'authorization: Bearer <token>' \
+  -d '{"text":"2 tins chickpeas, half a bag of spinach in the fridge"}'
+
+# 4. Parse a recipe (Plus: send the StoreKit transaction JWS)
+curl -s -X POST http://localhost:8787/v1/assist/parse-recipe \
+  -H 'content-type: application/json' -H 'authorization: Bearer <token>' \
+  -H 'x-larder-entitlement: <jwsRepresentation>' \
+  -d '{"text":"Spinach dal. Serves 4. 200 g red lentils..."}'
+
+# 5. Adjust constraints (Plus)
+curl -s -X POST http://localhost:8787/v1/assist/adjust \
+  -H 'content-type: application/json' -H 'authorization: Bearer <token>' \
+  -H 'x-larder-entitlement: <jwsRepresentation>' \
+  -d '{"instruction":"No fish on weeknights","currentConstraints":[],"planContext":{"days":[]}}'
+```
+
+## Running locally
+
+```sh
+npm install
+cp .dev.vars.example .dev.vars   # fill in values; .dev.vars is gitignored
+npx wrangler dev                 # http://localhost:8787, local KV
+npm test                         # vitest
+npm run typecheck                # tsc --noEmit
+```
+
+No Cloudflare account is needed for any of the above. Tests use a fake Anthropic client, an in-memory KV, and a certificate chain generated at test time, so no keys or private material are in the repository.
+
+## Configuration
+
+Vars live in `wrangler.toml`: `MODEL_FAST`, `MODEL_CAPABLE`, `ALLOW_DEV_ATTESTATION` (keep `"false"` in production), `FREE_DAILY_LIMIT`, `PLUS_DAILY_LIMIT`, `BUNDLE_ID`. Replace the placeholder `QUOTAS` KV namespace ids with real ones (`wrangler kv namespace create QUOTAS`) before deploying.
+
+Secrets are never written to a file in this directory. Set them per environment:
+
+```sh
+npx wrangler secret put ANTHROPIC_API_KEY
+npx wrangler secret put SESSION_SIGNING_KEY   # at least 32 random characters
+npx wrangler secret put DEV_CLIENT_SECRET     # only used when ALLOW_DEV_ATTESTATION is "true"
+```
+
+Invalid or missing configuration returns 500 `server_misconfigured` and logs the variable names, never their values.
+
+## What is implemented and what is not
+
+Implemented:
+- HMAC-SHA256 session tokens (1 hour, random subject, `tier: "anonymous"`), verified in constant time.
+- Dev attestation with a constant-time secret comparison, off unless explicitly enabled.
+- Entitlement from the `x-larder-entitlement` header: ES256 JWS with an x5c chain checked leaf → intermediate → Apple Root CA - G3 (exact DER match against the embedded root), certificate validity, Apple's marker extensions on leaf and intermediate, then bundle id, expiry, revocation and product (`com.larder.plus.monthly`, `com.larder.plus.annual`). Anything else is the free tier, never an error. A small DER reader in `src/auth/der.ts` covers just what this needs.
+- Per-subject daily quotas in KV (`quota:<sha256(sub)>:<yyyy-mm-dd>`, 2-day TTL).
+- One structured log line per model call: route, model, status, latency, input, output, cache-read and cache-creation tokens. No prompt or output content is logged.
+
+Not implemented:
+- **App Attest verification.** `POST /v1/session` with `kind: "appAttest"` returns 501 `app_attest_not_implemented`. The `Attestor` interface in `src/auth/attestation.ts` is where a real verifier goes (attestation object CBOR, Apple App Attestation root, nonce binding, counter tracking). Until then production has no way to issue sessions except dev attestation, which must stay off.
+- Online certificate revocation checks (OCSP) for the x5c chain.
+- Atomic quota counting. KV has no atomic increment, so concurrent calls can overshoot a limit slightly.
+
+## Prompt caching
+
+Each route's system prompt is a constant in `src/prompts/` and goes first as the only system block with `cache_control: { type: "ephemeral" }`. It never contains dates, ids or per-user text; the profile summary and the request go in the user turn. The output format object is built once per route so the request prefix stays byte-identical. `test/prompts.test.ts` guards these properties. Watch `cacheReadInputTokens` in the logs.
+
+## Cost
+
+From `docs/BLUEPRINT.md` section 5, at 30 requests per user-month (about 3k tokens in, 800 out): about $0.02 per user-month on Haiku 5.5 and $0.33-0.42 on Sonnet 5.5. A mixed routing lands near $0.10-0.15 per active user-month, inside the $4.17/month annual price. Routes read their model from `MODEL_FAST` / `MODEL_CAPABLE`, so an eval of about 200 labelled cases per task can move a route without a code change.
+
+## Data retention
+
+Requests carry derived flags and numbers, not names, emails, locations, exact weight or birth dates. Anthropic deletes API inputs and outputs within 30 days and does not train on them without permission. Zero data retention is available per organisation by agreement and covers the Messages API and prompt caching; request it once Larder is on a paid plan (Batch is not eligible). See `docs/research/04-nutrition-and-recommendation-engine.md`.

@@ -1,0 +1,140 @@
+name: Larder
+options:
+  bundleIdPrefix: com.larder
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "27.1"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  LarderKit:
+    path: .
+targets:
+  Larder:
+    type: application
+    platform: iOS
+    sources:
+      - path: App/Larder
+        type: syncedFolder
+        excludes:
+          - Resources/Larder.storekit
+      - path: App/Shared
+    info:
+      path: App/Larder/Info.plist
+      properties:
+        # Placeholder until the proxy is deployed; point it at your own Worker for development.
+        LarderProxyBaseURL: https://proxy.larder.app
+    entitlements:
+      path: App/Larder/Larder.entitlements
+      properties:
+        com.apple.developer.devicecheck.appattest-environment: production
+        com.apple.developer.healthkit: true
+        com.apple.security.application-groups:
+          - group.com.larder.app
+    dependencies:
+      - package: LarderKit
+        product: LarderCore
+      - package: LarderKit
+        product: LarderPersistence
+      - package: LarderKit
+        product: LarderAssistant
+      - package: LarderKit
+        product: LarderOnDeviceAI
+      - package: LarderKit
+        product: LarderDesign
+      - package: LarderKit
+        product: FeatureShelves
+      - package: LarderKit
+        product: FeatureLedger
+      - package: LarderKit
+        product: FeatureRecipes
+      - package: LarderKit
+        product: FeatureGrocery
+      - package: LarderKit
+        product: FeatureAccount
+      - target: LarderWidgets
+      - sdk: AppIntents.framework
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_APPROACHABLE_CONCURRENCY: "YES"
+        GENERATE_INFOPLIST_FILE: "YES"
+        ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: >-
+          UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown
+          UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_NSHealthShareUsageDescription: >-
+          Larder does not read data from Health. If a feature ever needs to, Larder will ask you before reading anything.
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: >-
+          Larder saves the nutrients of meals you mark as cooked to Health. It only writes what you log.
+        INFOPLIST_KEY_NSCameraUsageDescription: >-
+          Larder uses the camera to scan barcodes and receipts so you can add food to your shelves. Images stay on this device.
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+  LarderWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: App/LarderWidgets
+      - path: App/Shared
+    entitlements:
+      path: App/LarderWidgets/LarderWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.larder.app
+    info:
+      path: App/LarderWidgets/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    dependencies:
+      - package: LarderKit
+        product: LarderCore
+      - package: LarderKit
+        product: LarderDesign
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.larder.Larder.Widgets
+        SWIFT_VERSION: "6.0"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_APPROACHABLE_CONCURRENCY: "YES"
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_CFBundleDisplayName: Larder
+        ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+  LarderUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: App/LarderUITests
+    dependencies:
+      - target: Larder
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: "YES"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+schemes:
+  Larder:
+    build:
+      targets:
+        Larder: all
+        LarderUITests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: App/Larder/Resources/Larder.storekit
+    test:
+      config: Debug
+      gatherCoverageData: false
+      targets:
+        - LarderUITests
