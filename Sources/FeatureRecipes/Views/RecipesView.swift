@@ -77,13 +77,17 @@ public struct RecipesView: View {
                         )
                         .padding(LarderSpacing.l)
                     } else {
-                        ForEach(model.results) { recipe in
-                            NavigationLink(value: recipe) {
-                                RecipeRow(recipe: recipe)
+                        // Ledger rows on the canvas, a hairline under each, as on the Shelves and Ledger tabs.
+                        VStack(alignment: .leading, spacing: 0) {
+                            ForEach(model.results) { recipe in
+                                NavigationLink(value: recipe) {
+                                    RecipeRow(recipe: recipe)
+                                }
+                                .buttonStyle(.plain)
+                                Divider().overlay(LarderColor.line.hairline)
                             }
-                            .buttonStyle(.plain)
-                            .padding(.horizontal, LarderSpacing.l)
                         }
+                        .padding(.horizontal, LarderSpacing.l)
                     }
                 }
             }

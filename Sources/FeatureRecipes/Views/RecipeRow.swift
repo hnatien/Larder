@@ -2,8 +2,10 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// A library row in the style of a jar label: title, a minutes stamp, then cuisine and diet words.
+/// A library ledger row on the canvas: title, a minutes stamp, then cuisine and diet words. The list draws the hairline
+/// between rows; the row has no card or border of its own.
 struct RecipeRow: View {
+    @ScaledSpacing(.m) private var gap
     let recipe: Recipe
 
     private var minutes: Int { recipe.prepMinutes + recipe.cookMinutes }
@@ -22,13 +24,9 @@ struct RecipeRow: View {
                 .fixedSize(horizontal: false, vertical: true)
             AdaptiveStack(spacing: LarderSpacing.s) { stamp; descriptor }
         }
-        .padding(LarderSpacing.m)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(LarderColor.surface.sunken, in: RoundedRectangle(cornerRadius: LarderRadius.stamp))
-        .overlay {
-            RoundedRectangle(cornerRadius: LarderRadius.stamp)
-                .strokeBorder(LarderColor.line.strong, lineWidth: 1)
-        }
+        .padding(.vertical, gap)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(([recipe.title, Copy.Ledger.spokenMinutes(minutes)] + words).joined(separator: ", "))
     }
@@ -50,9 +48,11 @@ struct RecipeRow: View {
 
 #if DEBUG
 #Preview("RecipeRow") {
-    VStack(spacing: LarderSpacing.m) {
+    VStack(spacing: 0) {
         RecipeRow(recipe: PreviewData.chanaMasala)
+        Divider().overlay(LarderColor.line.hairline)
         RecipeRow(recipe: PreviewData.porridge)
+        Divider().overlay(LarderColor.line.hairline)
     }
     .padding(LarderSpacing.l)
     .background(LarderColor.surface.canvas)
