@@ -1,10 +1,12 @@
 import Foundation
 import LarderCore
 
-/// A recipe read from structured page data, with the tags the parsed form has no room for.
+/// A recipe read from structured page data, with the tags and photo address the parsed form has no room for.
 nonisolated struct StructuredRecipe: Hashable, Sendable {
     var recipe: ParsedRecipe
     var tags: RecipeTags
+    /// The first `image` address as the page wrote it, possibly relative; `nil` when there is none.
+    var imageAddress: String? = nil
 }
 
 /// Reads schema.org Recipe data from `<script type="application/ld+json">` blocks.
@@ -19,14 +21,19 @@ nonisolated enum JSONLDRecipeParser {
         try parseStructured(html: html).recipe
     }
 
-    /// Like `parse(html:)`, also returning cuisine and meal types.
+    /// Like `parse(html:)`, also returning cuisine, meal types and the photo address.
     static func parseStructured(html: String) throws(ParseError) -> StructuredRecipe {
         for block in jsonBlocks(in: html) {
             guard let data = block.data(using: .utf8),
-                  let json = try? JSONSerialization.jsonObject(with: data),
-                  let node = nodes(in: json).first(where: isRecipe),
-                  let structured = recipe(from: node)
+                  let json = try? JSONSerialization.jsonObject(with: data)
             else { continue }
+            let all = nodes(in: json)
+            guard let node = all.first(where: isRecipe), var structured = recipe(from: node) else { continue }
+            let nodesByID = Dictionary(
+                all.compactMap { node in (node["@id"] as? String).map { ($0, node) } },
+                uniquingKeysWith: { first, _ in first }
+            )
+            structured.imageAddress = imageAddress(node["image"], nodesByID: nodesByID)
             return structured
         }
         throw .noRecipe
@@ -107,6 +114,27 @@ nonisolated enum JSONLDRecipeParser {
             mealTypes: mealTypes(strings(node["recipeCategory"]))
         )
         return StructuredRecipe(recipe: parsed, tags: tags)
+    }
+
+    /// The first address in an `image` value: a URL string, an ImageObject, an `@id` reference to an ImageObject
+    /// elsewhere in the page's graph, or an array of any of these.
+    private static func imageAddress(_ value: Any?, nodesByID: [String: [String: Any]], followsReferences: Bool = true) -> String? {
+        switch value {
+        case let string as String:
+            let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
+            return trimmed.isEmpty ? nil : trimmed
+        case let array as [Any]:
+            return array.lazy.compactMap { imageAddress($0, nodesByID: nodesByID, followsReferences: followsReferences) }.first
+        case let object as [String: Any]:
+            if let address = imageAddress(object["url"] ?? object["contentUrl"], nodesByID: [:], followsReferences: false) {
+                return address
+            }
+            // One hop only, so a reference cycle cannot loop.
+            guard followsReferences, let id = object["@id"] as? String, let target = nodesByID[id] else { return nil }
+            return imageAddress(target, nodesByID: [:], followsReferences: false)
+        default:
+            return nil
+        }
     }
 
     private static func text(_ value: Any?) -> String? {

@@ -28,16 +28,19 @@ public nonisolated struct ImportResult: Hashable, Sendable {
     public var recipe: Recipe
     public var ingredients: [Ingredient]
     public var source: Source
+    /// The page's photo as a downsampled JPEG, written to the photo store on save; `nil` when the page has none.
+    public var photo: Data?
 
     /// Creates an import result.
-    public init(recipe: Recipe, ingredients: [Ingredient], source: Source) {
+    public init(recipe: Recipe, ingredients: [Ingredient], source: Source, photo: Data? = nil) {
         self.recipe = recipe
         self.ingredients = ingredients
         self.source = source
+        self.photo = photo
     }
 }
 
-/// Fetches a recipe page on the device and turns it into a recipe; images are never fetched or stored.
+/// Fetches a recipe page on the device and turns it into a recipe, with the photo its structured data names.
 nonisolated struct RecipeImporter: Sendable {
     /// Servings used when the page gives no yield.
     static let defaultServings = 4
@@ -46,19 +49,20 @@ nonisolated struct RecipeImporter: Sendable {
     /// A first-word match is a weak signal, so it reports well below certainty.
     static let firstWordMatchConfidence = 0.5
     private static let maximumPageBytes = 5_000_000
+    private static let maximumPhotoBytes = 10_000_000
 
     let foods: any FoodRepository
     let profile: any ProfileRepository
     let assistant: any AssistantBackend
     let isPlus: @Sendable () async -> Bool
 
-    /// Downloads a page with an ephemeral session; returns the body and its Content-Type header.
+    /// Downloads a page or its photo with an ephemeral session; returns the body and its Content-Type header.
     static let liveFetch: @Sendable (URL) async throws -> (Data, String) = { url in
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if components?.scheme == "http" { components?.scheme = "https" }
         guard let secure = components?.url else { throw ImportError.invalidURL }
         var request = URLRequest(url: secure, timeoutInterval: 20)
-        request.setValue("text/html,application/xhtml+xml", forHTTPHeaderField: "Accept")
+        request.setValue("text/html,application/xhtml+xml,image/*;q=0.9", forHTTPHeaderField: "Accept")
         let session = URLSession(configuration: .ephemeral)
         defer { session.finishTasksAndInvalidate() }
         let (data, response) = try await session.data(for: request)
@@ -68,7 +72,8 @@ nonisolated struct RecipeImporter: Sendable {
         return (data, http.value(forHTTPHeaderField: "Content-Type") ?? "")
     }
 
-    /// Reads the recipe at `url`: schema.org data first, then, for consented Plus users, the assistant.
+    /// Reads the recipe at `url`: schema.org data first, then, for consented Plus users, the assistant. The photo
+    /// named by schema.org data is fetched too; one that cannot be fetched or read leaves the recipe without a photo.
     func `import`(
         from url: URL,
         fetch: @Sendable (URL) async throws -> (Data, String)
@@ -87,7 +92,35 @@ nonisolated struct RecipeImporter: Sendable {
             structured = StructuredRecipe(recipe: try await assistantRecipe(from: html), tags: RecipeTags())
             source = .assistant
         }
-        return await result(from: structured, url: url, source: source)
+        var imported = await result(from: structured, url: url, source: source)
+        if let address = structured.imageAddress {
+            imported.photo = try await photo(at: address, on: url, fetch: fetch)
+        }
+        return imported
+    }
+
+    /// The photo at `address`, resolved against the page, as a stored JPEG; `nil` for anything that is not a readable
+    /// http or https image within the size limit. Only cancellation is thrown.
+    private func photo(
+        at address: String,
+        on page: URL,
+        fetch: @Sendable (URL) async throws -> (Data, String)
+    ) async throws -> Data? {
+        guard let url = URL(string: address, relativeTo: page)?.absoluteURL,
+              let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme), url.host != nil
+        else { return nil }
+        let data: Data
+        let contentType: String
+        do {
+            (data, contentType) = try await fetch(url)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            return nil
+        }
+        guard data.count <= Self.maximumPhotoBytes, contentType.lowercased().hasPrefix("image/") else { return nil }
+        try Task.checkCancellation()
+        return PhotoDownsampler.jpeg(from: data)
     }
 
     private func page(at url: URL, fetch: @Sendable (URL) async throws -> (Data, String)) async throws -> String {

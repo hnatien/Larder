@@ -12,6 +12,8 @@ public struct Recipe: Identifiable, Hashable, Codable, Sendable {
     public var cookMinutes: Int
     public var steps: [RecipeStep]
     public var tags: RecipeTags
+    /// The file name of the recipe's photo in the `RecipePhotoStore`; `nil` when the recipe has none.
+    public var photoFileName: String?
 
     /// Creates a recipe.
     public init(
@@ -24,7 +26,8 @@ public struct Recipe: Identifiable, Hashable, Codable, Sendable {
         prepMinutes: Int,
         cookMinutes: Int,
         steps: [RecipeStep] = [],
-        tags: RecipeTags = RecipeTags()
+        tags: RecipeTags = RecipeTags(),
+        photoFileName: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -36,6 +39,7 @@ public struct Recipe: Identifiable, Hashable, Codable, Sendable {
         self.cookMinutes = cookMinutes
         self.steps = steps
         self.tags = tags
+        self.photoFileName = photoFileName
     }
 }
 

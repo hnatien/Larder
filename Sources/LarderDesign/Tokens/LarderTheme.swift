@@ -77,4 +77,6 @@ public extension View {
 public extension EnvironmentValues {
     /// Whether a finished cooking timer flashes the screen and vibrates as well as announcing itself.
     @Entry var timersFlashAndVibrate = true
+    /// The directory recipe photos are stored in; `nil` shows the dish tile for every recipe.
+    @Entry var recipePhotoDirectory: URL? = nil
 }

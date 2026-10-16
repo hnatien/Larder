@@ -2,7 +2,7 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// A library row: a dish tile, the title, the time, cuisine and diet words, and a chevron.
+/// A library row: the photo or dish tile, the title, the time, cuisine and diet words, and a chevron.
 struct RecipeRow: View {
     @ScaledSpacing(.m) private var gap
     let recipe: Recipe
@@ -19,7 +19,7 @@ struct RecipeRow: View {
 
     var body: some View {
         HStack(spacing: LarderSpacing.m) {
-            RecipeTile(title: recipe.title, size: .medium)
+            RecipeImage(title: recipe.title, photoFileName: recipe.photoFileName, size: .medium)
             VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
                 Text(recipe.title)
                     .font(LarderFont.body(.body, weight: .semibold))

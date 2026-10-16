@@ -54,7 +54,7 @@ struct BannedTokenTests {
 
     @Test func everyComponentFileHasAPreview() throws {
         let components = DesignSources.files(withExtension: "swift", under: DesignSources.module.appending(path: "Components"))
-        #expect(components.count == 16)
+        #expect(components.count == 17)
         for file in components {
             #expect(try DesignSources.text(file).contains("#Preview"), "\(file.lastPathComponent) lacks a #Preview")
         }

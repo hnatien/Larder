@@ -231,7 +231,7 @@ public struct LedgerView: View {
                 if let tag = entry.leftoverTag {
                     TapeLabel(text: tag)
                 } else {
-                    JarLabel(title: entry.title, minutes: entry.minutes, slot: LedgerCopy.name(of: meal.slot)) {
+                    JarLabel(title: entry.title, minutes: entry.minutes, slot: LedgerCopy.name(of: meal.slot), photoFileName: entry.photoFileName) {
                         StatusPills(meal: meal)
                     }
                 }

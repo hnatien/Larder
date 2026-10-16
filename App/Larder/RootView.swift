@@ -46,6 +46,7 @@ struct RootView: View {
         content
             .larderTheme()
             .environment(\.timersFlashAndVibrate, dependencies.settings.timersFlashAndVibrate)
+            .environment(\.recipePhotoDirectory, dependencies.photos.directory)
             .preferredColorScheme(dependencies.launch.forcesDarkAppearance ? .dark : nil)
             .task { await dependencies.start() }
             .task { await dependencies.entitlements.start() }

@@ -122,6 +122,6 @@ public struct RecipesView: View {
 
 #Preview("RecipesView empty") {
     let store = PreviewStore(recipes: [], ingredients: [:])
-    RecipesView(model: RecipesModel(recipes: store, foods: store, profile: store, assistant: PreviewAssistant(), isPlus: { false }))
+    RecipesView(model: RecipesModel(recipes: store, photos: store, foods: store, profile: store, assistant: PreviewAssistant(), isPlus: { false }))
 }
 #endif

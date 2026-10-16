@@ -5,7 +5,15 @@ enum Migrations {
     static var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("v1-schema", migrate: createV1Schema)
+        migrator.registerMigration("v2-recipe-photo", migrate: addRecipePhoto)
         return migrator
+    }
+
+    /// Imported recipes can keep the page's photo; the column holds its file name in the photo store.
+    private static func addRecipePhoto(_ db: Database) throws {
+        try db.alter(table: "recipe") { t in
+            t.add(column: "photoFileName", .text)
+        }
     }
 
     private static func createV1Schema(_ db: Database) throws {

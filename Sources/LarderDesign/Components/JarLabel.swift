@@ -1,17 +1,25 @@
 import SwiftUI
 
-/// A meal in the week plan: a dish tile, the title, the slot and time, any status badges, and a chevron.
+/// A meal in the week plan: the photo or dish tile, the title, the slot and time, any status badges, and a chevron.
 public struct JarLabel<Badges: View>: View {
     private let title: String
     private let minutes: Int
     private let slot: String?
+    private let photoFileName: String?
     private let badges: Badges
 
-    /// Creates a meal row; `slot` is the optional meal slot such as "Dinner".
-    public init(title: String, minutes: Int, slot: String? = nil, @ViewBuilder badges: () -> Badges) {
+    /// Creates a meal row; `slot` is the optional meal slot such as "Dinner", `photoFileName` the recipe's photo.
+    public init(
+        title: String,
+        minutes: Int,
+        slot: String? = nil,
+        photoFileName: String? = nil,
+        @ViewBuilder badges: () -> Badges
+    ) {
         self.title = title
         self.minutes = minutes
         self.slot = slot
+        self.photoFileName = photoFileName
         self.badges = badges()
     }
 
@@ -21,7 +29,7 @@ public struct JarLabel<Badges: View>: View {
 
     public var body: some View {
         HStack(spacing: LarderSpacing.m) {
-            RecipeTile(title: title, size: .small)
+            RecipeImage(title: title, photoFileName: photoFileName, size: .small)
             VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
                 Text(title)
                     .font(LarderFont.body(.body, weight: .semibold))
@@ -47,8 +55,8 @@ public struct JarLabel<Badges: View>: View {
 
 public extension JarLabel where Badges == EmptyView {
     /// Creates a meal row without badges.
-    init(title: String, minutes: Int, slot: String? = nil) {
-        self.init(title: title, minutes: minutes, slot: slot) { EmptyView() }
+    init(title: String, minutes: Int, slot: String? = nil, photoFileName: String? = nil) {
+        self.init(title: title, minutes: minutes, slot: slot, photoFileName: photoFileName) { EmptyView() }
     }
 }
 

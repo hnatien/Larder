@@ -2,7 +2,7 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// One recipe: a dish banner, time and servings, ingredients to tick off, the constraint verdict, optional nutrition and
+/// One recipe: a photo or dish banner, time and servings, ingredients to tick off, the constraint verdict, optional nutrition and
 /// the method, with Start cooking and Add to plan pinned to the bottom.
 public struct RecipeDetailView: View {
     private enum Phase {
@@ -100,7 +100,7 @@ public struct RecipeDetailView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.m) {
-            RecipeTile(title: recipe.title, size: .banner)
+            RecipeImage(title: recipe.title, photoFileName: recipe.photoFileName, size: .banner)
                 .clipShape(RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous))
             Text(recipe.title)
                 .font(LarderFont.display(.largeTitle))

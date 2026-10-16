@@ -10,17 +10,26 @@ final class FetchRecorder: Sendable {
     private let body: Data
     private let contentType: String
     private let failure: (any Error)?
+    /// Answers for particular addresses, such as a page's photo; any other address gets the canned page.
+    private let routes: [URL: Result<(Data, String), StoreFailure>]
 
-    init(html: String, contentType: String = "text/html; charset=utf-8", failure: (any Error)? = nil) {
+    init(
+        html: String,
+        contentType: String = "text/html; charset=utf-8",
+        failure: (any Error)? = nil,
+        routes: [URL: Result<(Data, String), StoreFailure>] = [:]
+    ) {
         body = Data(html.utf8)
         self.contentType = contentType
         self.failure = failure
+        self.routes = routes
     }
 
     init(data: Data, contentType: String) {
         body = data
         self.contentType = contentType
         failure = nil
+        routes = [:]
     }
 
     var fetchedURLs: [URL] { urls.withLock { $0 } }
@@ -28,6 +37,7 @@ final class FetchRecorder: Sendable {
     var fetch: @Sendable (URL) async throws -> (Data, String) {
         { [self] url in
             urls.withLock { $0.append(url) }
+            if let route = routes[url] { return try route.get() }
             if let failure { throw failure }
             return (body, contentType)
         }
@@ -73,10 +83,70 @@ struct RecipeImporterTests {
         #expect(result.ingredients.allSatisfy { $0.recipeID == result.recipe.id })
     }
 
-    @Test func fetchesOnlyThePageNeverItsImages() async throws {
+    // MARK: Photos
+
+    private let photoURL = URL(string: "https://example.com/photo.jpg")!
+
+    @Test func fetchesThePagePhotoAndKeepsASmallJPEG() async throws {
+        let recorder = FetchRecorder(
+            html: try Fixture.html("object"),
+            routes: [photoURL: .success((TestImage.png(width: 2400, height: 1600), "image/png"))]
+        )
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(recorder.fetchedURLs == [pageURL, photoURL])
+        let photo = try #require(result.photo)
+        #expect(TestImage.type(of: photo) == "public.jpeg")
+        let size = try #require(TestImage.pixelSize(of: photo))
+        #expect(size.width == PhotoDownsampler.maximumPixelSize)
+        #expect(size.height == 800)
+        #expect(result.recipe.photoFileName == nil)
+    }
+
+    @Test func resolvesARelativePhotoAddressAgainstThePage() async throws {
+        let html = Sample.html(recipeJSON: #"{"@type":"Recipe","name":"Toast","image":{"@type":"ImageObject","url":"/img/toast.png"},"recipeIngredient":["1 slice bread"]}"#)
+        let resolved = URL(string: "https://example.com/img/toast.png")!
+        let recorder = FetchRecorder(html: html, routes: [resolved: .success((TestImage.png(width: 40, height: 30), "image/png"))])
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(recorder.fetchedURLs == [pageURL, resolved])
+        #expect(result.photo.flatMap(TestImage.pixelSize)?.width == 40)
+    }
+
+    @Test func aPhotoThatFailsToDownloadLeavesTheRecipeWithoutOne() async throws {
+        let recorder = FetchRecorder(html: try Fixture.html("object"), routes: [photoURL: .failure(StoreFailure())])
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(result.recipe.title == "Weeknight chana masala & rice")
+        #expect(result.photo == nil)
+    }
+
+    @Test func aPhotoAddressThatIsNotAnImageIsIgnored() async throws {
         let recorder = FetchRecorder(html: try Fixture.html("object"))
-        _ = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(recorder.fetchedURLs == [pageURL, photoURL])
+        #expect(result.photo == nil)
+    }
+
+    @Test func bytesLabelledAsAnImageThatDoNotDecodeAreIgnored() async throws {
+        let recorder = FetchRecorder(
+            html: try Fixture.html("object"),
+            routes: [photoURL: .success((Data("not an image".utf8), "image/jpeg"))]
+        )
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(result.photo == nil)
+    }
+
+    @Test func onlyHTTPPhotoAddressesAreFetched() async throws {
+        let html = Sample.html(recipeJSON: #"{"@type":"Recipe","name":"Toast","image":"file:///etc/passwd","recipeIngredient":["1 slice bread"]}"#)
+        let recorder = FetchRecorder(html: html)
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
         #expect(recorder.fetchedURLs == [pageURL])
+        #expect(result.photo == nil)
+    }
+
+    @Test func pagesWithoutAPhotoFetchOnlyThePage() async throws {
+        let recorder = FetchRecorder(html: try Fixture.html("array"))
+        let result = try await importer(store: FakeStore()).import(from: pageURL, fetch: recorder.fetch)
+        #expect(recorder.fetchedURLs == [pageURL])
+        #expect(result.photo == nil)
     }
 
     @Test func unquantifiedLinesBecomeZeroPieces() async throws {
@@ -341,7 +411,8 @@ struct ImportModelTests {
         let (model, recorder) = model(html: try Fixture.html("object"))
         model.addressText = "  example.com/chana  "
         await model.fetchPreview()
-        #expect(recorder.fetchedURLs == [URL(string: "https://example.com/chana")!])
+        // The page comes first; the second fetch is the photo its structured data names.
+        #expect(recorder.fetchedURLs == [URL(string: "https://example.com/chana")!, URL(string: "https://example.com/photo.jpg")!])
         #expect(model.preview?.recipe.title == "Weeknight chana masala & rice")
     }
 

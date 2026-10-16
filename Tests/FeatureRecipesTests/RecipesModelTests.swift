@@ -1,3 +1,4 @@
+import Foundation
 import LarderCore
 import Testing
 @testable import FeatureRecipes
@@ -180,6 +181,63 @@ struct RecipesModelTests {
             try await model.save(ImportResult(recipe: imported, ingredients: [], source: .structuredData))
         }
         #expect(model.error == .saveFailed)
+    }
+
+    @Test func saveWritesThePhotoAndRecordsItsFileName() async throws {
+        let (model, store) = await loadedModel()
+        let imported = Sample.recipe("Imported stew", origin: .userImport)
+        let photo = Data([0xFF, 0xD8, 0xFF])
+        try await model.save(ImportResult(recipe: imported, ingredients: [], source: .structuredData, photo: photo))
+        let saved = try #require(await store.saved.first?.0)
+        let fileName = try #require(saved.photoFileName)
+        #expect(await store.photos[fileName] == photo)
+        #expect(model.recipes.first { $0.id == imported.id }?.photoFileName == fileName)
+    }
+
+    @Test func saveWithoutAPhotoWritesNoFile() async throws {
+        let (model, store) = await loadedModel()
+        try await model.save(ImportResult(recipe: Sample.recipe("Imported stew", origin: .userImport), ingredients: [], source: .structuredData))
+        #expect(await store.saved.first?.0.photoFileName == nil)
+        #expect(await store.photos.isEmpty)
+    }
+
+    @Test func aPhotoThatCannotBeWrittenFailsTheSave() async {
+        let (model, store) = await loadedModel()
+        await store.setFailPhotoSave(true)
+        let imported = Sample.recipe("Imported stew", origin: .userImport)
+        await #expect(throws: RecipesError.saveFailed) {
+            try await model.save(ImportResult(recipe: imported, ingredients: [], source: .structuredData, photo: Data([1])))
+        }
+        #expect(await store.saved.isEmpty)
+        #expect(model.error == .saveFailed)
+    }
+
+    @Test func aFailedSaveRemovesThePhotoItWrote() async {
+        let (model, store) = await loadedModel()
+        await store.setFailSave(true)
+        let imported = Sample.recipe("Imported stew", origin: .userImport)
+        await #expect(throws: RecipesError.saveFailed) {
+            try await model.save(ImportResult(recipe: imported, ingredients: [], source: .structuredData, photo: Data([1])))
+        }
+        #expect(await store.photos.isEmpty)
+        #expect(await store.deletedPhotos == [imported.id.rawValue.uuidString + ".jpg"])
+    }
+
+    @Test func deleteRemovesThePhoto() async {
+        var imported = Sample.recipe("Imported stew", origin: .userImport)
+        imported.photoFileName = "stew.jpg"
+        let (model, store) = await loadedModel(extra: [imported])
+        #expect(await model.delete(imported))
+        #expect(await store.deletedPhotos == ["stew.jpg"])
+    }
+
+    @Test func aFailedDeleteKeepsThePhoto() async {
+        var imported = Sample.recipe("Imported stew", origin: .userImport)
+        imported.photoFileName = "stew.jpg"
+        let (model, store) = await loadedModel(extra: [imported])
+        await store.setFailDelete(true)
+        #expect(!(await model.delete(imported)))
+        #expect(await store.deletedPhotos.isEmpty)
     }
 }
 

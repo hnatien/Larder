@@ -28,6 +28,14 @@ public protocol RecipeRepository: Sendable {
     func ingredients(for recipeID: RecipeID) async throws -> [Ingredient]
 }
 
+/// Keeps recipe photos as files on the device.
+public protocol RecipePhotoStore: Sendable {
+    /// Writes `jpeg` as the photo of `recipeID`, replacing any earlier one, and returns its file name.
+    func save(_ jpeg: Data, for recipeID: RecipeID) async throws -> String
+    /// Deletes the photo with `fileName`; a missing file is not an error.
+    func delete(_ fileName: String) async throws
+}
+
 /// Reads and writes the user's shelves.
 public protocol PantryRepository: Sendable {
     /// Every pantry item.

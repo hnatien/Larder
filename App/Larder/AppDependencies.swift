@@ -78,6 +78,7 @@ final class AppDependencies {
     )
 
     let recipeRepository: GRDBRecipeRepository
+    let photos: FileRecipePhotoStore
     private let database: LarderDatabase
     private let foods: GRDBFoodRepository
     private let pantry: GRDBPantryRepository
@@ -104,9 +105,13 @@ final class AppDependencies {
             suite.removePersistentDomain(forName: Self.uiTestDefaultsSuite)
             defaults = suite
             database = try LarderDatabase.inMemory()
+            let uiTestPhotos = FileRecipePhotoStore(directory: FileManager.default.temporaryDirectory.appending(path: "RecipePhotos-UITest"))
+            try uiTestPhotos.deleteAll()
+            photos = uiTestPhotos
         } else {
             defaults = .standard
             database = try LarderDatabase.onDisk(at: try LarderDatabase.defaultURL())
+            photos = FileRecipePhotoStore(directory: try FileRecipePhotoStore.defaultDirectory())
         }
         foods = GRDBFoodRepository(database: database)
         recipeRepository = GRDBRecipeRepository(database: database)
@@ -146,7 +151,7 @@ final class AppDependencies {
         )
         shelves = ShelvesModel(pantry: pantry, foods: foods, assistant: assistant.router, dates: dates)
         recipes = RecipesModel(
-            recipes: recipeRepository, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
+            recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
         )
         grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, dates: dates)
         onboarding = OnboardingModel(profiles: profiles, preferences: preferences, dates: dates)
@@ -293,6 +298,7 @@ final class AppDependencies {
     /// Erases the store, reloads the seed library and returns to onboarding.
     private func eraseAllData() async throws {
         try await database.eraseAll()
+        try photos.deleteAll()
         defaults.removeObject(forKey: Self.seedVersionKey)
         await seedIfNeeded()
         onboarding = OnboardingModel(profiles: profiles, preferences: preferences, dates: dates)

@@ -27,7 +27,8 @@ struct RecipeRepositoryTests {
             prepMinutes: 10,
             cookMinutes: 15,
             steps: [RecipeStep(text: "Rinse the rice."), RecipeStep(text: "Simmer.", timerSeconds: 900)],
-            tags: RecipeTags(cuisine: "Korean", mealTypes: [.lunch, .dinner], equipment: [.stovetop, .oven], dietFlags: [.vegan])
+            tags: RecipeTags(cuisine: "Korean", mealTypes: [.lunch, .dinner], equipment: [.stovetop, .oven], dietFlags: [.vegan]),
+            photoFileName: "rice-and-greens.jpg"
         )
         let ingredients = [
             Ingredient(

@@ -56,7 +56,7 @@ struct MealSheet: View {
     @ViewBuilder private func mealContent(_ entry: LedgerMeal) -> some View {
         let meal = entry.meal
         HStack(alignment: .top, spacing: LarderSpacing.m) {
-            RecipeTile(title: entry.title, size: .large)
+            RecipeImage(title: entry.title, photoFileName: entry.photoFileName, size: .large)
             VStack(alignment: .leading, spacing: LarderSpacing.xs) {
                 Text(entry.title)
                     .font(LarderFont.display(.title2))
@@ -175,7 +175,7 @@ struct MealSheet: View {
                     PaperCard {
                         VStack(alignment: .leading, spacing: LarderSpacing.s) {
                             HStack(spacing: LarderSpacing.m) {
-                                RecipeTile(title: option.candidate.recipe.title, size: .small)
+                                RecipeImage(title: option.candidate.recipe.title, photoFileName: option.candidate.recipe.photoFileName, size: .small)
                                 VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
                                     Text(option.candidate.recipe.title)
                                         .font(LarderFont.body(.body, weight: .semibold))

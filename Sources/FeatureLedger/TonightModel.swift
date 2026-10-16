@@ -7,6 +7,8 @@ public struct TonightDinner: Equatable, Sendable {
     public var recipeID: RecipeID
     public var title: String
     public var minutes: Int
+    /// The recipe's photo in the photo store, if it has one.
+    public var photoFileName: String?
 }
 
 /// Drives the Tonight tab: tonight's planned dinner, and pantry-first ideas three at a time, offline and deterministic.
@@ -129,7 +131,8 @@ public final class TonightModel {
                 dinner = TonightDinner(
                     recipeID: option.recipeID,
                     title: option.candidate.recipe.title,
-                    minutes: option.candidate.totalMinutes
+                    minutes: option.candidate.totalMinutes,
+                    photoFileName: option.candidate.recipe.photoFileName
                 )
             }
         } catch {
@@ -159,7 +162,12 @@ public final class TonightModel {
         guard let meal = meals.first(where: {
             $0.slot == .dinner && $0.status != .skipped && calendar.isDate($0.date, inSameDayAs: today)
         }), let recipe = try await recipes.recipe(by: meal.recipeID) else { return nil }
-        return TonightDinner(recipeID: recipe.id, title: recipe.title, minutes: recipe.prepMinutes + recipe.cookMinutes)
+        return TonightDinner(
+            recipeID: recipe.id,
+            title: recipe.title,
+            minutes: recipe.prepMinutes + recipe.cookMinutes,
+            photoFileName: recipe.photoFileName
+        )
     }
 
     private func covers(_ plan: MealPlan, _ day: Date) -> Bool {

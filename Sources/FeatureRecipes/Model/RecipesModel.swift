@@ -29,6 +29,7 @@ public final class RecipesModel {
 
     private var candidates: [Recipe] = []
     private let repository: any RecipeRepository
+    private let photos: any RecipePhotoStore
     private let foods: any FoodRepository
     private let profile: any ProfileRepository
     private let assistant: any AssistantBackend
@@ -37,12 +38,14 @@ public final class RecipesModel {
     /// Creates a model over the given repositories; `isPlus` says whether the assistant may read pages.
     public init(
         recipes: any RecipeRepository,
+        photos: any RecipePhotoStore,
         foods: any FoodRepository,
         profile: any ProfileRepository,
         assistant: any AssistantBackend,
         isPlus: @escaping @Sendable () async -> Bool
     ) {
         self.repository = recipes
+        self.photos = photos
         self.foods = foods
         self.profile = profile
         self.assistant = assistant
@@ -107,6 +110,10 @@ public final class RecipesModel {
             self.error = .deleteFailed
             return false
         }
+        if let photo = recipe.photoFileName {
+            // The recipe is gone either way; a file that cannot be removed is never shown and goes with Delete all data.
+            try? await photos.delete(photo)
+        }
         error = nil
         await load()
         return true
@@ -120,11 +127,19 @@ public final class RecipesModel {
         }
     }
 
-    /// Saves an imported recipe and reloads the library.
+    /// Saves an imported recipe, with its photo when it has one, and reloads the library.
     func save(_ result: ImportResult) async throws {
+        var recipe = result.recipe
         do {
-            try await repository.save(result.recipe, ingredients: result.ingredients)
+            if let photo = result.photo {
+                recipe.photoFileName = try await photos.save(photo, for: recipe.id)
+            }
+            try await repository.save(recipe, ingredients: result.ingredients)
         } catch {
+            if let photo = recipe.photoFileName {
+                // Nothing refers to the file once the save failed; leaving it would only take up space.
+                try? await photos.delete(photo)
+            }
             self.error = .saveFailed
             throw RecipesError.saveFailed
         }

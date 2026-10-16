@@ -124,7 +124,7 @@ private struct DinnerCard: View {
     var body: some View {
         PaperCard(padded: false) {
             VStack(alignment: .leading, spacing: 0) {
-                RecipeTile(title: dinner.title, size: .banner)
+                RecipeImage(title: dinner.title, photoFileName: dinner.photoFileName, size: .banner)
                 VStack(alignment: .leading, spacing: LarderSpacing.m) {
                     Pill(LedgerCopy.tonightsDinner, systemImage: "fork.knife", tone: .brand)
                     Text(dinner.title)
@@ -164,7 +164,7 @@ private struct TonightCard: View {
         PaperCard {
             VStack(alignment: .leading, spacing: LarderSpacing.m) {
                 HStack(alignment: .top, spacing: LarderSpacing.m) {
-                    RecipeTile(title: option.candidate.recipe.title, size: .large)
+                    RecipeImage(title: option.candidate.recipe.title, photoFileName: option.candidate.recipe.photoFileName, size: .large)
                     VStack(alignment: .leading, spacing: LarderSpacing.xs) {
                         if isCooking {
                             Pill(LedgerCopy.onForTonight, systemImage: "checkmark", tone: .second)

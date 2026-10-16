@@ -30,6 +30,51 @@ struct JSONLDRecipeParserTests {
         #expect(recipe.ingredients[4].quantity == nil)
     }
 
+    @Test func readsAPhotoAddressString() throws {
+        let parsed = try JSONLDRecipeParser.parseStructured(html: Fixture.html("object"))
+        #expect(parsed.imageAddress == "https://example.com/photo.jpg")
+    }
+
+    @Test func readsThePhotoAddressOfAnImageObjectOrArray() throws {
+        let forms: [(json: String, expected: String?)] = [
+            (#"{"@type":"ImageObject","url":"https://example.com/a.jpg"}"#, "https://example.com/a.jpg"),
+            (#"{"@type":"ImageObject","contentUrl":"https://example.com/b.jpg"}"#, "https://example.com/b.jpg"),
+            (#"["https://example.com/c-16x9.jpg","https://example.com/c-1x1.jpg"]"#, "https://example.com/c-16x9.jpg"),
+            (#"[{"@type":"ImageObject"},{"@type":"ImageObject","url":"/d.jpg"}]"#, "/d.jpg"),
+            (#"" ""#, nil),
+            (#"[]"#, nil),
+            (#"42"#, nil),
+        ]
+        for form in forms {
+            let html = Sample.html(recipeJSON: #"{"@type":"Recipe","name":"Toast","recipeIngredient":["bread"],"image":"# + form.json + "}")
+            #expect(try JSONLDRecipeParser.parseStructured(html: html).imageAddress == form.expected, "\(form.json)")
+        }
+    }
+
+    @Test func followsAnImageReferenceIntoTheGraph() throws {
+        let html = Sample.html(recipeJSON: #"""
+            {"@context":"https://schema.org","@graph":[
+              {"@type":"ImageObject","@id":"https://example.com/#primaryimage","url":"https://example.com/hero.jpg"},
+              {"@type":"Recipe","name":"Toast","recipeIngredient":["bread"],"image":{"@id":"https://example.com/#primaryimage"}}
+            ]}
+            """#)
+        #expect(try JSONLDRecipeParser.parseStructured(html: html).imageAddress == "https://example.com/hero.jpg")
+    }
+
+    @Test func anImageReferenceThatPointsNowhereGivesNoPhotoAddress() throws {
+        let html = Sample.html(recipeJSON: #"""
+            {"@graph":[
+              {"@type":"ImageObject","@id":"#a","image":{"@id":"#a"}},
+              {"@type":"Recipe","name":"Toast","recipeIngredient":["bread"],"image":[{"@id":"#missing"},{"@id":"#a"}]}
+            ]}
+            """#)
+        #expect(try JSONLDRecipeParser.parseStructured(html: html).imageAddress == nil)
+    }
+
+    @Test func aRecipeWithoutAnImageHasNoPhotoAddress() throws {
+        #expect(try JSONLDRecipeParser.parseStructured(html: Fixture.html("graph")).imageAddress == nil)
+    }
+
     @Test func detectsTimersInSteps() throws {
         let recipe = try JSONLDRecipeParser.parse(html: Fixture.html("object"))
         #expect(recipe.steps[0].timerSeconds == nil)

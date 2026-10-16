@@ -1,6 +1,9 @@
+import CoreGraphics
 import Foundation
+import ImageIO
 import LarderCore
 import Synchronization
+import UniformTypeIdentifiers
 @testable import FeatureRecipes
 
 enum Fixture {
@@ -16,7 +19,7 @@ enum Fixture {
 
 struct StoreFailure: Error {}
 
-actor FakeStore: RecipeRepository, FoodRepository, ProfileRepository {
+actor FakeStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository {
     var recipes: [Recipe]
     var ingredientsByRecipe: [RecipeID: [Ingredient]]
     var foodList: [Food]
@@ -25,6 +28,9 @@ actor FakeStore: RecipeRepository, FoodRepository, ProfileRepository {
     var failReads = false
     var failSave = false
     var failDelete = false
+    var failPhotoSave = false
+    private(set) var photos: [String: Data] = [:]
+    private(set) var deletedPhotos: [String] = []
     private(set) var foodSearches: [String] = []
     private(set) var saved: [(Recipe, [Ingredient])] = []
 
@@ -45,6 +51,7 @@ actor FakeStore: RecipeRepository, FoodRepository, ProfileRepository {
     func setFailReads(_ value: Bool) { failReads = value }
     func setFailSave(_ value: Bool) { failSave = value }
     func setFailDelete(_ value: Bool) { failDelete = value }
+    func setFailPhotoSave(_ value: Bool) { failPhotoSave = value }
     func setProfile(_ value: UserProfile?) { profileValue = value }
 
     func all() throws -> [Recipe] {
@@ -70,6 +77,18 @@ actor FakeStore: RecipeRepository, FoodRepository, ProfileRepository {
     func delete(_ id: RecipeID) throws {
         if failDelete { throw StoreFailure() }
         recipes.removeAll { $0.id == id }
+    }
+
+    func save(_ jpeg: Data, for recipeID: RecipeID) throws -> String {
+        if failPhotoSave { throw StoreFailure() }
+        let fileName = recipeID.rawValue.uuidString + ".jpg"
+        photos[fileName] = jpeg
+        return fileName
+    }
+
+    func delete(_ fileName: String) {
+        photos[fileName] = nil
+        deletedPhotos.append(fileName)
     }
 
     func ingredients(for recipeID: RecipeID) throws -> [Ingredient] {
@@ -153,11 +172,44 @@ enum Sample {
         assistant: FakeAssistant = FakeAssistant(),
         isPlus: @escaping @Sendable () async -> Bool = { false }
     ) -> RecipesModel {
-        RecipesModel(recipes: store, foods: store, profile: store, assistant: assistant, isPlus: isPlus)
+        RecipesModel(recipes: store, photos: store, foods: store, profile: store, assistant: assistant, isPlus: isPlus)
     }
 
     static func html(recipeJSON: String) -> String {
         "<html><head><script type=\"application/ld+json\">\(recipeJSON)</script></head><body></body></html>"
+    }
+}
+
+/// Image bytes made on the spot, so photo tests need no fixture files.
+enum TestImage {
+    /// A PNG of a flat colour, `width` by `height` pixels.
+    static func png(width: Int, height: Int) -> Data {
+        let context = CGContext(
+            data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
+        context.setFillColor(red: 0.7, green: 0.3, blue: 0.1, alpha: 1)
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        let output = NSMutableData()
+        let destination = CGImageDestinationCreateWithData(output, UTType.png.identifier as CFString, 1, nil)!
+        CGImageDestinationAddImage(destination, context.makeImage()!, nil)
+        CGImageDestinationFinalize(destination)
+        return output as Data
+    }
+
+    /// The pixel size of encoded image `data`, or `nil` when it is not an image.
+    static func pixelSize(of data: Data) -> (width: Int, height: Int)? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+              let width = properties[kCGImagePropertyPixelWidth] as? Int,
+              let height = properties[kCGImagePropertyPixelHeight] as? Int
+        else { return nil }
+        return (width, height)
+    }
+
+    /// The uniform type of encoded image `data`.
+    static func type(of data: Data) -> String? {
+        CGImageSourceCreateWithData(data as CFData, nil).flatMap(CGImageSourceGetType) as String?
     }
 }
 

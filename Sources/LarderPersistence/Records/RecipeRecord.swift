@@ -18,6 +18,7 @@ struct RecipeRecord: LarderRecord {
     var mealTypes: [MealType]
     var equipment: [Equipment]
     var dietFlags: [DietPattern]
+    var photoFileName: String?
 
     init(_ recipe: Recipe) {
         id = recipe.id.rawValue
@@ -33,6 +34,7 @@ struct RecipeRecord: LarderRecord {
         mealTypes = recipe.tags.mealTypes.sortedByRawValue
         equipment = recipe.tags.equipment.sortedByRawValue
         dietFlags = recipe.tags.dietFlags.sortedByRawValue
+        photoFileName = recipe.photoFileName
     }
 
     var recipe: Recipe {
@@ -51,7 +53,8 @@ struct RecipeRecord: LarderRecord {
                 mealTypes: Set(mealTypes),
                 equipment: Set(equipment),
                 dietFlags: Set(dietFlags)
-            )
+            ),
+            photoFileName: photoFileName
         )
     }
 }

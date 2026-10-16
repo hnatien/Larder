@@ -15,7 +15,7 @@ struct MigrationTests {
         }
         #expect(tables.count == 11)
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo"])
     }
 
     @Test func migratingAgainIsANoOp() async throws {
@@ -23,8 +23,43 @@ struct MigrationTests {
         try await GRDBFoodRepository(database: database).upsert([Fixtures.food("Rice")])
         try Migrations.migrator.migrate(database.writer)
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo"])
         #expect(try await Fixtures.count("food", in: database) == 1)
+    }
+
+    @Test func recipePhotoMigrationKeepsExistingRecipesWithoutAPhoto() async throws {
+        let queue = try DatabaseQueue()
+        try Migrations.migrator.migrate(queue, upTo: "v1-schema")
+        let id = UUID()
+        try await queue.write { db in
+            try db.execute(
+                sql: """
+                    INSERT INTO recipe (id, title, origin, servings, prepMinutes, cookMinutes, steps, mealTypes, equipment, dietFlags)
+                    VALUES (?, 'Toast', 'userImport', 1, 2, 3, '[]', '[]', '[]', '[]')
+                    """,
+                arguments: [id.uuidString]
+            )
+        }
+        #expect(try await queue.read { db in try db.columns(in: "recipe").map(\.name) }.contains("photoFileName") == false)
+
+        try Migrations.migrator.migrate(queue)
+
+        let columns = try await queue.read { db in try db.columns(in: "recipe") }
+        let photo = try #require(columns.first { $0.name == "photoFileName" })
+        #expect(photo.type == "TEXT")
+        #expect(!photo.isNotNull)
+        let recipe = try await queue.read { db in try RecipeRecord.fetchOne(db, key: id.uuidString)?.recipe }
+        #expect(recipe?.title == "Toast")
+        #expect(recipe?.photoFileName == nil)
+        #expect(try await queue.read { db in try Migrations.migrator.appliedIdentifiers(db) } == ["v1-schema", "v2-recipe-photo"])
+    }
+
+    @Test func recipeSearchStillWorksAfterThePhotoMigration() async throws {
+        let database = try LarderDatabase.inMemory()
+        var recipe = Fixtures.recipe("Smoky bean stew")
+        recipe.photoFileName = "stew.jpg"
+        try await GRDBRecipeRepository(database: database).save(recipe, ingredients: [Fixtures.ingredient("beans", recipeID: recipe.id)])
+        #expect(try await GRDBRecipeRepository(database: database).search(text: "smoky", limit: 5).map(\.id) == [recipe.id])
     }
 
     @Test func eraseAllEmptiesEveryTableAndKeepsTheSchema() async throws {
@@ -43,7 +78,7 @@ struct MigrationTests {
             #expect(try await Fixtures.count(table, in: database) == 0)
         }
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo"])
         #expect(try await GRDBRecipeRepository(database: database).search(text: "rice", limit: 5).isEmpty)
         try await GRDBFoodRepository(database: database).upsert([food])
         #expect(try await GRDBFoodRepository(database: database).food(by: food.id) == food)

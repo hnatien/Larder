@@ -3,7 +3,7 @@ import Foundation
 import LarderCore
 
 /// In-memory repositories and sample recipes for SwiftUI previews.
-actor PreviewStore: RecipeRepository, FoodRepository, ProfileRepository {
+actor PreviewStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository {
     private var recipeList: [Recipe]
     private var lines: [RecipeID: [Ingredient]]
     private let foodList: [Food]
@@ -26,6 +26,8 @@ actor PreviewStore: RecipeRepository, FoodRepository, ProfileRepository {
     }
     func delete(_ id: RecipeID) { recipeList.removeAll { $0.id == id } }
     func ingredients(for recipeID: RecipeID) -> [Ingredient] { lines[recipeID] ?? [] }
+    func save(_ jpeg: Data, for recipeID: RecipeID) -> String { recipeID.rawValue.uuidString + ".jpg" }
+    func delete(_ fileName: String) {}
 
     func search(text: String, limit: Int) -> [Food] {
         Array(foodList.filter { $0.name.localizedCaseInsensitiveContains(text) }.prefix(limit))
@@ -100,7 +102,7 @@ nonisolated enum PreviewData {
 
     @MainActor static func model() -> RecipesModel {
         let store = PreviewStore()
-        return RecipesModel(recipes: store, foods: store, profile: store, assistant: PreviewAssistant(), isPlus: { false })
+        return RecipesModel(recipes: store, photos: store, foods: store, profile: store, assistant: PreviewAssistant(), isPlus: { false })
     }
 }
 #endif

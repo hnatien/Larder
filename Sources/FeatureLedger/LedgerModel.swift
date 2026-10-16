@@ -8,6 +8,8 @@ public nonisolated struct LedgerMeal: Identifiable, Hashable, Sendable {
     public var meal: PlannedMeal
     public var title: String
     public var minutes: Int
+    /// The recipe's photo in the photo store, if it has one.
+    public var photoFileName: String?
     /// "Chilli, day 2 of 4" for a leftover whose cooked meal is in the plan; `nil` otherwise.
     public var leftoverTag: String?
 
@@ -170,6 +172,7 @@ public final class LedgerModel {
             meal: meal,
             title: title,
             minutes: recipe.map { $0.prepMinutes + $0.cookMinutes } ?? 0,
+            photoFileName: recipe?.photoFileName,
             leftoverTag: tag
         )
     }
