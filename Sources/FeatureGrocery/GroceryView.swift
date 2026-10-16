@@ -2,75 +2,105 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// The grocery tab: the list by aisle in store-walk order, a basket of bought items and a field for adding by hand.
+/// The Groceries tab: what to buy by aisle in store-walk order, an add field, and the bought items folded away.
 public struct GroceryView: View {
     private let model: GroceryModel
+    private let onOpenPlan: (() -> Void)?
+    private let onOpenSettings: (() -> Void)?
     @State private var basketExpanded = false
 
-    /// Creates the grocery tab over a model.
-    public init(model: GroceryModel) {
+    /// Creates the grocery tab; `onOpenPlan` is offered when the list is empty, and `onOpenSettings` adds the
+    /// Settings button.
+    public init(model: GroceryModel, onOpenPlan: (() -> Void)? = nil, onOpenSettings: (() -> Void)? = nil) {
         self.model = model
+        self.onOpenPlan = onOpenPlan
+        self.onOpenSettings = onOpenSettings
     }
+
+    private var toBuyCount: Int { model.toBuy.map(\.entries.count).reduce(0, +) }
 
     public var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: LarderSpacing.xl) {
+            List {
+                Section {
                     AddItemField { model.addManual(name: $0) }
-                    if let error = model.error {
-                        Text(GroceryCopy.message(for: error))
-                            .font(LarderFont.body(.body))
-                            .foregroundStyle(LarderColor.status(.warning))
-                    }
-                    if model.isEmpty && !model.isLoading {
-                        EmptyShelf(
-                            title: GroceryCopy.emptyTitle,
-                            message: GroceryCopy.emptyMessage
-                        )
-                    }
-                    ForEach(model.toBuy) { section in
-                        aisleSection(section)
-                    }
-                    if !model.basket.isEmpty {
-                        basketSection
+                } footer: {
+                    if !model.isEmpty {
+                        Text(GroceryCopy.tickHint)
+                            .font(LarderFont.body(.footnote))
+                            .foregroundStyle(LarderColor.ink.secondary)
                     }
                 }
-                .padding(LarderSpacing.l)
+                .listRowBackground(LarderColor.surface.raised)
+                if let error = model.error {
+                    Label(GroceryCopy.message(for: error), systemImage: "exclamationmark.triangle")
+                        .font(LarderFont.body(.body))
+                        .foregroundStyle(LarderColor.status(.warning))
+                        .listRowBackground(Color.clear)
+                }
+                if model.isEmpty && !model.isLoading {
+                    EmptyShelf(
+                        title: GroceryCopy.emptyTitle,
+                        message: GroceryCopy.emptyMessage,
+                        illustration: .groceries,
+                        systemImage: "cart",
+                        action: onOpenPlan.map { .init(title: GroceryCopy.openPlan, perform: $0) }
+                    )
+                    .listRowBackground(Color.clear)
+                }
+                ForEach(model.toBuy) { section in
+                    Section {
+                        header(GroceryCopy.name(of: section.aisle), count: section.entries.count)
+                            .listRowBackground(LarderColor.surface.raised)
+                        ForEach(section.entries) { row($0) }
+                    }
+                }
+                if !model.basket.isEmpty {
+                    Section {
+                        DisclosureGroup(isExpanded: $basketExpanded) {
+                            ForEach(model.basket.flatMap(\.entries)) { row($0) }
+                            Button(GroceryCopy.clearBasket, systemImage: "trash") { model.clearChecked() }
+                                .foregroundStyle(LarderColor.accent.brand)
+                                .frame(minHeight: 44)
+                        } label: {
+                            header(GroceryCopy.inTheBasket, count: model.basket.map(\.entries.count).reduce(0, +))
+                        }
+                        .tint(LarderColor.ink.primary)
+                    }
+                    .listRowBackground(LarderColor.surface.raised)
+                }
             }
-            .background(LarderColor.surface.canvas)
+            .larderGroupedList()
             .navigationTitle(Copy.Tab.grocery)
+            .navigationSubtitle(GroceryCopy.subtitle(toBuy: toBuyCount))
+            .settingsButton(onOpenSettings)
             .toolbar {
-                ToolbarItem {
-                    ShareLink(item: model.shareText())
-                        .disabled(model.toBuy.isEmpty)
+                ToolbarItem(placement: .primaryAction) {
+                    ShareLink(item: model.shareText()) {
+                        Label(GroceryCopy.share, systemImage: "square.and.arrow.up")
+                    }
+                    .disabled(model.toBuy.isEmpty)
                 }
             }
+            .refreshable { await model.load() }
             .task { await model.load() }
+            .sensoryFeedback(.selection, trigger: model.checked)
         }
     }
 
-    private var basketSection: some View {
-        DisclosureGroup(isExpanded: $basketExpanded) {
-            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
-                ForEach(model.basket.flatMap(\.entries)) { entry in
-                    row(entry)
-                }
-                Button(GroceryCopy.clearBasket) { model.clearChecked() }
-                    .buttonStyle(.larderQuiet)
-            }
-        } label: {
-            SectionHeading(GroceryCopy.inTheBasket)
+    private func header(_ title: String, count: Int) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(title)
+                .font(LarderFont.body(.headline, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.primary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer()
+            Text(count, format: .number)
+                .font(LarderFont.body(.subheadline, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.secondary)
         }
-        .tint(LarderColor.ink.primary)
-    }
-
-    private func aisleSection(_ section: GroceryEntrySection) -> some View {
-        VStack(alignment: .leading, spacing: LarderSpacing.xs) {
-            SectionHeading(GroceryCopy.name(of: section.aisle))
-            ForEach(section.entries) { entry in
-                row(entry)
-            }
-        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 
     private func row(_ entry: GroceryEntry) -> some View {
@@ -81,6 +111,23 @@ public struct GroceryView: View {
             isChecked: model.checked.contains(entry.key)
         ) {
             Task { await model.toggle(entry) }
+        }
+        .listRowBackground(LarderColor.surface.raised)
+        .listRowSeparatorTint(LarderColor.line.hairline)
+        .swipeActions(edge: .trailing) {
+            if case .manual(let item) = entry {
+                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { model.removeManual(item) }
+            }
+        }
+        .contextMenu {
+            if case .manual(let item) = entry {
+                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { model.removeManual(item) }
+            }
+        }
+        .accessibilityActions {
+            if case .manual(let item) = entry {
+                Button(GroceryCopy.delete) { model.removeManual(item) }
+            }
         }
     }
 }

@@ -72,7 +72,7 @@ public enum GroceryEntry: Identifiable, Hashable, Sendable {
 
     public var name: String {
         switch self {
-        case .planned(let item): item.name
+        case .planned(let item): GroceryCopy.shoppingName(item.name)
         case .manual(let item): item.name
         }
     }
@@ -298,7 +298,7 @@ public final class GroceryModel {
         case .grains, .fats, .legumes, .other: .pantry
         }
         return PantryItem(
-            foodID: foodID, rawName: item.name, quantityGrams: grams, location: location,
+            foodID: foodID, rawName: GroceryCopy.shoppingName(item.name), quantityGrams: grams, location: location,
             source: .manual, addedOn: dates.now
         )
     }

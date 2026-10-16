@@ -285,3 +285,13 @@ let locale = Locale(identifier: "en_US")
         #expect(GroceryItemKey(text("Limes", unit: .piece)) != GroceryItemKey(text("Limes", unit: .tablespoon)))
     }
 }
+
+@Suite("Grocery names")
+struct GroceryNameTests {
+    @Test func databaseNamesReadAsShoppersWriteThem() {
+        #expect(GroceryCopy.shoppingName("Potato, raw, flesh and skin") == "Potato")
+        #expect(GroceryCopy.shoppingName("Ginger root, raw") == "Ginger root")
+        #expect(GroceryCopy.shoppingName("Lemons") == "Lemons")
+        #expect(GroceryCopy.shoppingName(", odd") == ", odd")
+    }
+}

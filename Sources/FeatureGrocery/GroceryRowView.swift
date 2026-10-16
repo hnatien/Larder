@@ -10,38 +10,40 @@ struct GroceryRowView: View {
     let toggle: () -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: LarderSpacing.m) {
-            Button(action: toggle) {
+        Button(action: toggle) {
+            HStack(alignment: .firstTextBaseline, spacing: LarderSpacing.m) {
                 Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(isChecked ? LarderColor.accent.second : LarderColor.ink.secondary)
-                    .frame(minWidth: 44, minHeight: 44)
-                    .contentShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(GroceryCopy.markBought(name))
-            .accessibilityAddTraits(.isButton)
-            .accessibilityValue(isChecked ? GroceryCopy.bought : GroceryCopy.toBuy)
-
-            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
-                Text(name)
-                    .font(LarderFont.body(.body))
-                    .foregroundStyle(isChecked ? LarderColor.ink.secondary : LarderColor.ink.primary)
-                    .strikethrough(isChecked)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                if partiallyInPantry {
-                    ReasonLine(text: GroceryCopy.haveSome)
+                    .font(LarderFont.body(.title3))
+                    .foregroundStyle(isChecked ? LarderColor.accent.second : LarderColor.ink.tertiary)
+                    .contentTransition(.symbolEffect(.replace))
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
+                    Text(name)
+                        .font(LarderFont.body(.body))
+                        .foregroundStyle(isChecked ? LarderColor.ink.secondary : LarderColor.ink.primary)
+                        .strikethrough(isChecked)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if partiallyInPantry {
+                        MetaLabel(GroceryCopy.haveSome, systemImage: "refrigerator")
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                if !quantity.isEmpty {
+                    Text(quantity)
+                        .font(LarderFont.body(.subheadline, weight: .medium))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                        .multilineTextAlignment(.trailing)
                 }
             }
-            .padding(.top, LarderSpacing.m)
-            Spacer(minLength: LarderSpacing.s)
-            if !quantity.isEmpty {
-                Stamp(text: quantity)
-                    .padding(.top, LarderSpacing.m)
-            }
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel([GroceryCopy.markBought(name), quantity].filter { !$0.isEmpty }.joined(separator: ", "))
+        .accessibilityValue(isChecked ? GroceryCopy.bought : GroceryCopy.toBuy)
+        .accessibilityAddTraits(.isButton)
     }
 }
 
@@ -51,5 +53,5 @@ struct GroceryRowView: View {
         GroceryRowView(name: "Rice", quantity: "500 g", partiallyInPantry: false, isChecked: true) {}
     }
     .padding(LarderSpacing.l)
-    .background(LarderColor.surface.canvas)
+    .background(LarderColor.surface.raised)
 }

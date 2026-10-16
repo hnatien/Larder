@@ -1,7 +1,7 @@
 import LarderDesign
 import SwiftUI
 
-/// A text field and Add button for hand-written items.
+/// A text field for hand-written items, with an Add button that appears once there is something to add.
 struct AddItemField: View {
     let add: (String) -> Void
     @State private var text = ""
@@ -9,25 +9,31 @@ struct AddItemField: View {
     private var isBlank: Bool { text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
 
     var body: some View {
-        AdaptiveStack(spacing: LarderSpacing.s) { field; addButton }
-    }
-
-    private var field: some View {
-        TextField(GroceryCopy.itemToBuy, text: $text, prompt: Text(GroceryCopy.addAnItem))
-            .font(LarderFont.body(.body))
-            .textFieldStyle(.plain)
-            .submitLabel(.done)
-            .onSubmit(submit)
-            .padding(LarderSpacing.m)
-            .frame(minHeight: 44)
-            .background(LarderColor.surface.sunken)
-            .clipShape(RoundedRectangle(cornerRadius: LarderRadius.field))
-    }
-
-    private var addButton: some View {
-        Button(GroceryCopy.add, action: submit)
-            .buttonStyle(.larderSecondary)
-            .disabled(isBlank)
+        HStack(spacing: LarderSpacing.s) {
+            Image(systemName: "plus.circle.fill")
+                .font(LarderFont.body(.title3))
+                .foregroundStyle(LarderColor.accent.brand)
+                .accessibilityHidden(true)
+            // Vertical so it grows with Dynamic Type instead of clipping; Return adds the item rather than a new line.
+            TextField(GroceryCopy.itemToBuy, text: $text, prompt: Text(GroceryCopy.addAnItem), axis: .vertical)
+                .font(LarderFont.body(.body))
+                .textFieldStyle(.plain)
+                .submitLabel(.done)
+                .onSubmit(submit)
+                .onChange(of: text) { _, new in
+                    if new.contains("\n") {
+                        text = new.replacingOccurrences(of: "\n", with: "")
+                        submit()
+                    }
+                }
+                .frame(minHeight: 44)
+            if !isBlank {
+                Button(GroceryCopy.add, action: submit)
+                    .buttonStyle(.larderSecondary)
+                    .transition(.opacity)
+            }
+        }
+        .larderAnimation(LarderMotion.tap, value: isBlank)
     }
 
     private func submit() {
