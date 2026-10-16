@@ -9,16 +9,16 @@ What exists, how it was verified, what is still open. Decisions are in `docs/BLU
 | Research | Seven reports: users and market, visual identity, accessibility, nutrition and recommendation engine, iOS stack, a UI/UX audit, and meal-planner UX best practices | `docs/research/01..07` |
 | Scaffold | SwiftPM package `LarderKit` with ten targets, XcodeGen project, scripts, domain model, ports | `swift build`, app builds for simulator |
 | Core engine | Units, nutrition calculator, DGA 2025 / WHO targets, shelf balance, two-path allergen engine with lexicon and exceptions, diet and religious filters, grocery list builder, constraint compiler, scorer, Tonight picker, week planner with local search, independent verifier, swap suggester | 221 Swift Testing tests, including zero hard violations over 150 persona-seed cases and a 7-day plan under 0.5 s |
-| Persistence | GRDB SQLite schema, FTS5 search, repositories, idempotent seed loader with slug-derived IDs and FDC ids, erase-all | 61 tests |
+| Persistence | GRDB SQLite schema with migrations, FTS5 search, repositories, recipe photo files next to the database, idempotent seed loader with slug-derived IDs and FDC ids, erase-all | 68 tests |
 | Assistant client | Proxy client with App Attest sessions (attest once, assert after, re-attest on a lost key, dev-secret fallback on the Simulator), session caching, PII-free profile summary, prompt sanitiser, deterministic pantry parser, router (on-device, proxy, deterministic, consent-gated) | 90 tests, including proofs that no sensitive field or network call escapes |
 | On-device AI | Foundation Models backend with @Generable types, context guard, error mapping, Vision receipt and barcode readers | 55 tests; the live Foundation Models test ran on this Mac |
-| Design system | 22 colour tokens light and dark with high-contrast variants, typography (bundled Fraunces static instances, SF Pro, bundled Commit Mono), spacing, radius, motion with Reduce Motion, one Copy catalogue for every feature string, 15 components plus a chip flow layout and optional illustrations | 81 tests, including WCAG ratios for every ink/surface pair, a banned-pattern scan, font registration by PostScript name and catalogue coverage of feature strings |
-| Features | Pantry, Plan and Tonight, Recipes with import, add-to-plan by day and cooking mode, Groceries, Account with welcome screen and three-question setup, StoreKit 2 entitlements, paywall, settings and export | 56 + 72 + 142 + 24 + 83 tests |
+| Design system | 22 colour tokens light and dark with high-contrast variants, typography (bundled Fraunces static instances, SF Pro, bundled Commit Mono), spacing, radius, motion with Reduce Motion, one Copy catalogue for every feature string, 16 components (dish tiles and recipe photos among them) plus a chip flow layout and optional illustrations | 81 tests, including WCAG ratios for every ink/surface pair, a banned-pattern scan, font registration by PostScript name and catalogue coverage of feature strings |
+| Features | Pantry, Plan and Tonight, Recipes with import (the page's photo is kept on the device), add-to-plan by day and cooking mode (timers post a notification when they end in the background), Groceries, Account with welcome screen and three-question setup, StoreKit 2 entitlements, paywall, settings and export | 56 + 72 + 170 + 24 + 83 tests |
 | App | Dependency graph, onboarding gate, five tabs, app icon and launch screen, App Intents and Shortcuts, today widget via App Group snapshot, UI tests with accessibility audits and screenshots | App and widget build warning-free; six UI tests pass (audits on every tab and Settings, welcome and setup, AX3, recipe-to-plan-by-day flow, "Set up later" keeps allergens, screenshots of 21 screens in light and dark) |
 | Proxy | Cloudflare Worker in TypeScript with App Attest attestation and assertion verification (stateless challenges, key-derived session subjects), session tokens, App Store JWS entitlement verification, KV quotas, four structured-output routes on Haiku 5.5 and Sonnet 5.5, cache-stable prompts | 165 vitest tests, `tsc` clean |
 | Seed data | 113 foods: 33 from FDC Foundation Foods (2026-04), 77 from SR Legacy (2018-04), 3 approximate and flagged; 42 original recipes; reviewable mapping, importer and validator | `python3 -I Tools/validate-seed.py`; the importer is byte-for-byte reproducible |
 
-Package total: 886 Swift Testing tests across ten targets, all passing on 2026-10-17.
+Package total: 921 Swift Testing tests across ten targets, all passing on 2026-10-17.
 
 ## Commands
 
@@ -48,9 +48,8 @@ Ordered by importance.
 8. `ParsedPantryLine` has no best-by field, so model-extracted best-by hints are dropped.
 9. The parse-pantry system prompt is under the 512-token caching minimum; it will not cache.
 10. Not run: a real StoreKit sandbox purchase, VoiceOver and Voice Control manual passes, a physical device.
-11. Recipes have no photos; dish tiles in a food-group tint stand in. Recipe import does not read the page's image yet.
-12. Pantry amounts are stored in grams; counts such as "6 eggs" are derived from the food's countable portion, so an item without one shows grams.
-13. Cooking timers do not schedule local notifications, so a timer that finishes while Larder is in the background is silent.
+11. Pantry amounts are stored in grams; counts such as "6 eggs" are derived from the food's countable portion, so an item without one shows grams.
+12. Recipe photos and timer notifications are covered by package tests only. No UI test imports a page with a photo or starts a timer, and seed recipes have no photos, so the screenshots still show dish tiles. Timer notifications use the default interruption level (time-sensitive needs an entitlement), so a Focus mode can hold them.
 
 ## Known audit limitation
 
