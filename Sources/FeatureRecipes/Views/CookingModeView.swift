@@ -9,13 +9,17 @@ import UIKit
 public struct CookingModeView: View {
     @State private var session: CookingSession
     @State private var isFlashing = false
+    @State private var showsIngredients = false
     @AccessibilityFocusState private var focusedStep: Int?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.timersFlashAndVibrate) private var flashesAndVibrates
+    private let ingredients: [Ingredient]
 
     /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step.
     public init(recipe: Recipe, ingredients: [Ingredient]) {
         _session = State(initialValue: CookingSession(recipe: recipe, ingredients: ingredients))
+        self.ingredients = ingredients
     }
 
     public var body: some View {
@@ -42,7 +46,12 @@ public struct CookingModeView: View {
                     .accessibilityHidden(true)
             }
         }
-        .sensoryFeedback(.success, trigger: session.finishCount)
+        .sensoryFeedback(.success, trigger: session.finishCount) { _, _ in flashesAndVibrates }
+        .sheet(isPresented: $showsIngredients) {
+            IngredientsSheet(ingredients: ingredients)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
         .task(id: session.finishCount) { await announceFinish() }
         .task(id: session.stepIndex) {
             try? await Task.sleep(for: .milliseconds(250))
@@ -63,15 +72,39 @@ public struct CookingModeView: View {
     }
 
     private var header: some View {
-        HStack {
-            if !session.steps.isEmpty {
-                Text(RecipesCopy.stepPosition(session.stepIndex + 1, of: session.steps.count))
-                    .stamp()
-                    .foregroundStyle(LarderColor.ink.secondary)
+        VStack(alignment: .leading, spacing: LarderSpacing.s) {
+            HStack(spacing: LarderSpacing.m) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(LarderFont.body(.body, weight: .semibold))
+                        .frame(width: 44, height: 44)
+                        .background(LarderColor.surface.sunken, in: Circle())
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(LarderColor.ink.primary)
+                .accessibilityLabel(RecipesCopy.close)
+                if !session.steps.isEmpty {
+                    Text(RecipesCopy.stepPosition(session.stepIndex + 1, of: session.steps.count))
+                        .font(LarderFont.body(.subheadline, weight: .semibold))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                }
+                Spacer(minLength: 0)
+                if !ingredients.isEmpty {
+                    Button {
+                        showsIngredients = true
+                    } label: {
+                        Label(RecipesCopy.ingredients, systemImage: "list.bullet")
+                    }
+                    .buttonStyle(.larderSecondary)
+                }
             }
-            Spacer()
-            Button(RecipesCopy.close) { dismiss() }
-                .buttonStyle(.larderQuiet)
+            if session.steps.count > 1 {
+                ProgressView(value: Double(session.stepIndex + 1), total: Double(session.steps.count))
+                    .tint(LarderColor.accent.brand)
+                    .accessibilityHidden(true)
+            }
         }
         .padding(.horizontal, LarderSpacing.l)
         .padding(.top, LarderSpacing.s)
@@ -146,7 +179,7 @@ public struct CookingModeView: View {
     private func announceFinish() async {
         guard session.finishCount > 0 else { return }
         AccessibilityNotification.Announcement(RecipesCopy.timerDone).post()
-        guard !reduceMotion else { return }
+        guard flashesAndVibrates, !reduceMotion else { return }
         isFlashing = true
         try? await Task.sleep(for: .seconds(1))
         if !Task.isCancelled { isFlashing = false }
@@ -156,6 +189,46 @@ public struct CookingModeView: View {
         #if os(iOS)
         UIApplication.shared.isIdleTimerDisabled = awake
         #endif
+    }
+}
+
+/// Every ingredient at the chosen servings, to glance at without leaving the step; tap to tick one off.
+private struct IngredientsSheet: View {
+    let ingredients: [Ingredient]
+    @State private var ticked: Set<IngredientID> = []
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List(ingredients) { ingredient in
+                Button {
+                    ticked.formSymmetricDifference([ingredient.id])
+                } label: {
+                    Label {
+                        Text(ingredient.rawText)
+                            .strikethrough(ticked.contains(ingredient.id))
+                            .foregroundStyle(ticked.contains(ingredient.id) ? LarderColor.ink.secondary : LarderColor.ink.primary)
+                    } icon: {
+                        Image(systemName: ticked.contains(ingredient.id) ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(ticked.contains(ingredient.id) ? LarderColor.accent.second : LarderColor.ink.tertiary)
+                    }
+                    .font(LarderFont.body(.title3))
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(ticked.contains(ingredient.id) ? .isSelected : [])
+                .listRowBackground(LarderColor.surface.raised)
+            }
+            .larderList()
+            .navigationTitle(RecipesCopy.ingredients)
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(RecipesCopy.done) { dismiss() }
+                }
+            }
+        }
     }
 }
 
@@ -173,14 +246,22 @@ private struct StepPage: View {
         ScrollView {
             VStack(alignment: .leading, spacing: LarderSpacing.l) {
                 if let summary {
-                    Text(summary)
-                        .font(LarderFont.body(.subheadline))
-                        .foregroundStyle(LarderColor.ink.secondary)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
+                    Label {
+                        Text(summary)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } icon: {
+                        Image(systemName: "basket")
+                            .foregroundStyle(LarderColor.accent.second)
+                    }
+                    .font(LarderFont.body(.body))
+                    .foregroundStyle(LarderColor.ink.secondary)
+                    .padding(LarderSpacing.m)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(LarderColor.surface.raised, in: RoundedRectangle(cornerRadius: LarderRadius.card, style: .continuous))
                 }
                 Text(step.text)
-                    .font(LarderFont.body(.title2))
+                    .font(LarderFont.display(.title2))
                     .foregroundStyle(LarderColor.ink.primary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)

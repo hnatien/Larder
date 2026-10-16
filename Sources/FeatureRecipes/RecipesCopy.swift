@@ -5,14 +5,25 @@ import LarderDesign
 /// Words used by the recipes screens that the shared design copy does not cover.
 nonisolated enum RecipesCopy {
     static var searchPrompt: String { String(localized: "Search recipes", bundle: Copy.bundle) }
+    static var subtitle: String { String(localized: "Cook from the library or import your own", bundle: Copy.bundle) }
     static var importRecipe: String { String(localized: "Import a recipe", bundle: Copy.bundle) }
     static var loading: String { String(localized: "Loading recipes", bundle: Copy.bundle) }
     static var clearFilters: String { String(localized: "Clear filters", bundle: Copy.bundle) }
     static var quickFilter: String { String(localized: "30 min or less", bundle: Copy.bundle) }
+    static var cuisine: String { String(localized: "Cuisine", bundle: Copy.bundle) }
+    static var anyCuisine: String { String(localized: "Any cuisine", bundle: Copy.bundle) }
+    static var addToPlan: String { String(localized: "Add to plan", bundle: Copy.bundle) }
+    static var addToPlanQuestion: String { String(localized: "Which day?", bundle: Copy.bundle) }
+    static func addedTo(_ day: String) -> String { String(localized: "Added to \(day)", bundle: Copy.bundle) }
+    static var couldNotAdd: String { String(localized: "Couldn't add that to the plan. Try again.", bundle: Copy.bundle) }
+    static var more: String { String(localized: "More", bundle: Copy.bundle) }
+    static var ingredientsHint: String { String(localized: "Tap an ingredient to tick it off.", bundle: Copy.bundle) }
+    static var today: String { String(localized: "Today", bundle: Copy.bundle) }
+    static var tomorrow: String { String(localized: "Tomorrow", bundle: Copy.bundle) }
 
     static var emptyLibraryTitle: String { String(localized: "No recipes yet", bundle: Copy.bundle) }
     static var emptyLibraryMessage: String {
-        String(localized: "Import one from a web page and it will wait here, ready to cook.", bundle: Copy.bundle)
+        String(localized: "Import one from a web page with the + button and it will wait here, ready to cook.", bundle: Copy.bundle)
     }
     static var noResultsTitle: String { String(localized: "No matches", bundle: Copy.bundle) }
     static var noResultsMessage: String {
@@ -64,7 +75,6 @@ nonisolated enum RecipesCopy {
     static var method: String { String(localized: "Method", bundle: Copy.bundle) }
     static var optional: String { String(localized: "optional", bundle: Copy.bundle) }
     static var startCooking: String { String(localized: "Start cooking", bundle: Copy.bundle) }
-    static var addToLedger: String { String(localized: "Add to Ledger", bundle: Copy.bundle) }
     static var deleteRecipe: String { String(localized: "Delete recipe", bundle: Copy.bundle) }
     static var deleteQuestion: String { String(localized: "Delete this recipe?", bundle: Copy.bundle) }
     static var deleteMessage: String { String(localized: "It will be removed from this device.", bundle: Copy.bundle) }
@@ -96,6 +106,7 @@ nonisolated enum RecipesCopy {
     static var next: String { String(localized: "Next", bundle: Copy.bundle) }
     static var finish: String { String(localized: "Finish", bundle: Copy.bundle) }
     static var close: String { String(localized: "Close", bundle: Copy.bundle) }
+    static var done: String { String(localized: "Done", bundle: Copy.bundle) }
     static var noSteps: String { String(localized: "This recipe has no steps to follow.", bundle: Copy.bundle) }
     static var stepsRotor: String { String(localized: "Steps", bundle: Copy.bundle) }
     static var start: String { String(localized: "Start", bundle: Copy.bundle) }
@@ -135,13 +146,13 @@ nonisolated enum RecipesCopy {
         case .notAWebPage:
             String(localized: "That address is not a web page Larder can read.", bundle: Copy.bundle)
         case .noStructuredRecipe:
-            String(localized: "This page has no recipe Larder can read on its own. You can paste the recipe in yourself, or Larder Plus can read pages without structured data.", bundle: Copy.bundle)
+            String(localized: "This page has no recipe Larder can read on its own. With Larder Plus, the assistant can read pages like this one.", bundle: Copy.bundle)
         case .saveFailed:
             String(localized: "Couldn't save that recipe. Try again.", bundle: Copy.bundle)
         case .assistantFailed(.plusRequired):
             String(localized: "Reading this page needs Larder Plus.", bundle: Copy.bundle)
         case .assistantFailed(.consentRequired):
-            String(localized: "Allow AI processing before the assistant reads a page.", bundle: Copy.bundle)
+            String(localized: "Turn on AI help in Settings before the assistant reads a page.", bundle: Copy.bundle)
         case .assistantFailed(.declined):
             String(localized: "The assistant would not read this page.", bundle: Copy.bundle)
         case .assistantFailed:

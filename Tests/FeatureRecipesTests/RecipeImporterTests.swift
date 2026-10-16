@@ -305,7 +305,8 @@ struct RecipeImporterTests {
             #expect(!message.contains("!"))
             #expect(!message.contains("\u{2014}"))
         }
-        #expect(RecipesCopy.message(for: .noStructuredRecipe).contains("paste"))
+        // There is no paste-the-text path, so the message must not offer one.
+        #expect(!RecipesCopy.message(for: .noStructuredRecipe).contains("paste"))
         #expect(RecipesCopy.message(for: .noStructuredRecipe).contains("Plus"))
     }
 }

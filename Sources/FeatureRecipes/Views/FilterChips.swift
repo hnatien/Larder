@@ -2,66 +2,64 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// A row of toggle chips for meal type, diet, time and cuisine. Selection is shown by a checkmark as well as colour.
+/// One scrolling row of filter chips: quick, meal types, diets, then a cuisine menu. Selection shows by a check as
+/// well as colour.
 struct FilterChips: View {
     @Bindable var model: RecipesModel
+    @Environment(\.displayScale) private var displayScale
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: LarderSpacing.s) {
+                ChoiceChip(RecipesCopy.quickFilter, systemImage: "bolt", isSelected: model.filters.maxMinutes == 30) {
+                    model.filters.maxMinutes = model.filters.maxMinutes == 30 ? nil : 30
+                }
                 ForEach(MealType.allCases, id: \.self) { mealType in
-                    FilterChip(title: RecipesCopy.name(of: mealType), isOn: model.filters.mealTypes.contains(mealType)) {
+                    ChoiceChip(RecipesCopy.name(of: mealType), isSelected: model.filters.mealTypes.contains(mealType)) {
                         model.filters.mealTypes.formSymmetricDifference([mealType])
                     }
                 }
                 ForEach(DietPattern.allCases, id: \.self) { diet in
-                    FilterChip(title: RecipesCopy.name(of: diet), isOn: model.filters.dietFlags.contains(diet)) {
+                    ChoiceChip(RecipesCopy.name(of: diet), isSelected: model.filters.dietFlags.contains(diet)) {
                         model.filters.dietFlags.formSymmetricDifference([diet])
                     }
                 }
-                FilterChip(title: RecipesCopy.quickFilter, isOn: model.filters.maxMinutes == 30) {
-                    model.filters.maxMinutes = model.filters.maxMinutes == 30 ? nil : 30
-                }
-                ForEach(model.cuisines, id: \.self) { cuisine in
-                    FilterChip(title: cuisine, isOn: model.filters.cuisine == cuisine) {
-                        model.filters.cuisine = model.filters.cuisine == cuisine ? nil : cuisine
-                    }
+                if !model.cuisines.isEmpty {
+                    cuisineMenu
                 }
             }
             .padding(.horizontal, LarderSpacing.l)
+            .padding(.vertical, LarderSpacing.xxs)
         }
     }
-}
 
-/// One toggle chip.
-struct FilterChip: View {
-    let title: String
-    let isOn: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
+    private var cuisineMenu: some View {
+        Menu {
+            Picker(RecipesCopy.cuisine, selection: $model.filters.cuisine) {
+                Text(RecipesCopy.anyCuisine).tag(String?.none)
+                ForEach(model.cuisines, id: \.self) { Text($0).tag(String?.some($0)) }
+            }
+        } label: {
             HStack(spacing: LarderSpacing.xs) {
-                if isOn {
-                    Image(systemName: "checkmark")
-                        .accessibilityHidden(true)
-                }
-                Text(title)
+                Text(model.filters.cuisine ?? RecipesCopy.cuisine)
+                Image(systemName: "chevron.down")
+                    .font(LarderFont.body(.caption, weight: .semibold))
+                    .accessibilityHidden(true)
             }
-            .font(LarderFont.body(.subheadline, weight: .medium))
-            .foregroundStyle(isOn ? LarderColor.ink.onAccent : LarderColor.ink.primary)
-            .padding(.horizontal, LarderSpacing.m)
-            .padding(.vertical, LarderSpacing.s)
+            .font(LarderFont.body(.body, weight: model.filters.cuisine == nil ? .regular : .semibold))
+            .foregroundStyle(model.filters.cuisine == nil ? LarderColor.ink.primary : LarderColor.ink.onAccent)
+            .padding(.horizontal, LarderSpacing.l)
+            .padding(.vertical, LarderSpacing.s + LarderSpacing.xxs)
             .frame(minHeight: 44)
-            .background(isOn ? LarderColor.accent.second : LarderColor.surface.sunken, in: RoundedRectangle(cornerRadius: LarderRadius.field))
+            .background(model.filters.cuisine == nil ? LarderColor.surface.raised : LarderColor.accent.brand, in: Capsule())
             .overlay {
-                RoundedRectangle(cornerRadius: LarderRadius.field)
-                    .strokeBorder(LarderColor.line.strong, lineWidth: 1)
+                if model.filters.cuisine == nil {
+                    Capsule().strokeBorder(LarderColor.line.strong, lineWidth: 1 / displayScale)
+                }
             }
-            .contentShape(RoundedRectangle(cornerRadius: LarderRadius.field))
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isOn ? .isSelected : [])
+        .accessibilityLabel(RecipesCopy.cuisine)
+        .accessibilityValue(model.filters.cuisine ?? RecipesCopy.anyCuisine)
     }
 }
 
@@ -70,14 +68,5 @@ struct FilterChip: View {
     FilterChips(model: PreviewData.model())
         .padding(.vertical, LarderSpacing.l)
         .background(LarderColor.surface.canvas)
-}
-
-#Preview("FilterChip selected") {
-    HStack {
-        FilterChip(title: "Vegan", isOn: true) {}
-        FilterChip(title: "Dinner", isOn: false) {}
-    }
-    .padding(LarderSpacing.l)
-    .background(LarderColor.surface.canvas)
 }
 #endif
