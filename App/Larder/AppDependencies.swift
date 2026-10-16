@@ -21,6 +21,8 @@ nonisolated struct LaunchOptions: Sendable {
     var isUITest: Bool
     /// `-LarderUITestOnboarding`: in UI-test mode, leave the profile out so onboarding shows.
     var showsOnboarding: Bool
+    /// `-LarderUITestEmptyPantry`: in UI-test mode, leave the shelves empty so the first-run empty states show.
+    var startsWithEmptyPantry: Bool
     /// `-AppleInterfaceStyle Dark`: in UI-test mode, render dark, since iOS ignores that argument on its own.
     var forcesDarkAppearance: Bool
 
@@ -31,6 +33,7 @@ nonisolated struct LaunchOptions: Sendable {
         return LaunchOptions(
             isUITest: isUITest,
             showsOnboarding: isUITest && arguments.contains("-LarderUITestOnboarding"),
+            startsWithEmptyPantry: isUITest && arguments.contains("-LarderUITestEmptyPantry"),
             forcesDarkAppearance: isUITest && UserDefaults.standard.string(forKey: "AppleInterfaceStyle") == "Dark"
         )
     }
@@ -272,18 +275,19 @@ final class AppDependencies {
         await snapshots.write()
     }
 
-    /// Puts `recipe` on today's dinner, replacing whatever was there, and reloads the Ledger.
-    func addToTonight(_ recipe: Recipe) async throws {
+    /// Puts `recipe` on `day`'s dinner, replacing whatever was there, and reloads Tonight and the Plan.
+    func addToPlan(_ recipe: Recipe, on day: Date) async throws {
         guard let profile = try await profiles.profile() else { throw LarderError.notFound }
         let catalogue = try await planning.catalogue(for: [recipe.id])
         guard let candidate = catalogue.candidates.first else { throw LarderError.notFound }
         let context = planning.context(for: profile, pantry: try await pantry.items(), recentPlans: [], catalogue: catalogue)
-        await tonight.cookTonight(RecipeScorer.score(candidate, context: context))
+        await tonight.schedule(RecipeScorer.score(candidate, context: context), on: day)
         if let error = tonight.error {
             tonight.clearError()
             throw error
         }
         await ledger.load()
+        await grocery.load()
     }
 
     /// Erases the store, reloads the seed library and returns to onboarding.
@@ -299,7 +303,8 @@ final class AppDependencies {
 
     // MARK: UI-test fixtures
 
-    /// Eight shelf items so Tonight has ideas, plus a saved profile unless the test wants onboarding.
+    /// Eight shelf items so Tonight has ideas unless the test wants an empty pantry, plus a saved profile unless the
+    /// test wants onboarding.
     private func installUITestFixtures() async throws {
         let now = dates.now
         let calendar = Calendar.current
@@ -314,7 +319,7 @@ final class AppDependencies {
             ("white-rice", "Rice", 1000, .pantry, inDays(365)),
             ("olive-oil", "Olive oil", 500, .pantry, inDays(365)),
         ]
-        for item in shelf {
+        for item in shelf where !launch.startsWithEmptyPantry {
             try await pantry.upsert(PantryItem(
                 foodID: DeterministicID.foodID(slug: item.slug),
                 rawName: item.name,
