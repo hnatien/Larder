@@ -33,6 +33,12 @@ enum ShelvesCopy {
     static var unit: String { String(localized: "Unit", bundle: Copy.bundle) }
     static var location: String { String(localized: "Kept in", bundle: Copy.bundle) }
     static var bestBy: String { String(localized: "Best by", bundle: Copy.bundle) }
+    static var chooseDate: String { String(localized: "Choose a date", bundle: Copy.bundle) }
+    static var noDate: String { String(localized: "No date", bundle: Copy.bundle) }
+    static var inThreeDays: String { String(localized: "In 3 days", bundle: Copy.bundle) }
+    static var inAWeek: String { String(localized: "In a week", bundle: Copy.bundle) }
+    static var inTwoWeeks: String { String(localized: "In 2 weeks", bundle: Copy.bundle) }
+    static var inAMonth: String { String(localized: "In a month", bundle: Copy.bundle) }
 
     /// Common foods for the Quick add chips.
     static var staples: [Staple] {

@@ -818,6 +818,17 @@
         }
       }
     },
+    "Choose a date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a date"
+          }
+        }
+      }
+    },
     "Choose a dinner": {
       "extractionState": "manual",
       "localizations": {
@@ -2051,6 +2062,50 @@
         }
       }
     },
+    "In 2 weeks": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In 2 weeks"
+          }
+        }
+      }
+    },
+    "In 3 days": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In 3 days"
+          }
+        }
+      }
+    },
+    "In a month": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In a month"
+          }
+        }
+      }
+    },
+    "In a week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In a week"
+          }
+        }
+      }
+    },
     "Ingredients": {
       "extractionState": "manual",
       "localizations": {
@@ -2553,6 +2608,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No beef"
+          }
+        }
+      }
+    },
+    "No date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No date"
           }
         }
       }
