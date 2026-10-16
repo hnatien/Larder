@@ -10,8 +10,8 @@ public enum LarderFont {
         let weight: Font.Weight
     }
 
-    /// Commit Mono 400 Regular.
-    static let monoPostScriptName = "CommitMono-400Regular"
+    /// Commit Mono 400 Regular, shipped unmodified as `CommitMono-400-Regular.otf`.
+    static let monoPostScriptName = "CommitMono-Regular"
     /// Tracking for stamps, in em.
     static let stampTracking: CGFloat = 0.04
 

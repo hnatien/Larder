@@ -89,7 +89,7 @@ struct TypographyTests {
     }
 
     @Test func monoUsesCommitMonoRegular() {
-        #expect(LarderFont.monoPostScriptName == "CommitMono-400Regular")
+        #expect(LarderFont.monoPostScriptName == "CommitMono-Regular")
     }
 
     @Test func stampTrackingIsFourHundredthsOfAnEm() {
