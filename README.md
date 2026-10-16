@@ -49,3 +49,9 @@ UI tests launch the app with `-LarderUITestMode`: an in-memory store with the se
 | `docs/screenshots/` | Screenshots from `Scripts/screenshots.sh` |
 | `docs/BLUEPRINT.md` | Every architectural decision; read this first |
 | `docs/research/` | The research reports behind the blueprint |
+| `Tools/` | Seed validator, FDC importer and its mapping, font naming helper |
+
+## Data and font credits
+
+- Nutrient data: USDA FoodData Central, Foundation Foods (April 2026) and SR Legacy (April 2018), public domain (CC0).
+- Fraunces (Undercase Type) and Commit Mono (Eigil Nikolajsen), SIL Open Font License 1.1; licences sit next to the fonts in `Sources/LarderDesign/Resources/Fonts/`.

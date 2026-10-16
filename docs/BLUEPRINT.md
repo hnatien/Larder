@@ -111,9 +111,9 @@ Larder/
   App/
     Larder/                        app entry, tabs, dependency container, App Intents
     LarderWidgets/                 today widget
-    Resources/                     Assets.xcassets (colour sets), fonts, seed data, Larder.storekit
+    Resources/                     Assets.xcassets (colour sets), seed data, Larder.storekit (fonts live in Sources/LarderDesign/Resources/Fonts)
   Server/larder-proxy/             Cloudflare Worker (TypeScript)
-  Tools/                           fdc-import, recipe validator CLI
+  Tools/                           import-fdc.py + fdc-mapping.json, validate-seed.py, name-fraunces-statics.py
   Scripts/                         test-packages.sh, generate.sh, lint.sh
   docs/
 ```
