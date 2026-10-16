@@ -27,6 +27,10 @@ targets:
       properties:
         # Placeholder until the proxy is deployed; point it at your own Worker for development.
         LarderProxyBaseURL: https://proxy.larder.app
+        # The paper canvas and the jar mark while the first frame loads.
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchMark
     entitlements:
       path: App/Larder/Larder.entitlements
       properties:
@@ -64,7 +68,8 @@ targets:
         SWIFT_APPROACHABLE_CONCURRENCY: "YES"
         GENERATE_INFOPLIST_FILE: "YES"
         ENABLE_USER_SCRIPT_SANDBOXING: "YES"
-        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: >-
           UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown
@@ -74,7 +79,7 @@ targets:
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: >-
           Larder saves the nutrients of meals you mark as cooked to Health. It only writes what you log.
         INFOPLIST_KEY_NSCameraUsageDescription: >-
-          Larder uses the camera to scan barcodes and receipts so you can add food to your shelves. Images stay on this device.
+          Larder uses the camera to scan barcodes and receipts so you can add food to your pantry. Images stay on this device.
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
   LarderWidgets:
