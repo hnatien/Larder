@@ -5,7 +5,8 @@ import SwiftUI
 import UIKit
 #endif
 
-/// Cooking mode: one step per screen, large Back and Next buttons, named timers, and the screen kept awake.
+/// Cooking mode: one step per screen, large Back and Next buttons, named timers that notify when they end in the
+/// background, and the screen kept awake.
 public struct CookingModeView: View {
     @State private var session: CookingSession
     @State private var isFlashing = false
@@ -18,7 +19,9 @@ public struct CookingModeView: View {
 
     /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step.
     public init(recipe: Recipe, ingredients: [Ingredient]) {
-        _session = State(initialValue: CookingSession(recipe: recipe, ingredients: ingredients))
+        _session = State(initialValue: CookingSession(
+            recipe: recipe, ingredients: ingredients, notifications: SystemTimerNotifications()
+        ))
         self.ingredients = ingredients
     }
 
@@ -52,6 +55,17 @@ public struct CookingModeView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
+        .alert(RecipesCopy.timerNotificationsTitle, isPresented: $session.asksForNotificationPermission) {
+            Button(RecipesCopy.continueAction) {
+                Task { await session.requestNotificationPermission() }
+            }
+        } message: {
+            Text(RecipesCopy.timerNotificationsReason)
+        }
+        .onChange(of: flashesAndVibrates, initial: true) { _, playsSound in
+            session.notificationsPlaySound = playsSound
+        }
+        .task { await session.refreshNotificationPermission() }
         .task(id: session.finishCount) { await announceFinish() }
         .task(id: session.stepIndex) {
             try? await Task.sleep(for: .milliseconds(250))

@@ -17,6 +17,10 @@ public final class TimerModel {
     public private(set) var state = State.idle
     /// Called once each time the countdown reaches zero.
     public var onFinish: (() -> Void)?
+    /// Called when the countdown starts or resumes, with the seconds left.
+    public var onRun: ((Int) -> Void)?
+    /// Called when a running countdown stops: paused, reset or finished.
+    public var onHalt: (() -> Void)?
 
     private let clock: any Clock<Duration>
     private var countdown: Task<Void, Never>?
@@ -36,6 +40,7 @@ public final class TimerModel {
         countdown = Task { [weak self] in
             await self?.tickDown()
         }
+        onRun?(remainingSeconds)
     }
 
     /// Stops the countdown and keeps the time left.
@@ -44,20 +49,24 @@ public final class TimerModel {
         countdown?.cancel()
         countdown = nil
         state = .paused
+        onHalt?()
     }
 
     /// Stops the countdown and returns to the full time.
     public func reset() {
+        let wasRunning = state == .running
         countdown?.cancel()
         countdown = nil
         remainingSeconds = totalSeconds
         state = .idle
+        if wasRunning { onHalt?() }
     }
 
     private func finish() {
         countdown = nil
         remainingSeconds = 0
         state = .finished
+        onHalt?()
         onFinish?()
     }
 

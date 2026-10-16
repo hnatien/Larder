@@ -180,6 +180,45 @@ enum Sample {
     }
 }
 
+/// Records the timer notifications a cooking session schedules and cancels.
+@MainActor
+final class FakeTimerNotifications: TimerNotifying {
+    struct Scheduled: Equatable {
+        var id: String
+        var title: String
+        var body: String
+        var seconds: Int
+        var playsSound: Bool
+    }
+
+    var currentPermission: TimerNotificationPermission
+    var grantsPermission: Bool
+    private(set) var requestCount = 0
+    private(set) var scheduled: [Scheduled] = []
+    private(set) var cancelled: [String] = []
+
+    init(permission: TimerNotificationPermission = .allowed, grantsPermission: Bool = true) {
+        currentPermission = permission
+        self.grantsPermission = grantsPermission
+    }
+
+    func permission() async -> TimerNotificationPermission { currentPermission }
+
+    func requestPermission() async -> Bool {
+        requestCount += 1
+        currentPermission = grantsPermission ? .allowed : .denied
+        return grantsPermission
+    }
+
+    func schedule(id: String, title: String, body: String, after seconds: Int, playsSound: Bool) {
+        scheduled.append(Scheduled(id: id, title: title, body: body, seconds: seconds, playsSound: playsSound))
+    }
+
+    func cancel(id: String) {
+        cancelled.append(id)
+    }
+}
+
 /// Image bytes made on the spot, so photo tests need no fixture files.
 enum TestImage {
     /// A PNG of a flat colour, `width` by `height` pixels.

@@ -115,6 +115,16 @@ nonisolated enum RecipesCopy {
     static var reset: String { String(localized: "Reset", bundle: Copy.bundle) }
     static var timerDone: String { String(localized: "Timer done", bundle: Copy.bundle) }
     static var timerPaused: String { String(localized: "Paused", bundle: Copy.bundle) }
+    /// The body of the notification for a timer that ended in the background.
+    static func timerEnded(step: Int) -> String {
+        String(localized: "Step \(step) timer is done.", bundle: Copy.bundle)
+    }
+    static var timerNotificationsTitle: String { String(localized: "Timer notifications", bundle: Copy.bundle) }
+    /// The one reason given before the system asks to allow notifications.
+    static var timerNotificationsReason: String {
+        String(localized: "Larder can tell you when a timer ends while you are in another app.", bundle: Copy.bundle)
+    }
+    static var continueAction: String { String(localized: "Continue", bundle: Copy.bundle) }
     /// A timer button's spoken name, such as "Start Step 2 timer".
     static func timerAction(_ action: String, name: String) -> String {
         String(localized: "\(action) \(name)", bundle: Copy.bundle)

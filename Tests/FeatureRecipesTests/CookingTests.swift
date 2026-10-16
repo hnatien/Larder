@@ -1,3 +1,4 @@
+import Foundation
 import LarderCore
 import Testing
 @testable import FeatureRecipes
@@ -141,7 +142,7 @@ struct CookingSessionTests {
     }
 
     @Test func createsTimersOnlyForStepsWithTimerSeconds() {
-        let session = CookingSession(recipe: recipe, ingredients: ingredients, clock: ManualClock())
+        let session = CookingSession(recipe: recipe, ingredients: ingredients, notifications: FakeTimerNotifications(), clock: ManualClock())
         #expect(session.timer(forStep: 0) == nil)
         #expect(session.timer(forStep: 1)?.totalSeconds == 900)
         #expect(session.timer(forStep: 2)?.totalSeconds == 2)
@@ -150,7 +151,7 @@ struct CookingSessionTests {
     }
 
     @Test func navigationStaysWithinTheSteps() {
-        let session = CookingSession(recipe: recipe, ingredients: [], clock: ManualClock())
+        let session = CookingSession(recipe: recipe, ingredients: [], notifications: FakeTimerNotifications(), clock: ManualClock())
         #expect(session.isFirst)
         session.back()
         #expect(session.stepIndex == 0)
@@ -168,14 +169,14 @@ struct CookingSessionTests {
 
     @Test func emptyRecipeHasNoStepsToVisit() {
         let empty = Recipe(title: "Empty", origin: .generated, servings: 1, prepMinutes: 0, cookMinutes: 0)
-        let session = CookingSession(recipe: empty, ingredients: [], clock: ManualClock())
+        let session = CookingSession(recipe: empty, ingredients: [], notifications: FakeTimerNotifications(), clock: ManualClock())
         session.next()
         #expect(session.stepIndex == 0)
         #expect(session.ingredientSummary(forStep: 0) == nil)
     }
 
     @Test func timersOnOtherStepsStayVisibleOnceStarted() {
-        let session = CookingSession(recipe: recipe, ingredients: [], clock: ManualClock())
+        let session = CookingSession(recipe: recipe, ingredients: [], notifications: FakeTimerNotifications(), clock: ManualClock())
         #expect(session.otherActiveTimers.isEmpty)
         session.timer(forStep: 1)?.start()
         session.go(to: 0)
@@ -187,7 +188,7 @@ struct CookingSessionTests {
 
     @Test func finishedTimerBumpsTheFinishCount() async {
         let clock = ManualClock()
-        let session = CookingSession(recipe: recipe, ingredients: [], clock: clock)
+        let session = CookingSession(recipe: recipe, ingredients: [], notifications: FakeTimerNotifications(), clock: clock)
         session.timer(forStep: 2)?.start()
         for _ in 0..<2 {
             await settle()
@@ -199,7 +200,7 @@ struct CookingSessionTests {
 
     @Test func stopTimersResetsRunningOnes() async {
         let clock = ManualClock()
-        let session = CookingSession(recipe: recipe, ingredients: [], clock: clock)
+        let session = CookingSession(recipe: recipe, ingredients: [], notifications: FakeTimerNotifications(), clock: clock)
         let timer = session.timer(forStep: 1)
         timer?.start()
         await settle()
@@ -210,7 +211,7 @@ struct CookingSessionTests {
     }
 
     @Test func summaryNamesTheIngredientsInTheStep() {
-        let session = CookingSession(recipe: recipe, ingredients: ingredients, clock: ManualClock())
+        let session = CookingSession(recipe: recipe, ingredients: ingredients, notifications: FakeTimerNotifications(), clock: ManualClock())
         #expect(session.ingredientSummary(forStep: 0) == "2 tbsp olive oil; 2 cloves garlic, minced")
         #expect(session.ingredientSummary(forStep: 1) == "1 (400 g) can chickpeas, drained")
         #expect(session.ingredientSummary(forStep: 3) == nil)
@@ -286,5 +287,164 @@ struct RecipeFiltersTests {
         let recipe = Sample.recipe("Timed", prep: 10, cook: 20)
         #expect(RecipeFilters(maxMinutes: 30).matches(recipe))
         #expect(!RecipeFilters(maxMinutes: 29).matches(recipe))
+    }
+}
+
+@MainActor
+struct TimerNotificationTests {
+    private let recipe = Recipe(
+        title: "Chana masala", origin: .generated, servings: 4, prepMinutes: 10, cookMinutes: 25,
+        steps: [
+            RecipeStep(text: "Warm the oil and fry the garlic."),
+            RecipeStep(text: "Add the chickpeas and simmer for 15 minutes.", timerSeconds: 900),
+            RecipeStep(text: "Boil the rice for 2 minutes.", timerSeconds: 2),
+        ]
+    )
+
+    private func session(
+        _ notifications: FakeTimerNotifications,
+        clock: ManualClock = ManualClock()
+    ) -> CookingSession {
+        CookingSession(recipe: recipe, ingredients: [], notifications: notifications, clock: clock)
+    }
+
+    private func tick(_ clock: ManualClock, seconds: Int) async {
+        for _ in 0..<seconds {
+            await settle()
+            clock.advance(by: .seconds(1))
+        }
+        await settle()
+    }
+
+    @Test func startingATimerSchedulesItsNotificationForTheTimeLeft() async {
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications)
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 1)?.start()
+        #expect(notifications.scheduled == [.init(
+            id: session.notificationID(forStep: 1),
+            title: "Chana masala",
+            body: "Step 2 timer is done.",
+            seconds: 900,
+            playsSound: true
+        )])
+        #expect(!session.asksForNotificationPermission)
+        session.stopTimers()
+    }
+
+    @Test func pauseCancelsAndResumeSchedulesWhatIsLeft() async {
+        let clock = ManualClock()
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications, clock: clock)
+        await session.refreshNotificationPermission()
+        let timer = session.timer(forStep: 1)
+        timer?.start()
+        await tick(clock, seconds: 1)
+        timer?.pause()
+        #expect(notifications.cancelled == [session.notificationID(forStep: 1)])
+        timer?.start()
+        #expect(notifications.scheduled.map(\.seconds) == [900, 899])
+        timer?.reset()
+        #expect(notifications.cancelled == Array(repeating: session.notificationID(forStep: 1), count: 2))
+    }
+
+    @Test func aFinishedTimerCancelsItsNotification() async {
+        let clock = ManualClock()
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications, clock: clock)
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 2)?.start()
+        await tick(clock, seconds: 2)
+        #expect(session.timer(forStep: 2)?.state == .finished)
+        #expect(notifications.cancelled == [session.notificationID(forStep: 2)])
+    }
+
+    @Test func closingCookingModeCancelsOnlyRunningTimers() async {
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications)
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 2)?.start()
+        session.stopTimers()
+        #expect(notifications.cancelled == [session.notificationID(forStep: 2)])
+    }
+
+    @Test func eachStepHasItsOwnNotification() {
+        let session = session(FakeTimerNotifications())
+        #expect(session.notificationID(forStep: 1) != session.notificationID(forStep: 2))
+        #expect(session.notificationID(forStep: 1).contains(recipe.id.rawValue.uuidString))
+    }
+
+    @Test func theNotificationIsSilentWhenTimersDoNotFlashAndVibrate() async {
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications)
+        session.notificationsPlaySound = false
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 1)?.start()
+        #expect(notifications.scheduled.map(\.playsSound) == [false])
+        session.stopTimers()
+    }
+
+    @Test func theFirstTimerAsksForPermissionAndSchedulesOnceAllowed() async {
+        let notifications = FakeTimerNotifications(permission: .undetermined, grantsPermission: true)
+        let session = session(notifications)
+        await session.refreshNotificationPermission()
+        #expect(!session.asksForNotificationPermission)
+        session.timer(forStep: 1)?.start()
+        #expect(session.asksForNotificationPermission)
+        #expect(notifications.scheduled.isEmpty)
+        #expect(notifications.requestCount == 0)
+
+        await session.requestNotificationPermission()
+        #expect(!session.asksForNotificationPermission)
+        #expect(notifications.requestCount == 1)
+        #expect(notifications.scheduled.map(\.id) == [session.notificationID(forStep: 1)])
+
+        session.timer(forStep: 2)?.start()
+        #expect(!session.asksForNotificationPermission)
+        #expect(notifications.scheduled.map(\.id) == [session.notificationID(forStep: 1), session.notificationID(forStep: 2)])
+        session.stopTimers()
+    }
+
+    @Test func declinedPermissionIsNotAskedAgain() async {
+        let notifications = FakeTimerNotifications(permission: .undetermined, grantsPermission: false)
+        let session = session(notifications)
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 1)?.start()
+        await session.requestNotificationPermission()
+        session.timer(forStep: 2)?.start()
+        #expect(!session.asksForNotificationPermission)
+        #expect(notifications.requestCount == 1)
+        #expect(notifications.scheduled.isEmpty)
+        session.stopTimers()
+    }
+
+    @Test func deniedPermissionNeverAsksOrSchedules() async {
+        let notifications = FakeTimerNotifications(permission: .denied)
+        let session = session(notifications)
+        await session.refreshNotificationPermission()
+        session.timer(forStep: 1)?.start()
+        #expect(!session.asksForNotificationPermission)
+        #expect(notifications.scheduled.isEmpty)
+        #expect(notifications.requestCount == 0)
+        session.stopTimers()
+    }
+
+    @Test func aTimerStartedBeforeThePermissionIsReadIsScheduledOnceItIs() async {
+        let notifications = FakeTimerNotifications(permission: .allowed)
+        let session = session(notifications)
+        session.timer(forStep: 1)?.start()
+        #expect(notifications.scheduled.isEmpty)
+        await session.refreshNotificationPermission()
+        #expect(notifications.scheduled.map(\.id) == [session.notificationID(forStep: 1)])
+        session.stopTimers()
+    }
+
+    @Test func aTimerStartedBeforeAnUndeterminedPermissionIsReadAsks() async {
+        let notifications = FakeTimerNotifications(permission: .undetermined)
+        let session = session(notifications)
+        session.timer(forStep: 1)?.start()
+        await session.refreshNotificationPermission()
+        #expect(session.asksForNotificationPermission)
+        session.stopTimers()
     }
 }

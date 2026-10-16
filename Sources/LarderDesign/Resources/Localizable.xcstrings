@@ -2161,6 +2161,17 @@
         }
       }
     },
+    "Larder can tell you when a timer ends while you are in another app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Larder can tell you when a timer ends while you are in another app."
+          }
+        }
+      }
+    },
     "Larder export": {
       "extractionState": "manual",
       "localizations": {
@@ -3800,6 +3811,17 @@
         }
       }
     },
+    "Step %lld timer is done.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %lld timer is done."
+          }
+        }
+      }
+    },
     "Steps": {
       "extractionState": "manual",
       "localizations": {
@@ -4148,6 +4170,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Timer done"
+          }
+        }
+      }
+    },
+    "Timer notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer notifications"
           }
         }
       }
