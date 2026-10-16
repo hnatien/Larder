@@ -11,9 +11,9 @@ Beachhead segments: busy households and people with decision fatigue; budget and
 ## 2. Feature set and free/paid split
 
 Free forever (safety and the Mealime-orphan wedge):
-- Shelves (pantry) with quantities, best-by dates, an "Eat first" shelf, natural-language quick add, barcode scan.
+- Pantry with quantities (counted in pieces when a food has a countable portion), best-by dates, a "Use soon" list, search, an item editor, natural-language quick add with one-tap staples, barcode scan.
 - Recipes: seed corpus, private on-device URL import (schema.org JSON-LD), full-text search, scaled ingredients, cooking mode (one step per screen, named timers, keep awake).
-- Ledger (week plan) with manual planning, swap, skip, slide, leftovers that roll forward.
+- Plan (week plan) with manual planning, add any recipe to any of the next seven days, swap, skip, slide, leftovers that roll forward.
 - Tonight: three pantry-first options (deterministic, offline).
 - Grocery list with quantities and aisles; checked items land on the shelves.
 - Allergen and dietary constraint engine (five axes). Never paywalled.
@@ -122,11 +122,14 @@ Rules: Core compiles and tests on macOS with `swift test`. Nothing in Core impor
 
 ## 7. Design system summary
 
-Idea: a pantry ledger. Paper, ink, stamped labels, a shelf. Not a dashboard.
+Idea: a pantry ledger. Paper, ink, stamped labels, a shelf. Not a dashboard. The identity lives in colour, type and illustration; structure is native iOS (2026-10-17 redesign, from `docs/research/06-ui-ux-audit.md` and `07-meal-planner-ux-best-practices.md`).
 
+- Navigation: five tabs with plain task words, Tonight, Plan, Pantry, Recipes, Groceries (code names stay `ledger`, `shelves`, `grocery`); every tab root has a Fraunces large title, a one-line subtitle saying what the screen is for, Settings at the leading edge and its add or share action as a toolbar button at the trailing edge. No floating action buttons over content.
+- First run: one welcome screen (promise plus four "how it works" rows, one Get started), then three optional questions (allergies, diet and health, household and weeknight time) with a progress bar, Back, Continue and "Set up later". Moving on or leaving early never clears an answer. Goal, equipment, birth year, numbers, timers and AI help live in Settings.
+- Components: capsule buttons (filled brand, brand-tinted, text), capsule choice chips with a check, paper cards with an outline and 18 pt continuous corners, dish tiles in a food-group tint in place of stock photos, icon-and-words meta labels, pill badges, toasts with Undo, centred empty states with an illustration and the screen's main action.
 - Typography: Fraunces (static instances, upright 500-700) for display at 22pt and above, scaling fully with Dynamic Type (an earlier cap at `.accessibility2` was removed because Xcode's accessibility audit flags any capped text and Apple's Larger Text criterion needs at least 200% growth); SF Pro for body and UI; Commit Mono for stamps and quantities. Never italic or light Fraunces, never Inter.
 - Colour tokens (light / dark): canvas #F5F1E6 / #161915, raised #FFFDF7 / #20241E, sunken #EBE5D4 / #10120F, hairline #D6CEB8 / #363B32, strong line #8C8570 / #7C7866, ink primary #1F2620 / #F0ECDD, secondary #4F5448 / #BDBAA8, tertiary #5F6256 / #9A9885, brand paprika #A83F18 / #F0875A, second verdigris #2C6B5B / #6FC0A8, spot mustard #E3A82B (fill only), success #2F6B34 / #8FCB84, warning #8A5700 / #E5B04A, danger beet #9C1F43 / #EE8CA6, info #2F5D7C / #8DB9D8; food groups produce #4A8A3C / #86C46F, grains #B07F1E / #E0AE4A, protein #3E6F8E / #78AECF, dairy #B05A78 / #E48FAE, fats #76772A / #B9BA52, legumes #8A5A3A / #C99572.
-- Shape: radii 2 (stamps), 8 (fields), 12 (cards), 24 (sheets), pill (glass controls). Hairline rules and flat tint steps; no shadows, no nested cards, no gradients, no glow, no emoji, no stock photos.
+- Shape: radii 2 (stamps), 8 (fields), 10 (tiles), 12 (cards and notices), 18 (paper panels), 24 (sheets), capsules for buttons, chips and badges. Hairline rules and flat tint steps; no shadows, no nested cards, no gradients, no glow, no emoji, no stock photos.
 - Motion: 120 / 220 / 360 ms; `.snappy` taps, `.smooth` layout, one `.bouncy` "stamped" save; Reduce Motion swaps to crossfades.
 - Voice: dry, no exclamation marks, no em dashes, no moralising; every recommendation gives a reason and one alternative.
 

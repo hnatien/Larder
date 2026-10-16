@@ -35,9 +35,9 @@ The `Larder` scheme's Run action uses `App/Larder/Resources/Larder.storekit`, so
 | `Scripts/generate.sh` | Generates `Larder.xcodeproj` from `project.yml` |
 | `Scripts/build-app.sh` | Builds the Larder app and widget for the first available iPhone simulator |
 | `Scripts/test-app.sh` | Runs the UI tests on the same simulator: accessibility audits of every tab, Settings and onboarding, an AX3 Dynamic Type pass and the screenshots; extra arguments pass to `xcodebuild`, e.g. `-only-testing:LarderUITests/LarderUITests/testDynamicTypeAX3` |
-| `Scripts/screenshots.sh` | Runs only the screenshot test, writing each tab in light and dark mode to `docs/screenshots/<tab>-<light\|dark>.png` |
+| `Scripts/screenshots.sh` | Runs only the screenshot test, writing every screen (welcome, setup, each tab, empty states, the planned week, meal sheet, recipe detail, cooking, adding and editing food, Settings) in light and dark mode to `docs/screenshots/<screen>-<light\|dark>.png` |
 
-UI tests launch the app with `-LarderUITestMode`: an in-memory store with the seed library, eight shelf items and a saved profile, so nothing touches your simulator's data. Add `-LarderUITestOnboarding` to start at onboarding instead.
+UI tests launch the app with `-LarderUITestMode`: an in-memory store with the seed library, eight pantry items and a saved profile, so nothing touches your simulator's data. Add `-LarderUITestOnboarding` to start at the welcome screen instead, or `-LarderUITestEmptyPantry` to start with nothing in the pantry.
 
 ## Folders
 
