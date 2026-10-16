@@ -15,7 +15,7 @@ preview_id = "11111111111111111111111111111111"
 
 [vars]
 MODEL_FAST = "claude-haiku-5-5"
-MODEL_CAPABLE = "claude-sonnet-5-5"
+MODEL_CAPABLE = "claude-haiku-5-5"
 ALLOW_DEV_ATTESTATION = "false"
 FREE_DAILY_LIMIT = "3"
 PLUS_DAILY_LIMIT = "60"

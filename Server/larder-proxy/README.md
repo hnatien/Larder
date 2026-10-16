@@ -113,7 +113,7 @@ Each route's system prompt is a constant in `src/prompts/` and goes first as the
 
 ## Cost
 
-From `docs/BLUEPRINT.md` section 5, at 30 requests per user-month (about 3k tokens in, 800 out): about $0.02 per user-month on Haiku 5.5 and $0.33-0.42 on Sonnet 5.5. A mixed routing lands near $0.10-0.15 per active user-month, inside the $4.17/month annual price. Routes read their model from `MODEL_FAST` / `MODEL_CAPABLE`, so an eval of about 200 labelled cases per task can move a route without a code change.
+From `docs/BLUEPRINT.md` section 5, at 30 requests per user-month (about 3k tokens in, 800 out): about $0.02 per user-month with every route on Haiku 5.5, well inside the $4.17/month annual price. Both `MODEL_FAST` and `MODEL_CAPABLE` are set to Haiku 5.5; routes read their model from these vars, so an eval of about 200 labelled cases per task can move a route without a code change.
 
 ## Data retention
 

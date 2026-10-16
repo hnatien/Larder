@@ -75,11 +75,11 @@ Answer to "is Haiku 5.5 enough": yes for most of it, because the engine does the
 | Explain a plan or a swap from reason codes | `claude-haiku-5-5` | low | Verbalising structured facts; output dominates cost ($0.10 / $0.50 per MTok) |
 | Parse natural-language pantry entry | On-device Foundation Models, fallback `claude-haiku-5-5` | low | Short extraction with a fixed schema |
 | Tag or normalise ingredients | `claude-haiku-5-5` | low | Classification |
-| Parse a recipe from a photo or messy page | `claude-sonnet-5-5` | medium | Vision plus noisy input; quality differences show here |
-| Conversational adjustments to constraints | `claude-sonnet-5-5` | medium | Multi-constraint reasoning and tone around sensitive conditions |
-| Offline recipe generation (batch, no user data) | `claude-sonnet-5-5` via Batch | medium | 50% off; every recipe passes the deterministic validator |
+| Parse a recipe from a photo or messy page | `claude-haiku-5-5` | medium | Vision plus noisy input; Haiku-only routing keeps cost flat |
+| Conversational adjustments to constraints | `claude-haiku-5-5` | medium | Multi-constraint reasoning and tone around sensitive conditions |
+| Offline recipe generation (batch, no user data) | `claude-haiku-5-5` via Batch | medium | 50% off; every recipe passes the deterministic validator |
 
-Expected cost at 30 requests per user-month (3k in, 800 out): about $0.02 on Haiku 5.5, $0.33-0.42 on Sonnet 5.5. A mixed routing lands near $0.10-0.15 per active user-month, well inside the $4.17/month annual price. Opus is unnecessary. Routes are configurable in the proxy so an eval of about 200 labelled cases per task can move a route up or down.
+Expected cost at 30 requests per user-month (3k in, 800 out): about $0.02 with every route on Haiku 5.5, well inside the $4.17/month annual price. Opus is unnecessary. Routes are configurable in the proxy so an eval of about 200 labelled cases per task can move a route up or down.
 
 API rules that apply (from the claude-api skill): adaptive thinking is on by default on both models, control depth with `output_config.effort`; no `temperature`; no assistant prefill; structured outputs via `output_config.format` with `client.messages.parse`; no `fallbacks` on Haiku 5.5, so handle `stop_reason == "refusal"` client-side; static system prompt first with a cache breakpoint, user profile summary after it, volatile request last; prompts carry derived flags and numbers, never names, emails, locations, exact weight or birth dates.
 
