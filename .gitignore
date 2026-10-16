@@ -12,3 +12,4 @@ Server/larder-proxy/dist/
 .dev.vars
 *.p8
 *.mobileprovision
+AssetsInbox/
