@@ -35,6 +35,48 @@ struct QuickAddTests {
         #expect(salt.location == .pantry)
     }
 
+    @Test @MainActor func unsaidLocationFollowsWhatTheFoodIs() async {
+        let lines = [
+            ParsedPantryLine(rawText: "2 chicken breasts", name: "chicken breasts", quantity: 2),
+            ParsedPantryLine(rawText: "10 eggs", name: "eggs", quantity: 10),
+            ParsedPantryLine(rawText: "a bag of rice", name: "bag of rice", quantity: 1),
+            ParsedPantryLine(rawText: "eggs in the cupboard", name: "eggs", quantity: 6, location: .pantry),
+        ]
+        let (model, _, _) = Fixture.model(assistant: FakeAssistant(returning: lines))
+        model.quickAddDraft = "2 chicken breasts, 10 eggs, a bag of rice, eggs in the cupboard"
+        await model.quickAdd()
+        #expect(model.pendingLines.map(\.location) == [.fridge, .fridge, .pantry, .pantry])
+    }
+
+    @Test @MainActor func unsaidLocationUsesTheMatchedFood() async {
+        let tuna = Food(name: "Tuna, canned in water", source: .seedApproximate, foodGroup: .protein, tags: [.fish])
+        let trout = Food(name: "Trout, raw", source: .seedApproximate, foodGroup: .protein, tags: [.fish])
+        let lines = [
+            ParsedPantryLine(rawText: "tuna", name: "tuna"),
+            ParsedPantryLine(rawText: "trout", name: "trout"),
+        ]
+        let (model, _, _) = Fixture.model(foods: [tuna, trout], assistant: FakeAssistant(returning: lines))
+        model.quickAddDraft = "tuna, trout"
+        await model.quickAdd()
+        #expect(model.pendingLines.map(\.location) == [.pantry, .fridge])
+    }
+
+    @Test @MainActor func failedFoodLookupStillGuessesFromTheName() async {
+        let foods = FakeFoodRepository()
+        await foods.setFailure(.storageFailure)
+        let model = ShelvesModel(
+            pantry: FakePantryRepository(),
+            foods: foods,
+            assistant: FakeAssistant(returning: [ParsedPantryLine(rawText: "milk", name: "milk")]),
+            dates: FixedDateProvider(Fixture.now),
+            calendar: Fixture.calendar
+        )
+        model.quickAddDraft = "milk"
+        await model.quickAdd()
+        #expect(model.pendingLines.map(\.location) == [.fridge])
+        #expect(model.error == nil)
+    }
+
     @Test @MainActor func failureKeepsTheDraftAndSurfacesTheError() async {
         let (model, _, _) = Fixture.model(assistant: FakeAssistant(throwing: .quotaExceeded))
         model.quickAddDraft = "2 onions"

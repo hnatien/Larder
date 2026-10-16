@@ -107,7 +107,17 @@ public final class ShelvesModel {
                 error = .invalidResponse
                 return
             }
-            pendingLines += parsed.map(DraftLine.init(parsed:))
+            var drafts: [DraftLine] = []
+            for line in parsed {
+                var draft = DraftLine(parsed: line)
+                if line.location == nil {
+                    // The catalogue only sharpens the guess, so a failed lookup falls back to the name alone.
+                    let food = try? await matchingFood(for: line.name)
+                    draft.location = .usual(forItemNamed: line.name, food: food)
+                }
+                drafts.append(draft)
+            }
+            pendingLines += drafts
             quickAddDraft = ""
         } catch {
             record(error, fallback: .assistantUnavailable)
