@@ -5,29 +5,78 @@ import LarderDesign
 /// User-facing strings for onboarding, the paywall and settings. Dry, plain, no exclamation marks.
 nonisolated enum AccountCopy {
     static var back: String { String(localized: "Back", bundle: Copy.bundle) }
-    static var next: String { String(localized: "Next", bundle: Copy.bundle) }
-    static var finish: String { String(localized: "Finish", bundle: Copy.bundle) }
-    static var skip: String { String(localized: "Skip", bundle: Copy.bundle) }
     static var preferNotToSay: String { String(localized: "Prefer not to say", bundle: Copy.bundle) }
     static var cancel: String { String(localized: "Cancel", bundle: Copy.bundle) }
     static var tryAgain: String { String(localized: "Try again", bundle: Copy.bundle) }
 
-    static func showAll(_ count: Int) -> String { String(localized: "Show all \(count)", bundle: Copy.bundle) }
-    static func showFewer() -> String { String(localized: "Show fewer", bundle: Copy.bundle) }
-    static func progress(step: Int, of total: Int) -> String { String(localized: "\(step) of \(total)", bundle: Copy.bundle) }
-    static func spokenProgress(step: Int, of total: Int) -> String { String(localized: "Step \(step) of \(total)", bundle: Copy.bundle) }
+    static func progress(step: Int, of total: Int) -> String { String(localized: "Question \(step) of \(total)", bundle: Copy.bundle) }
     static func remove(_ name: String) -> String { String(localized: "Remove \(name)", bundle: Copy.bundle) }
 
-    /// Onboarding questions and explanations.
+    /// The welcome screen, onboarding questions and their explanations.
     enum Onboarding {
-        static var welcomeTitle: String { String(localized: "Welcome to Larder", bundle: Copy.bundle) }
-        static var welcomeLines: [String] {
+        static var welcomeTitle: String { String(localized: "Dinner, sorted from what you already have", bundle: Copy.bundle) }
+        static var welcomeSubtitle: String {
+            String(localized: "Larder plans the week around your kitchen, so less food goes in the bin.", bundle: Copy.bundle)
+        }
+        /// The "how it works" rows: title, explanation and SF Symbol.
+        static var welcomePoints: [(title: String, detail: String, symbol: String)] {
             [
-                String(localized: "Larder plans meals around what is already on your shelves.", bundle: Copy.bundle),
-                String(localized: "It writes the grocery list and moves what you buy onto the shelves.", bundle: Copy.bundle),
-                String(localized: "It keeps what you can't eat out of every plan.", bundle: Copy.bundle),
+                (
+                    String(localized: "Add what's in your kitchen", bundle: Copy.bundle),
+                    String(localized: "Type it the way you'd say it, such as 2 onions and a bag of rice.", bundle: Copy.bundle),
+                    "refrigerator"
+                ),
+                (
+                    String(localized: "Get three dinner ideas each night", bundle: Copy.bundle),
+                    String(localized: "Each one uses food before it goes off.", bundle: Copy.bundle),
+                    "sun.horizon"
+                ),
+                (
+                    String(localized: "Shop once a week", bundle: Copy.bundle),
+                    String(localized: "The grocery list skips what you already have.", bundle: Copy.bundle),
+                    "cart"
+                ),
+                (
+                    String(localized: "Allergies stay out of every plan", bundle: Copy.bundle),
+                    String(localized: "Checked in code on this phone, never guessed by AI.", bundle: Copy.bundle),
+                    "checkmark.shield"
+                ),
             ]
         }
+        static var getStarted: String { String(localized: "Get started", bundle: Copy.bundle) }
+        static var welcomeNote: String { String(localized: "Three quick questions. No account needed.", bundle: Copy.bundle) }
+        static var setUpLater: String { String(localized: "Set up later", bundle: Copy.bundle) }
+        static var continueLabel: String { String(localized: "Continue", bundle: Copy.bundle) }
+        static var startPlanning: String { String(localized: "Start planning", bundle: Copy.bundle) }
+
+        static var leaveOutTitle: String { String(localized: "Anything you can't eat?", bundle: Copy.bundle) }
+        static var leaveOutDetail: String {
+            String(localized: "Larder leaves these out of every idea, plan and recipe. Tap all that apply, or none.", bundle: Copy.bundle)
+        }
+        static var intoleranceLabel: String { String(localized: "Anything else to leave out", bundle: Copy.bundle) }
+        static var intolerancePrompt: String { String(localized: "For example lactose, separated by commas", bundle: Copy.bundle) }
+        static var eatByTitle: String { String(localized: "Do you follow a diet?", bundle: Copy.bundle) }
+        static var eatByDetail: String {
+            String(localized: "Pick any that apply. Recipes outside them never show up.", bundle: Copy.bundle)
+        }
+        static var carefulTitle: String { String(localized: "Health conditions", bundle: Copy.bundle) }
+        static var carefulDetail: String {
+            String(localized: "Optional. These stay on this phone and shape nutrient ranges.", bundle: Copy.bundle)
+        }
+        static var householdTitle: String { String(localized: "Who are you cooking for?", bundle: Copy.bundle) }
+        static var householdDetail: String {
+            String(localized: "Recipes and the grocery list are sized for this many people.", bundle: Copy.bundle)
+        }
+        static var fewerPeople: String { String(localized: "One fewer person", bundle: Copy.bundle) }
+        static var morePeople: String { String(localized: "One more person", bundle: Copy.bundle) }
+        static func household(_ count: Int) -> String { String(localized: "\(count) at the table", bundle: Copy.bundle) }
+        static var cookTimeLabel: String { String(localized: "Longest time to cook on a weeknight", bundle: Copy.bundle) }
+        static var birthYearLabel: String { String(localized: "Year you were born", bundle: Copy.bundle) }
+        static var birthYearExplanation: String {
+            String(localized: "Used only for nutrient ranges on this device.", bundle: Copy.bundle)
+        }
+        static var timersLabel: String { String(localized: "Timers flash and vibrate", bundle: Copy.bundle) }
+        static var timersHint: String { String(localized: "Every timer sound also flashes the screen and vibrates.", bundle: Copy.bundle) }
         static var consentLabel: String { String(localized: "Allow AI help", bundle: Copy.bundle) }
         static var consentExplanation: String {
             String(
@@ -35,29 +84,6 @@ nonisolated enum AccountCopy {
                 bundle: Copy.bundle
             )
         }
-        static var leaveOutTitle: String { String(localized: "What should we always leave out?", bundle: Copy.bundle) }
-        static var intoleranceLabel: String { String(localized: "Anything else to leave out", bundle: Copy.bundle) }
-        static var intolerancePrompt: String { String(localized: "For example lactose, separated by commas", bundle: Copy.bundle) }
-        static var eatByTitle: String { String(localized: "Anything we eat by?", bundle: Copy.bundle) }
-        static var carefulTitle: String { String(localized: "Anything we should be careful with?", bundle: Copy.bundle) }
-        static var goalTitle: String { String(localized: "What matters most?", bundle: Copy.bundle) }
-        static var householdTitle: String { String(localized: "Who's eating?", bundle: Copy.bundle) }
-        static func household(_ count: Int) -> String { String(localized: "\(count) at the table", bundle: Copy.bundle) }
-        static var cookTimeLabel: String { String(localized: "Longest time to cook on a weeknight", bundle: Copy.bundle) }
-        static var birthYearLabel: String { String(localized: "Year you were born", bundle: Copy.bundle) }
-        static var birthYearExplanation: String {
-            String(localized: "Used only for nutrient ranges on this device.", bundle: Copy.bundle)
-        }
-        static var equipmentTitle: String { String(localized: "What do you cook with?", bundle: Copy.bundle) }
-        static var easierTitle: String { String(localized: "Make Larder easier to use", bundle: Copy.bundle) }
-        static var largerTextLabel: String { String(localized: "Larger text", bundle: Copy.bundle) }
-        static var largerTextHint: String {
-            String(localized: "Larder follows the text size set in Settings, under Accessibility, Display and Text Size.", bundle: Copy.bundle)
-        }
-        static var simpleLayoutLabel: String { String(localized: "Simpler layout", bundle: Copy.bundle) }
-        static var simpleLayoutHint: String { String(localized: "Fewer choices on each screen.", bundle: Copy.bundle) }
-        static var timersLabel: String { String(localized: "Timers flash and vibrate", bundle: Copy.bundle) }
-        static var timersHint: String { String(localized: "Every timer sound also flashes the screen and vibrates.", bundle: Copy.bundle) }
         static var saveFailed: String { String(localized: "Couldn't save your answers. Try again.", bundle: Copy.bundle) }
     }
 
@@ -71,18 +97,18 @@ nonisolated enum AccountCopy {
 
     /// The paywall.
     enum Paywall {
-        static var features: [String] {
+        /// Each benefit in a few words, with its SF Symbol.
+        static var features: [(text: String, symbol: String)] {
             [
-                String(localized: "Plan my week fills the whole week and replans when things change, with a reason for each meal.", bundle: Copy.bundle),
-                String(localized: "Household profiles give each person their own swaps on one shared plate.", bundle: Copy.bundle),
-                String(localized: "Leftovers and batch cooking are scheduled for you.", bundle: Copy.bundle),
-                String(localized: "Shelf balance shows each food group across the week, with numbers only if you want them.", bundle: Copy.bundle),
-                String(localized: "Photos and receipts update the shelves.", bundle: Copy.bundle),
-                String(localized: "The assistant takes requests such as a vegetarian Tuesday under 30 minutes.", bundle: Copy.bundle),
+                (String(localized: "Plan every week, with a reason for each dinner", bundle: Copy.bundle), "calendar"),
+                (String(localized: "Each person gets their own swaps on one shared plate", bundle: Copy.bundle), "person.2"),
+                (String(localized: "Leftovers and batch cooking scheduled for you", bundle: Copy.bundle), "arrow.2.squarepath"),
+                (String(localized: "See each food group across the week", bundle: Copy.bundle), "chart.bar"),
+                (String(localized: "Ask for a vegetarian Tuesday under 30 minutes", bundle: Copy.bundle), "text.bubble"),
             ]
         }
         static var staysFree: String {
-            String(localized: "Allergen filters, recipes, shelves, grocery lists and export stay free.", bundle: Copy.bundle)
+            String(localized: "Allergen filters, recipes, the pantry, grocery lists and export stay free.", bundle: Copy.bundle)
         }
         static var renews: String {
             String(localized: "Subscriptions renew automatically until cancelled in your App Store account settings.", bundle: Copy.bundle)
@@ -134,7 +160,12 @@ nonisolated enum AccountCopy {
     /// Settings.
     enum Settings {
         static var title: String { String(localized: "Settings", bundle: Copy.bundle) }
-        static var profile: String { String(localized: "Profile", bundle: Copy.bundle) }
+        static var household: String { String(localized: "Household", bundle: Copy.bundle) }
+        static var nutrition: String { String(localized: "Nutrition", bundle: Copy.bundle) }
+        static var cooking: String { String(localized: "Cooking", bundle: Copy.bundle) }
+        static var assistant: String { String(localized: "AI help", bundle: Copy.bundle) }
+        static var freeStatus: String { String(localized: "You're on the free plan. One week of planning is included.", bundle: Copy.bundle) }
+        static var dangerZone: String { String(localized: "Start over", bundle: Copy.bundle) }
         static var goal: String { String(localized: "What matters most", bundle: Copy.bundle) }
         static var equipment: String { String(localized: "Equipment", bundle: Copy.bundle) }
         static var leaveOut: String { String(localized: "What we leave out", bundle: Copy.bundle) }
@@ -156,13 +187,13 @@ nonisolated enum AccountCopy {
         static var data: String { String(localized: "Data", bundle: Copy.bundle) }
         static var export: String { String(localized: "Export everything", bundle: Copy.bundle) }
         static var exportHint: String {
-            String(localized: "A JSON file with your profile, what we leave out, targets, recipes, shelves and plans.", bundle: Copy.bundle)
+            String(localized: "A JSON file with your profile, what we leave out, targets, recipes, pantry and plans.", bundle: Copy.bundle)
         }
         static var exportName: String { String(localized: "Larder export", bundle: Copy.bundle) }
         static var delete: String { String(localized: "Delete all data", bundle: Copy.bundle) }
         static var deleteTitle: String { String(localized: "Delete everything on this device?", bundle: Copy.bundle) }
         static var deleteMessage: String {
-            String(localized: "Your profile, recipes, shelves and plans are removed and can't be recovered. A subscription is managed by the App Store and is not cancelled.", bundle: Copy.bundle)
+            String(localized: "Your profile, recipes, pantry and plans are removed and can't be recovered. A subscription is managed by the App Store and is not cancelled.", bundle: Copy.bundle)
         }
         static var deleteConfirm: String { String(localized: "Delete everything", bundle: Copy.bundle) }
         static var about: String { String(localized: "About", bundle: Copy.bundle) }

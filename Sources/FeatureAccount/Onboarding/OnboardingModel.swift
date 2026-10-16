@@ -16,12 +16,13 @@ public nonisolated enum EatByChoice: Hashable, Sendable {
     public static let all: [EatByChoice] = DietPattern.allCases.map(diet) + ReligiousRule.allCases.map(religious)
 }
 
-/// The onboarding answers and the step the user is on. Nothing is asked twice; everything is editable in Settings.
+/// The onboarding answers and the step the user is on: a welcome screen, then three short questions.
+/// Every question is optional, nothing is ever cleared by moving on, and everything else lives in Settings.
 @Observable @MainActor
 public final class OnboardingModel {
-    /// The screens, in order. Each asks one question.
+    /// The screens, in order. The welcome screen asks nothing; each later screen asks one question.
     public enum Step: Int, CaseIterable, Sendable {
-        case welcome, leaveOut, eatBy, goal, household, equipment, easierToUse
+        case welcome, leaveOut, eatBy, household
     }
 
     /// Allergens, most commonly avoided first.
@@ -43,26 +44,15 @@ public final class OnboardingModel {
     public private(set) var isFinished = false
     public private(set) var error: OnboardingError?
 
-    /// Consent to send derived settings and recipe text to the cloud assistant; off by default.
-    public var aiConsent = false
     public var allergens: Set<Allergen> = []
     /// Free-text intolerances, separated by commas.
     public var intoleranceText = ""
     public var eatBy: Set<EatByChoice> = []
     public private(set) var medicalFlags: Set<MedicalFlag> = []
     public private(set) var medicalPreferNotToSay = false
-    /// `nil` until chosen; a skipped goal saves as `.maintain`.
-    public var goal: Goal?
     /// Saved within `householdRange`.
     public var householdSize = ProfileDefaults.householdSize
     public var maxCookMinutes = ProfileDefaults.maxCookMinutes
-    /// `nil` means "Prefer not to say".
-    public var birthYear: Int?
-    public var equipment: Set<Equipment> = ProfileDefaults.equipment
-    public var prefersSimpleLayout = false
-    public var timersFlashAndVibrate = true
-    /// Off by default: calories and amounts stay hidden.
-    public var showsNumbers = false
 
     private let profiles: any ProfileRepository
     private let preferences: ComfortPreferences
@@ -82,25 +72,24 @@ public final class OnboardingModel {
         self.currencyCode = locale.currency?.identifier ?? "USD"
     }
 
-    /// The step's position, such as "2 of 7".
+    /// How many questions follow the welcome screen.
+    public static var questionCount: Int { Step.allCases.count - 1 }
+
+    /// The question's position, such as "Question 2 of 3"; empty on the welcome screen.
     public var progressText: String {
-        AccountCopy.progress(step: step.rawValue + 1, of: Step.allCases.count)
+        guard step != .welcome else { return "" }
+        return AccountCopy.progress(step: step.rawValue, of: Self.questionCount)
     }
 
-    /// The step's position for VoiceOver.
-    public var spokenProgress: String {
-        AccountCopy.spokenProgress(step: step.rawValue + 1, of: Step.allCases.count)
+    /// How far through the questions the user is, from 0 to 1.
+    public var progress: Double {
+        Double(step.rawValue) / Double(Self.questionCount)
     }
 
     public var canGoBack: Bool { step != .welcome }
     public var isLastStep: Bool { step == Step.allCases.last }
-    /// Every question after the welcome screen can be skipped.
-    public var canSkip: Bool { step != .welcome }
-
-    /// Years offered for the year of birth, newest first.
-    public var birthYearChoices: [Int] {
-        ProfileDefaults.birthYears(referenceYear: ProfileDefaults.referenceYear(at: dates.now))
-    }
+    /// Every question can be left for later; the welcome screen only moves on.
+    public var canSetUpLater: Bool { step != .welcome }
 
     /// Moves to the next step; does nothing on the last one, which finishes instead.
     public func next() {
@@ -114,15 +103,10 @@ public final class OnboardingModel {
         step = previous
     }
 
-    /// Clears this step's answers back to their defaults and moves on; on the last step it finishes.
-    public func skip() async {
-        guard canSkip else { return }
-        resetAnswers(for: step)
-        if isLastStep {
-            await finish()
-        } else {
-            next()
-        }
+    /// Saves every answer given so far and finishes; unanswered questions keep their defaults.
+    public func setUpLater() async {
+        guard canSetUpLater else { return }
+        await finish()
     }
 
     /// Selects or clears a condition; choosing one withdraws "Prefer not to say".
@@ -159,28 +143,27 @@ public final class OnboardingModel {
             self.error = .saveFailed
             return
         }
-        preferences.prefersSimpleLayout = prefersSimpleLayout
-        preferences.timersFlashAndVibrate = timersFlashAndVibrate
-        preferences.birthYearDeclined = birthYear == nil
+        // Birth year is not asked at setup; Settings offers it, and until then nutrient ranges use the default age.
+        preferences.birthYearDeclined = true
         error = nil
         isFinished = true
     }
 
-    /// The profile the answers describe. Sex, height and weight are never asked.
+    /// The profile the answers describe. Sex, height, weight, goal and birth year are never asked at setup.
     func makeProfile(referenceYear: Int) -> UserProfile {
         UserProfile(
-            birthYear: ProfileDefaults.birthYear(birthYear, referenceYear: referenceYear),
+            birthYear: ProfileDefaults.birthYear(nil, referenceYear: referenceYear),
             sex: .unspecified,
             heightCm: ProfileDefaults.heightCm,
             weightKg: nil,
             activityLevel: ProfileDefaults.activityLevel,
-            goal: goal ?? ProfileDefaults.goal,
+            goal: ProfileDefaults.goal,
             householdSize: householdSize.clamped(to: Self.householdRange),
             currencyCode: currencyCode,
             maxCookMinutes: ProfileDefaults.cookMinutes(nearest: maxCookMinutes),
-            equipment: equipment,
-            showsNumbers: showsNumbers,
-            consents: Consents(aiProcessing: aiConsent)
+            equipment: ProfileDefaults.equipment,
+            showsNumbers: false,
+            consents: Consents(aiProcessing: false)
         )
     }
 
@@ -205,32 +188,6 @@ public final class OnboardingModel {
             .split { $0 == "," || $0.isNewline }
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty && seen.insert($0.lowercased()).inserted }
-    }
-
-    private func resetAnswers(for step: Step) {
-        switch step {
-        case .welcome:
-            aiConsent = false
-        case .leaveOut:
-            allergens = []
-            intoleranceText = ""
-        case .eatBy:
-            eatBy = []
-            medicalFlags = []
-            medicalPreferNotToSay = false
-        case .goal:
-            goal = nil
-        case .household:
-            householdSize = ProfileDefaults.householdSize
-            maxCookMinutes = ProfileDefaults.maxCookMinutes
-            birthYear = nil
-        case .equipment:
-            equipment = ProfileDefaults.equipment
-        case .easierToUse:
-            prefersSimpleLayout = false
-            timersFlashAndVibrate = true
-            showsNumbers = false
-        }
     }
 }
 

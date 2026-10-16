@@ -30,7 +30,6 @@ public nonisolated struct UserDefaultsKeyValueStore: KeyValueStore {
 /// The keys FeatureAccount stores flags under.
 nonisolated enum AccountKey {
     static let freeWeekUsed = "larder.freeWeekUsed"
-    static let prefersSimpleLayout = "larder.prefersSimpleLayout"
     static let timersFlashAndVibrate = "larder.timersFlashAndVibrate"
     static let birthYearDeclined = "larder.birthYearDeclined"
 }
@@ -62,12 +61,6 @@ public nonisolated struct ComfortPreferences: Sendable {
     /// Creates preferences over `store`.
     public init(store: any KeyValueStore) {
         self.store = store
-    }
-
-    /// Fewer choices per screen and plainer layouts; off by default.
-    public var prefersSimpleLayout: Bool {
-        get { store.bool(forKey: AccountKey.prefersSimpleLayout) ?? false }
-        nonmutating set { store.set(newValue, forKey: AccountKey.prefersSimpleLayout) }
     }
 
     /// Cooking timers flash the screen and vibrate as well as sound; on by default.

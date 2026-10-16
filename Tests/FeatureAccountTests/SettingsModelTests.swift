@@ -71,12 +71,10 @@ struct SettingsModelTests {
 
     @Test func comfortTogglesPersist() async {
         let (model, _) = await loaded()
-        model.setPrefersSimpleLayout(true)
         model.setTimersFlashAndVibrate(false)
         let reread = ComfortPreferences(store: flags)
-        #expect(reread.prefersSimpleLayout)
         #expect(reread.timersFlashAndVibrate == false)
-        #expect(model.prefersSimpleLayout)
+        #expect(model.timersFlashAndVibrate == false)
     }
 
     @Test func householdAndCookTimeAreKeptInRange() async {
@@ -234,7 +232,7 @@ struct PaywallCopyTests {
     }
 
     @Test func noCopySellsUrgency() {
-        let all = AccountCopy.Paywall.features + [AccountCopy.Paywall.staysFree, AccountCopy.Paywall.renews]
+        let all = AccountCopy.Paywall.features.map(\.text) + [AccountCopy.Paywall.staysFree, AccountCopy.Paywall.renews]
         for line in all {
             #expect(!line.lowercased().contains("limited time"))
             #expect(!line.contains("!"))

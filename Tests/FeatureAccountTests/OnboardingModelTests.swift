@@ -27,11 +27,10 @@ struct OnboardingModelTests {
             progress.append(model.progressText)
             model.next()
         }
-        #expect(seen == [.welcome, .leaveOut, .eatBy, .goal, .household, .equipment, .easierToUse])
-        #expect(progress.first == "1 of 7")
-        #expect(progress[1] == "2 of 7")
-        #expect(progress.last == "7 of 7")
-        #expect(model.step == .easierToUse)
+        #expect(seen == [.welcome, .leaveOut, .eatBy, .household])
+        #expect(progress == ["", "Question 1 of 3", "Question 2 of 3", "Question 3 of 3"])
+        #expect(model.step == .household)
+        #expect(model.progress == 1)
         #expect(model.isLastStep)
     }
 
@@ -48,21 +47,22 @@ struct OnboardingModelTests {
         #expect(model.allergens == [.sesame])
     }
 
-    @Test func welcomeCannotBeSkipped() async {
+    @Test func welcomeCannotBeLeftForLater() async {
         let model = makeModel()
-        model.aiConsent = true
-        #expect(model.canSkip == false)
-        await model.skip()
+        #expect(model.canSetUpLater == false)
+        await model.setUpLater()
         #expect(model.step == .welcome)
-        #expect(model.aiConsent)
+        #expect(model.isFinished == false)
+        #expect(await repository.storedProfile == nil)
     }
 
-    @Test func sensitiveDefaultsAreOff() {
+    @Test func sensitiveSettingsAreOffAfterSetup() async throws {
         let model = makeModel()
-        #expect(model.aiConsent == false)
-        #expect(model.showsNumbers == false)
-        #expect(model.timersFlashAndVibrate)
-        #expect(model.prefersSimpleLayout == false)
+        await model.finish()
+        let profile = try #require(await repository.storedProfile)
+        #expect(profile.consents.aiProcessing == false)
+        #expect(profile.showsNumbers == false)
+        #expect(ComfortPreferences(store: flags).timersFlashAndVibrate)
     }
 
     @Test func eatingDisorderHistoryIsNeverOffered() {
@@ -127,35 +127,37 @@ struct OnboardingModelTests {
         #expect(model.medicalFlags.isEmpty)
     }
 
-    @Test func skipClearsTheStepAndMovesOn() async {
+    @Test func movingBetweenQuestionsNeverClearsAnswers() {
         let model = makeModel()
         model.next()
         model.allergens = [.milk]
         model.intoleranceText = "lactose"
-        await model.skip()
-        #expect(model.step == .eatBy)
-        #expect(model.allergens.isEmpty)
-        #expect(model.intoleranceText.isEmpty)
-    }
-
-    @Test func skipKeepsEarlierAnswers() async {
-        let model = makeModel()
-        model.next()
-        model.allergens = [.egg]
         model.next()
         model.eatBy = [.diet(.vegan)]
-        await model.skip()
-        #expect(model.allergens == [.egg])
-        #expect(model.eatBy.isEmpty)
-        #expect(model.step == .goal)
+        model.next()
+        model.back()
+        model.back()
+        #expect(model.step == .leaveOut)
+        #expect(model.allergens == [.milk])
+        #expect(model.intoleranceText == "lactose")
+        #expect(model.eatBy == [.diet(.vegan)])
     }
 
-    @Test func skippedEverythingSavesSafeDefaults() async throws {
+    @Test func setUpLaterKeepsEveryAnswerGivenSoFar() async {
         let model = makeModel()
         model.next()
-        while !model.isFinished {
-            await model.skip()
-        }
+        model.allergens = [.peanut]
+        model.intoleranceText = "lactose"
+        await model.setUpLater()
+        #expect(model.isFinished)
+        let kinds = await repository.storedConstraints.map(\.kind)
+        #expect(kinds == [.allergen(.peanut), .intolerance("lactose")])
+    }
+
+    @Test func setUpLaterWithNothingAnsweredSavesSafeDefaults() async throws {
+        let model = makeModel()
+        model.next()
+        await model.setUpLater()
         let profile = try #require(await repository.storedProfile)
         #expect(profile.birthYear == 2026 - 35)
         #expect(profile.sex == .unspecified)
@@ -174,32 +176,20 @@ struct OnboardingModelTests {
 
     @Test func finishSavesAnswers() async throws {
         let model = makeModel()
-        model.aiConsent = true
-        model.goal = .lessWaste
         model.householdSize = 4
         model.maxCookMinutes = 25
-        model.birthYear = 1990
-        model.equipment = [.airFryer]
-        model.showsNumbers = true
         await model.finish()
         #expect(model.isFinished)
         let profile = try #require(await repository.storedProfile)
-        #expect(profile.birthYear == 1990)
-        #expect(profile.goal == .lessWaste)
         #expect(profile.householdSize == 4)
         #expect(profile.maxCookMinutes == 25)
-        #expect(profile.equipment == [.airFryer])
-        #expect(profile.showsNumbers)
-        #expect(profile.consents.aiProcessing)
         #expect(profile.consents.cloudSync == false)
-        #expect(ComfortPreferences(store: flags).birthYearDeclined == false)
     }
 
     @Test func outOfRangeAnswersAreClampedOrDeclined() async throws {
         let model = makeModel()
         model.householdSize = 12
         model.maxCookMinutes = 50
-        model.birthYear = 2024
         await model.finish()
         let profile = try #require(await repository.storedProfile)
         #expect(profile.householdSize == 8)
@@ -209,7 +199,6 @@ struct OnboardingModelTests {
 
     @Test func finishStoresDefaultTargetsForTheAnswers() async throws {
         let model = makeModel()
-        model.birthYear = 1980
         model.toggleMedical(.chronicKidneyDisease)
         await model.finish()
         let profile = try #require(await repository.storedProfile)
@@ -228,16 +217,6 @@ struct OnboardingModelTests {
         #expect(targets.contains { $0.nutrient == .protein })
     }
 
-    @Test func finishStoresComfortSettings() async {
-        let model = makeModel()
-        model.prefersSimpleLayout = true
-        model.timersFlashAndVibrate = false
-        await model.finish()
-        let preferences = ComfortPreferences(store: flags)
-        #expect(preferences.prefersSimpleLayout)
-        #expect(preferences.timersFlashAndVibrate == false)
-    }
-
     @Test func failedSaveLeavesOnboardingUnfinished() async {
         await repository.setFailsSaves(true)
         let model = makeModel()
@@ -247,7 +226,7 @@ struct OnboardingModelTests {
         #expect(model.error == .saveFailed)
         #expect(model.isSaving == false)
         #expect(await repository.storedProfile == nil)
-        #expect(flags.bool(forKey: AccountKey.prefersSimpleLayout) == nil)
+        #expect(flags.bool(forKey: AccountKey.birthYearDeclined) == nil)
     }
 
     @Test func retryAfterFailureSucceeds() async {
@@ -258,11 +237,5 @@ struct OnboardingModelTests {
         await model.finish()
         #expect(model.isFinished)
         #expect(model.error == nil)
-    }
-
-    @Test func birthYearChoicesAreRecentFirstAndExcludeChildren() {
-        let years = makeModel().birthYearChoices
-        #expect(years.first == 2013)
-        #expect(years.last == 1926)
     }
 }

@@ -245,7 +245,6 @@ struct TrialWeekGateTests {
 
     @Test func comfortDefaults() {
         let preferences = ComfortPreferences(store: InMemoryKeyValueStore())
-        #expect(preferences.prefersSimpleLayout == false)
         #expect(preferences.timersFlashAndVibrate)
     }
 

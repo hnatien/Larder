@@ -34,6 +34,7 @@ public struct SettingsView: View {
                 plusSection
                 dataSection
                 aboutSection
+                deleteSection
             }
             .padding(LarderSpacing.l)
         }
@@ -77,11 +78,9 @@ public struct SettingsView: View {
         #endif
     }
 
+    @ViewBuilder
     private func profileSection(_ profile: UserProfile) -> some View {
-        SettingsGroup(AccountCopy.Settings.profile) {
-            StackedPicker(AccountCopy.Settings.goal, selection: binding(profile.goal) { await model.setGoal($0) }) {
-                ForEach(Goal.allCases, id: \.self) { Text(AccountCopy.name(of: $0)).tag($0) }
-            }
+        SettingsGroup(AccountCopy.Settings.household) {
             Stepper(
                 value: binding(profile.householdSize) { await model.setHouseholdSize($0) },
                 in: ProfileDefaults.householdRange
@@ -94,40 +93,48 @@ public struct SettingsView: View {
             ) {
                 ForEach(ProfileDefaults.cookMinuteChoices, id: \.self) { Text(Copy.Ledger.spokenMinutes($0)).tag($0) }
             }
+            StackedPicker(AccountCopy.Settings.goal, selection: binding(profile.goal) { await model.setGoal($0) }) {
+                ForEach(Goal.allCases, id: \.self) { Text(AccountCopy.name(of: $0)).tag($0) }
+            }
             DisclosureGroup(AccountCopy.Settings.equipment) {
                 ForEach(Equipment.allCases, id: \.self) { item in
                     Toggle(
                         AccountCopy.name(of: item),
                         isOn: binding(profile.equipment.contains(item)) { await model.setEquipment(item, included: $0) }
                     )
+                    .tint(LarderColor.accent.second)
                 }
             }
-            StackedPicker(
-                AccountCopy.Onboarding.birthYearLabel,
-                selection: binding(model.displayedBirthYear) { await model.setBirthYear($0) }
-            ) {
-                Text(AccountCopy.preferNotToSay).tag(Int?.none)
-                ForEach(model.birthYearChoices, id: \.self) { Text(String($0)).tag(Int?.some($0)) }
-            }
+        }
+        SettingsGroup(AccountCopy.Settings.nutrition) {
             LabelledToggle(
                 AccountCopy.Numbers.label,
                 hint: AccountCopy.Numbers.hint,
                 isOn: binding(profile.showsNumbers) { await model.setShowsNumbers($0) }
             )
-            LabelledToggle(
-                AccountCopy.Onboarding.consentLabel,
-                hint: AccountCopy.Onboarding.consentExplanation,
-                isOn: binding(profile.consents.aiProcessing) { await model.setAIConsent($0) }
-            )
-            LabelledToggle(
-                AccountCopy.Onboarding.simpleLayoutLabel,
-                hint: AccountCopy.Onboarding.simpleLayoutHint,
-                isOn: Binding(get: { model.prefersSimpleLayout }, set: { model.setPrefersSimpleLayout($0) })
-            )
+            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                StackedPicker(
+                    AccountCopy.Onboarding.birthYearLabel,
+                    selection: binding(model.displayedBirthYear) { await model.setBirthYear($0) }
+                ) {
+                    Text(AccountCopy.preferNotToSay).tag(Int?.none)
+                    ForEach(model.birthYearChoices, id: \.self) { Text(String($0)).tag(Int?.some($0)) }
+                }
+                HintText(AccountCopy.Onboarding.birthYearExplanation)
+            }
+        }
+        SettingsGroup(AccountCopy.Settings.cooking) {
             LabelledToggle(
                 AccountCopy.Onboarding.timersLabel,
                 hint: AccountCopy.Onboarding.timersHint,
                 isOn: Binding(get: { model.timersFlashAndVibrate }, set: { model.setTimersFlashAndVibrate($0) })
+            )
+        }
+        SettingsGroup(AccountCopy.Settings.assistant) {
+            LabelledToggle(
+                AccountCopy.Onboarding.consentLabel,
+                hint: AccountCopy.Onboarding.consentExplanation,
+                isOn: binding(profile.consents.aiProcessing) { await model.setAIConsent($0) }
             )
         }
     }
@@ -182,15 +189,16 @@ public struct SettingsView: View {
 
     private var plusSection: some View {
         SettingsGroup(AccountCopy.Settings.plus) {
-            Stamp(text: plusStatus)
             if entitlements.tier == .plus {
+                Pill(plusStatus, systemImage: "checkmark.seal", tone: .second)
                 #if os(iOS)
                 Button(AccountCopy.Settings.manage) { showsManageSubscription = true }
-                    .buttonStyle(.larderQuiet)
+                    .buttonStyle(.larderSecondary)
                 #endif
             } else {
+                HintText(AccountCopy.Settings.freeStatus)
                 Button(AccountCopy.Settings.seePlus) { showsPaywall = true }
-                    .buttonStyle(.larderQuiet)
+                    .buttonStyle(.larderSecondary)
             }
         }
     }
@@ -207,8 +215,21 @@ public struct SettingsView: View {
                 Label(AccountCopy.Settings.export, systemImage: "square.and.arrow.up")
             }
             .buttonStyle(.larderSecondary)
-            Button(AccountCopy.Settings.delete, role: .destructive) { model.requestDeleteAll() }
-                .buttonStyle(.larderSecondary)
+        }
+    }
+
+    private var deleteSection: some View {
+        SettingsGroup(AccountCopy.Settings.dangerZone, footer: AccountCopy.Settings.deleteMessage) {
+            Button(role: .destructive) {
+                model.requestDeleteAll()
+            } label: {
+                Label(AccountCopy.Settings.delete, systemImage: "trash")
+                    .font(LarderFont.body(.body, weight: .semibold))
+                    .foregroundStyle(LarderColor.status(.danger))
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -223,8 +244,6 @@ public struct SettingsView: View {
             }
             Text(AccountCopy.Settings.usdaAttribution)
         }
-        .font(LarderFont.body(.footnote))
-        .foregroundStyle(LarderColor.ink.secondary)
     }
 
     /// A binding that shows `value` and saves changes through `save`.
@@ -247,7 +266,8 @@ public struct SettingsView: View {
     }
 }
 
-/// A titled card of settings rows; the title is secondary ink so it keeps its contrast on the paper canvas.
+/// A titled card of settings rows with a hairline between rows, like an inset grouped list; the title is secondary ink
+/// so it keeps its contrast on the paper canvas.
 private struct SettingsGroup<Content: View>: View {
     private let title: String
     private let footer: String?
@@ -265,12 +285,30 @@ private struct SettingsGroup<Content: View>: View {
                 .font(LarderFont.body(.subheadline, weight: .semibold))
                 .foregroundStyle(LarderColor.ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, LarderSpacing.l)
                 .accessibilityAddTraits(.isHeader)
-            PaperCard {
-                VStack(alignment: .leading, spacing: LarderSpacing.l) { content }
+            PaperCard(padded: false) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Group(subviews: content) { rows in
+                        ForEach(rows.indices, id: \.self) { index in
+                            rows[index]
+                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                                .padding(.horizontal, LarderSpacing.l)
+                                .padding(.vertical, LarderSpacing.m)
+                            if index < rows.count - 1 {
+                                Divider()
+                                    .overlay(LarderColor.line.hairline)
+                                    .padding(.leading, LarderSpacing.l)
+                            }
+                        }
+                    }
+                }
+                .font(LarderFont.body(.body))
+                .foregroundStyle(LarderColor.ink.primary)
             }
             if let footer {
                 HintText(footer)
+                    .padding(.horizontal, LarderSpacing.l)
             }
         }
     }

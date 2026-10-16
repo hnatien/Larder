@@ -105,12 +105,26 @@ public struct PaywallView: View {
 
     private var pitch: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.l) {
-            SectionHeading(Copy.Plus.name)
+            Image(systemName: "sparkles")
+                .font(LarderFont.body(.title, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.onAccent)
+                .frame(width: 64, height: 64)
+                .background(LarderColor.accent.brand, in: RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous))
+                .accessibilityHidden(true)
+            Text(Copy.Plus.name)
+                .font(LarderFont.display(.largeTitle))
+                .foregroundStyle(LarderColor.ink.primary)
+                .accessibilityAddTraits(.isHeader)
             BodyText(Copy.Plus.pitch)
             PaperCard {
                 VStack(alignment: .leading, spacing: LarderSpacing.m) {
-                    ForEach(AccountCopy.Paywall.features, id: \.self) { feature in
-                        BodyText(feature)
+                    ForEach(AccountCopy.Paywall.features, id: \.text) { feature in
+                        Label {
+                            BodyText(feature.text)
+                        } icon: {
+                            Image(systemName: feature.symbol)
+                                .foregroundStyle(LarderColor.accent.second)
+                        }
                     }
                     HintText(AccountCopy.Paywall.staysFree)
                 }

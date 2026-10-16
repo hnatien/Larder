@@ -24,7 +24,6 @@ public final class SettingsModel {
     /// True while "Delete all data" waits for confirmation; deletion does nothing otherwise.
     public private(set) var isConfirmingDelete = false
     public private(set) var birthYearDeclined: Bool
-    public private(set) var prefersSimpleLayout: Bool
     public private(set) var timersFlashAndVibrate: Bool
     /// The "Export everything" file.
     public let exportDocument: ExportDocument
@@ -48,7 +47,6 @@ public final class SettingsModel {
         self.deleteEverything = deleteAllData
         self.exportDocument = ExportDocument(builder: exporter, dates: dates)
         self.birthYearDeclined = preferences.birthYearDeclined
-        self.prefersSimpleLayout = preferences.prefersSimpleLayout
         self.timersFlashAndVibrate = preferences.timersFlashAndVibrate
     }
 
@@ -98,11 +96,6 @@ public final class SettingsModel {
         guard await updateProfile({ $0.birthYear = stored }) else { return }
         preferences.birthYearDeclined = declined
         birthYearDeclined = declined
-    }
-
-    public func setPrefersSimpleLayout(_ value: Bool) {
-        preferences.prefersSimpleLayout = value
-        prefersSimpleLayout = value
     }
 
     public func setTimersFlashAndVibrate(_ value: Bool) {
