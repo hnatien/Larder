@@ -8,4 +8,4 @@ simulator="$(Scripts/simulator.sh)"
 echo "Testing Larder on ${simulator}"
 xcodebuild -project Larder.xcodeproj -scheme Larder -destination "platform=iOS Simulator,name=${simulator}" \
     test CODE_SIGNING_ALLOWED=NO "$@" 2>&1 \
-    | grep -E "Test Case .*(passed|failed)|error:|Executed|\*\* TEST"
+    | grep --line-buffered -E "Test Case .*(passed|failed)|error:|Executed|\*\* TEST"
