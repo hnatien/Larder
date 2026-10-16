@@ -51,6 +51,10 @@ public nonisolated enum LarderRadius {
     public static let stamp: CGFloat = 2
     public static let field: CGFloat = 8
     public static let card: CGFloat = 12
+    /// Recipe tiles and thumbnails; continuous corners.
+    public static let tile: CGFloat = 10
+    /// Paper cards and grouped panels; continuous corners.
+    public static let panel: CGFloat = 18
     public static let sheet: CGFloat = 24
     /// For glass controls only.
     public static let pill: CGFloat = .infinity

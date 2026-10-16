@@ -10,24 +10,25 @@ public nonisolated enum Copy {
     /// Tab bar titles.
     public enum Tab {
         public static var tonight: String { String(localized: "Tonight", bundle: .module) }
-        public static var ledger: String { String(localized: "Ledger", bundle: .module) }
-        public static var shelves: String { String(localized: "Shelves", bundle: .module) }
+        public static var ledger: String { String(localized: "Plan", bundle: .module) }
+        public static var shelves: String { String(localized: "Pantry", bundle: .module) }
         public static var recipes: String { String(localized: "Recipes", bundle: .module) }
-        public static var grocery: String { String(localized: "Grocery", bundle: .module) }
-        public static var account: String { String(localized: "Account", bundle: .module) }
+        public static var grocery: String { String(localized: "Groceries", bundle: .module) }
+        public static var account: String { String(localized: "Settings", bundle: .module) }
     }
 
     /// Button and menu labels.
     public enum Action {
         public static var swap: String { String(localized: "Swap", bundle: .module) }
         public static var skip: String { String(localized: "Skip", bundle: .module) }
-        public static var markCooked: String { String(localized: "Mark cooked", bundle: .module) }
-        public static var letItGo: String { String(localized: "Let it go", bundle: .module) }
-        public static var eatIt: String { String(localized: "Eat it", bundle: .module) }
+        public static var markCooked: String { String(localized: "Mark as cooked", bundle: .module) }
+        public static var letItGo: String { String(localized: "Throw away", bundle: .module) }
+        public static var eatIt: String { String(localized: "Used up", bundle: .module) }
         public static var notNow: String { String(localized: "Not now", bundle: .module) }
         public static var addWhatYouHave: String { String(localized: "Add what you have", bundle: .module) }
         public static var planMyWeek: String { String(localized: "Plan my week", bundle: .module) }
-        public static var pickForMe: String { String(localized: "Pick for me", bundle: .module) }
+        public static var otherIdeas: String { String(localized: "Show other ideas", bundle: .module) }
+        public static var addFood: String { String(localized: "Add food", bundle: .module) }
     }
 
     /// Freshness words; each has an icon in `FreshnessStyle`.
@@ -118,7 +119,7 @@ public nonisolated enum Copy {
 
     /// The Today widget.
     public enum Widget {
-        public static var description: String { String(localized: "Tonight's dinner from your Ledger.", bundle: .module) }
+        public static var description: String { String(localized: "Tonight's dinner from your plan.", bundle: .module) }
         public static var nothingPlanned: String { String(localized: "Nothing planned", bundle: .module) }
         public static var openForIdeas: String { String(localized: "Open Larder for three ideas.", bundle: .module) }
     }
@@ -126,7 +127,7 @@ public nonisolated enum Copy {
     /// Microcopy for empty states, plans, expiry and errors.
     public enum Voice {
         public static var emptyPantry: String {
-            String(localized: "Nothing on the shelves yet. Add what you have and we'll plan around it.", bundle: .module)
+            String(localized: "Add what you have at home and Larder plans dinners around it.", bundle: .module)
         }
 
         public static func firstPlan(nights: Int, using item: String) -> String {

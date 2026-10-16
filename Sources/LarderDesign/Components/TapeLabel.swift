@@ -8,8 +8,9 @@ extension View {
     }
 }
 
-/// A masking-tape tag for leftovers, such as "Chilli, day 2 of 4".
+/// A leftovers row, such as "Chilli, day 2 of 4": a repeat icon and the words, on a mustard tint.
 public struct TapeLabel: View {
+    @ScaledMetric(relativeTo: .body) private var iconSide: CGFloat = 44
     private let text: String
 
     /// Creates a tag with the given text.
@@ -18,15 +19,25 @@ public struct TapeLabel: View {
     }
 
     public var body: some View {
-        Text(text)
-            .font(LarderFont.body(.footnote, weight: .semibold))
-            .onSpotFill()
-            .padding(.horizontal, LarderSpacing.m)
-            .padding(.vertical, LarderSpacing.xs)
-            .background(LarderColor.accent.spot, in: RoundedRectangle(cornerRadius: LarderRadius.stamp))
-            .rotationEffect(.degrees(-1))
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(text)
+        HStack(spacing: LarderSpacing.m) {
+            ZStack {
+                RoundedRectangle(cornerRadius: LarderRadius.tile, style: .continuous)
+                    .fill(LarderColor.accent.spot)
+                Image(systemName: "arrow.2.squarepath")
+                    .font(LarderFont.body(.body, weight: .semibold))
+                    .onSpotFill()
+            }
+            .frame(width: iconSide, height: iconSide)
+            .accessibilityHidden(true)
+            Text(text)
+                .font(LarderFont.body(.body))
+                .foregroundStyle(LarderColor.ink.secondary)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(text)
     }
 }
 

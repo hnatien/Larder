@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// An empty state: a line-drawn shelf and jar, a heading, a sentence and an optional action.
+/// An empty state, centred: an illustration (or a symbol, or the line-drawn shelf and jar), a heading, a sentence, and
+/// up to two actions.
 public struct EmptyShelf: View {
-    /// The empty state's single action.
+    /// One of the empty state's actions.
     public struct Action {
         let title: String
         let perform: () -> Void
@@ -14,37 +15,90 @@ public struct EmptyShelf: View {
         }
     }
 
-    @ScaledMetric(relativeTo: .title2) private var illustrationWidth: CGFloat = 160
+    @ScaledMetric(relativeTo: .title2) private var illustrationWidth: CGFloat = 140
+    @ScaledMetric(relativeTo: .title2) private var symbolSide: CGFloat = 52
+    @ScaledMetric(relativeTo: .title2) private var illustrationSide: CGFloat = 200
     private let title: String
     private let message: String
+    private let systemImage: String?
+    private let illustration: LarderIllustration?
     private let action: Action?
+    private let secondaryAction: Action?
 
-    /// Creates an empty state.
-    public init(title: String, message: String, action: Action? = nil) {
+    /// Creates an empty state; `illustration` wins over `systemImage` when the catalogue has it, and without either the
+    /// shelf drawing shows.
+    public init(
+        title: String,
+        message: String,
+        illustration: LarderIllustration? = nil,
+        systemImage: String? = nil,
+        action: Action? = nil,
+        secondaryAction: Action? = nil
+    ) {
         self.title = title
         self.message = message
+        self.illustration = illustration
+        self.systemImage = systemImage
         self.action = action
+        self.secondaryAction = secondaryAction
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: LarderSpacing.l) {
+        VStack(spacing: LarderSpacing.l) {
+            artwork
+                .accessibilityHidden(true)
+            VStack(spacing: LarderSpacing.s) {
+                Text(title)
+                    .font(LarderFont.display(.title2))
+                    .foregroundStyle(LarderColor.ink.primary)
+                    .accessibilityAddTraits(.isHeader)
+                Text(message)
+                    .font(LarderFont.body(.body))
+                    .foregroundStyle(LarderColor.ink.secondary)
+            }
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            if action != nil || secondaryAction != nil {
+                VStack(spacing: LarderSpacing.s) {
+                    if let action {
+                        Button(action: action.perform) {
+                            Text(action.title).frame(maxWidth: 320)
+                        }
+                        .buttonStyle(.larderPrimary)
+                    }
+                    if let secondaryAction {
+                        Button(secondaryAction.title, action: secondaryAction.perform)
+                            .buttonStyle(.larderQuiet)
+                    }
+                }
+                .padding(.top, LarderSpacing.xs)
+            }
+        }
+        .padding(.vertical, LarderSpacing.xl)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder private var artwork: some View {
+        if let illustration, illustration.isAvailable {
+            illustration.image
+                .frame(width: illustrationSide, height: illustrationSide)
+        } else if let systemImage {
+            ZStack {
+                Circle()
+                    .fill(LarderColor.accent.brand.opacity(0.1))
+                Image(systemName: systemImage)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(LarderColor.accent.brand)
+                    .frame(width: symbolSide, height: symbolSide)
+            }
+            .frame(width: symbolSide * 2, height: symbolSide * 2)
+        } else {
             ShelfLines()
                 .stroke(LarderColor.ink.secondary, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
                 .frame(width: illustrationWidth, height: illustrationWidth * 0.75)
-                .accessibilityHidden(true)
-            SectionHeading(title)
-            Text(message)
-                .font(LarderFont.body(.body))
-                .foregroundStyle(LarderColor.ink.secondary)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-            if let action {
-                Button(action.title, action: action.perform)
-                    .buttonStyle(.larderPrimary)
-            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .contain)
     }
 }
 
@@ -83,6 +137,18 @@ private struct ShelfLines: Shape {
         title: "Nothing on the shelves",
         message: Copy.Voice.emptyPantry,
         action: .init(title: Copy.Action.addWhatYouHave) {}
+    )
+    .padding(LarderSpacing.l)
+    .background(LarderColor.surface.canvas)
+}
+
+#Preview("EmptyShelf with symbol") {
+    EmptyShelf(
+        title: "No plan yet",
+        message: "Plan the week in one tap.",
+        systemImage: "calendar.badge.plus",
+        action: .init(title: Copy.Action.planMyWeek) {},
+        secondaryAction: .init(title: Copy.Action.notNow) {}
     )
     .padding(LarderSpacing.l)
     .background(LarderColor.surface.canvas)

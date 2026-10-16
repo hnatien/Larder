@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Larder's three button weights: filled brand, outlined, and text only. Disabled buttons drop the fill and use tertiary ink.
+/// Larder's three button weights, all capsules: a filled brand capsule, a tinted capsule, and text only.
+/// Disabled buttons drop the fill and use tertiary ink. Primary taps give a light haptic.
 public struct LarderButtonStyle: ButtonStyle {
     /// Which weight to draw.
     public enum Kind: CaseIterable, Sendable {
@@ -11,6 +12,8 @@ public struct LarderButtonStyle: ButtonStyle {
     static let minimumHitTarget: CGFloat = 44
     /// How much the primary fill darkens while pressed.
     static let pressedDarkening = 0.08
+    /// How strongly the secondary capsule is tinted with the brand colour.
+    static let secondaryTint = 0.12
 
     private let kind: Kind
 
@@ -27,16 +30,16 @@ public struct LarderButtonStyle: ButtonStyle {
         @Environment(\.isEnabled) private var isEnabled
         @Environment(\.displayScale) private var displayScale
         @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
+        @ScaledSpacing(.m) private var verticalPadding
+        @ScaledSpacing(.l) private var horizontalPadding
         let kind: Kind
         let configuration: ButtonStyleConfiguration
-
-        private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: LarderRadius.field) }
 
         private var foreground: Color {
             guard isEnabled else { return LarderColor.ink.tertiary }
             return switch kind {
             case .primary: LarderColor.ink.onAccent
-            case .secondary: LarderColor.ink.primary
+            case .secondary: LarderColor.accent.brand
             case .quiet: LarderColor.accent.second
             }
         }
@@ -45,24 +48,38 @@ public struct LarderButtonStyle: ButtonStyle {
             configuration.label
                 .font(LarderFont.body(.body, weight: .semibold))
                 .foregroundStyle(foreground)
+                .multilineTextAlignment(.center)
                 .underline(kind == .quiet && showButtonShapes)
-                .padding(.horizontal, LarderSpacing.l)
-                .padding(.vertical, LarderSpacing.m)
+                .padding(.horizontal, kind == .quiet ? LarderSpacing.s : horizontalPadding)
+                .padding(.vertical, verticalPadding)
                 .frame(minWidth: LarderButtonStyle.minimumHitTarget, minHeight: LarderButtonStyle.minimumHitTarget)
-                .background {
-                    if kind == .primary, isEnabled {
-                        shape.fill(LarderColor.accent.brand)
-                            .overlay(shape.fill(Color.black.opacity(configuration.isPressed ? LarderButtonStyle.pressedDarkening : 0)))
-                    }
-                }
+                .background { fill }
                 .overlay {
-                    if kind == .secondary || (kind == .primary && !isEnabled) {
-                        shape.strokeBorder(LarderColor.line.strong, lineWidth: 1 / displayScale)
+                    if kind != .quiet, !isEnabled {
+                        Capsule().strokeBorder(LarderColor.line.strong, lineWidth: 1 / displayScale)
                     }
                 }
                 .opacity(pressedOpacity)
-                .contentShape(shape)
+                .scaleEffect(configuration.isPressed && kind != .quiet ? 0.98 : 1)
+                .contentShape(Capsule())
                 .larderAnimation(LarderMotion.tap, value: configuration.isPressed)
+                .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed) { _, pressed in
+                    pressed && kind == .primary && isEnabled
+                }
+        }
+
+        @ViewBuilder private var fill: some View {
+            if isEnabled {
+                switch kind {
+                case .primary:
+                    Capsule().fill(LarderColor.accent.brand)
+                        .overlay(Capsule().fill(Color.black.opacity(configuration.isPressed ? LarderButtonStyle.pressedDarkening : 0)))
+                case .secondary:
+                    Capsule().fill(LarderColor.accent.brand.opacity(LarderButtonStyle.secondaryTint * (configuration.isPressed ? 1.8 : 1)))
+                case .quiet:
+                    EmptyView()
+                }
+            }
         }
 
         private var pressedOpacity: Double {
@@ -72,9 +89,9 @@ public struct LarderButtonStyle: ButtonStyle {
 }
 
 public extension ButtonStyle where Self == LarderButtonStyle {
-    /// Brand fill with on-accent text.
+    /// A brand capsule with on-accent text: the screen's one main action.
     static var larderPrimary: LarderButtonStyle { LarderButtonStyle(.primary) }
-    /// A strong-line outline with ink text.
+    /// A brand-tinted capsule with brand text: a second action.
     static var larderSecondary: LarderButtonStyle { LarderButtonStyle(.secondary) }
     /// Text only, in the second accent.
     static var larderQuiet: LarderButtonStyle { LarderButtonStyle(.quiet) }

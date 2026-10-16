@@ -1,14 +1,13 @@
 import SwiftUI
 
-/// One day in the week ledger: a stamped day name, its meals, a hairline below, and a brand tab when it is today.
+/// One day in the week plan: a readable day heading with a Today badge, then that day's meals on a card.
 public struct LedgerRow<Meals: View>: View {
-    private let tabWidth: CGFloat = 3
-    @ScaledSpacing(.m) private var gap
+    @ScaledSpacing(.s) private var gap
     private let day: String
     private let isToday: Bool
     private let meals: Meals
 
-    /// Creates a row for a day.
+    /// Creates a row for a day; `day` is the visible heading, such as "Saturday 17 October".
     public init(day: String, isToday: Bool, @ViewBuilder meals: () -> Meals) {
         self.day = day
         self.isToday = isToday
@@ -16,47 +15,43 @@ public struct LedgerRow<Meals: View>: View {
     }
 
     public var body: some View {
-        HStack(alignment: .top, spacing: 0) {
-            Rectangle()
-                .fill(isToday ? LarderColor.accent.brand : Color.clear)
-                .frame(width: tabWidth)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: gap) {
-                HStack(spacing: LarderSpacing.s) {
-                    Text(day)
-                        .stamp()
-                        .foregroundStyle(LarderColor.ink.primary)
-                    if isToday {
-                        Text(Copy.Ledger.today)
-                            .stamp()
-                            .foregroundStyle(LarderColor.accent.brand)
-                    }
+        VStack(alignment: .leading, spacing: gap) {
+            HStack(spacing: LarderSpacing.s) {
+                Text(day)
+                    .font(LarderFont.body(.subheadline, weight: .semibold))
+                    .foregroundStyle(isToday ? LarderColor.accent.brand : LarderColor.ink.secondary)
+                if isToday {
+                    Pill(Copy.Ledger.today, tone: .brand)
                 }
-                .accessibilityElement(children: .combine)
-                .accessibilityAddTraits(.isHeader)
-                meals
             }
-            .padding(.vertical, gap)
-            .padding(.horizontal, LarderSpacing.l)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, LarderSpacing.xs)
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isHeader)
+            PaperCard {
+                VStack(alignment: .leading, spacing: LarderSpacing.m) { meals }
+            }
+            .overlay {
+                if isToday {
+                    RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous)
+                        .strokeBorder(LarderColor.accent.brand, lineWidth: 1.5)
+                        .accessibilityHidden(true)
+                }
+            }
         }
-        .overlay(alignment: .bottom) { Hairline() }
         .accessibilityElement(children: .contain)
     }
 }
 
 #Preview("LedgerRow") {
-    VStack(spacing: 0) {
-        LedgerRow(day: "Mon", isToday: false) {
-            JarLabel(title: "Lentil soup", minutes: 35, tone: .ink, slot: "Dinner")
+    VStack(spacing: LarderSpacing.l) {
+        LedgerRow(day: "Monday 19 October", isToday: false) {
+            JarLabel(title: "Lentil soup", minutes: 35, slot: "Dinner")
         }
-        LedgerRow(day: "Tue", isToday: true) {
-            JarLabel(title: "Chilli", minutes: 50, tone: .brand, slot: "Dinner")
+        LedgerRow(day: "Tuesday 20 October", isToday: true) {
+            JarLabel(title: "Chilli", minutes: 50, slot: "Dinner")
             TapeLabel(text: "Chilli, day 2 of 4")
         }
-        LedgerRow(day: "Wed", isToday: false) {
-            JarLabel(title: "Spinach omelette", minutes: 15, tone: .second, slot: "Dinner")
-        }
     }
+    .padding(LarderSpacing.l)
     .background(LarderColor.surface.canvas)
 }

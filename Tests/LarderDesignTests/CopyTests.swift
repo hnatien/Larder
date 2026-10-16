@@ -12,7 +12,7 @@ private let bannedWords = ["good", "bad", "clean", "cheat"]
 private let allCopy: [String] = [
     Copy.Tab.tonight, Copy.Tab.ledger, Copy.Tab.shelves, Copy.Tab.recipes, Copy.Tab.grocery, Copy.Tab.account,
     Copy.Action.swap, Copy.Action.skip, Copy.Action.markCooked, Copy.Action.letItGo, Copy.Action.eatIt,
-    Copy.Action.notNow, Copy.Action.addWhatYouHave, Copy.Action.planMyWeek, Copy.Action.pickForMe,
+    Copy.Action.notNow, Copy.Action.addWhatYouHave, Copy.Action.planMyWeek, Copy.Action.otherIdeas, Copy.Action.addFood,
     Copy.Freshness.fresh, Copy.Freshness.soon, Copy.Freshness.today, Copy.Freshness.past,
     Copy.Freshness.spoken(word: "Use soon", bestBy: "14 October"),
     Copy.Shelf.light, Copy.Shelf.comfortable, Copy.Shelf.heavy,
@@ -128,7 +128,7 @@ struct CopyTests {
         #expect(Copy.Voice.planSaved == "Stamped. The week is yours.")
         #expect(Copy.Voice.vetoReply == "Fair. Here's another that uses the same ingredients.")
         #expect(Copy.Voice.offline == "Couldn't reach the server. Your plan is saved here and will sync later.")
-        #expect(Copy.Voice.emptyPantry == "Nothing on the shelves yet. Add what you have and we'll plan around it.")
+        #expect(Copy.Voice.emptyPantry == "Add what you have at home and Larder plans dinners around it.")
         #expect(Copy.Voice.expiring(item: "Spinach", weekday: "Thursday") == "Spinach is best by Thursday. Dinner tonight uses it.")
         #expect(Copy.Voice.expiredToday(item: "yoghurt") == "The yoghurt is at its limit today. Eat it, or let it go.")
         #expect(Copy.Voice.lightOnGroup("greens") == "Light on greens this week. A handful in two dinners would do it.")
@@ -137,10 +137,11 @@ struct CopyTests {
 
     @Test func tabsAndActionsAreExact() {
         #expect([Copy.Tab.tonight, Copy.Tab.ledger, Copy.Tab.shelves, Copy.Tab.recipes, Copy.Tab.grocery, Copy.Tab.account]
-            == ["Tonight", "Ledger", "Shelves", "Recipes", "Grocery", "Account"])
+            == ["Tonight", "Plan", "Pantry", "Recipes", "Groceries", "Settings"])
         #expect([Copy.Action.swap, Copy.Action.skip, Copy.Action.markCooked, Copy.Action.letItGo, Copy.Action.eatIt,
-                 Copy.Action.notNow, Copy.Action.addWhatYouHave, Copy.Action.planMyWeek, Copy.Action.pickForMe]
-            == ["Swap", "Skip", "Mark cooked", "Let it go", "Eat it", "Not now", "Add what you have", "Plan my week", "Pick for me"])
+                 Copy.Action.notNow, Copy.Action.addWhatYouHave, Copy.Action.planMyWeek, Copy.Action.otherIdeas, Copy.Action.addFood]
+            == ["Swap", "Skip", "Mark as cooked", "Throw away", "Used up", "Not now", "Add what you have", "Plan my week",
+                "Show other ideas", "Add food"])
     }
 
     @Test func pluralsResolveThroughTheCatalogue() {

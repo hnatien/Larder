@@ -12,24 +12,30 @@ struct Hairline: View {
     }
 }
 
-/// An opaque raised card with hairline rules at the top and bottom. Never nest one inside another.
+/// An opaque raised card with a hairline outline and continuous corners. Never nest one inside another.
 public struct PaperCard<Content: View>: View {
+    @Environment(\.displayScale) private var displayScale
     @ScaledSpacing(.l) private var padding
     private let content: Content
+    private let usesPadding: Bool
 
-    /// Creates a card around the content.
-    public init(@ViewBuilder content: () -> Content) {
+    /// Creates a card around the content; `padded: false` lets the content run to the card's edges.
+    public init(padded: Bool = true, @ViewBuilder content: () -> Content) {
         self.content = content()
+        self.usesPadding = padded
+    }
+
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous)
     }
 
     public var body: some View {
         content
-            .padding(padding)
+            .padding(usesPadding ? padding : 0)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(LarderColor.surface.raised)
-            .overlay(alignment: .top) { Hairline() }
-            .overlay(alignment: .bottom) { Hairline() }
-            .clipShape(RoundedRectangle(cornerRadius: LarderRadius.card))
+            .background(LarderColor.surface.raised, in: shape)
+            .clipShape(shape)
+            .overlay { shape.strokeBorder(LarderColor.line.hairline, lineWidth: 1 / displayScale) }
     }
 }
 
