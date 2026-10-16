@@ -2,10 +2,14 @@ import LarderCore
 import LarderDesign
 import SwiftUI
 
-/// Describe what you bought, check the parsed lines, then add them; the same sheet takes lines typed by hand.
+/// Add food: type what you bought or tap common foods, check each line, then add them all from the toolbar.
 struct QuickAddSheet: View {
     @Bindable var model: ShelvesModel
     @Environment(\.dismiss) private var dismiss
+
+    private var isDraftBlank: Bool {
+        model.quickAddDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
     var body: some View {
         NavigationStack {
@@ -17,28 +21,44 @@ struct QuickAddSheet: View {
                     .listRowBackground(LarderColor.surface.raised)
                 }
                 describeSection
+                staplesSection
                 if !model.pendingLines.isEmpty {
                     linesSection
                 }
-                confirmSection
+                Section {
+                    Button(ShelvesCopy.addByHand, systemImage: "plus.circle", action: model.addBlankLine)
+                }
+                .listRowBackground(LarderColor.surface.raised)
             }
             .larderList()
             .navigationTitle(ShelvesCopy.sheetTitle)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(ShelvesCopy.cancel) { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(ShelvesCopy.addItems(model.confirmableLines.count)) { confirm() }
+                        .disabled(model.confirmableLines.isEmpty)
+                }
+            }
         }
         .onChange(of: model.error) { _, error in
             if let error {
                 AccessibilityNotification.Announcement(ShelvesCopy.message(for: error)).post()
             }
         }
+        .onDisappear { model.discardPending() }
     }
 
     private var describeSection: some View {
         Section {
-            TextField(ShelvesCopy.draftPrompt, text: $model.quickAddDraft, axis: .vertical)
-                .lineLimit(3...8)
+            TextField(ShelvesCopy.draftLabel, text: $model.quickAddDraft, prompt: Text(ShelvesCopy.draftPrompt), axis: .vertical)
+                .lineLimit(2...6)
+                .submitLabel(.done)
+                .onSubmit { Task { await model.quickAdd() } }
             Button {
                 Task { await model.quickAdd() }
             } label: {
@@ -46,52 +66,81 @@ struct QuickAddSheet: View {
                     if model.isParsing {
                         ProgressView()
                     }
-                    Text(ShelvesCopy.parse)
+                    Label(ShelvesCopy.parse, systemImage: "text.viewfinder")
                 }
                 .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.larderPrimary)
-            .disabled(model.isParsing || model.quickAddDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            .buttonStyle(.larderSecondary)
+            .disabled(model.isParsing || isDraftBlank)
+        } header: {
+            Text(ShelvesCopy.draftLabel)
+                .font(LarderFont.body(.headline, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.primary)
+                .textCase(nil)
+        } footer: {
+            Text(ShelvesCopy.draftHint)
+                .font(LarderFont.body(.footnote))
+                .foregroundStyle(LarderColor.ink.secondary)
         }
         .listRowBackground(LarderColor.surface.raised)
+    }
+
+    private var staplesSection: some View {
+        Section {
+            ChipFlow {
+                ForEach(ShelvesCopy.staples) { staple in
+                    ChoiceChip(staple.name, systemImage: "plus", isSelected: model.isPending(staple)) {
+                        model.toggle(staple)
+                    }
+                }
+            }
+            .padding(.vertical, LarderSpacing.xs)
+        } header: {
+            Text(ShelvesCopy.staplesTitle)
+                .font(LarderFont.body(.headline, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.primary)
+                .textCase(nil)
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
     }
 
     private var linesSection: some View {
         Section {
-            ForEach($model.pendingLines) { $line in
-                DraftLineEditor(line: $line, defaultBestBy: model.now) {
+            ForEach(model.pendingLines) { line in
+                DraftLineEditor(line: binding(for: line), defaultBestBy: model.now) {
                     model.pendingLines.removeAll { $0.id == line.id }
                 }
             }
+        } header: {
+            Text(ShelvesCopy.checkTitle)
+                .font(LarderFont.body(.headline, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.primary)
+                .textCase(nil)
         }
         .listRowBackground(LarderColor.surface.raised)
     }
 
-    private var confirmSection: some View {
-        Section {
-            Button(ShelvesCopy.addByHand, action: model.addBlankLine)
-                .buttonStyle(.larderSecondary)
-            Button {
-                Task {
-                    let added = await model.confirmPending()
-                    if added > 0 {
-                        AccessibilityNotification.Announcement(ShelvesCopy.added(added)).post()
-                    }
-                    if model.pendingLines.isEmpty { dismiss() }
-                }
-            } label: {
-                Text(ShelvesCopy.addItems(model.confirmableLines.count))
-                    .frame(maxWidth: .infinity)
+    /// A binding that finds the line by its ID, so removing a line (Cancel, a staple chip, the minus button) never
+    /// leaves a row reading past the end of the array while it disappears.
+    private func binding(for line: DraftLine) -> Binding<DraftLine> {
+        Binding(
+            get: { model.pendingLines.first { $0.id == line.id } ?? line },
+            set: { edited in
+                guard let index = model.pendingLines.firstIndex(where: { $0.id == line.id }) else { return }
+                model.pendingLines[index] = edited
             }
-            .buttonStyle(.larderPrimary)
-            .disabled(model.confirmableLines.isEmpty)
-            Button(Copy.Action.notNow) {
-                model.discardPending()
-                dismiss()
+        )
+    }
+
+    private func confirm() {
+        Task {
+            let added = await model.confirmPending()
+            if added > 0 {
+                AccessibilityNotification.Announcement(ShelvesCopy.added(added)).post()
             }
-            .buttonStyle(.larderQuiet)
+            if model.pendingLines.isEmpty { dismiss() }
         }
-        .listRowBackground(Color.clear)
     }
 }
 

@@ -18,6 +18,8 @@ public final class ShelvesModel {
     public private(set) var undo: UndoAction?
     public var quickAddDraft = ""
     public var pendingLines: [DraftLine] = []
+    /// Narrows the lists to items whose name contains this text; empty shows everything.
+    public var searchText = ""
 
     private let pantry: any PantryRepository
     private let foods: any FoodRepository
@@ -43,18 +45,25 @@ public final class ShelvesModel {
     /// The current moment, for defaulting a best-by date.
     public var now: Date { dates.now }
 
+    /// Items matching `searchText`.
+    var visibleItems: [PantryItem] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return items }
+        return items.filter { $0.rawName.localizedStandardContains(query) }
+    }
+
     /// Items best by within three days or already past, soonest first.
     public var eatFirst: [PantryItem] {
-        items
+        visibleItems
             .filter { freshness(for: $0) != .fresh }
             .sorted { ($0.bestBy ?? .distantFuture, $0.rawName) < ($1.bestBy ?? .distantFuture, $1.rawName) }
     }
 
-    /// Non-empty storage locations in shelf order, each sorted by name.
+    /// Non-empty storage locations in shelf order, each sorted by name. Items on the Use soon list show there only.
     public var shelves: [(StorageLocation, [PantryItem])] {
         StorageLocation.allCases.compactMap { location in
-            let kept = items
-                .filter { $0.location == location }
+            let kept = visibleItems
+                .filter { $0.location == location && freshness(for: $0) == .fresh }
                 .sorted { $0.rawName.localizedStandardCompare($1.rawName) == .orderedAscending }
             return kept.isEmpty ? nil : (location, kept)
         }
@@ -102,6 +111,20 @@ public final class ShelvesModel {
             quickAddDraft = ""
         } catch {
             record(error, fallback: .assistantUnavailable)
+        }
+    }
+
+    /// Whether a pending line already carries this staple.
+    public func isPending(_ staple: Staple) -> Bool {
+        pendingLines.contains { $0.name.caseInsensitiveCompare(staple.name) == .orderedSame }
+    }
+
+    /// Adds the staple as a pending line, or takes it back off when it is already pending.
+    public func toggle(_ staple: Staple) {
+        if isPending(staple) {
+            pendingLines.removeAll { $0.name.caseInsensitiveCompare(staple.name) == .orderedSame }
+        } else {
+            pendingLines.append(staple.line)
         }
     }
 
@@ -168,6 +191,25 @@ public final class ShelvesModel {
             record(error, fallback: .storageFailure)
         }
         await reload()
+    }
+
+    /// Saves an edited item; a blank name or an amount that is not positive and finite is ignored.
+    public func update(_ item: PantryItem) async {
+        var edited = item
+        edited.rawName = item.rawName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !edited.rawName.isEmpty, edited.quantityGrams.isFinite, edited.quantityGrams > 0 else { return }
+        error = nil
+        do {
+            try await pantry.upsert(edited)
+        } catch {
+            record(error, fallback: .storageFailure)
+        }
+        await reload()
+    }
+
+    /// The amount of an item in words, counting pieces when its food has a countable portion.
+    public func quantityText(for item: PantryItem) -> String {
+        ShelvesCopy.quantity(grams: item.quantityGrams, portions: item.foodID.flatMap { foodsByID[$0] }?.portions ?? [])
     }
 
     /// Puts the last removed item back on the shelves.

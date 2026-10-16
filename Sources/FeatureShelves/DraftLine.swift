@@ -47,6 +47,21 @@ public struct DraftLine: Identifiable, Hashable, Sendable {
     }
 }
 
+/// A common food offered as a one-tap chip in Add food, with a typical amount and where it is kept.
+public struct Staple: Identifiable, Hashable, Sendable {
+    public let name: String
+    public let quantity: Double
+    public let unit: UnitOfMeasure
+    public let location: StorageLocation
+
+    public var id: String { name }
+
+    /// The pending line this staple adds.
+    public var line: DraftLine {
+        DraftLine(name: name, quantity: quantity, unit: unit, location: location, source: .manual)
+    }
+}
+
 /// The last removed item, kept briefly so the removal can be reversed.
 public struct UndoAction: Identifiable, Hashable, Sendable {
     /// How the item left the shelves.
