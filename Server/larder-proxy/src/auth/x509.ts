@@ -18,11 +18,14 @@ export interface Certificate {
   signatureHash: "SHA-256" | "SHA-384";
   signature: Uint8Array;
   spki: Uint8Array;
+  /** The subject public key as an uncompressed SEC 1 point (`04 || x || y`). */
+  publicKey: Uint8Array;
   curve: "P-256" | "P-384";
   curveSize: number;
   notBefore: Date;
   notAfter: Date;
-  extensionOids: ReadonlySet<string>;
+  /** Extension OID to the contents of its `extnValue` OCTET STRING. */
+  extensions: ReadonlyMap<string, Uint8Array>;
 }
 
 /** Converts a single-certificate PEM block to DER. */
@@ -40,7 +43,7 @@ export function parseCertificate(der: Uint8Array): Certificate {
   const offset = tbsFields[0]?.tag === Tag.context0 ? 1 : 0;
   const validity = children(expectTag(tbsFields[offset + 3], Tag.sequence));
   const spkiNode = expectTag(tbsFields[offset + 5], Tag.sequence);
-  const [spkiAlgorithm] = children(spkiNode);
+  const [spkiAlgorithm, spkiKey] = children(spkiNode);
   const [keyType, curveOid] = children(expectTag(spkiAlgorithm, Tag.sequence));
   if (!keyType || decodeOid(keyType) !== EC_PUBLIC_KEY || !curveOid) throw new DerError("Not an EC public key");
   const curve = CURVES[decodeOid(curveOid)];
@@ -57,25 +60,30 @@ export function parseCertificate(der: Uint8Array): Certificate {
     signatureHash,
     signature: decodeBitString(expectTag(signatureNode, Tag.bitString)),
     spki: spkiNode.bytes,
+    publicKey: decodeBitString(expectTag(spkiKey, Tag.bitString)),
     curve: curve.name,
     curveSize: curve.size,
     notBefore: decodeTime(notBefore),
     notAfter: decodeTime(notAfter),
-    extensionOids: extensionOids(tbsFields.slice(offset + 6)),
+    extensions: extensions(tbsFields.slice(offset + 6)),
   };
 }
 
-function extensionOids(trailing: DerNode[]): Set<string> {
+// Extension ::= SEQUENCE { extnID OID, critical BOOLEAN DEFAULT FALSE, extnValue OCTET STRING }
+function extensions(trailing: DerNode[]): Map<string, Uint8Array> {
   const wrapper = trailing.find((node) => node.tag === Tag.context3);
-  const oids = new Set<string>();
-  if (!wrapper) return oids;
+  const values = new Map<string, Uint8Array>();
+  if (!wrapper) return values;
   const [list] = children(wrapper);
   for (const extension of children(expectTag(list, Tag.sequence))) {
-    const [oid] = children(expectTag(extension, Tag.sequence));
-    if (!oid) throw new DerError("Empty extension");
-    oids.add(decodeOid(oid));
+    const fields = children(expectTag(extension, Tag.sequence));
+    const [oid] = fields;
+    if (!oid || fields.length < 2) throw new DerError("Empty extension");
+    const id = decodeOid(oid);
+    if (values.has(id)) throw new DerError("Duplicate extension");
+    values.set(id, expectTag(fields[fields.length - 1], Tag.octetString).value);
   }
-  return oids;
+  return values;
 }
 
 /** Imports the certificate's public key for ECDSA verification. */

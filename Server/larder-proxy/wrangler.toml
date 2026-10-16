@@ -19,4 +19,9 @@ MODEL_CAPABLE = "claude-sonnet-5-5"
 ALLOW_DEV_ATTESTATION = "false"
 FREE_DAILY_LIMIT = "3"
 PLUS_DAILY_LIMIT = "60"
-BUNDLE_ID = "com.larder.app"
+BUNDLE_ID = "com.larder.Larder"
+# App Attest: set APPLE_TEAM_ID to the 10-character Apple Developer Team ID before deploying; until
+# then App Attest sessions fail closed with 500 server_misconfigured. The environment must match the
+# app's com.apple.developer.devicecheck.appattest-environment entitlement.
+# APPLE_TEAM_ID = "XXXXXXXXXX"
+APP_ATTEST_ENVIRONMENT = "production"

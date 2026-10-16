@@ -16,6 +16,8 @@ export interface Env {
   FREE_DAILY_LIMIT?: string;
   PLUS_DAILY_LIMIT?: string;
   BUNDLE_ID?: string;
+  APPLE_TEAM_ID?: string;
+  APP_ATTEST_ENVIRONMENT?: string;
   ANTHROPIC_API_KEY?: string;
   SESSION_SIGNING_KEY?: string;
   DEV_CLIENT_SECRET?: string;
@@ -30,6 +32,8 @@ const ConfigSchema = z.object({
   FREE_DAILY_LIMIT: DailyLimit,
   PLUS_DAILY_LIMIT: DailyLimit,
   BUNDLE_ID: z.string().min(1),
+  APPLE_TEAM_ID: z.string().regex(/^[A-Z0-9]{10}$/).optional(),
+  APP_ATTEST_ENVIRONMENT: z.enum(["production", "development"]).default("production"),
   SESSION_SIGNING_KEY: z.string().min(32),
   DEV_CLIENT_SECRET: z.string().min(1).optional(),
 });
@@ -42,6 +46,9 @@ export interface Config {
   freeDailyLimit: number;
   plusDailyLimit: number;
   bundleId: string;
+  /** Apple Developer Team ID; App Attest's App ID is `<team>.<bundle>`. Without it App Attest fails closed. */
+  appleTeamId: string | undefined;
+  appAttestEnvironment: "production" | "development";
   sessionSigningKey: string;
   devClientSecret: string | undefined;
 }
@@ -68,6 +75,8 @@ export function parseConfig(env: Env): Config {
     freeDailyLimit: value.FREE_DAILY_LIMIT,
     plusDailyLimit: value.PLUS_DAILY_LIMIT,
     bundleId: value.BUNDLE_ID,
+    appleTeamId: value.APPLE_TEAM_ID,
+    appAttestEnvironment: value.APP_ATTEST_ENVIRONMENT,
     sessionSigningKey: value.SESSION_SIGNING_KEY,
     devClientSecret: value.DEV_CLIENT_SECRET,
   };
@@ -80,4 +89,6 @@ export interface AppDeps {
   now: () => Date;
   env: Env;
   trustedRootPEMs: readonly string[];
+  /** Trust anchors for App Attest credential certificates. */
+  appAttestRootPEMs: readonly string[];
 }

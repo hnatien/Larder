@@ -34,6 +34,10 @@ export interface CertOptions {
   issuer?: TestCert;
   hash?: "SHA-256" | "SHA-384";
   extensionOids?: string[];
+  /** Extensions with real values (DER placed inside extnValue). */
+  extensionValues?: { oid: string; value: Uint8Array }[];
+  /** Use these keys instead of generating a pair. */
+  keys?: CryptoKeyPair;
   notBefore?: Date;
   notAfter?: Date;
   useUtcTime?: boolean;
@@ -42,7 +46,7 @@ export interface CertOptions {
 
 const nameOf = (common: string) => sequence(set(sequence(oid("2.5.4.3"), utf8String(common))));
 
-function rawToDerSignature(raw: Uint8Array): Uint8Array {
+export function rawToDerSignature(raw: Uint8Array): Uint8Array {
   const half = raw.length / 2;
   return sequence(integer(raw.subarray(0, half)), integer(raw.subarray(half)));
 }
@@ -52,12 +56,15 @@ export async function generateKeys(curve: Curve): Promise<CryptoKeyPair> {
 }
 
 export async function makeCert(options: CertOptions): Promise<TestCert> {
-  const keys = await generateKeys(options.curve);
+  const keys = options.keys ?? (await generateKeys(options.curve));
   const hash = options.hash ?? "SHA-256";
   const algorithm = sequence(oid(hash === "SHA-256" ? ECDSA_SHA256 : ECDSA_SHA384));
   const time = options.useUtcTime ? utcTime : generalizedTime;
   const spki = new Uint8Array((await crypto.subtle.exportKey("spki", keys.publicKey)) as ArrayBuffer);
-  const extensions = (options.extensionOids ?? []).map((id) => sequence(oid(id), octetString(nullValue())));
+  const extensions = [
+    ...(options.extensionOids ?? []).map((id) => sequence(oid(id), octetString(nullValue()))),
+    ...(options.extensionValues ?? []).map((extension) => sequence(oid(extension.oid), octetString(extension.value))),
+  ];
   const tbs = sequence(
     tlv(0xa0, integer(new Uint8Array([2]))),
     integer(crypto.getRandomValues(new Uint8Array(8))),

@@ -1,4 +1,4 @@
-// A deliberately small DER reader covering only what X.509 chain checks for App Store JWS need.
+// A deliberately small DER reader covering only what the X.509 chain checks for App Store JWS and App Attest need.
 
 /** Raised for any structural problem in DER input. */
 export class DerError extends Error {
@@ -25,6 +25,7 @@ export const Tag = {
   sequence: 0x30,
   set: 0x31,
   context0: 0xa0,
+  context1: 0xa1,
   context3: 0xa3,
 } as const;
 

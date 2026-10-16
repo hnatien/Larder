@@ -5,7 +5,8 @@ import { FakeAnthropic } from "./fakeAnthropic.js";
 import { MemoryKV } from "./memoryKv.js";
 
 export const NOW = new Date("2026-10-16T12:00:00Z");
-export const BUNDLE_ID = "com.larder.app";
+export const BUNDLE_ID = "com.larder.Larder";
+export const TEAM_ID = "ABCDE12345";
 
 /** Random per run so no secret-shaped values live in the repository. */
 export const SIGNING_KEY = `${crypto.randomUUID()}${crypto.randomUUID()}`;
@@ -20,13 +21,16 @@ export function testEnv(overrides: Partial<Env> = {}): Env {
     FREE_DAILY_LIMIT: "3",
     PLUS_DAILY_LIMIT: "60",
     BUNDLE_ID,
+    APPLE_TEAM_ID: TEAM_ID,
     SESSION_SIGNING_KEY: SIGNING_KEY,
     DEV_CLIENT_SECRET: DEV_SECRET,
     ...overrides,
   };
 }
 
-export function makeHarness(options: { env?: Partial<Env>; trustedRootPEMs?: string[]; now?: Date } = {}) {
+export function makeHarness(
+  options: { env?: Partial<Env>; trustedRootPEMs?: string[]; appAttestRootPEMs?: string[]; now?: Date } = {},
+) {
   const anthropic = new FakeAnthropic();
   const kv = new MemoryKV();
   const env = testEnv(options.env);
@@ -36,6 +40,7 @@ export function makeHarness(options: { env?: Partial<Env>; trustedRootPEMs?: str
     now: () => options.now ?? NOW,
     env,
     trustedRootPEMs: options.trustedRootPEMs ?? [],
+    appAttestRootPEMs: options.appAttestRootPEMs ?? [],
   });
   return { app, anthropic, kv, env };
 }

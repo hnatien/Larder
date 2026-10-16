@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import { AppAttestAttestor, DevAttestor, SessionRequestSchema, type Attestor } from "./auth/attestation.js";
+import { issueChallenge } from "./auth/challenge.js";
 import { ENTITLEMENT_HEADER, verifySignedTransaction } from "./auth/entitlement.js";
 import { issueSessionToken, requireSession } from "./auth/session.js";
 import { ConfigError, parseConfig, type AppDeps, type Config } from "./env.js";
@@ -22,6 +23,7 @@ interface Context {
 type Handler = (context: Context) => Promise<ErrorReply | { status: 200; body: unknown }>;
 
 const routes: Record<string, Handler> = {
+  "/v1/challenge": handleChallenge,
   "/v1/session": handleSession,
   "/v1/assist/explain": (context) => handleAssist(explainRoute, context),
   "/v1/assist/parse-pantry": (context) => handleAssist(parsePantryRoute, context),
@@ -74,17 +76,35 @@ async function readBody<T>(request: Request, schema: z.ZodType<T>): Promise<{ ok
   return { ok: true, body: result.data };
 }
 
-async function handleSession({ request, config, deps }: Context) {
+async function handleChallenge({ config, deps }: Context) {
+  return { status: 200 as const, body: await issueChallenge(config.sessionSigningKey, deps.now()) };
+}
+
+async function handleSession({ request, requestId, config, deps }: Context) {
   const parsed = await readBody(request, SessionRequestSchema);
   if (!parsed.ok) return parsed.reply;
   const attestation = parsed.body.attestation;
+  const now = deps.now();
   const attestor: Attestor =
     attestation.kind === "dev"
       ? new DevAttestor({ enabled: config.allowDevAttestation, clientSecret: config.devClientSecret })
-      : new AppAttestAttestor();
-  const rejection = await attestor.verify(attestation);
-  if (rejection) return rejection;
-  const { token, claims } = await issueSessionToken(config.sessionSigningKey, deps.now());
+      : new AppAttestAttestor({
+          kv: deps.kv,
+          signingKey: config.sessionSigningKey,
+          teamId: config.appleTeamId,
+          bundleId: config.bundleId,
+          environment: config.appAttestEnvironment,
+          rootPEMs: deps.appAttestRootPEMs,
+          now,
+        });
+  const result = await attestor.verify(attestation);
+  if (!result.accepted) {
+    if (result.reason) {
+      console.warn(JSON.stringify({ event: "attestation_rejected", requestId, kind: attestation.kind, reason: result.reason }));
+    }
+    return result.reply;
+  }
+  const { token, claims } = await issueSessionToken(config.sessionSigningKey, now, result.subject);
   return { status: 200 as const, body: { token, expiresAt: new Date(claims.exp * 1000).toISOString() } };
 }
 

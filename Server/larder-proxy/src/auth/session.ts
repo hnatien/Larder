@@ -10,7 +10,7 @@ const ClaimsSchema = z.object({
   tier: z.literal("anonymous"),
 });
 
-/** Claims inside a session token. `sub` is random and links to nothing about the person. */
+/** Claims inside a session token. `sub` is random, or derived from an App Attest key id; it links to nothing about the person. */
 export type SessionClaims = z.infer<typeof ClaimsSchema>;
 
 /** Why a token was rejected. */
@@ -24,9 +24,10 @@ function importKey(signingKey: string, usage: "sign" | "verify"): Promise<Crypto
 export async function issueSessionToken(
   signingKey: string,
   now: Date,
+  subject: string = crypto.randomUUID(),
 ): Promise<{ token: string; claims: SessionClaims }> {
   const claims: SessionClaims = {
-    sub: crypto.randomUUID(),
+    sub: subject,
     exp: Math.floor(now.getTime() / 1000) + SESSION_TTL_SECONDS,
     tier: "anonymous",
   };

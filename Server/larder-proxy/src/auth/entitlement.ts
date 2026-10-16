@@ -84,7 +84,7 @@ export async function verifySignedTransaction(
     return free("untrusted_root");
   }
   if (!trustedRoots.some((trusted) => bytesEqual(trusted, root.der))) return free("untrusted_root");
-  if (!leaf.extensionOids.has(LEAF_MARKER_OID) || !intermediate.extensionOids.has(INTERMEDIATE_MARKER_OID)) {
+  if (!leaf.extensions.has(LEAF_MARKER_OID) || !intermediate.extensions.has(INTERMEDIATE_MARKER_OID)) {
     return free("invalid_chain");
   }
   const nowMs = options.now.getTime();

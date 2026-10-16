@@ -90,15 +90,13 @@ describe("POST /v1/session", () => {
     expect(response.status).toBe(500);
   });
 
-  it("reports App Attest as not implemented with 501", async () => {
+  it("routes App Attest bodies to App Attest verification, not dev attestation", async () => {
     const { app } = makeHarness();
     const response = await post(app, "/v1/session", {
-      attestation: { kind: "appAttest", keyId: "k", attestationObject: "o", challenge: "c" },
+      attestation: { kind: "appAttest", keyId: "AA==", attestationObject: "AA==", challenge: "c" },
     });
-    expect(response.status).toBe(501);
-    const body = (await response.json()) as { error: string; message: string };
-    expect(body.error).toBe("app_attest_not_implemented");
-    expect(body.message).toMatch(/not implemented/);
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ error: "challenge_invalid" });
   });
 
   it("returns 400 with issues for an unknown attestation kind", async () => {
