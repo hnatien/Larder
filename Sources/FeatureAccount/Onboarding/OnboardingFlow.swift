@@ -56,9 +56,7 @@ public struct OnboardingFlow: View {
                     }
                     content
                     if model.error != nil {
-                        Label(AccountCopy.Onboarding.saveFailed, systemImage: "exclamationmark.triangle")
-                            .font(LarderFont.body(.body))
-                            .foregroundStyle(LarderColor.status(.danger))
+                        InlineBanner(AccountCopy.Onboarding.saveFailed)
                     }
                 }
                 .padding(gutter)
@@ -246,6 +244,12 @@ public struct OnboardingFlow: View {
         .padding(.horizontal, gutter)
         .padding(.vertical, LarderSpacing.m)
         .disabled(model.isSaving)
+        // An edge and the canvas behind it, so the question never reads through under the button.
+        .frame(maxWidth: .infinity)
+        .background(LarderColor.surface.canvas)
+        .overlay(alignment: .top) {
+            Divider().overlay(LarderColor.line.hairline)
+        }
     }
 }
 

@@ -57,11 +57,11 @@ nonisolated enum AccountCopy {
         static var intolerancePrompt: String { String(localized: "For example lactose, separated by commas", bundle: Copy.bundle) }
         static var eatByTitle: String { String(localized: "Do you follow a diet?", bundle: Copy.bundle) }
         static var eatByDetail: String {
-            String(localized: "Pick any that apply. Recipes outside them never show up.", bundle: Copy.bundle)
+            String(localized: "Pick any that apply. Ideas and plans stick to them.", bundle: Copy.bundle)
         }
         static var carefulTitle: String { String(localized: "Health conditions", bundle: Copy.bundle) }
         static var carefulDetail: String {
-            String(localized: "Optional. These stay on this phone and shape nutrient ranges.", bundle: Copy.bundle)
+            String(localized: "Optional. These stay on this phone. Larder plans within the nutrient ranges they call for, even with numbers hidden.", bundle: Copy.bundle)
         }
         static var householdTitle: String { String(localized: "Who are you cooking for?", bundle: Copy.bundle) }
         static var householdDetail: String {
@@ -91,7 +91,7 @@ nonisolated enum AccountCopy {
     enum Numbers {
         static var label: String { String(localized: "Show numbers", bundle: Copy.bundle) }
         static var hint: String {
-            String(localized: "Calories and nutrient amounts stay hidden unless this is on. Shelf balance uses words either way.", bundle: Copy.bundle)
+            String(localized: "Calories and nutrient amounts stay hidden unless this is on. Nutrition balance uses words either way.", bundle: Copy.bundle)
         }
     }
 
@@ -105,6 +105,8 @@ nonisolated enum AccountCopy {
                 (String(localized: "Leftovers and batch cooking scheduled for you", bundle: Copy.bundle), "arrow.2.squarepath"),
                 (String(localized: "See each food group across the week", bundle: Copy.bundle), "chart.bar"),
                 (String(localized: "Ask for a vegetarian Tuesday under 30 minutes", bundle: Copy.bundle), "text.bubble"),
+                (String(localized: "Read a recipe from a photo of a book or card", bundle: Copy.bundle), "camera"),
+                (String(localized: "Add groceries to your pantry from a receipt", bundle: Copy.bundle), "doc.text.viewfinder"),
             ]
         }
         static var staysFree: String {
@@ -164,7 +166,22 @@ nonisolated enum AccountCopy {
         static var nutrition: String { String(localized: "Nutrition", bundle: Copy.bundle) }
         static var cooking: String { String(localized: "Cooking", bundle: Copy.bundle) }
         static var assistant: String { String(localized: "AI help", bundle: Copy.bundle) }
-        static var freeStatus: String { String(localized: "You're on the free plan. One week of planning is included.", bundle: Copy.bundle) }
+        static var freeStatus: String { String(localized: "You're on the free plan.", bundle: Copy.bundle) }
+        static var freeWeekLeft: String { String(localized: "Your free planned week is still there to use.", bundle: Copy.bundle) }
+        static var freeWeekUsed: String {
+            String(localized: "You've used your free planned week. You can still add recipes to any day by hand.", bundle: Copy.bundle)
+        }
+        static var terms: String { String(localized: "Terms of use", bundle: Copy.bundle) }
+        static var privacy: String { String(localized: "Privacy policy", bundle: Copy.bundle) }
+        static var removedRule: String { String(localized: "Removed. Plans can include it again.", bundle: Copy.bundle) }
+        static var undo: String { String(localized: "Undo", bundle: Copy.bundle) }
+        static var tryAgain: String { String(localized: "Try again", bundle: Copy.bundle) }
+        static var deleteFooter: String { String(localized: "Erases everything on this iPhone and starts setup again.", bundle: Copy.bundle) }
+
+        /// The Add menu under one group, named for it so each one reads differently.
+        static func add(to group: String) -> String {
+            String(localized: "Add to \(group)", bundle: Copy.bundle)
+        }
         static var dangerZone: String { String(localized: "Start over", bundle: Copy.bundle) }
         static var goal: String { String(localized: "What matters most", bundle: Copy.bundle) }
         static var equipment: String { String(localized: "Equipment", bundle: Copy.bundle) }

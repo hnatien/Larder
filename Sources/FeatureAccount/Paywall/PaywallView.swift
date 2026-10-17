@@ -9,7 +9,7 @@ nonisolated enum LegalLinks {
     static let privacy = URL(string: "https://larder.app/privacy")
 }
 
-/// What Larder Plus adds and how to get it. "Not now" weighs the same as subscribing.
+/// What Larder Plus adds and how to get it. "Not now" stays on screen in words, never a bare close icon.
 public struct PaywallView: View {
     private let entitlements: EntitlementStore
     private let onDismiss: () -> Void
@@ -40,12 +40,35 @@ public struct PaywallView: View {
         if entitlements.products.isEmpty {
             fallback
         } else {
+            // The plans, the subscribe button, Restore and the legal links all sit in the system's own
+            // control area, so the pitch keeps the rest of the screen and nothing is stacked under it.
             SubscriptionStoreView(groupID: EntitlementStore.subscriptionGroupID) {
-                ScrollView { pitch.padding(gutter) }
+                ScrollView {
+                    VStack(alignment: .leading, spacing: LarderSpacing.l) {
+                        status
+                        pitch
+                        HintText(AccountCopy.Paywall.renews)
+                    }
+                    .padding(gutter)
+                }
             }
-            .subscriptionStoreControlStyle(.prominentPicker)
+            .subscriptionStoreControlStyle(.compactPicker)
             .subscriptionStoreButtonLabel(.multiline)
+            .storeButton(.visible, for: .restorePurchases, .policies)
+            .storeButton(.hidden, for: .cancellation)
+            .policyDestination(LegalLinks.terms, for: .termsOfService)
+            .policyDestination(LegalLinks.privacy, for: .privacyPolicy)
+            .tint(LarderColor.accent.brand)
             .containerBackground(LarderColor.surface.canvas, for: .subscriptionStore)
+            .overlay(alignment: .topTrailing) {
+                Button(Copy.Action.notNow, action: onDismiss)
+                    .font(LarderFont.body(.body, weight: .semibold))
+                    .foregroundStyle(LarderColor.ink.primary)
+                    .buttonStyle(.glass)
+                    .frame(minHeight: 44)
+                    .padding(.trailing, gutter)
+                    .padding(.top, LarderSpacing.s)
+            }
             .onInAppPurchaseCompletion { _, result in
                 let outcome: Result<PurchaseOutcome, any Error>
                 do {
@@ -54,14 +77,6 @@ public struct PaywallView: View {
                     outcome = .failure(error)
                 }
                 if entitlements.complete(outcome) == .purchased { onDismiss() }
-            }
-            .safeAreaInset(edge: .bottom) {
-                VStack(alignment: .leading, spacing: LarderSpacing.s) {
-                    status
-                    actions
-                }
-                .padding(gutter)
-                .background(LarderColor.surface.raised)
             }
         }
         #else
@@ -170,6 +185,20 @@ public struct PaywallView: View {
         }
     }
 }
+
+#if os(iOS)
+private extension View {
+    /// Links a store policy to its page, when the page has an address.
+    @ViewBuilder
+    func policyDestination(_ url: URL?, for policy: SubscriptionStorePolicyKind) -> some View {
+        if let url {
+            subscriptionStorePolicyDestination(url: url, for: policy)
+        } else {
+            self
+        }
+    }
+}
+#endif
 
 #if DEBUG
 #Preview("Paywall") {

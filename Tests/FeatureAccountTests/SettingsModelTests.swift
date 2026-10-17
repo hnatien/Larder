@@ -180,6 +180,40 @@ struct SettingsModelTests {
         #expect(await repository.storedConstraints == [diet])
     }
 
+    @Test func undoPutsARemovedRuleBack() async {
+        let dislike = DietaryConstraint.userSet(.dislike(.name("Olives")), at: referenceNow)
+        let diet = DietaryConstraint.userSet(.diet(.vegan), at: referenceNow)
+        let (model, repository) = await loaded(constraints: [dislike, diet])
+        await model.requestRemoval(dislike)
+        #expect(model.lastRemoved == dislike)
+        await model.undoRemoval()
+        #expect(model.lastRemoved == nil)
+        #expect(Set(await repository.storedConstraints) == [dislike, diet])
+    }
+
+    @Test func dismissingTheUndoLetsTheRemovalStand() async {
+        let dislike = DietaryConstraint.userSet(.dislike(.name("Olives")), at: referenceNow)
+        let (model, repository) = await loaded(constraints: [dislike])
+        await model.requestRemoval(dislike)
+        model.dismissRemovalUndo()
+        await model.undoRemoval()
+        #expect(await repository.storedConstraints.isEmpty)
+    }
+
+    @Test func freeWeekStatusFollowsTheGate() async {
+        let repository = FakeProfileRepository(profile: sampleProfile)
+        let library = FakeLibrary()
+        let gate = TrialWeekGate(store: flags)
+        let model = SettingsModel(
+            profiles: repository,
+            exporter: ExportBuilder(profiles: repository, recipes: library, pantry: library, plans: library),
+            preferences: ComfortPreferences(store: flags), dates: FixedDates(), trialWeek: gate, deleteAllData: {}
+        )
+        #expect(model.freeWeekAvailable == true)
+        gate.markFreeWeekUsed()
+        #expect(model.freeWeekAvailable == false)
+    }
+
     @Test func deleteWithoutConfirmationDoesNothing() async {
         let (model, _) = await loaded()
         await model.deleteAllData()

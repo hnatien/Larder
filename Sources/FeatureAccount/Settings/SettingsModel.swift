@@ -25,6 +25,8 @@ public final class SettingsModel {
     public private(set) var isConfirmingDelete = false
     public private(set) var birthYearDeclined: Bool
     public private(set) var timersFlashAndVibrate: Bool
+    /// The last rule taken off, while Undo can put it back.
+    public private(set) var lastRemoved: DietaryConstraint?
     /// The "Export everything" file.
     public let exportDocument: ExportDocument
 
@@ -32,16 +34,20 @@ public final class SettingsModel {
     private let preferences: ComfortPreferences
     private let dates: any DateProvider
     private let deleteEverything: @Sendable () async throws -> Void
+    private let trialWeek: TrialWeekGate?
 
-    /// Creates the model; `deleteAllData` erases every store and is called only after confirmation.
+    /// Creates the model; `deleteAllData` erases every store and is called only after confirmation, and `trialWeek`
+    /// says whether the free planned week is still there.
     public init(
         profiles: any ProfileRepository,
         exporter: ExportBuilder,
         preferences: ComfortPreferences,
         dates: any DateProvider,
+        trialWeek: TrialWeekGate? = nil,
         deleteAllData: @escaping @Sendable () async throws -> Void
     ) {
         self.profiles = profiles
+        self.trialWeek = trialWeek
         self.preferences = preferences
         self.dates = dates
         self.deleteEverything = deleteAllData
@@ -49,6 +55,9 @@ public final class SettingsModel {
         self.birthYearDeclined = preferences.birthYearDeclined
         self.timersFlashAndVibrate = preferences.timersFlashAndVibrate
     }
+
+    /// Whether a free user's one planned week is still unused; `nil` when Larder cannot tell.
+    public var freeWeekAvailable: Bool? { trialWeek?.canGenerateFreeWeek }
 
     /// Years offered for the year of birth, newest first.
     public var birthYearChoices: [Int] { ProfileDefaults.birthYears(referenceYear: referenceYear) }
@@ -167,7 +176,22 @@ public final class SettingsModel {
     private var referenceYear: Int { ProfileDefaults.referenceYear(at: dates.now) }
 
     private func remove(_ id: DietaryConstraintID) async {
+        let removed = constraints.first { $0.id == id }
         await saveConstraints(constraints.filter { $0.id != id })
+        if error == nil { lastRemoved = removed }
+    }
+
+    /// Puts the last removed rule back where it was.
+    public func undoRemoval() async {
+        guard let removed = lastRemoved else { return }
+        lastRemoved = nil
+        guard !constraints.contains(where: { $0.id == removed.id }) else { return }
+        await saveConstraints(constraints + [removed])
+    }
+
+    /// Lets the last removal stand.
+    public func dismissRemovalUndo() {
+        lastRemoved = nil
     }
 
     @discardableResult

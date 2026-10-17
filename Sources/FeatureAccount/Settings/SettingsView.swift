@@ -22,14 +22,17 @@ public struct SettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: LarderSpacing.xl) {
                 if let error = model.error {
-                    Label(AccountCopy.message(for: error), systemImage: "exclamationmark.triangle")
-                        .foregroundStyle(LarderColor.status(.danger))
+                    InlineBanner(
+                        AccountCopy.message(for: error),
+                        action: error == .loadFailed ? .init(title: AccountCopy.Settings.tryAgain) { Task { await model.load() } } : nil
+                    )
                 }
                 if let profile = model.profile {
-                    profileSection(profile)
+                    // What Larder leaves out comes first: it is the safety setting, and setup may have been left for later.
                     ForEach(SettingsModel.editableAxes, id: \.self) { axis in
                         constraintSection(axis)
                     }
+                    profileSection(profile)
                 }
                 plusSection
                 dataSection
@@ -39,6 +42,7 @@ public struct SettingsView: View {
             .padding(LarderSpacing.l)
         }
         .background(LarderColor.surface.canvas)
+        .larderToast(removalToast, onExpire: model.dismissRemovalUndo)
         .navigationTitle(AccountCopy.Settings.title)
         .task { await model.load() }
         .onChange(of: model.error) { _, error in
@@ -166,12 +170,14 @@ public struct SettingsView: View {
     private func addControls(for axis: ConstraintAxis) -> some View {
         let options = Self.addableKinds(on: axis).filter { !model.contains($0) }
         if !options.isEmpty {
-            Menu(AccountCopy.Settings.add) {
+            Menu {
                 ForEach(options, id: \.self) { kind in
                     Button(AccountCopy.name(of: kind)) { Task { await model.add(kind) } }
                 }
+            } label: {
+                Label(AccountCopy.Settings.add(to: AccountCopy.name(of: axis)), systemImage: "plus.circle")
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             }
-            .frame(minHeight: 44)
         }
         switch axis {
         case .medical:
@@ -197,6 +203,14 @@ public struct SettingsView: View {
                 #endif
             } else {
                 HintText(AccountCopy.Settings.freeStatus)
+                if let available = model.freeWeekAvailable {
+                    Label(
+                        available ? AccountCopy.Settings.freeWeekLeft : AccountCopy.Settings.freeWeekUsed,
+                        systemImage: available ? "calendar.badge.plus" : "calendar.badge.checkmark"
+                    )
+                    .font(LarderFont.body(.subheadline))
+                    .foregroundStyle(LarderColor.ink.primary)
+                }
                 Button(AccountCopy.Settings.seePlus) { showsPaywall = true }
                     .buttonStyle(.larderSecondary)
             }
@@ -219,7 +233,7 @@ public struct SettingsView: View {
     }
 
     private var deleteSection: some View {
-        SettingsGroup(AccountCopy.Settings.dangerZone, footer: AccountCopy.Settings.deleteMessage) {
+        SettingsGroup(AccountCopy.Settings.dangerZone, footer: AccountCopy.Settings.deleteFooter) {
             Button(role: .destructive) {
                 model.requestDeleteAll()
             } label: {
@@ -243,6 +257,23 @@ public struct SettingsView: View {
                 Text(AccountCopy.Settings.fontLicence)
             }
             Text(AccountCopy.Settings.usdaAttribution)
+            if let terms = LegalLinks.terms {
+                Link(AccountCopy.Settings.terms, destination: terms)
+                    .frame(minHeight: 44)
+            }
+            if let privacy = LegalLinks.privacy {
+                Link(AccountCopy.Settings.privacy, destination: privacy)
+                    .frame(minHeight: 44)
+            }
+        }
+    }
+
+    /// The last rule taken off, with Undo.
+    private var removalToast: LarderToast? {
+        model.lastRemoved.map { removed in
+            LarderToast(id: removed.id.rawValue, AccountCopy.Settings.removedRule, systemImage: "minus.circle.fill", actionTitle: AccountCopy.Settings.undo) {
+                Task { await model.undoRemoval() }
+            }
         }
     }
 
@@ -355,8 +386,15 @@ private struct DraftField: View {
 
     var body: some View {
         HStack {
-            TextField(label, text: $text)
+            // Vertical so it grows with Dynamic Type instead of clipping; Return adds rather than starting a new line.
+            TextField(label, text: $text, axis: .vertical)
                 .onSubmit(send)
+                .onChange(of: text) { _, new in
+                    if new.contains("\n") {
+                        text = new.replacingOccurrences(of: "\n", with: "")
+                        send()
+                    }
+                }
                 .padding(LarderSpacing.m)
                 .frame(minHeight: 44)
                 .background(LarderColor.surface.sunken, in: RoundedRectangle(cornerRadius: LarderRadius.field))
