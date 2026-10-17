@@ -13,7 +13,7 @@ struct FoundationModelsBackendTests {
     private static let liveModelIsAvailable = SystemLanguageModel.default.availability == .available
 
     private func backend(available: Bool) -> FoundationModelsBackend {
-        FoundationModelsBackend(model: .default, modelIsAvailable: { available })
+        FoundationModelsBackend(model: .default, dates: UnusedDateProvider(), modelIsAvailable: { available })
     }
 
     @Test func availabilityFollowsTheModel() {
@@ -74,7 +74,7 @@ struct FoundationModelsBackendTests {
 
     @Test(.enabled(if: liveModelIsAvailable, "Needs Apple Intelligence enabled on this Mac"))
     func liveModelParsesAShortPantryList() async throws {
-        let lines = try await FoundationModelsBackend().parsePantry(text: "2 onions, a bag of rice")
+        let lines = try await FoundationModelsBackend(dates: UnusedDateProvider()).parsePantry(text: "2 onions, a bag of rice")
         #expect(!lines.isEmpty)
     }
 }

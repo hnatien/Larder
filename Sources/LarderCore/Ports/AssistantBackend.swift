@@ -75,6 +75,8 @@ public struct ParsedPantryLine: Hashable, Codable, Sendable {
     public var quantity: Double?
     public var unit: UnitOfMeasure?
     public var location: StorageLocation?
+    /// The start of the day the text says the item is best by, resolved from wording such as "exp friday"; `nil` when none is written.
+    public var bestBy: Date?
 
     /// Creates a parsed pantry line.
     public init(
@@ -82,13 +84,15 @@ public struct ParsedPantryLine: Hashable, Codable, Sendable {
         name: String,
         quantity: Double? = nil,
         unit: UnitOfMeasure? = nil,
-        location: StorageLocation? = nil
+        location: StorageLocation? = nil,
+        bestBy: Date? = nil
     ) {
         self.rawText = rawText
         self.name = name
         self.quantity = quantity
         self.unit = unit
         self.location = location
+        self.bestBy = bestBy
     }
 }
 

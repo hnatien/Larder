@@ -30,14 +30,15 @@ public struct DraftLine: Identifiable, Hashable, Sendable {
         self.source = source
     }
 
-    /// Creates a line from the assistant's reading of free text.
-    public init(parsed line: ParsedPantryLine) {
+    /// Creates a line from the assistant's reading of free text or a receipt, keeping any best-by date it found.
+    public init(parsed line: ParsedPantryLine, source: PantrySource = .naturalLanguage) {
         self.init(
             name: line.name,
             quantity: line.quantity ?? 1,
             unit: line.unit ?? .piece,
             location: line.location ?? .pantry,
-            source: .naturalLanguage
+            bestBy: line.bestBy,
+            source: source
         )
     }
 

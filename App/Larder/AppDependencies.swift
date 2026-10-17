@@ -186,7 +186,7 @@ final class AppDependencies {
         let proxy = ProxyAssistantBackend(client: client, dateProvider: dates) {
             try await explainContext(planning: planning, plans: plans, profiles: profiles)
         }
-        let onDevice = FoundationModelsBackend()
+        let onDevice = FoundationModelsBackend(dates: dates)
         let router = AssistantRouter(onDevice: onDevice, proxy: proxy) {
             do {
                 return try await profiles.profile()?.consents ?? Consents()

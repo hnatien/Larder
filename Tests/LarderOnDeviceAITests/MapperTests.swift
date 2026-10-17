@@ -1,22 +1,38 @@
+import Foundation
 import Testing
 import LarderCore
 @testable import LarderOnDeviceAI
 
 struct PantryLineMapperTests {
-    @Test func mapsEveryField() {
+    private static let calendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .gmt
+        return calendar
+    }()
+    /// Monday 19 October 2026, 17:00 GMT.
+    private static let now = Date(timeIntervalSince1970: 1_792_429_200)
+
+    @Test func mapsEveryField() throws {
         let line = PantryLine(name: "  basmati rice ", quantity: 500, unit: "grams", location: "pantry", bestByHint: "use by Friday")
-        #expect(PantryLineMapper.map(line) == ParsedPantryLine(
+        let friday = try #require(Self.calendar.date(from: DateComponents(year: 2026, month: 10, day: 23)))
+        #expect(PantryLineMapper.map(line, now: Self.now, calendar: Self.calendar, locale: Locale(identifier: "en_GB")) == ParsedPantryLine(
             rawText: "basmati rice",
             name: "basmati rice",
             quantity: 500,
             unit: .gram,
-            location: .pantry
+            location: .pantry,
+            bestBy: friday
         ))
+    }
+
+    @Test func bestByWordingWithNoDayStaysNil() {
+        let line = PantryLine(name: "milk", quantity: nil, unit: nil, location: nil, bestByHint: "check the lid")
+        #expect(PantryLineMapper.map(line, now: Self.now, calendar: Self.calendar).bestBy == nil)
     }
 
     @Test func missingOptionalFieldsStayNil() {
         let line = PantryLine(name: "onions", quantity: nil, unit: nil, location: nil, bestByHint: nil)
-        #expect(PantryLineMapper.map(line) == ParsedPantryLine(rawText: "onions", name: "onions"))
+        #expect(PantryLineMapper.map(line, now: Self.now) == ParsedPantryLine(rawText: "onions", name: "onions"))
     }
 
     @Test(arguments: [
@@ -25,20 +41,20 @@ struct PantryLineMapperTests {
     ])
     func unitSpellingsMapThroughUnitParser(unit: String, expected: UnitOfMeasure) {
         let line = PantryLine(name: "x", quantity: 1, unit: unit, location: nil, bestByHint: nil)
-        #expect(PantryLineMapper.map(line).unit == expected)
+        #expect(PantryLineMapper.map(line, now: Self.now).unit == expected)
     }
 
     @Test(arguments: ["bag", "tin", "handful", "", "  "])
     func containerWordsAndBlankUnitsMapToNoUnit(unit: String) {
         let line = PantryLine(name: "rice", quantity: 1, unit: unit, location: nil, bestByHint: nil)
-        #expect(PantryLineMapper.map(line).unit == nil)
-        #expect(PantryLineMapper.map(line).quantity == 1)
+        #expect(PantryLineMapper.map(line, now: Self.now).unit == nil)
+        #expect(PantryLineMapper.map(line, now: Self.now).quantity == 1)
     }
 
     @Test(arguments: [0, -2, Double.nan, Double.infinity])
     func quantitiesThatAreNotPositiveAndFiniteAreDropped(quantity: Double) {
         let line = PantryLine(name: "eggs", quantity: quantity, unit: nil, location: nil, bestByHint: nil)
-        #expect(PantryLineMapper.map(line).quantity == nil)
+        #expect(PantryLineMapper.map(line, now: Self.now).quantity == nil)
     }
 }
 

@@ -9,16 +9,18 @@ import LarderCore
 public actor FoundationModelsBackend: AssistantBackend, OnDeviceAvailability {
     private let model: SystemLanguageModel
     private let modelIsAvailable: @Sendable () -> Bool
+    private let dates: any DateProvider
     private let textExtractor = DocumentTextExtractor()
     private var preparedPantrySession: LanguageModelSession?
 
-    /// Creates a backend over `model`.
-    public init(model: SystemLanguageModel = .default) {
-        self.init(model: model, modelIsAvailable: { model.availability == .available })
+    /// Creates a backend over `model`; `dates` anchors best-by wording such as "exp friday".
+    public init(model: SystemLanguageModel = .default, dates: any DateProvider) {
+        self.init(model: model, dates: dates, modelIsAvailable: { model.availability == .available })
     }
 
-    init(model: SystemLanguageModel, modelIsAvailable: @escaping @Sendable () -> Bool) {
+    init(model: SystemLanguageModel, dates: any DateProvider, modelIsAvailable: @escaping @Sendable () -> Bool) {
         self.model = model
+        self.dates = dates
         self.modelIsAvailable = modelIsAvailable
     }
 
@@ -59,7 +61,8 @@ public actor FoundationModelsBackend: AssistantBackend, OnDeviceAvailability {
                 allowsTruncation: true
             )
             let response = try await session.respond(to: Prompt(fitted), generating: PantryLines.self)
-            return response.content.lines.map(PantryLineMapper.map).filter { !$0.name.isEmpty }
+            let now = dates.now
+            return response.content.lines.map { PantryLineMapper.map($0, now: now) }.filter { !$0.name.isEmpty }
         } catch {
             throw GenerationErrorMapper.map(error)
         }

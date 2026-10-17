@@ -88,12 +88,13 @@ struct ProxyAssistantBackendTests {
         #expect(sent.utf16.count <= 500)
     }
 
-    @Test func parsePantryMapsUnitsAndLocations() async throws {
+    @Test func parsePantryMapsUnitsLocationsAndBestByHints() async throws {
         let stub = stubbed(Fixtures.pantryPath, Fixtures.pantryReply)
         let lines = try await Fixtures.backend(stub).parsePantry(text: "2 onions, 500 g chicken thighs in the freezer, stock")
+        let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: Calendar.current.startOfDay(for: Fixtures.now))
         #expect(lines == [
             ParsedPantryLine(rawText: "onions", name: "onions", quantity: 2),
-            ParsedPantryLine(rawText: "chicken thighs", name: "chicken thighs", quantity: 500, unit: .gram, location: .freezer),
+            ParsedPantryLine(rawText: "chicken thighs", name: "chicken thighs", quantity: 500, unit: .gram, location: .freezer, bestBy: nextWeek),
             ParsedPantryLine(rawText: "stock", name: "stock", quantity: 1, unit: nil, location: .pantry),
         ])
     }

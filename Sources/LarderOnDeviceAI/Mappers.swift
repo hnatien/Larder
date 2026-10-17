@@ -4,17 +4,17 @@ import LarderCore
 
 /// Maps an on-device pantry line to the Core type.
 nonisolated enum PantryLineMapper {
-    /// The Core line for `line`; the name is trimmed, quantities that are not positive and finite are dropped.
-    ///
-    /// `bestByHint` is not carried over: `ParsedPantryLine` has no best-by field yet.
-    static func map(_ line: PantryLine) -> ParsedPantryLine {
+    /// The Core line for `line`; the name is trimmed, quantities that are not positive and finite are dropped, and the
+    /// best-by wording becomes a day counted from `now`.
+    static func map(_ line: PantryLine, now: Date, calendar: Calendar = .current, locale: Locale = .current) -> ParsedPantryLine {
         let name = line.name.trimmingCharacters(in: .whitespacesAndNewlines)
         return ParsedPantryLine(
             rawText: name,
             name: name,
             quantity: line.quantity.flatMap { $0.isFinite && $0 > 0 ? $0 : nil },
             unit: UnitParser.unit(from: line.unit),
-            location: StorageLocationMapper.location(from: line.location)
+            location: StorageLocationMapper.location(from: line.location),
+            bestBy: BestByHint.date(from: line.bestByHint, now: now, calendar: calendar, locale: locale)
         )
     }
 }

@@ -65,13 +65,15 @@ public struct ProxyAssistantBackend: AssistantBackend {
         let scrubbed = sanitizer.scrub(text, limit: sanitizer.pantryLimit)
         guard !scrubbed.isEmpty else { return [] }
         let response = try await send(ParsePantryRequestBody(text: scrubbed), to: .parsePantry, as: ParsePantryResponseBody.self)
+        let now = dateProvider.now
         return response.lines.map { line in
             ParsedPantryLine(
                 rawText: line.rawName,
                 name: line.rawName,
                 quantity: line.quantity,
                 unit: UnitParser.unit(from: line.unit),
-                location: line.location
+                location: line.location,
+                bestBy: BestByHint.date(from: line.bestByHint, now: now)
             )
         }
     }
