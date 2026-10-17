@@ -99,6 +99,27 @@ struct AllergenEngineTests {
         #expect(!engine.textPath([line], foods: Kitchen.foods(spread), allergen: .peanut))
     }
 
+    @Test func guessedMatchTaggedFreeIsUncertainNeverClear() {
+        let chicken = Kitchen.safeFood("Chicken, raw")
+        var line = Kitchen.line("400 g chicken nuggets", food: chicken)
+        line.matchConfidence = 0.5
+
+        let result = verdict([line], foods: Kitchen.foods(chicken), [Kitchen.constraint(.allergen(.wheat))])
+
+        #expect(engine.dataPath([line], foods: Kitchen.foods(chicken), allergen: .wheat) == .unknown)
+        #expect(result == .uncertain([AllergenReason(allergen: .wheat, ingredientID: line.id, evidence: .dataTag(.unknown))]))
+    }
+
+    @Test func guessedMatchStillExcludesOnAContainsTag() {
+        let sauce = Kitchen.food("House sauce", allergens: [.mustard: .contains])
+        var line = Kitchen.line("house sauce, to serve", food: sauce)
+        line.matchConfidence = 0.5
+
+        let result = verdict([line], foods: Kitchen.foods(sauce), [Kitchen.constraint(.allergen(.mustard))])
+
+        #expect(result == .excluded([AllergenReason(allergen: .mustard, ingredientID: line.id, evidence: .dataTag(.contains))]))
+    }
+
     @Test func missingFoodRecordIsUnknown() {
         let ghost = Kitchen.food("Not in the database")
         let line = Kitchen.line("mystery mix", food: ghost)

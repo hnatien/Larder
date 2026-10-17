@@ -35,12 +35,18 @@ public enum AllergenVerdict: Hashable, Sendable {
 public struct AllergenEngine: Sendable {
     public var lexicon: AllergenLexicon
 
+    /// The match confidence from which a food's verified-free tag speaks for an ingredient line. Seed recipes name
+    /// their foods (1); an imported line's first-word guess (0.5) can be a different product, such as "chicken
+    /// nuggets" matched to raw chicken, so its free tags read as unknown while contains and may-contain still count.
+    public static let trustedMatchConfidence = 1.0
+
     /// Creates an engine.
     public init(lexicon: AllergenLexicon = .standard) {
         self.lexicon = lexicon
     }
 
-    /// Worst tagged presence across all ingredients, garnish included; a missing food or an empty list is `.unknown`.
+    /// Worst tagged presence across all ingredients, garnish included; a missing food, a verified-free tag on a match
+    /// below `trustedMatchConfidence` or an empty list is `.unknown`.
     public func dataPath(_ ingredients: [Ingredient], foods: [FoodID: Food], allergen: Allergen) -> AllergenPresence {
         guard !ingredients.isEmpty else { return .unknown }
         return ingredients.map { presence(of: allergen, in: $0, foods: foods) }.max { $0.severity < $1.severity } ?? .unknown
@@ -125,7 +131,9 @@ public struct AllergenEngine: Sendable {
 
     private func presence(of allergen: Allergen, in ingredient: Ingredient, foods: [FoodID: Food]) -> AllergenPresence {
         guard let food = ingredient.foodID.flatMap({ foods[$0] }) else { return .unknown }
-        return food.allergens.presence(of: allergen)
+        let presence = food.allergens.presence(of: allergen)
+        if presence == .verifiedFree, ingredient.matchConfidence < Self.trustedMatchConfidence { return .unknown }
+        return presence
     }
 
     private func lexiconHit(for allergen: Allergen, in ingredient: Ingredient, foods: [FoodID: Food]) -> String? {

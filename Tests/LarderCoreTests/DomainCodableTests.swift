@@ -57,6 +57,11 @@ struct DomainCodableTests {
         #expect(try Fixtures.roundTrip(ingredient) == ingredient)
     }
 
+    @Test func ingredientConfidenceDefaultsToWhetherItNamesAFood() {
+        #expect(Ingredient(recipeID: RecipeID(), rawText: "1 cup rice", quantity: 1, unit: .cup, foodID: FoodID()).matchConfidence == 1)
+        #expect(Ingredient(recipeID: RecipeID(), rawText: "1 cup rice", quantity: 1, unit: .cup).matchConfidence == 0)
+    }
+
     @Test func pantryItemRoundTrips() throws {
         let item = PantryItem(
             foodID: FoodID(),

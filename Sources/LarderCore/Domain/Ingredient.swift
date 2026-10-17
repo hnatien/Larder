@@ -14,7 +14,7 @@ public struct Ingredient: Identifiable, Hashable, Codable, Sendable {
     public var isOptional: Bool
     public var isGarnish: Bool
 
-    /// Creates an ingredient line.
+    /// Creates an ingredient line; a `nil` confidence means certain (1) when `foodID` is set and none (0) when not.
     public init(
         id: IngredientID = IngredientID(),
         recipeID: RecipeID,
@@ -23,7 +23,7 @@ public struct Ingredient: Identifiable, Hashable, Codable, Sendable {
         unit: UnitOfMeasure,
         foodID: FoodID? = nil,
         gramsResolved: Double? = nil,
-        matchConfidence: Double = 0,
+        matchConfidence: Double? = nil,
         isOptional: Bool = false,
         isGarnish: Bool = false
     ) {
@@ -34,7 +34,7 @@ public struct Ingredient: Identifiable, Hashable, Codable, Sendable {
         self.unit = unit
         self.foodID = foodID
         self.gramsResolved = gramsResolved
-        self.matchConfidence = matchConfidence
+        self.matchConfidence = matchConfidence ?? (foodID == nil ? 0 : 1)
         self.isOptional = isOptional
         self.isGarnish = isGarnish
     }
