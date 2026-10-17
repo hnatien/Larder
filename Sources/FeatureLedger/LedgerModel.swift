@@ -28,6 +28,15 @@ public nonisolated struct LedgerDay: Identifiable, Hashable, Sendable {
     public var id: Date { date }
 }
 
+/// One change of a proposed repair as the ledger shows it.
+public nonisolated struct RepairLine: Identifiable, Hashable, Sendable {
+    public var id: PlannedMealID
+    /// The day, the dish and what happens to it.
+    public var text: String
+    /// Why it changes.
+    public var reason: String
+}
+
 /// Drives the week ledger: planning, swaps, skips, slides and leftovers, with the shelf balance from verification.
 @Observable
 @MainActor
@@ -69,6 +78,9 @@ public final class LedgerModel {
     public private(set) var adjustError: LarderError?
     /// Days of the last adjusted plan whose own change nothing could meet; they kept the planner's dinner.
     public private(set) var unmetAdjustmentDays: [Date] = []
+    /// Changes for the rest of the week after a skip, a day left uncooked or a lost food, waiting for the user to
+    /// apply them or not; never applied on its own.
+    public private(set) var proposedRepair: PlanRepair?
 
     private let plans: any PlanRepository
     private let service: PlanningService
@@ -81,6 +93,13 @@ public final class LedgerModel {
     private let profileRepository: any ProfileRepository
     /// Meal identifiers in the order of the last explain request, so meal notes map back to meals.
     private var explainedMealIDs: [PlannedMealID] = []
+    /// The meals `proposedRepair` was worked out from, and the skips it answers; a proposal for other meals is stale.
+    private var repairBase: [PlannedMeal] = []
+    private var repairSkipped: Set<PlannedMealID> = []
+    /// The meals before and after the last applied repair.
+    private var repairUndo: (before: [PlannedMeal], after: [PlannedMeal])?
+    /// The plan and day whose repair the user turned down, so loading does not offer it again that day.
+    private var declinedRepair: (plan: MealPlanID, day: Date)?
 
     /// Creates a model over the given ports; `calendar` decides plan days and which day is today.
     public init(
@@ -146,6 +165,27 @@ public final class LedgerModel {
         return shown.compactMap { nutrient in verification?.nutrientNotes.first { $0.nutrient == nutrient } }
     }
 
+    /// The proposed repair's changes in day order, each with why it changes.
+    public var repairLines: [RepairLine] {
+        guard let proposedRepair else { return [] }
+        let title = { (id: RecipeID) in self.recipesByID[id]?.title ?? "" }
+        let dayName = { (date: Date) in
+            date.formatted(Date.FormatStyle(calendar: self.calendar, timeZone: self.calendar.timeZone).weekday(.wide))
+        }
+        return proposedRepair.changes.map { change in
+            RepairLine(
+                id: change.mealID,
+                text: LedgerCopy.describe(change, title: title, dayName: dayName),
+                reason: LedgerCopy.reason(for: change, lookup: reasonLookup)
+            )
+        }
+    }
+
+    /// Whether the last applied repair can be undone: nothing in the week has changed since.
+    public var canUndoRepair: Bool {
+        repairUndo.map { $0.after == meals } ?? false
+    }
+
     /// Reason lines for a meal, from its reason codes.
     public func reasons(for meal: PlannedMeal, limit: Int = .max) -> [String] {
         ReasonCopy.lines(for: meal.reasonCodes, lookup: reasonLookup, limit: limit)
@@ -208,7 +248,16 @@ public final class LedgerModel {
             try await refresh()
         } catch {
             record(error)
+            return
         }
+        await checkDay()
+    }
+
+    /// The daily check: offers a repair when an earlier day left a meal uncooked or a food the week counted on is gone.
+    private func checkDay() async {
+        guard let plan, proposedRepair == nil, meals.contains(where: { $0.status == .planned }) else { return }
+        if let declinedRepair, declinedRepair.plan == plan.id, calendar.isDate(declinedRepair.day, inSameDayAs: dates.now) { return }
+        await proposeRepair(skipped: [])
     }
 
     /// Reloads recipes and foods for the plan's meals and re-verifies the plan.
@@ -282,6 +331,9 @@ public final class LedgerModel {
             explainedMealIDs = []
             showsExplanation = false
             unmetAdjustmentDays = unmetOffsets.compactMap { calendar.date(byAdding: .day, value: $0, to: startDate) }
+            proposedRepair = nil
+            repairSkipped = []
+            repairUndo = nil
             if !plus { await markFreeWeekUsed() }
             remember(try await service.catalogue(for: Set(newMeals.map(\.recipeID))))
             savedPlanCount += 1
@@ -411,6 +463,80 @@ public final class LedgerModel {
         return names
     }
 
+    // MARK: Repairing
+
+    /// Works out a repair of the week as it stands; one without changes clears the proposal.
+    private func proposeRepair(skipped: Set<PlannedMealID>) async {
+        guard let plan else { return }
+        do {
+            let repair = try await service.repair(plan: plan, meals: meals, skipped: skipped, slots: Self.plannedSlots)
+            guard !repair.changes.isEmpty else {
+                proposedRepair = nil
+                repairSkipped = []
+                return
+            }
+            var recipes = Set<RecipeID>()
+            for change in repair.changes {
+                recipes.insert(change.recipeID)
+                if case .replaced(let previous) = change.action { recipes.insert(previous) }
+            }
+            remember(try await service.catalogue(for: recipes))
+            repairBase = meals
+            repairSkipped = skipped
+            proposedRepair = repair
+        } catch {
+            record(error)
+        }
+    }
+
+    /// Saves the proposed repair; `undoRepair()` puts the week back until something else changes. When the week
+    /// changed after the proposal, a fresh proposal replaces it instead.
+    public func applyRepair() async {
+        guard let plan, let repair = proposedRepair else { return }
+        guard meals == repairBase else {
+            await proposeRepair(skipped: repairSkipped)
+            return
+        }
+        error = nil
+        let before = meals
+        do {
+            try await plans.save(plan, meals: repair.result.meals)
+        } catch {
+            record(error)
+            return
+        }
+        meals = repair.result.meals
+        proposedRepair = nil
+        repairSkipped = []
+        repairUndo = (before, repair.result.meals)
+        await reverify()
+    }
+
+    /// Puts back the week from before the last applied repair, if nothing changed since.
+    public func undoRepair() async {
+        guard let plan, let undo = repairUndo, undo.after == meals else {
+            repairUndo = nil
+            return
+        }
+        error = nil
+        do {
+            try await plans.save(plan, meals: undo.before)
+        } catch {
+            record(error)
+            return
+        }
+        repairUndo = nil
+        meals = undo.before
+        await reverify()
+    }
+
+    /// Keeps the week as it is; loading does not offer a repair again today.
+    public func dismissRepair() {
+        if let plan { declinedRepair = (plan.id, dates.now) }
+        proposedRepair = nil
+        repairSkipped = []
+    }
+
     // MARK: Meal actions
 
     /// Marks a meal as cooked.
@@ -418,10 +544,12 @@ public final class LedgerModel {
         await update(meal) { $0.status = .cooked }
     }
 
-    /// Marks a meal as skipped; it dims and stops counting towards the shelf, nothing more.
+    /// Marks a meal as skipped; it dims, stops counting towards the shelf, and the rest of the week gets a repair to
+    /// apply or not.
     public func skip(_ meal: PlannedMeal) async {
         guard await update(meal, { $0.status = .skipped }) else { return }
         await reverify()
+        await proposeRepair(skipped: (proposedRepair == nil ? [] : repairSkipped).union([meal.id]))
     }
 
     /// Pins a meal so replanning keeps it.

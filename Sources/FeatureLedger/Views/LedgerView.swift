@@ -83,6 +83,9 @@ public struct LedgerView: View {
             model.paywallRequested = false
             onShowPaywall()
         }
+        .onChange(of: model.proposedRepair != nil) { _, proposed in
+            if proposed { AccessibilityNotification.Announcement(LedgerCopy.repairTitle).post() }
+        }
         .onChange(of: model.savedPlanCount) {
             AccessibilityNotification.Announcement(Copy.Voice.planSaved).post()
             headingFocused = true
@@ -101,6 +104,10 @@ public struct LedgerView: View {
         List {
             header
                 .ledgerListRow()
+            if model.proposedRepair != nil || model.canUndoRepair {
+                RepairCard(model: model)
+                    .ledgerListRow()
+            }
             if model.showsExplanation, model.plan != nil {
                 explanationCard
                     .ledgerListRow()
