@@ -1,0 +1,69 @@
+{
+  "flow": "adjust",
+  "metrics": [
+    {
+      "id": "safe",
+      "label": "safe",
+      "kind": "binary"
+    },
+    {
+      "id": "behavior",
+      "label": "behavior",
+      "kind": "binary"
+    },
+    {
+      "id": "narrow",
+      "label": "narrow scope",
+      "kind": "binary"
+    },
+    {
+      "id": "voice",
+      "label": "voice",
+      "kind": "binary"
+    },
+    {
+      "id": "leak",
+      "label": "guard leak",
+      "kind": "binary",
+      "better": "lower"
+    }
+  ],
+  "perf_fields": [
+    {
+      "id": "cost_usd",
+      "label": "cost",
+      "unit": "$"
+    },
+    {
+      "id": "in_tokens",
+      "label": "in tok"
+    },
+    {
+      "id": "out_tokens",
+      "label": "out tok"
+    },
+    {
+      "id": "latency_s",
+      "label": "latency",
+      "unit": "s"
+    }
+  ],
+  "prices": {
+    "claude-haiku-5-5": {
+      "in": 0.1,
+      "out": 0.5
+    }
+  },
+  "harness_paths": [
+    "eval/harness.ts",
+    "eval/graders.ts",
+    "src/model.ts",
+    "src/schemas.ts",
+    "src/routes/route.ts",
+    "src/prompts/voice.ts",
+    "eval/cases/adjust.json",
+    "src/routes/adjust.ts",
+    "src/prompts/adjust.ts"
+  ],
+  "harness_sha": "b5d88dd1fd578e6d78722c8715290389eccb36fb280811047cc0086896bbf806"
+}

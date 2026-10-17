@@ -1,0 +1,81 @@
+{
+  "flow": "explain",
+  "metrics": [
+    {
+      "id": "grounded",
+      "label": "grounded nums",
+      "kind": "binary"
+    },
+    {
+      "id": "hidden_nums",
+      "label": "no hidden nums",
+      "kind": "binary"
+    },
+    {
+      "id": "swaps_plain",
+      "label": "plain swaps",
+      "kind": "binary"
+    },
+    {
+      "id": "structure",
+      "label": "structure",
+      "kind": "binary"
+    },
+    {
+      "id": "policy",
+      "label": "voice/policy",
+      "kind": "binary"
+    },
+    {
+      "id": "swap_allergen",
+      "label": "swap allergen",
+      "kind": "float",
+      "scale": 1,
+      "better": "lower"
+    },
+    {
+      "id": "swap_count",
+      "label": "swaps",
+      "kind": "float",
+      "scale": 2
+    }
+  ],
+  "perf_fields": [
+    {
+      "id": "cost_usd",
+      "label": "cost",
+      "unit": "$"
+    },
+    {
+      "id": "in_tokens",
+      "label": "in tok"
+    },
+    {
+      "id": "out_tokens",
+      "label": "out tok"
+    },
+    {
+      "id": "latency_s",
+      "label": "latency",
+      "unit": "s"
+    }
+  ],
+  "prices": {
+    "claude-haiku-5-5": {
+      "in": 0.1,
+      "out": 0.5
+    }
+  },
+  "harness_paths": [
+    "eval/harness.ts",
+    "eval/graders.ts",
+    "src/model.ts",
+    "src/schemas.ts",
+    "src/routes/route.ts",
+    "src/prompts/voice.ts",
+    "eval/cases/explain.json",
+    "src/routes/explain.ts",
+    "src/prompts/explain.ts"
+  ],
+  "harness_sha": "e6f38061678f08daa7ed7dfd6d447fedfe689a96e22b7b263dfb5ecc0a1fbc79"
+}

@@ -10,7 +10,8 @@
     "noImplicitOverride": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "noEmit": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "eval"]
 }

@@ -7,7 +7,9 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "eval": "node eval/run-eval.mjs",
+    "eval:summary": "node eval/summary.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",

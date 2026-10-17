@@ -1,0 +1,84 @@
+{
+  "flow": "parse-pantry",
+  "metrics": [
+    {
+      "id": "exact",
+      "label": "exact",
+      "kind": "binary"
+    },
+    {
+      "id": "field_acc",
+      "label": "field acc",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "items_f1",
+      "label": "items F1",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "qty_acc",
+      "label": "quantity",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "unit_acc",
+      "label": "unit",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "loc_acc",
+      "label": "location",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "bestby_acc",
+      "label": "best-by",
+      "kind": "float",
+      "scale": 1
+    }
+  ],
+  "perf_fields": [
+    {
+      "id": "cost_usd",
+      "label": "cost",
+      "unit": "$"
+    },
+    {
+      "id": "in_tokens",
+      "label": "in tok"
+    },
+    {
+      "id": "out_tokens",
+      "label": "out tok"
+    },
+    {
+      "id": "latency_s",
+      "label": "latency",
+      "unit": "s"
+    }
+  ],
+  "prices": {
+    "claude-haiku-5-5": {
+      "in": 0.1,
+      "out": 0.5
+    }
+  },
+  "harness_paths": [
+    "eval/harness.ts",
+    "eval/graders.ts",
+    "src/model.ts",
+    "src/schemas.ts",
+    "src/routes/route.ts",
+    "src/prompts/voice.ts",
+    "eval/cases/parse-pantry.json",
+    "src/routes/parsePantry.ts",
+    "src/prompts/parsePantry.ts"
+  ],
+  "harness_sha": "afc6eab038d63f96f3998a14cf1d55229471be129477d10f252f62ad0eeeddaf"
+}

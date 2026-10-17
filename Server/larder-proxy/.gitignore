@@ -1,3 +1,9 @@
 node_modules/
 .wrangler/
 .dev.vars
+# LLM eval output: bulky or regenerated; results.jsonl and _state.json are kept
+.claude/hillclimb/**/traces/
+.claude/hillclimb/**/progress.txt
+.claude/hillclimb/**/report.html
+.claude/hillclimb/**/state.json
+.claude/hillclimb/**/trajectory/

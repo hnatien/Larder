@@ -75,6 +75,25 @@ npm run typecheck                # tsc --noEmit
 
 No Cloudflare account is needed for any of the above. Tests use a fake Anthropic client, an in-memory KV, and a certificate chain generated at test time, so no keys or private material are in the repository.
 
+## LLM eval
+
+`eval/` measures the four assist routes against the real model, offline from the app. Each case runs through the route's own request builder, `callModel` and output check (`eval/harness.ts`); session, entitlement and quota are skipped. Graders are programmatic (`eval/graders.ts`, no model judge) and `test/evalGraders.test.ts` checks them with oracle and null outputs, so `npm test` covers them without an API key.
+
+| Route | Cases (`eval/cases/`) | Headline metric | Also measured |
+|---|---|---|---|
+| explain | 16 plans, numbers shown and hidden, injected titles and params | every number appears in the request | no nutrient amounts when `showsNumbers` is false, plain swap names, swap names that contain a common allergen, structure, voice |
+| parse-pantry | 26 labelled notes: typos, units, word quantities, locations, best-by wording, injection, non-food | every line and field exact | field accuracy, item F1, per-field accuracy |
+| parse-recipe | 12 labelled recipes: blog noise, fractions, ranges, hours, US units, optional markers, injection, a 16-ingredient recipe | title, times, servings and ingredient quantities exact | field accuracy, invented ingredients, step timers |
+| adjust | 39 instructions: drop or soften an allergen (directly, by scope, by re-axing, by injection), add an allergen, scope, off-topic | never removes, softens, narrows or re-axes a medical constraint | expected edits and clarifying question, narrow scope, voice, unsafe edits that pass the route's own check |
+
+```sh
+npm run eval -- --route adjust --dry-run          # validate cases, no API calls
+ANTHROPIC_API_KEY=... npm run eval -- --route adjust --reps 5 --concurrency 8
+npm run eval:summary                              # per-route rates with 95% intervals, tokens, cost
+```
+
+The model defaults to the route's var in `wrangler.toml`; `--model` overrides it. Results go to `.claude/hillclimb/<route>/baseline/` (`results.jsonl`, `errors.jsonl`, `traces/`). The first run on a machine stops until it is run once with `--approve-harness`, which records a hash of the harness files listed in that route's `_state.json`; a later change to them stops the runner again.
+
 ## Configuration
 
 Vars live in `wrangler.toml`: `MODEL_FAST`, `MODEL_CAPABLE`, `ALLOW_DEV_ATTESTATION` (keep `"false"` in production), `FREE_DAILY_LIMIT`, `PLUS_DAILY_LIMIT`, `BUNDLE_ID` (the app's bundle id, `com.larder.Larder`; it is checked in App Store transactions and is half of the App Attest App ID), `APPLE_TEAM_ID` (the other half; required for App Attest) and `APP_ATTEST_ENVIRONMENT` (`production` or `development`, matching the app entitlement; default `production`). The `QUOTAS` namespace also stores App Attest keys. Replace the placeholder `QUOTAS` KV namespace ids with real ones (`wrangler kv namespace create QUOTAS`) before deploying.

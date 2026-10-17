@@ -1,0 +1,76 @@
+{
+  "flow": "parse-recipe",
+  "metrics": [
+    {
+      "id": "core_ok",
+      "label": "core fields",
+      "kind": "binary"
+    },
+    {
+      "id": "field_acc",
+      "label": "field acc",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "no_invent",
+      "label": "no invented",
+      "kind": "binary"
+    },
+    {
+      "id": "timers_ok",
+      "label": "timers",
+      "kind": "binary"
+    },
+    {
+      "id": "ing_qty",
+      "label": "ingr qty",
+      "kind": "float",
+      "scale": 1
+    },
+    {
+      "id": "ing_unit",
+      "label": "ingr unit",
+      "kind": "float",
+      "scale": 1
+    }
+  ],
+  "perf_fields": [
+    {
+      "id": "cost_usd",
+      "label": "cost",
+      "unit": "$"
+    },
+    {
+      "id": "in_tokens",
+      "label": "in tok"
+    },
+    {
+      "id": "out_tokens",
+      "label": "out tok"
+    },
+    {
+      "id": "latency_s",
+      "label": "latency",
+      "unit": "s"
+    }
+  ],
+  "prices": {
+    "claude-haiku-5-5": {
+      "in": 0.1,
+      "out": 0.5
+    }
+  },
+  "harness_paths": [
+    "eval/harness.ts",
+    "eval/graders.ts",
+    "src/model.ts",
+    "src/schemas.ts",
+    "src/routes/route.ts",
+    "src/prompts/voice.ts",
+    "eval/cases/parse-recipe.json",
+    "src/routes/parseRecipe.ts",
+    "src/prompts/parseRecipe.ts"
+  ],
+  "harness_sha": "526e41ea8d1e73ada5281e3b09c70c161e5f920d393c99c39edbf0a6da24b793"
+}
