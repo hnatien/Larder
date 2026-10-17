@@ -124,7 +124,7 @@ struct CopyTests {
         #expect(Copy.Allergen.excluded(allergen: "peanut", because: "ingredient list") == "Excluded: contains peanut (ingredient list).")
         #expect(Copy.Allergen.unsure(about: "the stock") == "We're not sure about the stock here. Check the label.")
         #expect(Copy.Medical.disclaimer == "Larder helps you plan meals. It is not medical advice. Talk to your clinician about any condition.")
-        #expect(Copy.Plus.pitch == "Planning one week is free. Larder Plus plans the month and watches your shelf.")
+        #expect(Copy.Plus.pitch == "Planning your first week is free. Larder Plus plans every week and reads recipes and receipts from a photo.")
         #expect(Copy.Voice.planSaved == "Stamped. The week is yours.")
         #expect(Copy.Voice.vetoReply == "Fair. Here's another that uses the same ingredients.")
         #expect(Copy.Voice.offline == "Couldn't reach the server. Your plan is saved here and will sync later.")

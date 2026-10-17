@@ -110,7 +110,7 @@ public nonisolated enum Copy {
         public static var name: String { String(localized: "Larder Plus", bundle: .module) }
         public static var pitch: String {
             String(
-                localized: "Planning one week is free. Larder Plus plans the month and watches your shelf.",
+                localized: "Planning your first week is free. Larder Plus plans every week and reads recipes and receipts from a photo.",
                 bundle: .module
             )
         }
@@ -123,6 +123,34 @@ public nonisolated enum Copy {
         public static var description: String { String(localized: "Tonight's dinner from your plan.", bundle: .module) }
         public static var nothingPlanned: String { String(localized: "Nothing planned", bundle: .module) }
         public static var openForIdeas: String { String(localized: "Open Larder for three ideas.", bundle: .module) }
+    }
+
+    /// Asking for AI help where it is needed.
+    public enum Consent {
+        public static var title: String { String(localized: "Allow AI help?", bundle: .module) }
+        public static var sends: String {
+            String(localized: "Recipe text and plain settings such as cook time and diet type go to Larder's server and the AI model behind it.", bundle: .module)
+        }
+        public static var stays: String {
+            String(localized: "Medical and religious details never leave this iPhone.", bundle: .module)
+        }
+        public static var change: String { String(localized: "You can turn it off in Settings at any time.", bundle: .module) }
+        public static var allow: String { String(localized: "Allow AI help", bundle: .module) }
+    }
+
+    /// Strings the app shell shows: launch failures and recipes that cannot be opened.
+    public enum App {
+        public static var recipeMissing: String { String(localized: "That recipe is no longer in your library.", bundle: .module) }
+        public static var recipeUnreadable: String { String(localized: "Couldn't open that recipe. Try again.", bundle: .module) }
+        public static var ok: String { String(localized: "OK", bundle: .module) }
+        public static var startupFailedTitle: String { String(localized: "Larder couldn't open your data", bundle: .module) }
+        public static var startupFailedMessage: String {
+            String(localized: "Your data stays on this device. Try again, or close Larder and open it again.", bundle: .module)
+        }
+        public static var tryAgain: String { String(localized: "Try again", bundle: .module) }
+        public static var addedFirstFood: String {
+            String(localized: "Your pantry has food in it. Here are tonight's ideas.", bundle: .module)
+        }
     }
 
     /// Microcopy for empty states, plans, expiry and errors.
