@@ -1379,6 +1379,17 @@
         }
       }
     },
+    "Couldn't save the list. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save the list. Try again."
+          }
+        }
+      }
+    },
     "Couldn't save to this device. Check your storage and try again.": {
       "extractionState": "manual",
       "localizations": {

@@ -56,6 +56,7 @@ nonisolated enum GroceryCopy {
         switch error {
         case .loadFailed: String(localized: "Couldn't load the list. Pull down to try again.", bundle: Copy.bundle)
         case .pantryUpdateFailed: String(localized: "Couldn't update your pantry. The item is unchanged.", bundle: Copy.bundle)
+        case .basketUpdateFailed: String(localized: "Couldn't save the list. Try again.", bundle: Copy.bundle)
         }
     }
 }

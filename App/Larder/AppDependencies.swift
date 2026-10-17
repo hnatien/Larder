@@ -82,6 +82,7 @@ final class AppDependencies {
     private let database: LarderDatabase
     private let foods: GRDBFoodRepository
     private let pantry: GRDBPantryRepository
+    private let basket: GRDBGroceryBasketRepository
     private let plans: GRDBPlanRepository
     private let profiles: GRDBProfileRepository
     private let dates: any DateProvider
@@ -116,6 +117,7 @@ final class AppDependencies {
         foods = GRDBFoodRepository(database: database)
         recipeRepository = GRDBRecipeRepository(database: database)
         pantry = GRDBPantryRepository(database: database)
+        basket = GRDBGroceryBasketRepository(database: database)
         plans = GRDBPlanRepository(database: database)
         profiles = GRDBProfileRepository(database: database)
         let dates = SystemDateProvider()
@@ -162,7 +164,7 @@ final class AppDependencies {
         recipes = RecipesModel(
             recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
         )
-        grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, dates: dates)
+        grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, basket: basket, dates: dates)
         onboarding = OnboardingModel(profiles: profiles, preferences: preferences, dates: dates)
         dinners = DinnerReader(plans: plans, recipes: recipeRepository, calendar: .current)
         snapshots = TodaySnapshotWriter(reader: dinners, dates: dates, fileURL: launch.isUITest ? nil : TodaySnapshot.fileURL)
