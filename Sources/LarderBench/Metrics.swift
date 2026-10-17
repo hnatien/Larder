@@ -26,6 +26,14 @@ struct Metric: Sendable {
         }
     }
 
+    /// A signed difference between two values of this metric; shares are in percentage points.
+    func formatDifference(_ number: Double) -> String {
+        switch unit {
+        case .share: String(format: "%+.1f pt", number * 100)
+        default: (number < 0 ? "" : "+") + format(number)
+        }
+    }
+
     /// Nutrients the default targets cover (`NutrientTargets.defaults`), in report order.
     static let nutrients: [Nutrient] = [.energy, .protein, .fiber, .sodium, .saturatedFat, .addedSugar, .potassium]
 
@@ -64,16 +72,18 @@ struct Metric: Sendable {
             mean(run.weeks.map { $0.solveSeconds * 1000 })
         },
     ] + nutrients.map { nutrient in
-        Metric(key: "within_\(nutrient.rawValue)", label: "Weeks within the \(nutrient.readableName) band", unit: .share) { run in
+        Metric(
+            key: "within_\(nutrient.rawValue)", label: "Weeks within the \(nutrient.readableName) band, per filled dinner", unit: .share
+        ) { run in
             mean(run.weeks.compactMap { week in
                 week.nutrientNotes.first { $0.nutrient == nutrient }.map { $0.status == .within ? 1 : 0 }
             })
         }
     }
 
-    /// Meals that were cooked from scratch in the plan, leftovers excluded.
-    private static func cooked(_ plan: [PlannedMeal]) -> [PlannedMeal] {
-        plan.filter { $0.leftoverOf == nil }
+    /// Planned meals the household cooked from scratch: skipped and Tonight-replaced meals and leftovers excluded.
+    static func cooked(_ plan: [PlannedMeal]) -> [PlannedMeal] {
+        plan.filter { $0.status == .cooked && $0.leftoverOf == nil }
     }
 
     /// Share of meals whose recipe already appeared earlier in the same week.
@@ -95,7 +105,7 @@ struct Metric: Sendable {
 }
 
 extension WeekRecord {
-    /// Shannon entropy in bits of the plan's cuisines, leftovers excluded; `nil` for an empty plan.
+    /// Shannon entropy in bits of the cuisines cooked from scratch; `nil` when nothing was.
     var cuisineEntropy: Double? {
         guard !cuisines.isEmpty else { return nil }
         var counts: [String: Int] = [:]
@@ -125,7 +135,8 @@ struct Summary: Sendable {
         count = sorted.count
     }
 
-    private static func quantile(_ sorted: [Double], _ q: Double) -> Double {
+    /// The `q` quantile of ascending `sorted`, which must not be empty.
+    static func quantile(_ sorted: [Double], _ q: Double) -> Double {
         let position = q * Double(sorted.count - 1)
         let lower = Int(position.rounded(.down))
         let upper = min(lower + 1, sorted.count - 1)

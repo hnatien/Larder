@@ -82,6 +82,8 @@ struct PantryLedger {
 struct HouseholdRun: Sendable {
     var household: Household
     var arm: String
+    /// The simulation seed that generated the household and its deviations.
+    var seed: UInt64
     var weeks: [WeekRecord]
     var pantryUse: Double?
     var startingPantryUse: Double?
@@ -96,10 +98,13 @@ struct WeekRecord: Sendable {
     var unfilledSlots: Int
     var groceryLines: Int
     var hardViolations: Int
+    /// Nutrients of the plan averaged over its filled dinners, so empty slots do not pull the totals down; none for an
+    /// empty plan.
     var nutrientNotes: [NutrientNote]
     var solveSeconds: Double
     var tonightMeals: Int
-    /// Lower-cased cuisine of each meal cooked from scratch in the plan; "none" for a recipe without one.
+    /// Lower-cased cuisine of each planned meal cooked from scratch (status `.cooked`, not a leftover); "none" for a
+    /// recipe without one.
     var cuisines: [String]
 }
 
@@ -167,6 +172,8 @@ struct Simulation: Sendable {
             let weekPlan = arm.plan(input)
             let solveSeconds = (clock.now - started) / .seconds(1)
             let report = verify(weekPlan.meals, compiled: compiled)
+            // One slot a day, so each filled dinner counts as a day: the bands then apply per filled dinner.
+            let perDinner = verify(weekPlan.meals, compiled: compiled, days: weekPlan.meals.count)
 
             // Shop once for the week, net of the pantry, in whole packs.
             let grocery = GroceryListBuilder().build(
@@ -249,10 +256,10 @@ struct Simulation: Sendable {
                 unfilledSlots: weekPlan.unfilledSlots,
                 groceryLines: grocery.items.count,
                 hardViolations: report.hardViolations.count + tonightReport.hardViolations.count,
-                nutrientNotes: report.nutrientNotes,
+                nutrientNotes: perDinner.nutrientNotes,
                 solveSeconds: solveSeconds,
                 tonightMeals: tonight.count,
-                cuisines: planned.filter { $0.leftoverOf == nil }.map { meal in
+                cuisines: planned.filter { $0.status == .cooked && $0.leftoverOf == nil }.map { meal in
                     catalogue.recipes[meal.recipeID]?.tags.cuisine?.lowercased() ?? "none"
                 }
             ))
@@ -264,6 +271,7 @@ struct Simulation: Sendable {
         return HouseholdRun(
             household: household,
             arm: arm.name,
+            seed: seed,
             weeks: records,
             pantryUse: resolved > 0 ? ledger.usedPerishable / resolved : nil,
             startingPantryUse: startingResolved > 0 ? ledger.usedStarting / startingResolved : nil,
@@ -291,14 +299,14 @@ struct Simulation: Sendable {
         }
     }
 
-    private func verify(_ meals: [PlannedMeal], compiled: CompiledConstraints) -> VerificationReport {
+    private func verify(_ meals: [PlannedMeal], compiled: CompiledConstraints, days: Int = Simulation.daysPerWeek) -> VerificationReport {
         PlanVerifier.verify(
             meals: meals,
             candidates: catalogue.candidates,
             foods: catalogue.foods,
             constraints: compiled.constraints,
             targets: compiled.targets,
-            days: Self.daysPerWeek,
+            days: days,
             householdSize: compiled.householdSize,
             slots: Set(slots)
         )

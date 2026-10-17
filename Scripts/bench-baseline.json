@@ -1,0 +1,29 @@
+{
+  "arm" : "planner",
+  "configuration" : {
+    "households" : 40,
+    "seed" : 42,
+    "seeds" : 3,
+    "weeks" : 4
+  },
+  "metrics" : {
+    "repeat_across_weeks" : {
+      "count" : 120,
+      "high" : 0.6626393849206348,
+      "low" : 0.5721755952380954,
+      "mean" : 0.6182605820105819
+    },
+    "starting_pantry_use" : {
+      "count" : 120,
+      "high" : 0.37291737404514735,
+      "low" : 0.30386649417144335,
+      "mean" : 0.33751880190951355
+    },
+    "waste_g_per_week" : {
+      "count" : 120,
+      "high" : 2158.81401290625,
+      "low" : 1874.884676695312,
+      "mean" : 2013.1269806249995
+    }
+  }
+}
