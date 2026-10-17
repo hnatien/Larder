@@ -5,7 +5,11 @@ import LarderCore
 /// An in-memory pantry for previews and tests; set `failure` to make every call throw.
 actor FakePantryRepository: PantryRepository {
     private(set) var stored: [PantryItem]
+    /// Events written with `record(_:)`, in the order they were written.
+    private(set) var loggedEvents: [PantryEvent] = []
     var failure: LarderError?
+    /// Makes only `record(_:)` throw.
+    var eventFailure: LarderError?
 
     init(items: [PantryItem] = []) {
         self.stored = items
@@ -13,6 +17,10 @@ actor FakePantryRepository: PantryRepository {
 
     func setFailure(_ failure: LarderError?) {
         self.failure = failure
+    }
+
+    func setEventFailure(_ failure: LarderError?) {
+        eventFailure = failure
     }
 
     func add(_ item: PantryItem) {
@@ -38,18 +46,37 @@ actor FakePantryRepository: PantryRepository {
         stored.removeAll { $0.id == id }
     }
 
-    func consume(foodID: FoodID, grams: Double) throws {
+    func consume(foodID: FoodID, grams: Double) throws -> [PantryItem] {
         try failIfNeeded()
         var remaining = grams
+        var touched: [PantryItem] = []
         let order = stored.indices
             .filter { stored[$0].foodID == foodID }
             .sorted { (stored[$0].bestBy ?? .distantFuture) < (stored[$1].bestBy ?? .distantFuture) }
         for index in order where remaining > 0 {
+            touched.append(stored[index])
             let taken = min(remaining, stored[index].quantityGrams)
             stored[index].quantityGrams -= taken
             remaining -= taken
         }
         stored.removeAll { $0.quantityGrams <= 0 }
+        return touched
+    }
+
+    func record(_ events: [PantryEvent]) throws {
+        try failIfNeeded()
+        if let eventFailure { throw eventFailure }
+        loggedEvents += events
+    }
+
+    func removeEvents(_ ids: [PantryEventID]) throws {
+        try failIfNeeded()
+        loggedEvents.removeAll { ids.contains($0.id) }
+    }
+
+    func events(from start: Date, to end: Date) throws -> [PantryEvent] {
+        try failIfNeeded()
+        return loggedEvents.filter { $0.date >= start && $0.date < end }.sorted { $0.date < $1.date }
     }
 
     private func failIfNeeded() throws {

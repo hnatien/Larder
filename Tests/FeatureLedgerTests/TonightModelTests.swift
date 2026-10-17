@@ -48,7 +48,7 @@ import Testing
 
     @Test func emptyShelvesAreReported() async {
         var world = World()
-        world.pantry.stored = []
+        world.pantry = FakePantryRepository(stored: [])
         let model = world.tonight()
         await model.load()
         #expect(model.shelvesAreEmpty)

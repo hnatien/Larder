@@ -32,7 +32,10 @@ nonisolated enum PreviewSupport {
         func items() -> [PantryItem] { [] }
         func upsert(_ item: PantryItem) {}
         func remove(_ id: PantryItemID) {}
-        func consume(foodID: FoodID, grams: Double) {}
+        func consume(foodID: FoodID, grams: Double) -> [PantryItem] { [] }
+        func record(_ events: [PantryEvent]) {}
+        func removeEvents(_ ids: [PantryEventID]) {}
+        func events(from start: Date, to end: Date) -> [PantryEvent] { [] }
 
         func currentPlan() -> MealPlan? { nil }
         func plans() -> [MealPlan] { [] }

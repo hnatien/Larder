@@ -69,13 +69,64 @@ struct FakeFoodRepository: FoodRepository {
     func upsert(_ foods: [Food]) {}
 }
 
-struct FakePantryRepository: PantryRepository {
-    var stored: [PantryItem] = Fixtures.pantry
+/// Shelves and the event log in memory; `consume` takes from the earliest best-by first, like the real store.
+actor FakePantryRepository: PantryRepository {
+    private(set) var stored: [PantryItem]
+    private(set) var loggedEvents: [PantryEvent] = []
+    /// Every `consume` call, in order.
+    private(set) var consumed: [FoodAmount] = []
+    private var failConsumeAfter: Int?
+    private var failEventWrites = false
+
+    init(stored: [PantryItem] = Fixtures.pantry) {
+        self.stored = stored
+    }
+
+    /// Makes `consume` throw once it has succeeded `count` times.
+    func setFailConsume(after count: Int?) { failConsumeAfter = count }
+    func setFailEventWrites(_ value: Bool) { failEventWrites = value }
+
+    func grams(of foodID: FoodID) -> Double {
+        stored.filter { $0.foodID == foodID }.map(\.quantityGrams).reduce(0, +)
+    }
 
     func items() -> [PantryItem] { stored }
-    func upsert(_ item: PantryItem) {}
-    func remove(_ id: PantryItemID) {}
-    func consume(foodID: FoodID, grams: Double) {}
+
+    func upsert(_ item: PantryItem) {
+        stored.removeAll { $0.id == item.id }
+        stored.append(item)
+    }
+
+    func remove(_ id: PantryItemID) { stored.removeAll { $0.id == id } }
+
+    func consume(foodID: FoodID, grams: Double) throws -> [PantryItem] {
+        if let limit = failConsumeAfter, consumed.count >= limit { throw LarderError.storageFailure }
+        consumed.append(FoodAmount(foodID: foodID, grams: grams))
+        var remaining = grams
+        var touched: [PantryItem] = []
+        let order = stored.indices
+            .filter { stored[$0].foodID == foodID }
+            .sorted { (stored[$0].bestBy ?? .distantFuture) < (stored[$1].bestBy ?? .distantFuture) }
+        for index in order where remaining > 0 {
+            touched.append(stored[index])
+            let taken = min(remaining, stored[index].quantityGrams)
+            stored[index].quantityGrams -= taken
+            remaining -= taken
+        }
+        stored.removeAll { $0.quantityGrams <= 0 }
+        return touched
+    }
+
+    func record(_ events: [PantryEvent]) throws {
+        if failEventWrites { throw LarderError.storageFailure }
+        loggedEvents += events
+    }
+
+    func removeEvents(_ ids: [PantryEventID]) { loggedEvents.removeAll { ids.contains($0.id) } }
+
+    func events(from start: Date, to end: Date) -> [PantryEvent] {
+        loggedEvents.filter { $0.date >= start && $0.date < end }
+    }
 }
 
 struct FakeProfileRepository: ProfileRepository {

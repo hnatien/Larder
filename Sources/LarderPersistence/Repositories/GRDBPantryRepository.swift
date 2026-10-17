@@ -33,14 +33,18 @@ public struct GRDBPantryRepository: PantryRepository {
         }
     }
 
-    /// Deducts `grams` across items of the food, earliest best-by first, removing items that reach zero.
-    /// Consuming more than is on the shelves empties them; zero, negative or NaN amounts change nothing.
-    public func consume(foodID: FoodID, grams: Double) async throws {
-        guard grams > 0 else { return }
-        try await database.write { db in
+    /// Deducts `grams` across items of the food, earliest best-by first, removing items that reach zero, and returns
+    /// the items it touched as they were before. Consuming more than is on the shelves empties them; zero, negative or
+    /// NaN amounts change nothing.
+    @discardableResult
+    public func consume(foodID: FoodID, grams: Double) async throws -> [PantryItem] {
+        guard grams > 0 else { return [] }
+        return try await database.write { db in
             let records = try Self.byBestBy(PantryItemRecord.filter(Column("foodID") == foodID.key)).fetchAll(db)
             var remaining = grams
+            var touched: [PantryItem] = []
             for var record in records where remaining > 0 {
+                touched.append(record.item)
                 let taken = min(record.quantityGrams, remaining)
                 remaining -= taken
                 record.quantityGrams -= taken
@@ -50,6 +54,35 @@ public struct GRDBPantryRepository: PantryRepository {
                     try record.update(db)
                 }
             }
+            return touched
+        }
+    }
+
+    public func record(_ events: [PantryEvent]) async throws {
+        guard !events.isEmpty else { return }
+        try await database.write { db in
+            for event in events {
+                try PantryEventRecord(event).upsert(db)
+            }
+        }
+    }
+
+    public func removeEvents(_ ids: [PantryEventID]) async throws {
+        guard !ids.isEmpty else { return }
+        try await database.write { db in
+            _ = try PantryEventRecord.deleteAll(db, keys: ids.map(\.key))
+        }
+    }
+
+    /// Events dated from `start` up to but not including `end`, oldest first; an empty or reversed range has none.
+    public func events(from start: Date, to end: Date) async throws -> [PantryEvent] {
+        guard start < end else { return [] }
+        return try await database.read { db in
+            try PantryEventRecord
+                .filter(Column("date") >= start && Column("date") < end)
+                .order(Column("date"), Column.rowID)
+                .fetchAll(db)
+                .map(\.event)
         }
     }
 

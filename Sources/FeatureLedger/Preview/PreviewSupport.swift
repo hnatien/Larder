@@ -59,7 +59,10 @@ actor PreviewStore: PlanRepository, RecipeRepository, FoodRepository, PantryRepo
     func items() -> [PantryItem] { shelves }
     func upsert(_ item: PantryItem) { shelves.append(item) }
     func remove(_ id: PantryItemID) { shelves.removeAll { $0.id == id } }
-    func consume(foodID: FoodID, grams: Double) {}
+    func consume(foodID: FoodID, grams: Double) -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) {}
+    func removeEvents(_ ids: [PantryEventID]) {}
+    func events(from start: Date, to end: Date) -> [PantryEvent] { [] }
 
     func profile() -> UserProfile? { storedProfile }
     func save(_ profile: UserProfile) { storedProfile = profile }

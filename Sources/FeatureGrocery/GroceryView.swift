@@ -154,7 +154,10 @@ private struct PreviewStore: PlanRepository, RecipeRepository, FoodRepository, P
     func items() async throws -> [PantryItem] { [] }
     func upsert(_ item: PantryItem) async throws {}
     func remove(_ id: PantryItemID) async throws {}
-    func consume(foodID: FoodID, grams: Double) async throws {}
+    func consume(foodID: FoodID, grams: Double) async throws -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) async throws {}
+    func removeEvents(_ ids: [PantryEventID]) async throws {}
+    func events(from start: Date, to end: Date) async throws -> [PantryEvent] { [] }
 }
 
 @MainActor private func previewModel(manual: [String]) -> GroceryModel {

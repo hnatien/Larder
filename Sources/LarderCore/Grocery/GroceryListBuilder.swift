@@ -1,7 +1,7 @@
 import Foundation
 
 /// One line of the grocery list.
-public struct GroceryItem: Hashable, Sendable {
+public struct GroceryItem: Hashable, Codable, Sendable {
     public var name: String
     public var foodID: FoodID?
     /// Grams still to buy after the pantry; `nil` when the amount could not be weighed (see `displayQuantity`).
