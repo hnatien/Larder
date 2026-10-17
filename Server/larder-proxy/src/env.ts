@@ -13,6 +13,7 @@ export interface Env {
   MODEL_FAST?: string;
   MODEL_CAPABLE?: string;
   ALLOW_DEV_ATTESTATION?: string;
+  ALLOW_XCODE_TRANSACTIONS?: string;
   FREE_DAILY_LIMIT?: string;
   PLUS_DAILY_LIMIT?: string;
   BUNDLE_ID?: string;
@@ -29,6 +30,10 @@ const ConfigSchema = z.object({
   MODEL_FAST: z.string().min(1),
   MODEL_CAPABLE: z.string().min(1),
   ALLOW_DEV_ATTESTATION: z.enum(["true", "false"]).transform((value) => value === "true"),
+  ALLOW_XCODE_TRANSACTIONS: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
   FREE_DAILY_LIMIT: DailyLimit,
   PLUS_DAILY_LIMIT: DailyLimit,
   BUNDLE_ID: z.string().min(1),
@@ -43,6 +48,8 @@ export interface Config {
   modelFast: string;
   modelCapable: string;
   allowDevAttestation: boolean;
+  /** Accept transactions signed by StoreKit testing in Xcode, which anyone can forge. Development only. */
+  allowXcodeTransactions: boolean;
   freeDailyLimit: number;
   plusDailyLimit: number;
   bundleId: string;
@@ -72,6 +79,7 @@ export function parseConfig(env: Env): Config {
     modelFast: value.MODEL_FAST,
     modelCapable: value.MODEL_CAPABLE,
     allowDevAttestation: value.ALLOW_DEV_ATTESTATION,
+    allowXcodeTransactions: value.ALLOW_XCODE_TRANSACTIONS,
     freeDailyLimit: value.FREE_DAILY_LIMIT,
     plusDailyLimit: value.PLUS_DAILY_LIMIT,
     bundleId: value.BUNDLE_ID,

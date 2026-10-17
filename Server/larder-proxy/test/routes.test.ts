@@ -1,7 +1,7 @@
 import { APIConnectionError, APIError, AuthenticationError, RateLimitError } from "@anthropic-ai/sdk";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { ENTITLEMENT_HEADER } from "../src/auth/entitlement.js";
-import { makeChain, signTransaction, type TestChain } from "./helpers/certs.js";
+import { makeChain, signTransaction, signXcodeTransaction, type TestChain } from "./helpers/certs.js";
 import { authed, BUNDLE_ID, makeHarness, NOW, post, sessionToken } from "./helpers/fixtures.js";
 
 const explainBody = {
@@ -375,6 +375,40 @@ describe("POST /v1/assist/adjust", () => {
   it("returns 402 for the free tier", async () => {
     const { app } = plusHarness();
     expect((await post(app, "/v1/assist/adjust", adjustBody, await authed())).status).toBe(402);
+  });
+
+  it("logs why the entitlement was refused", async () => {
+    const { app } = plusHarness();
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    await post(app, "/v1/assist/adjust", adjustBody, await authed());
+    const lines = spy.mock.calls.map((args) => JSON.parse(String(args[0])));
+    spy.mockRestore();
+    expect(lines).toEqual([
+      { event: "entitlement_rejected", requestId: expect.any(String), route: "adjust", reason: "missing" },
+    ]);
+  });
+
+  it("returns 402 for an Xcode StoreKit testing transaction by default", async () => {
+    const { app } = plusHarness();
+    const jws = await signXcodeTransaction({
+      bundleId: BUNDLE_ID,
+      productId: "com.larder.plus.monthly",
+      expiresDate: NOW.getTime() + 86_400_000,
+    });
+    const headers = { ...(await authed()), [ENTITLEMENT_HEADER]: jws };
+    expect((await post(app, "/v1/assist/adjust", adjustBody, headers)).status).toBe(402);
+  });
+
+  it("accepts an Xcode StoreKit testing transaction when ALLOW_XCODE_TRANSACTIONS is true", async () => {
+    const { app, anthropic } = makeHarness({ env: { ALLOW_XCODE_TRANSACTIONS: "true" } });
+    anthropic.replyJson(adjustOutput([]));
+    const jws = await signXcodeTransaction({
+      bundleId: BUNDLE_ID,
+      productId: "com.larder.plus.monthly",
+      expiresDate: NOW.getTime() + 86_400_000,
+    });
+    const headers = { ...(await authed()), [ENTITLEMENT_HEADER]: jws };
+    expect((await post(app, "/v1/assist/adjust", adjustBody, headers)).status).toBe(200);
   });
 
   it("returns edits for Plus with the capable model and 2048 max tokens", async () => {

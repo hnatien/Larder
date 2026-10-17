@@ -4,7 +4,7 @@ import { DerError, decodeOid, readRoot } from "../src/auth/der.js";
 import { verifySignedTransaction } from "../src/auth/entitlement.js";
 import { derSignatureToRaw, parseCertificate, pemToDer } from "../src/auth/x509.js";
 import { toBase64Url } from "../src/encoding.js";
-import { makeCert, makeChain, signTransaction, type TestChain } from "./helpers/certs.js";
+import { makeCert, makeChain, signTransaction, signXcodeTransaction, type TestChain } from "./helpers/certs.js";
 import { BUNDLE_ID, NOW } from "./helpers/fixtures.js";
 
 const validPayload = {
@@ -16,8 +16,9 @@ const validPayload = {
 
 describe("verifySignedTransaction", () => {
   let chain: TestChain;
-  const verify = (jws: string | null, roots = [chain.rootPem], now = NOW) =>
-    verifySignedTransaction(jws, { now, appleRootPEMs: roots, bundleId: BUNDLE_ID });
+  const verify = (jws: string | null, roots = [chain.rootPem], now = NOW, allowXcodeTransactions = false) =>
+    verifySignedTransaction(jws, { now, appleRootPEMs: roots, bundleId: BUNDLE_ID, allowXcodeTransactions });
+  const verifyAllowingXcode = (jws: string) => verify(jws, [chain.rootPem], NOW, true);
 
   beforeAll(async () => {
     chain = await makeChain();
@@ -123,6 +124,32 @@ describe("verifySignedTransaction", () => {
   it("treats a non-certificate x5c entry as malformed", async () => {
     const jws = await signTransaction(chain, validPayload, { x5c: ["AAAA", "AAAA", "AAAA"] });
     expect(await verify(jws)).toEqual({ tier: "free", reason: "malformed" });
+  });
+
+  it("treats an Xcode StoreKit testing transaction as free unless allowed", async () => {
+    expect(await verify(await signXcodeTransaction(validPayload))).toEqual({ tier: "free", reason: "xcode_not_allowed" });
+  });
+
+  it("grants Plus for an Xcode StoreKit testing transaction when allowed", async () => {
+    expect(await verifyAllowingXcode(await signXcodeTransaction(validPayload))).toEqual({ tier: "plus", reason: "verified" });
+  });
+
+  it("still checks bundle, expiry, revocation and product on an allowed Xcode transaction", async () => {
+    const cases = [
+      [{ bundleId: "com.example.other" }, "wrong_bundle"],
+      [{ expiresDate: NOW.getTime() - 1 }, "expired"],
+      [{ revocationDate: NOW.getTime() - 1000 }, "revoked"],
+      [{ productId: "com.larder.tip.small" }, "unknown_product"],
+    ] as const;
+    for (const [change, reason] of cases) {
+      const jws = await signXcodeTransaction({ ...validPayload, ...change });
+      expect(await verifyAllowingXcode(jws)).toEqual({ tier: "free", reason });
+    }
+  });
+
+  it("keeps the Apple chain check for other environments when Xcode transactions are allowed", async () => {
+    const jws = await signXcodeTransaction({ ...validPayload, environment: "Production" });
+    expect(await verifyAllowingXcode(jws)).toEqual({ tier: "free", reason: "malformed" });
   });
 });
 

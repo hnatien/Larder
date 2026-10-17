@@ -17,6 +17,9 @@ preview_id = "11111111111111111111111111111111"
 MODEL_FAST = "claude-haiku-5-5"
 MODEL_CAPABLE = "claude-haiku-5-5"
 ALLOW_DEV_ATTESTATION = "false"
+# Accepts Plus transactions from StoreKit testing in Xcode (the Simulator). They are not signed by
+# Apple, so anyone could forge one: keep "false" outside local development.
+ALLOW_XCODE_TRANSACTIONS = "false"
 FREE_DAILY_LIMIT = "3"
 PLUS_DAILY_LIMIT = "60"
 BUNDLE_ID = "com.larder.Larder"

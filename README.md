@@ -25,7 +25,7 @@ The cloud assistant is only called after the user allows AI help; everything els
 
 ### StoreKit testing
 
-The `Larder` scheme's Run action uses `App/Larder/Resources/Larder.storekit`, so Larder Plus products, the trial and purchases work in the simulator without App Store Connect. Manage test transactions from Debug > StoreKit > Manage Transactions. The file is not copied into the app bundle.
+The `Larder` scheme's Run action uses `App/Larder/Resources/Larder.storekit`, so Larder Plus products, the trial and purchases work in the simulator without App Store Connect. Manage test transactions from Debug > StoreKit > Manage Transactions. The file is not copied into the app bundle. These transactions are signed by Xcode, not Apple, so the local proxy only honours them for Plus routes (such as Adjust this week) with `ALLOW_XCODE_TRANSACTIONS=true` in `Server/larder-proxy/.dev.vars`.
 
 ## Scripts
 

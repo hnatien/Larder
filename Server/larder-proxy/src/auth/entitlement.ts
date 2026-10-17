@@ -12,6 +12,9 @@ export const PLUS_PRODUCT_IDS: ReadonlySet<string> = new Set(["com.larder.plus.m
 const LEAF_MARKER_OID = "1.2.840.113635.100.6.11.1";
 const INTERMEDIATE_MARKER_OID = "1.2.840.113635.100.6.2.1";
 
+/** The `environment` of transactions signed locally by StoreKit testing in Xcode. */
+const XCODE_ENVIRONMENT = "Xcode";
+
 /** Why a transaction did or did not grant Plus; safe to log. */
 export type EntitlementReason =
   | "verified"
@@ -24,7 +27,8 @@ export type EntitlementReason =
   | "wrong_bundle"
   | "expired"
   | "revoked"
-  | "unknown_product";
+  | "unknown_product"
+  | "xcode_not_allowed";
 
 /** Outcome of entitlement resolution. Anything other than a verified Plus transaction is the free tier. */
 export interface Entitlement {
@@ -40,6 +44,7 @@ const HeaderSchema = z.object({
 const PayloadSchema = z.object({
   bundleId: z.string(),
   productId: z.string(),
+  environment: z.string().optional(),
   expiresDate: z.number().optional(),
   revocationDate: z.number().optional(),
 });
@@ -49,63 +54,35 @@ const free = (reason: EntitlementReason): Entitlement => ({ tier: "free", reason
 /**
  * Verifies a signed transaction: x5c chain leaf -> intermediate -> trusted root (exact DER match),
  * certificate validity and Apple marker OIDs, the ES256 JWS signature, then bundle, expiry,
- * revocation and product. Never throws; any failure resolves to the free tier.
+ * revocation and product. A transaction from StoreKit testing in Xcode is signed by a local
+ * certificate that chains to no Apple root, so with `allowXcodeTransactions` its signature is
+ * skipped, as Apple's App Store Server Library does for that environment; the payload checks still
+ * apply. Never throws; any failure resolves to the free tier.
  */
 export async function verifySignedTransaction(
   jws: string | null,
-  options: { now: Date; appleRootPEMs: readonly string[]; bundleId: string },
+  options: { now: Date; appleRootPEMs: readonly string[]; bundleId: string; allowXcodeTransactions: boolean },
 ): Promise<Entitlement> {
   if (!jws) return free("missing");
   const parts = jws.split(".");
   if (parts.length !== 3) return free("malformed");
   const [headerPart, payloadPart, signaturePart] = parts as [string, string, string];
 
-  let header: z.infer<typeof HeaderSchema>;
   let payload: z.infer<typeof PayloadSchema>;
-  let chain: Certificate[];
-  let signature: Uint8Array<ArrayBuffer>;
   try {
-    const headerResult = HeaderSchema.safeParse(JSON.parse(fromUtf8(fromBase64Url(headerPart))));
     const payloadResult = PayloadSchema.safeParse(JSON.parse(fromUtf8(fromBase64Url(payloadPart))));
-    if (!headerResult.success || !payloadResult.success) return free("malformed");
-    header = headerResult.data;
+    if (!payloadResult.success) return free("malformed");
     payload = payloadResult.data;
-    chain = header.x5c.map((entry) => parseCertificate(fromBase64(entry)));
-    signature = fromBase64Url(signaturePart);
   } catch {
     return free("malformed");
   }
 
-  const [leaf, intermediate, root] = chain as [Certificate, Certificate, Certificate];
-  let trustedRoots: Uint8Array[];
-  try {
-    trustedRoots = options.appleRootPEMs.map(pemToDer);
-  } catch {
-    return free("untrusted_root");
-  }
-  if (!trustedRoots.some((trusted) => bytesEqual(trusted, root.der))) return free("untrusted_root");
-  if (!leaf.extensions.has(LEAF_MARKER_OID) || !intermediate.extensions.has(INTERMEDIATE_MARKER_OID)) {
-    return free("invalid_chain");
-  }
   const nowMs = options.now.getTime();
-  if (chain.some((cert) => cert.notBefore.getTime() > nowMs || cert.notAfter.getTime() < nowMs)) {
-    return free("certificate_expired");
-  }
-
-  try {
-    if (!(await isSignedBy(intermediate, root)) || !(await isSignedBy(leaf, intermediate))) {
-      return free("invalid_chain");
-    }
-    if (leaf.curve !== "P-256" || signature.length !== 64) return free("invalid_signature");
-    const verified = await crypto.subtle.verify(
-      { name: "ECDSA", hash: "SHA-256" },
-      await importPublicKey(leaf),
-      signature,
-      utf8(`${headerPart}.${payloadPart}`),
-    );
-    if (!verified) return free("invalid_signature");
-  } catch {
-    return free("invalid_chain");
+  if (payload.environment === XCODE_ENVIRONMENT) {
+    if (!options.allowXcodeTransactions) return free("xcode_not_allowed");
+  } else {
+    const failure = await verifyAppleSignature(headerPart, payloadPart, signaturePart, options.appleRootPEMs, nowMs);
+    if (failure) return free(failure);
   }
 
   if (payload.bundleId !== options.bundleId) return free("wrong_bundle");
@@ -113,4 +90,56 @@ export async function verifySignedTransaction(
   if (payload.expiresDate === undefined || payload.expiresDate <= nowMs) return free("expired");
   if (!PLUS_PRODUCT_IDS.has(payload.productId)) return free("unknown_product");
   return { tier: "plus", reason: "verified" };
+}
+
+/** Checks the x5c chain up to a trusted root and the JWS signature; returns why it failed, if it did. */
+async function verifyAppleSignature(
+  headerPart: string,
+  payloadPart: string,
+  signaturePart: string,
+  appleRootPEMs: readonly string[],
+  nowMs: number,
+): Promise<EntitlementReason | undefined> {
+  let chain: Certificate[];
+  let signature: Uint8Array<ArrayBuffer>;
+  try {
+    const headerResult = HeaderSchema.safeParse(JSON.parse(fromUtf8(fromBase64Url(headerPart))));
+    if (!headerResult.success) return "malformed";
+    chain = headerResult.data.x5c.map((entry) => parseCertificate(fromBase64(entry)));
+    signature = fromBase64Url(signaturePart);
+  } catch {
+    return "malformed";
+  }
+
+  const [leaf, intermediate, root] = chain as [Certificate, Certificate, Certificate];
+  let trustedRoots: Uint8Array[];
+  try {
+    trustedRoots = appleRootPEMs.map(pemToDer);
+  } catch {
+    return "untrusted_root";
+  }
+  if (!trustedRoots.some((trusted) => bytesEqual(trusted, root.der))) return "untrusted_root";
+  if (!leaf.extensions.has(LEAF_MARKER_OID) || !intermediate.extensions.has(INTERMEDIATE_MARKER_OID)) {
+    return "invalid_chain";
+  }
+  if (chain.some((cert) => cert.notBefore.getTime() > nowMs || cert.notAfter.getTime() < nowMs)) {
+    return "certificate_expired";
+  }
+
+  try {
+    if (!(await isSignedBy(intermediate, root)) || !(await isSignedBy(leaf, intermediate))) {
+      return "invalid_chain";
+    }
+    if (leaf.curve !== "P-256" || signature.length !== 64) return "invalid_signature";
+    const verified = await crypto.subtle.verify(
+      { name: "ECDSA", hash: "SHA-256" },
+      await importPublicKey(leaf),
+      signature,
+      utf8(`${headerPart}.${payloadPart}`),
+    );
+    if (!verified) return "invalid_signature";
+  } catch {
+    return "invalid_chain";
+  }
+  return undefined;
 }

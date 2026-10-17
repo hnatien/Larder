@@ -117,8 +117,12 @@ async function handleAssist<Req, Res>(route: AssistRoute<Req, Res>, { request, r
     now,
     appleRootPEMs: deps.trustedRootPEMs,
     bundleId: config.bundleId,
+    allowXcodeTransactions: config.allowXcodeTransactions,
   });
-  if (route.requiresPlus && entitlement.tier !== "plus") return errorReply(402, "plus_required");
+  if (route.requiresPlus && entitlement.tier !== "plus") {
+    console.warn(JSON.stringify({ event: "entitlement_rejected", requestId, route: route.name, reason: entitlement.reason }));
+    return errorReply(402, "plus_required");
+  }
 
   const parsed = await readBody(request, route.requestSchema);
   if (!parsed.ok) return parsed.reply;

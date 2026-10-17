@@ -136,3 +136,13 @@ export async function signTransaction(
   return `${headerPart}.${payloadPart}.${toBase64Url(new Uint8Array(signature))}`;
 }
 
+
+/**
+ * Signs a transaction the way StoreKit testing in Xcode does: one self-signed certificate in x5c,
+ * chained to no Apple root, and `environment: "Xcode"` in the payload.
+ */
+export async function signXcodeTransaction(payload: Record<string, unknown>): Promise<string> {
+  const local = await makeCert({ name: "StoreKit Testing in Xcode", curve: "P-256" });
+  const chain: TestChain = { root: local, intermediate: local, leaf: local, rootPem: toPem(local.der) };
+  return signTransaction(chain, { environment: "Xcode", ...payload }, { kid: "Apple_Xcode_Key", x5c: [toBase64(local.der)] });
+}
