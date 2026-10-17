@@ -85,8 +85,8 @@ public struct PlanRepair: Sendable {
 ///    does, and carry `replacedBecause` with the cause. A meal with a leftover is only replaced by a batch recipe.
 /// 5. After any deviation, a seeded local search like `WeekPlanner`'s swaps editable meals against the plan
 ///    objective less `changePenalty` per changed meal (a leftover following its cooked meal counts with it) and `bandPenalty` per nutrient band the original week met and
-///    the repaired one misses. It takes only swaps that also improve the week's nutrition (or undo an earlier
-///    swap), so a slot changes for a nutrient band, never for a slightly better recipe.
+///    the repaired one misses. It takes only swaps that bring the week closer to a band it lost (or undo an
+///    earlier swap), so a slot changes to win a band back, never for a slightly better recipe.
 /// 6. The verifier re-checks the week; a changed meal that fails is dropped.
 public enum PlanRepairer {
     /// Objective taken off per changed meal: more than most score gains between recipes, so a meal changes for a
@@ -343,8 +343,8 @@ private struct Repairer {
 
     /// Seeded local search over editable meals against the objective with its change and band penalties.
     ///
-    /// Runs only after a deviation, and takes a swap only when it also lowers the nutrient and band penalties or
-    /// undoes an earlier swap, so a week that went to plan never changes and `.balance` always means nutrition.
+    /// Runs only after a deviation, and takes a swap only when it brings the week closer to a band the deviation
+    /// lost or undoes an earlier swap, so a week that went to plan never changes and `.balance` always means a band.
     mutating func search() {
         guard !causes.isEmpty || !events.skipped.isEmpty else { return }
         var current = evaluate(meals)
@@ -371,7 +371,7 @@ private struct Repairer {
             for alternative in alternatives {
                 let trial = swapping(meal, to: alternative)
                 let value = evaluate(trial)
-                guard value.nutritionCost < current.nutritionCost - 1e-9 || value.changed < current.changed else { continue }
+                guard value.lostCost < current.lostCost - 1e-9 || value.changed < current.changed else { continue }
                 if value.objective > (best?.value.objective ?? current.objective) + 1e-9 { best = (trial, value) }
             }
             if let best {
@@ -586,8 +586,8 @@ private struct Repairer {
     private struct Evaluation {
         /// The plan objective less the change and lost-band penalties.
         var objective: Double
-        /// The nutrient penalty plus the lost-band penalty.
-        var nutritionCost: Double
+        /// The lost-band penalty plus the nutrient penalty of those lost bands.
+        var lostCost: Double
         /// Meals that differ from the plan as made, removed ones included; a leftover that only follows its changed
         /// cooked meal is part of that one change.
         var changed: Int
@@ -605,7 +605,7 @@ private struct Repairer {
         let breakdown = breakdown(meals, gaps: bands.gaps)
         return Evaluation(
             objective: breakdown.objective - PlanRepairer.changePenalty * Double(changed) - lostPenalty,
-            nutritionCost: breakdown.nutrientPenalty + lostPenalty,
+            lostCost: lostPenalty + bands.gaps.filter { baselineBands.contains($0.nutrient) }.reduce(0) { $0 + $1.penalty },
             changed: changed
         )
     }
