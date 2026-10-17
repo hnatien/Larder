@@ -15,7 +15,7 @@ Free forever (safety and the Mealime-orphan wedge):
 - Recipes: seed corpus, private on-device URL import (schema.org JSON-LD), full-text search, scaled ingredients, cooking mode (one step per screen, named timers, keep awake).
 - Plan (week plan) with manual planning, add any recipe to any of the next seven days, swap, skip, slide, leftovers that roll forward.
 - Tonight: three pantry-first options (deterministic, offline).
-- Grocery list with quantities and aisles; checked items land on the shelves.
+- Grocery list with quantities and aisles; checked items land on the shelves with a default best-by date by food group, and the basket and hand-written items survive a relaunch and plan changes. Marking a meal cooked (or Finish in cooking mode) takes its ingredients off the shelves, with Undo; every removal is logged as cooked, eaten, let go or expired for a later waste measure.
 - Allergen and dietary constraint engine (five axes). Never paywalled.
 - Full JSON export. No ads.
 - One generated week to try Plus ("Planning one week is free").
