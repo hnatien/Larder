@@ -25,6 +25,12 @@ enum Fixtures {
         .underBudget,
         .cooksOften(cuisine: "Indian"),
         .cooksOftenWith(food: FoodID()),
+        .movedFrom(date: Date(timeIntervalSince1970: 1_792_000_000)),
+        .replacedBecause(cause: .skipped),
+        .replacedBecause(cause: .notCooked),
+        .replacedBecause(cause: .outOfStock(food: FoodID())),
+        .replacedBecause(cause: .expired(food: FoodID())),
+        .replacedBecause(cause: .balance),
     ]
 
     static let allConstraintKinds: [ConstraintKind] = [
@@ -48,6 +54,8 @@ enum Fixtures {
         case .underBudget: "underBudget"
         case .cooksOften: "cooksOften"
         case .cooksOftenWith: "cooksOftenWith"
+        case .movedFrom: "movedFrom"
+        case .replacedBecause: "replacedBecause"
         }
     }
 

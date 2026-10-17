@@ -18,6 +18,12 @@ struct ReasonCodeWireTests {
         (.underBudget, ReasonCodeWire(code: "underBudget")),
         (.cooksOften(cuisine: "Indian"), ReasonCodeWire(code: "cooksOften", params: ["cuisine": .string("Indian")])),
         (.cooksOftenWith(food: spinach), ReasonCodeWire(code: "cooksOftenWith", params: ["food": .string("spinach")])),
+        (.movedFrom(date: Fixtures.date(2026, 10, 19)), ReasonCodeWire(code: "movedFrom", params: ["date": .string("2026-10-19")])),
+        (.replacedBecause(cause: .skipped), ReasonCodeWire(code: "replacedBecause", params: ["cause": .string("skipped")])),
+        (.replacedBecause(cause: .expired(food: spinach)),
+         ReasonCodeWire(code: "replacedBecause", params: ["cause": .string("expired"), "food": .string("spinach")])),
+        (.replacedBecause(cause: .outOfStock(food: FoodID())),
+         ReasonCodeWire(code: "replacedBecause", params: ["cause": .string("outOfStock")])),
     ]
 
     @Test(arguments: cases)

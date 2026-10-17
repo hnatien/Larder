@@ -1896,6 +1896,28 @@
         }
       }
     },
+    "Fills the gap a skipped meal left": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fills the gap a skipped meal left"
+          }
+        }
+      }
+    },
+    "Fills the gap an uncooked meal left": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fills the gap an uncooked meal left"
+          }
+        }
+      }
+    },
     "Finish": {
       "extractionState": "manual",
       "localizations": {
@@ -2458,6 +2480,17 @@
         }
       }
     },
+    "Keeps the week's nutrition in range": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeps the week's nutrition in range"
+          }
+        }
+      }
+    },
     "Kept in": {
       "extractionState": "manual",
       "localizations": {
@@ -2872,6 +2905,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Move to another day"
+          }
+        }
+      }
+    },
+    "Moved here from %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moved here from %@"
           }
         }
       }
@@ -4240,6 +4284,28 @@
         }
       }
     },
+    "Something it needed is past its date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something it needed is past its date"
+          }
+        }
+      }
+    },
+    "Something it needed ran out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something it needed ran out"
+          }
+        }
+      }
+    },
     "Soy": {
       "extractionState": "manual",
       "localizations": {
@@ -4544,6 +4610,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "The %@ is at its limit today. Eat it, or let it go."
+          }
+        }
+      }
+    },
+    "The %@ is past its date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@ is past its date"
+          }
+        }
+      }
+    },
+    "The %@ ran out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@ ran out"
           }
         }
       }
