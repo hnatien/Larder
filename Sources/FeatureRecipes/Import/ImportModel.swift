@@ -10,6 +10,7 @@ public final class ImportModel: Identifiable {
     public enum Phase: Equatable, Sendable {
         case idle
         case loading
+        case readingPhoto
         case preview(ImportResult)
         case failed(ImportError)
         case saving
@@ -55,6 +56,33 @@ public final class ImportModel: Identifiable {
             phase = .failed(error)
         } catch {
             phase = .idle
+        }
+    }
+
+    /// Reads the recipe in a photo from the camera or the photo library and shows what was found.
+    public func readPhoto(_ data: Data) async {
+        phase = .readingPhoto
+        do {
+            let result = try await importer.import(photo: data)
+            guard !Task.isCancelled else { return }
+            phase = .preview(result)
+        } catch let error as ImportError {
+            phase = .failed(error)
+        } catch {
+            phase = .idle
+        }
+    }
+
+    /// Shows that a chosen photo could not be loaded from the library.
+    public func photoUnavailable() {
+        phase = .failed(.unreadablePhoto)
+    }
+
+    /// Whether a page or photo is being read or the recipe saved, so new input waits.
+    public var isBusy: Bool {
+        switch phase {
+        case .loading, .readingPhoto, .saving: true
+        case .idle, .preview, .failed, .saved: false
         }
     }
 

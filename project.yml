@@ -74,7 +74,8 @@ targets:
           UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown
           UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_NSCameraUsageDescription: >-
-          Larder uses the camera to scan barcodes and receipts so you can add food to your pantry. Images stay on this device.
+          Larder uses the camera to scan barcodes and receipts for your pantry and to read recipe pages. Photos are read on
+          this device. If it can't read a recipe photo and AI help is on, that photo goes to Larder's assistant.
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
   LarderWidgets:

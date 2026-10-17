@@ -1,11 +1,14 @@
 import LarderCore
 import LarderDesign
+import PhotosUI
 import SwiftUI
 
-/// Import from a web address: type or paste, preview what was found, then save.
+/// Import from a web address or a photo of a recipe: preview what was found, then save.
 public struct ImportSheet: View {
     @Bindable private var model: ImportModel
     @Environment(\.dismiss) private var dismiss
+    @State private var pickedPhoto: PhotosPickerItem?
+    @State private var showsCamera = false
 
     /// Creates the sheet over `model`, from `RecipesModel.makeImportModel()`.
     public init(model: ImportModel) {
@@ -17,6 +20,7 @@ public struct ImportSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: LarderSpacing.xl) {
                     addressField
+                    photoSection
                     status
                     if let result = model.preview {
                         PreviewCard(result: result, servings: Binding(get: { result.recipe.servings }, set: { model.setServings($0) }))
@@ -32,7 +36,7 @@ public struct ImportSheet: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(RecipesCopy.cancel) { dismiss() }
+                    Button(role: .close) { dismiss() }
                 }
             }
             .onChange(of: model.phase) { _, phase in
@@ -43,15 +47,57 @@ public struct ImportSheet: View {
                     AccessibilityNotification.Announcement(RecipesCopy.message(for: error)).post()
                 case .preview(let result):
                     AccessibilityNotification.Announcement(RecipesCopy.found(result.recipe.title)).post()
-                case .idle, .loading, .saving:
+                case .idle, .loading, .readingPhoto, .saving:
                     break
                 }
             }
+            .onChange(of: pickedPhoto) { _, item in
+                guard let item else { return }
+                pickedPhoto = nil
+                Task {
+                    guard let data = try? await item.loadTransferable(type: Data.self) else {
+                        model.photoUnavailable()
+                        return
+                    }
+                    await model.readPhoto(data)
+                }
+            }
+            #if os(iOS)
+            .fullScreenCover(isPresented: $showsCamera) {
+                CameraCapture { data in
+                    showsCamera = false
+                    if let data { Task { await model.readPhoto(data) } }
+                }
+                .ignoresSafeArea()
+            }
+            #endif
+        }
+    }
+
+    private var photoSection: some View {
+        VStack(alignment: .leading, spacing: LarderSpacing.m) {
+            SectionHeading(RecipesCopy.fromPhoto)
+            Text(RecipesCopy.fromPhotoHint)
+                .font(LarderFont.body(.footnote))
+                .foregroundStyle(LarderColor.ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            AdaptiveStack(spacing: LarderSpacing.m) {
+                #if os(iOS)
+                if CameraCapture.isAvailable {
+                    Button(RecipesCopy.takePhoto) { showsCamera = true }
+                        .buttonStyle(.larderSecondary)
+                }
+                #endif
+                PhotosPicker(RecipesCopy.choosePhoto, selection: $pickedPhoto, matching: .images, photoLibrary: .shared())
+                    .buttonStyle(.larderSecondary)
+            }
+            .disabled(model.isBusy)
         }
     }
 
     private var addressField: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.m) {
+            SectionHeading(RecipesCopy.fromAddress)
             TextField(RecipesCopy.address, text: $model.addressText)
                 .font(LarderFont.body(.body))
                 .foregroundStyle(LarderColor.ink.primary)
@@ -82,13 +128,15 @@ public struct ImportSheet: View {
             Task { await model.fetchPreview() }
         }
         .buttonStyle(.larderPrimary)
-        .disabled(model.addressText.trimmingCharacters(in: .whitespaces).isEmpty || model.phase == .loading || model.phase == .saving)
+        .disabled(model.addressText.trimmingCharacters(in: .whitespaces).isEmpty || model.isBusy)
     }
 
     @ViewBuilder private var status: some View {
         switch model.phase {
         case .loading:
             ProgressView(RecipesCopy.readingPage)
+        case .readingPhoto:
+            ProgressView(RecipesCopy.readingPhoto)
         case .failed(let error):
             Label(RecipesCopy.message(for: error), systemImage: "exclamationmark.triangle.fill")
                 .font(LarderFont.body(.body))
@@ -134,8 +182,10 @@ private struct PreviewCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
             Stamp(text: Copy.Ledger.minutes(result.recipe.prepMinutes + result.recipe.cookMinutes))
-            if result.source == .assistant {
-                ReasonLine(text: RecipesCopy.assistantNote)
+            switch result.source {
+            case .assistant: ReasonLine(text: RecipesCopy.assistantNote)
+            case .photo: ReasonLine(text: RecipesCopy.photoNote)
+            case .structuredData: EmptyView()
             }
             Stepper(value: $servings, in: 1...RecipeDetailView.maximumServings) {
                 HStack {

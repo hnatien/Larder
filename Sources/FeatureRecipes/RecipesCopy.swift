@@ -136,9 +136,19 @@ nonisolated enum RecipesCopy {
     static var readingPage: String { String(localized: "Reading the page", bundle: Copy.bundle) }
     static var save: String { String(localized: "Save recipe", bundle: Copy.bundle) }
     static var startOver: String { String(localized: "Start over", bundle: Copy.bundle) }
-    static var cancel: String { String(localized: "Cancel", bundle: Copy.bundle) }
     static var assistantNote: String {
         String(localized: "The assistant read this page. Check the amounts before you cook.", bundle: Copy.bundle)
+    }
+    static var fromPhoto: String { String(localized: "From a photo", bundle: Copy.bundle) }
+    static var fromPhotoHint: String {
+        String(localized: "A recipe card or a cookbook page. Larder reads it on this iPhone when it can.", bundle: Copy.bundle)
+    }
+    static var takePhoto: String { String(localized: "Take a photo", bundle: Copy.bundle) }
+    static var choosePhoto: String { String(localized: "Choose a photo", bundle: Copy.bundle) }
+    static var readingPhoto: String { String(localized: "Reading the photo", bundle: Copy.bundle) }
+    static var fromAddress: String { String(localized: "From a web page", bundle: Copy.bundle) }
+    static var photoNote: String {
+        String(localized: "Read from your photo. Check the amounts before you cook.", bundle: Copy.bundle)
     }
     static func found(_ title: String) -> String {
         String(localized: "Found \(title)", bundle: Copy.bundle)
@@ -167,6 +177,18 @@ nonisolated enum RecipesCopy {
             String(localized: "The assistant would not read this page.", bundle: Copy.bundle)
         case .assistantFailed:
             String(localized: "The assistant couldn't read this page. Try again later.", bundle: Copy.bundle)
+        case .photoNeedsPlus:
+            String(localized: "Reading a recipe from a photo needs Larder Plus.", bundle: Copy.bundle)
+        case .unreadablePhoto:
+            String(localized: "Couldn't find a recipe in that photo. Try a sharper photo of the whole page.", bundle: Copy.bundle)
+        case .photoAssistantFailed(.consentRequired):
+            String(localized: "This iPhone couldn't read the photo on its own. Turn on AI help in Settings to let the assistant read it.", bundle: Copy.bundle)
+        case .photoAssistantFailed(.declined):
+            String(localized: "The assistant would not read this photo.", bundle: Copy.bundle)
+        case .photoAssistantFailed(.quotaExceeded):
+            String(localized: "This month's assistant allowance is used up. Try again next month or import from a web address.", bundle: Copy.bundle)
+        case .photoAssistantFailed:
+            String(localized: "The assistant couldn't read this photo. Try again later.", bundle: Copy.bundle)
         }
     }
 }

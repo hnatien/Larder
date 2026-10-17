@@ -15,6 +15,12 @@ public nonisolated enum ImportError: Error, Hashable, Sendable {
     case assistantFailed(LarderError)
     /// The recipe was read but could not be saved.
     case saveFailed
+    /// Reading a recipe from a photo is a Larder Plus feature.
+    case photoNeedsPlus
+    /// The photo could not be opened, or no recipe could be read from it.
+    case unreadablePhoto
+    /// The assistant was asked to read the photo and could not.
+    case photoAssistantFailed(LarderError)
 }
 
 /// A recipe ready to preview and save.
@@ -23,6 +29,8 @@ public nonisolated struct ImportResult: Hashable, Sendable {
     public enum Source: Hashable, Sendable {
         case structuredData
         case assistant
+        /// Read from a photo of a recipe page or card.
+        case photo
     }
 
     public var recipe: Recipe
@@ -50,6 +58,10 @@ nonisolated struct RecipeImporter: Sendable {
     static let firstWordMatchConfidence = 0.5
     private static let maximumPageBytes = 5_000_000
     private static let maximumPhotoBytes = 10_000_000
+    /// The largest camera or library photo read for a recipe, before it is downsampled.
+    static let maximumRecipePhotoBytes = 40_000_000
+    /// The longest side of a recipe photo sent to be read: sharp enough for small print, well inside the proxy's image limit.
+    static let readingPixelSize = 2048
 
     let foods: any FoodRepository
     let profile: any ProfileRepository
@@ -97,6 +109,36 @@ nonisolated struct RecipeImporter: Sendable {
             imported.photo = try await photo(at: address, on: url, fetch: fetch)
         }
         return imported
+    }
+
+    /// Reads the recipe in a photo of a page or card, for Plus users. The assistant reads it on this device first
+    /// (Vision text and Foundation Models) and, when AI help is allowed, falls back to the proxy's image route.
+    /// The photo is not kept with the recipe: it shows a page, not the dish.
+    func `import`(photo data: Data) async throws -> ImportResult {
+        guard await isPlus() else { throw ImportError.photoNeedsPlus }
+        guard data.count <= Self.maximumRecipePhotoBytes,
+              let jpeg = PhotoDownsampler.jpeg(from: data, maximumPixelSize: Self.readingPixelSize)
+        else { throw ImportError.unreadablePhoto }
+        let consented = (try? await profile.profile())?.consents.aiProcessing == true
+        let parsed: ParsedRecipe
+        do {
+            parsed = try await assistant.parseRecipe(text: "", imageData: jpeg)
+        } catch LarderError.assistantUnavailable where !consented {
+            // Nothing on this device could read it and the proxy was not allowed to try.
+            throw ImportError.photoAssistantFailed(.consentRequired)
+        } catch LarderError.invalidResponse {
+            throw ImportError.unreadablePhoto
+        } catch let error as LarderError {
+            throw ImportError.photoAssistantFailed(error)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            throw ImportError.photoAssistantFailed(.assistantUnavailable)
+        }
+        guard !parsed.title.trimmingCharacters(in: .whitespaces).isEmpty, !parsed.ingredients.isEmpty || !parsed.steps.isEmpty else {
+            throw ImportError.unreadablePhoto
+        }
+        return await result(from: StructuredRecipe(recipe: parsed, tags: RecipeTags()), url: nil, source: .photo)
     }
 
     /// The photo at `address`, resolved against the page, as a stored JPEG; `nil` for anything that is not a readable
@@ -173,7 +215,7 @@ nonisolated struct RecipeImporter: Sendable {
         return parsed
     }
 
-    private func result(from structured: StructuredRecipe, url: URL, source: ImportResult.Source) async -> ImportResult {
+    private func result(from structured: StructuredRecipe, url: URL?, source: ImportResult.Source) async -> ImportResult {
         let parsed = structured.recipe
         let recipe = Recipe(
             title: parsed.title,

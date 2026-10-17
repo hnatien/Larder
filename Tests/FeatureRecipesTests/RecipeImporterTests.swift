@@ -482,3 +482,109 @@ struct ImportModelTests {
         #expect(importModel.phase == .idle)
     }
 }
+
+struct PhotoImportTests {
+    private static let recipe = ParsedRecipe(
+        title: "Lemon dal", servings: 4, prepMinutes: 5, cookMinutes: 25,
+        ingredients: [ParsedIngredient(rawText: "200 g red lentils", name: "red lentils", quantity: 200, unit: .gram)],
+        steps: [RecipeStep(text: "Simmer for 20 minutes.")]
+    )
+
+    private func importer(store: FakeStore, assistant: FakeAssistant, isPlus: Bool = true) -> RecipeImporter {
+        RecipeImporter(foods: store, profile: store, assistant: assistant, isPlus: { isPlus })
+    }
+
+    @Test func plusUserGetsARecipeReadFromADownsampledPhotoThatIsNotKept() async throws {
+        let assistant = FakeAssistant(result: .success(Self.recipe))
+        let result = try await importer(store: FakeStore(), assistant: assistant).import(photo: TestImage.png(width: 4000, height: 3000))
+
+        let calls = await assistant.parseCalls
+        #expect(calls.count == 1)
+        #expect(calls[0].text.isEmpty)
+        let sent = try #require(calls[0].imageData)
+        #expect(TestImage.type(of: sent) == "public.jpeg")
+        #expect(TestImage.pixelSize(of: sent)?.width == RecipeImporter.readingPixelSize)
+        #expect(result.source == .photo)
+        #expect(result.photo == nil)
+        #expect(result.recipe.origin == .userImport)
+        #expect(result.recipe.sourceURL == nil)
+        #expect(result.recipe.title == "Lemon dal")
+        #expect(result.recipe.steps[0].timerSeconds == 1200)
+    }
+
+    @Test func freeUserIsToldItNeedsPlusAndNothingIsRead() async {
+        let assistant = FakeAssistant(result: .success(Self.recipe))
+        await #expect(throws: ImportError.photoNeedsPlus) {
+            try await importer(store: FakeStore(), assistant: assistant, isPlus: false).import(photo: TestImage.png(width: 100, height: 100))
+        }
+        #expect(await assistant.parseCalls.isEmpty)
+    }
+
+    @Test func bytesThatAreNotAnImageNeverReachTheAssistant() async {
+        let assistant = FakeAssistant(result: .success(Self.recipe))
+        await #expect(throws: ImportError.unreadablePhoto) {
+            try await importer(store: FakeStore(), assistant: assistant).import(photo: Data("not an image".utf8))
+        }
+        #expect(await assistant.parseCalls.isEmpty)
+    }
+
+    @Test func unavailableWithoutConsentPointsToAIHelp() async {
+        let assistant = FakeAssistant(result: .failure(LarderError.assistantUnavailable))
+        let store = FakeStore(profile: Sample.profile(aiProcessing: false))
+        await #expect(throws: ImportError.photoAssistantFailed(.consentRequired)) {
+            try await importer(store: store, assistant: assistant).import(photo: TestImage.png(width: 100, height: 100))
+        }
+    }
+
+    @Test func unavailableWithConsentStaysUnavailable() async {
+        let assistant = FakeAssistant(result: .failure(LarderError.assistantUnavailable))
+        let store = FakeStore(profile: Sample.profile(aiProcessing: true))
+        await #expect(throws: ImportError.photoAssistantFailed(.assistantUnavailable)) {
+            try await importer(store: store, assistant: assistant).import(photo: TestImage.png(width: 100, height: 100))
+        }
+    }
+
+    @Test func aPhotoWithNoRecipeInItIsUnreadable() async {
+        for answer: Result<ParsedRecipe, any Error> in [
+            .success(ParsedRecipe(title: "Shopping list", ingredients: [], steps: [])),
+            .failure(LarderError.invalidResponse),
+        ] {
+            let assistant = FakeAssistant(result: answer)
+            await #expect(throws: ImportError.unreadablePhoto) {
+                try await importer(store: FakeStore(), assistant: assistant).import(photo: TestImage.png(width: 100, height: 100))
+            }
+        }
+    }
+
+    @Test func declinesAndQuotaArePassedOn() async {
+        for error: LarderError in [.declined(category: "guardrail"), .quotaExceeded] {
+            let assistant = FakeAssistant(result: .failure(error))
+            await #expect(throws: ImportError.photoAssistantFailed(error)) {
+                try await importer(store: FakeStore(), assistant: assistant).import(photo: TestImage.png(width: 100, height: 100))
+            }
+        }
+    }
+
+    @Test func photoErrorCopyIsPresentForEveryCase() {
+        let errors: [ImportError] = [
+            .photoNeedsPlus, .unreadablePhoto, .photoAssistantFailed(.consentRequired), .photoAssistantFailed(.declined(category: nil)),
+            .photoAssistantFailed(.quotaExceeded), .photoAssistantFailed(.assistantUnavailable),
+        ]
+        let messages = errors.map(RecipesCopy.message(for:))
+        #expect(Set(messages).count == errors.count)
+        for message in messages {
+            #expect(!message.isEmpty)
+            #expect(!message.contains("this page"))
+        }
+    }
+
+    @MainActor @Test func modelShowsReadingThenThePreview() async throws {
+        let assistant = FakeAssistant(result: .success(Self.recipe))
+        let model = ImportModel(importer: importer(store: FakeStore(), assistant: assistant), save: { _ in })
+        #expect(!model.isBusy)
+        await model.readPhoto(TestImage.png(width: 200, height: 200))
+        #expect(model.preview?.recipe.title == "Lemon dal")
+        model.photoUnavailable()
+        #expect(model.phase == .failed(.unreadablePhoto))
+    }
+}
