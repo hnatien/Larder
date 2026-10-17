@@ -191,3 +191,33 @@ struct FreshnessStyleTests {
     }
     #endif
 }
+
+@Suite("FreshnessStamp dates")
+struct FreshnessStampDateTests {
+    private let calendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC") ?? .gmt
+        return calendar
+    }()
+    private let locale = Locale(identifier: "en_GB")
+    /// Saturday 17 October 2026, mid-morning.
+    private var now: Date { calendar.date(from: DateComponents(year: 2026, month: 10, day: 17, hour: 10)) ?? .now }
+
+    private func text(daysFromNow days: Int) -> String {
+        let date = calendar.date(byAdding: .day, value: days, to: now) ?? now
+        return FreshnessStamp.dateText(date, now: now, calendar: calendar, locale: locale)
+    }
+
+    @Test func nearDatesReadAsWords() {
+        #expect(text(daysFromNow: 0) == "Today")
+        #expect(text(daysFromNow: 1) == "Tomorrow")
+        #expect(text(daysFromNow: -1) == "Yesterday")
+        #expect(text(daysFromNow: 3) == "In 3 days")
+        #expect(text(daysFromNow: -2) == "2 days ago")
+    }
+
+    @Test func laterDatesShowTheDayAndTheYearOnlyWhenItDiffers() {
+        #expect(text(daysFromNow: 10) == "27 Oct")
+        #expect(text(daysFromNow: 90) == "15 Jan 2027")
+    }
+}
