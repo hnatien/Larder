@@ -18,8 +18,8 @@ struct RootView: View {
 
         var message: String {
             switch self {
-            case .recipeMissing: String(localized: "That recipe is no longer in your library.")
-            case .recipeUnreadable: String(localized: "Couldn't open that recipe. Try again.")
+            case .recipeMissing: Copy.App.recipeMissing
+            case .recipeUnreadable: Copy.App.recipeUnreadable
             }
         }
     }
@@ -38,6 +38,8 @@ struct RootView: View {
     @State private var showsAccount = false
     @State private var showsPaywall = false
     @State private var isAddingFood = false
+    /// Set when Add food was opened from Tonight's empty state, so the first food added leads back to the ideas.
+    @State private var returnsToTonight = false
     @State private var notice: Notice?
 
     private var state: AppState { dependencies.state }
@@ -48,6 +50,19 @@ struct RootView: View {
             .environment(\.timersFlashAndVibrate, dependencies.settings.timersFlashAndVibrate)
             .environment(\.recipePhotoDirectory, dependencies.photos.directory)
             .preferredColorScheme(dependencies.launch.forcesDarkAppearance ? .dark : nil)
+            .onOpenURL { url in
+                // larder://tonight, from the widget.
+                if url.scheme == "larder", url.host() == "tonight" { state.selectedTab = .tonight }
+            }
+            .onChange(of: state.hasProfile) { _, hasProfile in
+                // After Delete all data nothing from the old session should come back over the new setup.
+                guard hasProfile == false else { return }
+                showsAccount = false
+                showsPaywall = false
+                presentedRecipe = nil
+                isAddingFood = false
+                returnsToTonight = false
+            }
             .task { await dependencies.start() }
             .task { await dependencies.entitlements.start() }
             .task { await dependencies.prepareOnDeviceModel() }
@@ -59,7 +74,7 @@ struct RootView: View {
 
     @ViewBuilder private var content: some View {
         if state.startupFailed {
-            StartupFailureView()
+            StartupFailureView { Task { await dependencies.retryStart() } }
         } else {
             switch state.hasProfile {
             case nil:
@@ -88,6 +103,7 @@ struct RootView: View {
                     onOpenRecipe: { openRecipe($0) },
                     onStartCooking: { openRecipe($0, startsCooking: true) },
                     onAddToPantry: {
+                        returnsToTonight = dependencies.shelves.items.isEmpty
                         state.selectedTab = .shelves
                         isAddingFood = true
                     },
@@ -111,6 +127,8 @@ struct RootView: View {
                     model: dependencies.recipes,
                     onAddToPlan: addToPlan,
                     onFinishCooking: finishCooking,
+                    onAddToGroceries: dependencies.addToGroceries,
+                    plannedDinners: dependencies.plannedDinners,
                     onOpenSettings: openSettings
                 )
             }
@@ -130,8 +148,20 @@ struct RootView: View {
         .onChange(of: dependencies.tonight.cookingID) {
             Task { await dependencies.snapshots.write() }
         }
+        .onChange(of: isAddingFood) { _, isAdding in
+            // The first food added from Tonight's empty state goes straight back to tonight's ideas.
+            guard !isAdding, returnsToTonight else { return }
+            returnsToTonight = false
+            if !dependencies.shelves.items.isEmpty {
+                state.selectedTab = .tonight
+                AccessibilityNotification.Announcement(Copy.App.addedFirstFood).post()
+            }
+        }
         .onChange(of: dependencies.shelves.items) {
-            Task { await dependencies.tonight.load() }
+            Task {
+                await dependencies.tonight.load()
+                await dependencies.recipes.refreshCoverage()
+            }
         }
         .sheet(item: $presentedRecipe) { presented in
             NavigationStack {
@@ -140,6 +170,8 @@ struct RootView: View {
                     recipe: presented.recipe,
                     onAddToPlan: addToPlan,
                     onFinishCooking: finishCooking,
+                    onAddToGroceries: dependencies.addToGroceries,
+                    plannedDinners: dependencies.plannedDinners,
                     startsCooking: presented.startsCooking
                 )
                 .toolbar {
@@ -166,7 +198,7 @@ struct RootView: View {
             notice?.message ?? "",
             isPresented: Binding(get: { notice != nil }, set: { if !$0 { notice = nil } })
         ) {
-            Button(String(localized: "OK")) { notice = nil }
+            Button(Copy.App.ok) { notice = nil }
         }
     }
 
@@ -204,14 +236,22 @@ struct RootView: View {
     }
 }
 
-/// Shown when the store cannot be opened; there is nothing else the app can do without it.
+/// Shown when the store cannot be opened; there is nothing else the app can do without it, so it offers to try again
+/// when it can.
 struct StartupFailureView: View {
+    var onRetry: (() -> Void)?
+
     var body: some View {
-        ContentUnavailableView(
-            String(localized: "Larder couldn't open your data"),
-            systemImage: "exclamationmark.triangle",
-            description: Text(String(localized: "Close Larder and open it again. Your data stays on this device."))
-        )
+        ContentUnavailableView {
+            Label(Copy.App.startupFailedTitle, systemImage: "exclamationmark.triangle")
+        } description: {
+            Text(Copy.App.startupFailedMessage)
+        } actions: {
+            if let onRetry {
+                Button(Copy.App.tryAgain, action: onRetry)
+                    .buttonStyle(.larderPrimary)
+            }
+        }
         .foregroundStyle(LarderColor.ink.primary)
     }
 }

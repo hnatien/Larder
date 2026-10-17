@@ -75,12 +75,14 @@ final class AppDependencies {
         exporter: ExportBuilder(profiles: profiles, recipes: recipeRepository, pantry: pantry, plans: plans),
         preferences: preferences,
         dates: dates,
+        trialWeek: trialWeek,
         deleteAllData: { [weak self] in try await self?.eraseAllData() }
     )
 
     let recipeRepository: GRDBRecipeRepository
     let photos: FileRecipePhotoStore
     private let database: LarderDatabase
+    private let trialWeek: TrialWeekGate
     private let foods: GRDBFoodRepository
     private let pantry: GRDBPantryRepository
     private let basket: GRDBGroceryBasketRepository
@@ -125,6 +127,7 @@ final class AppDependencies {
         self.dates = dates
         let flags = UserDefaultsKeyValueStore(defaults: defaults)
         let trialWeek = TrialWeekGate(store: flags)
+        self.trialWeek = trialWeek
         preferences = ComfortPreferences(store: flags)
         planning = PlanningService(
             plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, profiles: profiles, dates: dates
@@ -163,7 +166,8 @@ final class AppDependencies {
             isPlus: entitlements.isPlus
         )
         recipes = RecipesModel(
-            recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
+            recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, pantry: pantry, marks: recipeRepository,
+            assistant: assistant.router, isPlus: entitlements.isPlus
         )
         grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, basket: basket, dates: dates)
         onboarding = OnboardingModel(profiles: profiles, preferences: preferences, dates: dates)
@@ -254,6 +258,14 @@ final class AppDependencies {
         await snapshots.write()
     }
 
+    /// Runs launch again after it failed to read the store.
+    func retryStart() async {
+        guard state.startupFailed else { return }
+        state.startupFailed = false
+        hasStarted = false
+        await start()
+    }
+
     /// Warms the on-device model once the first frame is up.
     func prepareOnDeviceModel() async {
         do {
@@ -336,6 +348,26 @@ final class AppDependencies {
                 ledger.dismissCookUndo()
             }
         )
+    }
+
+    /// Puts recipe lines the pantry lacks on the grocery list as hand-written items; returns whether every one was added.
+    func addToGroceries(_ lines: [Ingredient]) async -> Bool {
+        for line in lines {
+            await grocery.addManual(name: line.rawText)
+            if grocery.error != nil { return false }
+        }
+        return true
+    }
+
+    /// Dinners planned from today, by the start of their day, for Add to plan; empty when the plan cannot be read.
+    func plannedDinners() async -> [Date: String] {
+        do {
+            let dinners = try await self.dinners.dinners(from: dates.now)
+            return Dictionary(dinners.map { ($0.day, $0.title) }, uniquingKeysWith: { first, _ in first })
+        } catch {
+            Self.logger.error("Could not read planned dinners: \(String(describing: type(of: error)), privacy: .public)")
+            return [:]
+        }
     }
 
     /// Shows the shelves cooking changed everywhere they appear.

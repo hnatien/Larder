@@ -1,3 +1,4 @@
+import FeatureRecipes
 import LarderDesign
 import OSLog
 import SwiftUI
@@ -8,6 +9,7 @@ struct LarderApp: App {
 
     init() {
         LarderFont.registerBundledFonts()
+        TimerNotificationPresenter.shared.install()
         do {
             dependencies = try AppDependencies.makeShared(launch: .current)
         } catch {
