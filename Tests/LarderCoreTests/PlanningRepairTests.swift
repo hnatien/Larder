@@ -245,6 +245,25 @@ struct PlanningRepairTests {
         #expect(repair.changes.map(\.action) == [.removed])
     }
 
+    @Test func repairDaysAfterTheWeekEndedDropsItsUncookedMeals() {
+        let current = handPlan({ plan in [meal(Planning.tofuBowl, plan, day: 0), meal(Planning.beanTacos, plan, day: 2)] }, days: 3)
+
+        let repair = PlanRepairer.repair(current, today: planDay(5), events: PlanEvents(), request: Planning.request(household: 2, days: 3))
+
+        #expect(repair.result.meals.isEmpty)
+        #expect(repair.changes.map(\.action) == [.removed, .removed])
+        #expect(repair.result.unfilledSlots.isEmpty)
+    }
+
+    @Test func repairBeforeTheWeekStartsChangesNothing() {
+        let current = handPlan({ plan in [meal(Planning.tofuBowl, plan, day: 0), meal(Planning.beanTacos, plan, day: 1)] }, days: 3)
+
+        let repair = PlanRepairer.repair(current, today: planDay(-2), events: PlanEvents(), request: Planning.request(household: 2, days: 3))
+
+        #expect(repair.changes.isEmpty)
+        #expect(Set(repair.result.meals.map(\.id)) == Set(current.meals.map(\.id)))
+    }
+
     @Test func movedSourceTakesItsLeftoverAlong() throws {
         let stocked = Planning.chickpeaCurry.ingredients.compactMap { line in
             line.foodID.flatMap { Planning.foods[$0] }.map { Planning.pantryItem($0, grams: (line.gramsResolved ?? 0) + 1) }

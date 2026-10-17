@@ -214,7 +214,7 @@ private struct Repairer {
     mutating func carryForwardPastMeals() {
         let past = ordered(meals.filter { meal in
             meal.leftoverOf == nil && meal.status == .planned && !meal.isLocked
-                && day(of: meal.date).map { (0..<todayIndex).contains($0) } == true
+                && day(of: meal.date).map { $0 >= 0 && $0 < todayIndex } == true
         })
         for meal in past {
             guard let current = meals.first(where: { $0.id == meal.id }) else { continue }
@@ -233,7 +233,7 @@ private struct Repairer {
     private func move(_ meal: PlannedMeal) -> [PlannedMeal]? {
         let children = Set(leftovers(of: meal.id, in: meals).filter { $0.status == .planned && !$0.isLocked }.map(\.id))
         guard let from = day(of: meal.date),
-              let target = (max(todayIndex, 0)..<dates.count).first(where: { isFree($0, meal.slot, ignoring: children) })
+              let target = (min(max(todayIndex, 0), dates.count)..<dates.count).first(where: { isFree($0, meal.slot, ignoring: children) })
         else { return nil }
         var trial = meals
         guard let index = trial.firstIndex(where: { $0.id == meal.id }) else { return nil }
