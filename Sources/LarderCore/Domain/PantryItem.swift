@@ -47,4 +47,6 @@ public enum PantrySource: String, CaseIterable, Hashable, Codable, Sendable {
     case barcode
     case naturalLanguage
     case receipt
+    /// Bought from the grocery list's planned items.
+    case groceryList
 }
