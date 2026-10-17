@@ -36,6 +36,11 @@ let testTargets: [Target] = sourceTargets.map {
     )
 }
 
+/// The offline evaluation harness: macOS only, Core only, never shipped in the app.
+let benchTargets: [Target] = [
+    .executableTarget(name: "LarderBench", dependencies: ["LarderCore"]),
+]
+
 let package = Package(
     name: "LarderKit",
     platforms: [.iOS(.v26), .macOS(.v26)],
@@ -43,5 +48,5 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/groue/GRDB.swift", from: "7.11.0")
     ],
-    targets: sourceTargets + testTargets
+    targets: sourceTargets + testTargets + benchTargets
 )

@@ -13,3 +13,6 @@ Server/larder-proxy/dist/
 *.p8
 *.mobileprovision
 AssetsInbox/
+
+# LarderBench output
+bench-results/
