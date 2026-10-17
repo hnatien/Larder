@@ -66,8 +66,8 @@ public enum PlanVerifier {
     /// Every meal is re-run through the allergen engine and the constraint filter; excluded and uncertain
     /// verdicts are both hard violations, as is a meal whose recipe is missing from `candidates`.
     ///
-    /// Nutrient notes cover per-day and per-1,000-kcal targets, per person per day; other bases are skipped,
-    /// as are nutrients the food data does not cover. Per-day bands, maxima included, are scaled to the share
+    /// Nutrient notes cover per-day, per-1,000-kcal and percent-of-energy targets, per person per day, in the
+    /// nutrient's own unit; per-meal targets are skipped, as are nutrients the food data does not cover. Per-day bands, maxima included, are scaled to the share
     /// of the day that `slots` cover.
     public static func verify(
         meals: [PlannedMeal],
@@ -135,9 +135,7 @@ public enum PlanVerifier {
     ) -> [NutrientNote] {
         targets.compactMap { target in
             guard let perDay = totals.perPersonPerDay(target.nutrient, days: days, householdSize: householdSize),
-                  let band = totals.dailyBand(
-                      for: target, days: days, householdSize: householdSize, coverage: coverage, targetAsFloor: true
-                  )
+                  let band = totals.dailyBand(for: target, days: days, householdSize: householdSize, coverage: coverage)
             else { return nil }
             let status: NutrientStatus = if let low = band.min, perDay < low {
                 .under
@@ -177,18 +175,14 @@ struct PlanNutrition {
         return value / Double(days) / Double(max(householdSize, 1))
     }
 
-    /// The target's band per person per day; per-day bands scale by `coverage`, the share of the day the
-    /// plan's slots cover, and per-1,000-kcal bands by the plan's energy.
+    /// The target's band per person per day. Per-day bands scale by `coverage`, the share of the day the plan's
+    /// slots cover; per-1,000-kcal bands by the plan's energy; percent-of-energy bands become amounts of the
+    /// plan's own energy at the nutrient's kcal per gram (10 % of 2,000 kcal of saturated fat is about 22 g).
     ///
-    /// Without `targetAsFloor` only explicit min and max count; with it, a target that has neither uses
-    /// its target amount as the floor. `nil` for other bases, unknown energy, no coverage, or no bound at all.
-    func dailyBand(
-        for target: NutrientTarget,
-        days: Int,
-        householdSize: Int,
-        coverage: Double,
-        targetAsFloor: Bool
-    ) -> (min: Double?, max: Double?)? {
+    /// Explicit min and max are the bounds; a target with neither uses its target amount as the floor. `nil`
+    /// for per-meal targets, percent-of-energy targets on a nutrient that carries no energy, unknown energy,
+    /// no coverage, or no bound at all.
+    func dailyBand(for target: NutrientTarget, days: Int, householdSize: Int, coverage: Double) -> (min: Double?, max: Double?)? {
         let scale: Double
         switch target.basis {
         case .perDay:
@@ -197,12 +191,29 @@ struct PlanNutrition {
         case .per1000kcal:
             guard let kcal = perPersonPerDay(.energy, days: days, householdSize: householdSize), kcal > 0 else { return nil }
             scale = kcal / 1000
-        case .perMeal, .percentEnergy:
+        case .percentEnergy:
+            guard let kcalPerGram = target.nutrient.kcalPerGram,
+                  let kcal = perPersonPerDay(.energy, days: days, householdSize: householdSize), kcal > 0
+            else { return nil }
+            scale = kcal / 100 / kcalPerGram
+        case .perMeal:
             return nil
         }
-        let low = target.min ?? (targetAsFloor && target.max == nil ? target.target : nil)
+        let low = target.min ?? (target.max == nil ? target.target : nil)
         guard low != nil || target.max != nil else { return nil }
         return (low.map { $0 * scale }, target.max.map { $0 * scale })
+    }
+}
+
+extension Nutrient {
+    /// Energy per gram for the macronutrients (Atwater factors); `nil` for energy itself and the micronutrients.
+    var kcalPerGram: Double? {
+        switch self {
+        case .fat, .saturatedFat, .monounsaturatedFat, .polyunsaturatedFat: 9
+        case .protein, .carbohydrate, .totalSugar, .addedSugar: 4
+        case .fiber: 2
+        case .energy, .sodium, .potassium, .calcium, .iron, .vitaminD, .vitaminB12: nil
+        }
     }
 }
 

@@ -95,6 +95,8 @@ public struct PlanResult: Sendable {
 /// one household's servings. Locked meals are never changed, even when the verifier flags them; unlocked
 /// meals that fail verification are replaced, and dropped into `unfilledSlots` after three rounds.
 /// Per-day nutrient targets are scaled to the share of the day the requested slots cover (`MealSlotShare`).
+/// Each search move tries the best-scoring alternatives and, when the draft is outside a nutrient band, the
+/// alternatives richest (or leanest, for a nutrient over its cap) in the nutrient that costs the objective most.
 public enum WeekPlanner {
     /// Written to `MealPlan.solverVersion`.
     public static let solverVersion = "1.0"
@@ -102,6 +104,9 @@ public enum WeekPlanner {
     /// Score margin below the best within which the greedy fill picks at random.
     static let greedyBand = 0.25
     static let alternativesPerMove = 3
+    /// Multiplies every nutrient's weighted squared deviation, so one swap toward a band can outweigh a small score
+    /// difference: a week a fifth short of its fibre floor costs 0.24, a fifth under its energy floor 0.4.
+    static let nutrientPenaltyScale = 10.0
     static let quotaPenalty = 2.0
     static let repairRounds = 3
 
@@ -120,7 +125,7 @@ public enum WeekPlanner {
     }
 }
 
-/// Weight of each nutrient's squared band deviation in the plan objective.
+/// Weight of each nutrient's squared band deviation in the plan objective, before `nutrientPenaltyScale`.
 extension Nutrient {
     fileprivate var penaltyWeight: Double {
         switch self {
@@ -134,6 +139,15 @@ extension Nutrient {
 private struct Slot: Hashable {
     var day: Int
     var type: MealType
+}
+
+/// How far a draft sits outside one nutrient's band, as a share of the bound it misses: negative under the floor,
+/// positive over the cap.
+private struct NutrientGap {
+    var nutrient: Nutrient
+    var deviation: Double
+
+    var penalty: Double { WeekPlanner.nutrientPenaltyScale * nutrient.penaltyWeight * deviation * deviation }
 }
 
 private enum Entry {
@@ -201,19 +215,25 @@ private struct Solver {
 
     mutating func search() {
         var current = breakdown().objective
+        var worstGap = nutrientGaps(in: meals()).max { $0.penalty < $1.penalty }
         for _ in 0..<WeekPlanner.searchIterations {
             let movable = planned.filter { if case .cooked = entries[$0] { true } else { false } }
             guard !movable.isEmpty else { return }
             let slot = movable[Int(random.next(upperBound: UInt64(movable.count)))]
             guard case .cooked(let original, let id) = entries[slot] else { continue }
             let needsBatch = hasLeftover(slot)
-            let alternatives = pool
-                .filter { alternative in
-                    alternative.recipeID != original && isAvailable(alternative, for: slot, replacing: original)
-                        && !breachesQuota(alternative, at: slot, replacing: original)
-                        && (!needsBatch || isBatch(alternative.recipeID))
+            let open = pool.filter { alternative in
+                alternative.recipeID != original && isAvailable(alternative, for: slot, replacing: original)
+                    && !breachesQuota(alternative, at: slot, replacing: original)
+                    && (!needsBatch || isBatch(alternative.recipeID))
+            }
+            var alternatives = Array(open.prefix(WeekPlanner.alternativesPerMove))
+            if let worstGap {
+                for alternative in Self.closing(worstGap, from: open).prefix(WeekPlanner.alternativesPerMove)
+                where !alternatives.contains(where: { $0.recipeID == alternative.recipeID }) {
+                    alternatives.append(alternative)
                 }
-                .prefix(WeekPlanner.alternativesPerMove)
+            }
 
             var best: (recipe: RecipeID, objective: Double)?
             for alternative in alternatives {
@@ -224,10 +244,25 @@ private struct Solver {
             if let best {
                 entries[slot] = .cooked(best.recipe, id: id)
                 current = best.objective
+                worstGap = nutrientGaps(in: meals()).max { $0.penalty < $1.penalty }
             } else {
                 entries[slot] = .cooked(original, id: id)
             }
         }
+    }
+
+    /// `options` that move the plan toward `gap`'s band: most of the nutrient per serving first when under the
+    /// floor, least first when over the cap; recipes without data for the nutrient are left out, and ties keep pool order.
+    private static func closing(_ gap: NutrientGap, from options: [ScoredRecipe]) -> [ScoredRecipe] {
+        options.enumerated()
+            .compactMap { index, option in
+                option.candidate.nutrition.perServing.value(of: gap.nutrient).map { (option, index, $0) }
+            }
+            .sorted { lhs, rhs in
+                if lhs.2 != rhs.2 { return gap.deviation < 0 ? lhs.2 > rhs.2 : lhs.2 < rhs.2 }
+                return lhs.1 < rhs.1
+            }
+            .map(\.0)
     }
 
     /// Re-verifies and replaces failing unlocked meals, then drops what still fails; returns the final report.
@@ -378,22 +413,7 @@ private struct Solver {
         let mealScore = meals.reduce(0) { total, meal in
             meal.leftoverOf == nil ? total + (scores[meal.recipeID]?.score ?? 0) : total
         }
-        let totals = PlanNutrition(meals: meals, candidates: candidates)
-        var nutrientPenalty = 0.0
-        for target in request.compiled.targets {
-            guard let value = totals.perPersonPerDay(target.nutrient, days: dates.count, householdSize: household),
-                  let band = totals.dailyBand(
-                      for: target, days: dates.count, householdSize: household, coverage: coverage, targetAsFloor: false
-                  )
-            else { continue }
-            var deviation = 0.0
-            if let low = band.min, low > 0, value < low {
-                deviation = (low - value) / low
-            } else if let high = band.max, high > 0, value > high {
-                deviation = (value - high) / high
-            }
-            nutrientPenalty += target.nutrient.penaltyWeight * deviation * deviation
-        }
+        let nutrientPenalty = nutrientGaps(in: meals).reduce(0) { $0 + $1.penalty }
         let varietyPenalty = WeekPlanner.quotaPenalty * Double(quotaViolations)
         return PlanScoreBreakdown(
             mealScoreTotal: mealScore,
@@ -401,6 +421,23 @@ private struct Solver {
             varietyPenalty: varietyPenalty,
             objective: mealScore - nutrientPenalty - varietyPenalty
         )
+    }
+
+    /// Nutrients outside their band per person per day, one per target the data covers, in target order.
+    private func nutrientGaps(in meals: [PlannedMeal]) -> [NutrientGap] {
+        let totals = PlanNutrition(meals: meals, candidates: candidates)
+        return request.compiled.targets.compactMap { target in
+            guard let value = totals.perPersonPerDay(target.nutrient, days: dates.count, householdSize: household),
+                  let band = totals.dailyBand(for: target, days: dates.count, householdSize: household, coverage: coverage)
+            else { return nil }
+            if let low = band.min, low > 0, value < low {
+                return NutrientGap(nutrient: target.nutrient, deviation: (value - low) / low)
+            }
+            if let high = band.max, high > 0, value > high {
+                return NutrientGap(nutrient: target.nutrient, deviation: (value - high) / high)
+            }
+            return nil
+        }
     }
 
     /// Meals beyond the cuisine quota, counted per meal type.
