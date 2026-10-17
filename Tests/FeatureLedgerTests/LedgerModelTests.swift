@@ -420,3 +420,159 @@ import Testing
         #expect(model.averages.map(\.nutrient) == [.energy, .protein, .fiber, .sodium])
     }
 }
+
+@MainActor @Suite struct LedgerRepairTests {
+    let world = World()
+
+    /// Curry cooked tonight with its leftover tomorrow, then ragu.
+    func loadedWithLeftover() async -> (LedgerModel, [PlannedMeal]) {
+        let (_, seeded) = await world.seed { plan in
+            let cooked = Fixtures.meal(Fixtures.chickpeaCurry, in: plan, day: 0, servings: 4)
+            return [
+                cooked,
+                Fixtures.meal(Fixtures.chickpeaCurry, in: plan, day: 1, leftoverOf: cooked.id, reasons: [.leftoverOf(meal: cooked.id)]),
+                Fixtures.meal(Fixtures.beefRagu, in: plan, day: 2),
+            ]
+        }
+        let model = world.ledger()
+        await model.load()
+        return (model, seeded)
+    }
+
+    @Test func skipProposesARepairWithoutApplyingIt() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        #expect(model.proposedRepair == nil)
+
+        await model.skip(meals[0])
+
+        let repair = try #require(model.proposedRepair)
+        let change = try #require(repair.changes.first { $0.mealID == meals[1].id })
+        #expect(change.cause == .skipped)
+        #expect(model.meals.first { $0.id == meals[1].id } == meals[1])
+        #expect(await world.plans.meals(for: meals[0].planID).first { $0.id == meals[1].id } == meals[1])
+        let line = try #require(model.repairLines.first { $0.id == meals[1].id })
+        let title = try #require(model.recipesByID[change.recipeID]?.title)
+        #expect(line.text == "Tuesday: \(title) instead of Chickpea and spinach curry")
+        #expect(line.reason == "Fills the gap a skipped meal left")
+        #expect(model.error == nil)
+    }
+
+    @Test func applyingSavesTheRepairAndUndoPutsTheWeekBack() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        let before = model.meals
+        let repaired = try #require(model.proposedRepair).result.meals
+
+        await model.applyRepair()
+
+        #expect(model.proposedRepair == nil)
+        #expect(model.meals == repaired)
+        #expect(Set(await world.plans.meals(for: meals[0].planID)) == Set(repaired))
+        #expect(!model.meals.contains { $0.leftoverOf == meals[0].id })
+        #expect(model.canUndoRepair)
+
+        await model.undoRepair()
+
+        #expect(model.meals == before)
+        #expect(Set(await world.plans.meals(for: meals[0].planID)) == Set(before))
+        #expect(model.meals.first { $0.id == meals[0].id }?.status == .skipped)
+        #expect(!model.canUndoRepair)
+    }
+
+    @Test func undoIsGoneOnceTheWeekChangesAgain() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        await model.applyRepair()
+
+        await model.lock(meals[2])
+
+        #expect(!model.canUndoRepair)
+        let locked = model.meals
+        await model.undoRepair()
+        #expect(model.meals == locked)
+    }
+
+    @Test func dismissingKeepsTheWeekAndLoadingDoesNotOfferItAgainToday() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        let skipped = model.meals
+
+        model.dismissRepair()
+        await model.load()
+
+        #expect(model.proposedRepair == nil)
+        #expect(model.meals == skipped)
+    }
+
+    @Test func applyingAfterTheWeekChangedProposesAgainInstead() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        await model.lock(meals[2])
+        let changed = model.meals
+
+        await model.applyRepair()
+
+        #expect(model.meals == changed)
+        #expect(await world.plans.meals(for: meals[0].planID).first { $0.id == meals[1].id } == meals[1])
+        let repair = try #require(model.proposedRepair)
+        #expect(repair.result.meals.first { $0.id == meals[2].id }?.isLocked == true)
+    }
+
+    @Test func replanDropsTheProposal() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        #expect(model.proposedRepair != nil)
+
+        await model.replan(keepingLocked: true)
+
+        #expect(model.proposedRepair == nil)
+        #expect(model.meals.count == 7)
+    }
+
+    @Test func loadOffersToMoveYesterdaysUncookedDinner() async throws {
+        var world = World()
+        world.pantry.stored = Fixtures.pantry + [Fixtures.pantryItem(Fixtures.eggs, grams: 200)]
+        let (_, meals) = await world.seed(Fixtures.plan(start: Fixtures.day(-1))) { plan in
+            [Fixtures.meal(Fixtures.spinachRice, in: plan, day: 0), Fixtures.meal(Fixtures.beefRagu, in: plan, day: 2)]
+        }
+        let model = world.ledger()
+
+        await model.load()
+
+        let repair = try #require(model.proposedRepair)
+        #expect(repair.changes.map(\.action) == [.moved(from: Fixtures.day(-1))])
+        #expect(model.repairLines.map(\.text) == ["Monday: Spinach fried rice, moved from Sunday"])
+        #expect(model.repairLines.map(\.reason) == ["Not marked as cooked"])
+        #expect(model.meals.first { $0.id == meals[0].id }?.date == Fixtures.day(-1))
+    }
+
+    @Test func loadOffersNothingWhenTheWeekWentToPlan() async {
+        await world.seed { plan in
+            [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0), Fixtures.meal(Fixtures.beefRagu, in: plan, day: 1)]
+        }
+        let model = world.ledger()
+        await model.load()
+        #expect(model.proposedRepair == nil)
+        #expect(model.error == nil)
+    }
+
+    @Test func failedSkipProposesNothing() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await world.plans.setFailWrites(true)
+        await model.skip(meals[0])
+        #expect(model.proposedRepair == nil)
+        #expect(model.error == .storageFailure)
+    }
+
+    @Test func failedApplyKeepsTheProposal() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        await world.plans.setFailWrites(true)
+
+        await model.applyRepair()
+
+        #expect(model.proposedRepair != nil)
+        #expect(model.error == .storageFailure)
+        #expect(model.meals.contains { $0.id == meals[1].id && $0.leftoverOf == meals[0].id })
+    }
+}

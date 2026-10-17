@@ -68,6 +68,34 @@ public struct ReasonCodeWire: Codable, Hashable, Sendable {
                 params["food"] = .string(PromptSanitizer().scrub(name, limit: 80))
             }
             self.init(code: "cooksOftenWith", params: params)
+        case .movedFrom(let date):
+            self.init(code: "movedFrom", params: ["date": .string(WireDate.string(from: date))])
+        case .replacedBecause(let cause):
+            var params: [String: Param] = ["cause": .string(cause.wireName)]
+            if let food = cause.food, let name = foodNames[food] {
+                params["food"] = .string(PromptSanitizer().scrub(name, limit: 80))
+            }
+            self.init(code: "replacedBecause", params: params)
+        }
+    }
+}
+
+extension RepairCause {
+    /// The cause's name on the wire, without its food.
+    fileprivate var wireName: String {
+        switch self {
+        case .skipped: "skipped"
+        case .notCooked: "notCooked"
+        case .outOfStock: "outOfStock"
+        case .expired: "expired"
+        case .balance: "balance"
+        }
+    }
+
+    fileprivate var food: FoodID? {
+        switch self {
+        case .outOfStock(let food), .expired(let food): food
+        case .skipped, .notCooked, .balance: nil
         }
     }
 }

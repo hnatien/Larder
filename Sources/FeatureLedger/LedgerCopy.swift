@@ -70,6 +70,42 @@ nonisolated enum LedgerCopy {
     static var openSettings: String { String(localized: "Open Settings", bundle: Copy.bundle) }
     static var assistantAsks: String { String(localized: "The assistant asks", bundle: Copy.bundle) }
 
+    static var repairTitle: String { String(localized: "Changes for the rest of the week", bundle: Copy.bundle) }
+    static var applyRepair: String { String(localized: "Make these changes", bundle: Copy.bundle) }
+    static var repairApplied: String { String(localized: "The rest of the week is updated.", bundle: Copy.bundle) }
+    static var undo: String { String(localized: "Undo", bundle: Copy.bundle) }
+
+    /// What a repair does to one meal, prefixed by its day; `title` names recipes and `dayName` names days.
+    static func describe(_ change: PlanChange, title: (RecipeID) -> String, dayName: (Date) -> String) -> String {
+        let dish = title(change.recipeID)
+        let text: String
+        switch change.action {
+        case .moved(let from):
+            let earlier = dayName(from)
+            text = String(localized: "\(dish), moved from \(earlier)", bundle: Copy.bundle)
+        case .replaced(let previous):
+            let before = title(previous)
+            text = String(localized: "\(dish) instead of \(before)", bundle: Copy.bundle)
+        case .removed:
+            text = String(localized: "\(dish) comes off the plan", bundle: Copy.bundle)
+        }
+        return dayNote(day: dayName(change.date), text: text)
+    }
+
+    /// Why a repair changes one meal.
+    static func reason(for change: PlanChange, lookup: ReasonCopy.Lookup) -> String {
+        switch (change.action, change.cause) {
+        case (.moved, _):
+            String(localized: "Not marked as cooked", bundle: Copy.bundle)
+        case (.removed, .skipped):
+            String(localized: "The meal it came from was skipped", bundle: Copy.bundle)
+        case (.removed, .notCooked):
+            String(localized: "Not cooked, and no day is free for it", bundle: Copy.bundle)
+        default:
+            ReasonCopy.line(for: change.cause, lookup: lookup)
+        }
+    }
+
     /// The note under a proposal when some changes were left for Settings.
     static func setAside(_ count: Int) -> String {
         count == 1

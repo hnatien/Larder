@@ -66,6 +66,8 @@ Profile + Constraints + Targets
 
 Allergen safety is two independent code paths with a contains / may contain / unknown / verified-free state per ingredient; unknown is never shown as safe. The model never holds the allergen list as its guard.
 
+When the week deviates, PlanRepairer repairs it instead of replanning seven days. Past days and cooked, skipped and locked meals stay fixed. An uncooked meal from a past day moves to the next free day in its slot when the pantry still covers it and no nutrient band is lost; otherwise it comes off the plan. A skipped meal takes its leftover with it, a leftover follows its meal when that moves, and a meal that counted on a food that has run out or passed its date is replaced. A seeded search then charges a penalty per changed meal and per nutrient band the original week met, so it only swaps to win a band back. The verifier re-checks the result, and every change carries a reason code (`movedFrom`, `replacedBecause`) that the ledger turns into copy. Skipping a meal, or opening the ledger after a day was left uncooked, proposes the repair; nothing changes until the user applies it, and Undo puts the week back. Replan week still regenerates the whole week.
+
 ## 5. Model choice for personalised recommendations
 
 Answer to "is Haiku 5.5 enough": yes for most of it, because the engine does the hard part deterministically.

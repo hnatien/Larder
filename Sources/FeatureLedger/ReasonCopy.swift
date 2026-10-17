@@ -47,6 +47,33 @@ nonisolated enum ReasonCopy {
                 return String(localized: "Like what you cook most", bundle: Copy.bundle)
             }
             return String(localized: "You cook a lot with \(name)", bundle: Copy.bundle)
+        case .movedFrom(let date):
+            let dayName = weekday(date, lookup: lookup)
+            return String(localized: "Moved here from \(dayName)", bundle: Copy.bundle)
+        case .replacedBecause(let cause):
+            return line(for: cause, lookup: lookup)
+        }
+    }
+
+    /// Why a repair changed a meal, as the meal's reason or a line in the repair proposal.
+    static func line(for cause: RepairCause, lookup: Lookup) -> String {
+        switch cause {
+        case .skipped:
+            return String(localized: "Fills the gap a skipped meal left", bundle: Copy.bundle)
+        case .notCooked:
+            return String(localized: "Fills the gap an uncooked meal left", bundle: Copy.bundle)
+        case .outOfStock(let food):
+            guard let name = lookup.foodNames[food].map(displayName), !name.isEmpty else {
+                return String(localized: "Something it needed ran out", bundle: Copy.bundle)
+            }
+            return String(localized: "The \(name) ran out", bundle: Copy.bundle)
+        case .expired(let food):
+            guard let name = lookup.foodNames[food].map(displayName), !name.isEmpty else {
+                return String(localized: "Something it needed is past its date", bundle: Copy.bundle)
+            }
+            return String(localized: "The \(name) is past its date", bundle: Copy.bundle)
+        case .balance:
+            return String(localized: "Keeps the week's nutrition in range", bundle: Copy.bundle)
         }
     }
 

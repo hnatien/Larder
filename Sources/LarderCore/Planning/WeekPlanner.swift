@@ -132,7 +132,7 @@ public enum WeekPlanner {
 
 /// Weight of each nutrient's squared band deviation in the plan objective, before `nutrientPenaltyScale`.
 extension Nutrient {
-    fileprivate var penaltyWeight: Double {
+    var penaltyWeight: Double {
         switch self {
         case .energy, .sodium: 1.0
         case .fiber, .protein: 0.6
@@ -148,11 +148,53 @@ private struct Slot: Hashable {
 
 /// How far a draft sits outside one nutrient's band, as a share of the bound it misses: negative under the floor,
 /// positive over the cap.
-private struct NutrientGap {
+struct NutrientGap {
     var nutrient: Nutrient
     var deviation: Double
 
     var penalty: Double { WeekPlanner.nutrientPenaltyScale * nutrient.penaltyWeight * deviation * deviation }
+
+    /// Nutrients outside their band per person per day, one per target the data covers, in target order.
+    static func gaps(
+        in meals: [PlannedMeal],
+        candidates: [RecipeID: RecipeCandidate],
+        targets: [NutrientTarget],
+        days: Int,
+        householdSize: Int,
+        coverage: Double
+    ) -> [NutrientGap] {
+        gaps(in: PlanNutrition(meals: meals, candidates: candidates), targets: targets, days: days, householdSize: householdSize, coverage: coverage)
+    }
+
+    /// Nutrients outside their band in `totals`, as `gaps(in:candidates:targets:days:householdSize:coverage:)`.
+    static func gaps(in totals: PlanNutrition, targets: [NutrientTarget], days: Int, householdSize: Int, coverage: Double) -> [NutrientGap] {
+        targets.compactMap { target in
+            guard let value = totals.perPersonPerDay(target.nutrient, days: days, householdSize: householdSize),
+                  let band = totals.dailyBand(for: target, days: days, householdSize: householdSize, coverage: coverage)
+            else { return nil }
+            if let low = band.min, low > 0, value < low {
+                return NutrientGap(nutrient: target.nutrient, deviation: (value - low) / low)
+            }
+            if let high = band.max, high > 0, value > high {
+                return NutrientGap(nutrient: target.nutrient, deviation: (value - high) / high)
+            }
+            return nil
+        }
+    }
+
+    /// `options` that move the plan toward this band: most of the nutrient per serving first when under the
+    /// floor, least first when over the cap; recipes without data for the nutrient are left out, and ties keep pool order.
+    func closing(from options: [ScoredRecipe]) -> [ScoredRecipe] {
+        options.enumerated()
+            .compactMap { index, option in
+                option.candidate.nutrition.perServing.value(of: nutrient).map { (option, index, $0) }
+            }
+            .sorted { lhs, rhs in
+                if lhs.2 != rhs.2 { return deviation < 0 ? lhs.2 > rhs.2 : lhs.2 < rhs.2 }
+                return lhs.1 < rhs.1
+            }
+            .map(\.0)
+    }
 }
 
 private enum Entry {
@@ -234,7 +276,7 @@ private struct Solver {
             }
             var alternatives = Array(open.prefix(WeekPlanner.alternativesPerMove))
             if let worstGap {
-                for alternative in Self.closing(worstGap, from: open).prefix(WeekPlanner.alternativesPerMove)
+                for alternative in worstGap.closing(from: open).prefix(WeekPlanner.alternativesPerMove)
                 where !alternatives.contains(where: { $0.recipeID == alternative.recipeID }) {
                     alternatives.append(alternative)
                 }
@@ -254,20 +296,6 @@ private struct Solver {
                 entries[slot] = .cooked(original, id: id)
             }
         }
-    }
-
-    /// `options` that move the plan toward `gap`'s band: most of the nutrient per serving first when under the
-    /// floor, least first when over the cap; recipes without data for the nutrient are left out, and ties keep pool order.
-    private static func closing(_ gap: NutrientGap, from options: [ScoredRecipe]) -> [ScoredRecipe] {
-        options.enumerated()
-            .compactMap { index, option in
-                option.candidate.nutrition.perServing.value(of: gap.nutrient).map { (option, index, $0) }
-            }
-            .sorted { lhs, rhs in
-                if lhs.2 != rhs.2 { return gap.deviation < 0 ? lhs.2 > rhs.2 : lhs.2 < rhs.2 }
-                return lhs.1 < rhs.1
-            }
-            .map(\.0)
     }
 
     /// Re-verifies and replaces failing unlocked meals, then drops what still fails; returns the final report.
@@ -430,19 +458,10 @@ private struct Solver {
 
     /// Nutrients outside their band per person per day, one per target the data covers, in target order.
     private func nutrientGaps(in meals: [PlannedMeal]) -> [NutrientGap] {
-        let totals = PlanNutrition(meals: meals, candidates: candidates)
-        return request.compiled.targets.compactMap { target in
-            guard let value = totals.perPersonPerDay(target.nutrient, days: dates.count, householdSize: household),
-                  let band = totals.dailyBand(for: target, days: dates.count, householdSize: household, coverage: coverage)
-            else { return nil }
-            if let low = band.min, low > 0, value < low {
-                return NutrientGap(nutrient: target.nutrient, deviation: (value - low) / low)
-            }
-            if let high = band.max, high > 0, value > high {
-                return NutrientGap(nutrient: target.nutrient, deviation: (value - high) / high)
-            }
-            return nil
-        }
+        NutrientGap.gaps(
+            in: meals, candidates: candidates, targets: request.compiled.targets, days: dates.count,
+            householdSize: household, coverage: coverage
+        )
     }
 
     /// Meals beyond the cuisine quota, counted per meal type.

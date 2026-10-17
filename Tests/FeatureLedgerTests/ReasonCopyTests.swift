@@ -60,6 +60,27 @@ import Testing
         #expect(ReasonCopy.line(for: .fibreGap(gramsShort: 12), lookup: lookup) == "Adds the fibre this week is short of")
     }
 
+    @Test func movedFromNamesTheFirstDay() {
+        #expect(ReasonCopy.line(for: .movedFrom(date: Fixtures.date(2026, 10, 19)), lookup: lookup) == "Moved here from Monday")
+    }
+
+    @Test func replacedBecauseSaysWhy() {
+        let lines = [RepairCause.skipped, .notCooked, .outOfStock(food: Fixtures.spinach.id), .expired(food: Fixtures.spinach.id), .balance]
+            .map { ReasonCopy.line(for: .replacedBecause(cause: $0), lookup: lookup) }
+        #expect(lines == [
+            "Fills the gap a skipped meal left",
+            "Fills the gap an uncooked meal left",
+            "The spinach ran out",
+            "The spinach is past its date",
+            "Keeps the week's nutrition in range",
+        ])
+    }
+
+    @Test func replacedBecauseWithoutAKnownFoodStaysVague() {
+        #expect(ReasonCopy.line(for: .replacedBecause(cause: .outOfStock(food: FoodID())), lookup: lookup) == "Something it needed ran out")
+        #expect(ReasonCopy.line(for: .replacedBecause(cause: .expired(food: FoodID())), lookup: lookup) == "Something it needed is past its date")
+    }
+
     @Test func linesKeepOrderAndRespectTheLimit() {
         let codes: [ReasonCode] = [.quick(minutes: 15), .underBudget, .pantryOverlap(count: 3)]
         #expect(ReasonCopy.lines(for: codes, lookup: lookup, limit: 2) == ["On the table in 15 minutes", "Easy on the budget"])

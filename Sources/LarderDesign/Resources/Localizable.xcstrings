@@ -67,6 +67,17 @@
         }
       }
     },
+    "%@ comes off the plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ comes off the plan"
+          }
+        }
+      }
+    },
     "%@ cooked. What it used is off your pantry.": {
       "extractionState": "manual",
       "localizations": {
@@ -85,6 +96,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ every %lld %@"
+          }
+        }
+      }
+    },
+    "%@ instead of %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ instead of %@"
           }
         }
       }
@@ -184,6 +206,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@, day %lld of %lld"
+          }
+        }
+      }
+    },
+    "%@, moved from %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, moved from %@"
           }
         }
       }
@@ -935,6 +968,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Celery"
+          }
+        }
+      }
+    },
+    "Changes for the rest of the week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes for the rest of the week"
           }
         }
       }
@@ -1929,6 +1973,28 @@
         }
       }
     },
+    "Fills the gap a skipped meal left": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fills the gap a skipped meal left"
+          }
+        }
+      }
+    },
+    "Fills the gap an uncooked meal left": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fills the gap an uncooked meal left"
+          }
+        }
+      }
+    },
     "Finish": {
       "extractionState": "manual",
       "localizations": {
@@ -2491,6 +2557,17 @@
         }
       }
     },
+    "Keeps the week's nutrition in range": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeps the week's nutrition in range"
+          }
+        }
+      }
+    },
     "Kept in": {
       "extractionState": "manual",
       "localizations": {
@@ -2766,6 +2843,17 @@
         }
       }
     },
+    "Make these changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make these changes"
+          }
+        }
+      }
+    },
     "Manage subscription": {
       "extractionState": "manual",
       "localizations": {
@@ -2909,6 +2997,17 @@
         }
       }
     },
+    "Moved here from %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moved here from %@"
+          }
+        }
+      }
+    },
     "Mustard": {
       "extractionState": "manual",
       "localizations": {
@@ -3037,6 +3136,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "No recipes yet"
+          }
+        }
+      }
+    },
+    "Not cooked, and no day is free for it": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not cooked, and no day is free for it"
+          }
+        }
+      }
+    },
+    "Not marked as cooked": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not marked as cooked"
           }
         }
       }
@@ -4273,6 +4394,28 @@
         }
       }
     },
+    "Something it needed is past its date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something it needed is past its date"
+          }
+        }
+      }
+    },
+    "Something it needed ran out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something it needed ran out"
+          }
+        }
+      }
+    },
     "Soy": {
       "extractionState": "manual",
       "localizations": {
@@ -4581,6 +4724,28 @@
         }
       }
     },
+    "The %@ is past its date": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@ is past its date"
+          }
+        }
+      }
+    },
+    "The %@ ran out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The %@ ran out"
+          }
+        }
+      }
+    },
     "The App Store couldn't confirm this purchase. Try Restore purchases.": {
       "extractionState": "manual",
       "localizations": {
@@ -4735,6 +4900,17 @@
         }
       }
     },
+    "The meal it came from was skipped": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The meal it came from was skipped"
+          }
+        }
+      }
+    },
     "The purchase didn't go through. Try again in a moment.": {
       "extractionState": "manual",
       "localizations": {
@@ -4742,6 +4918,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The purchase didn't go through. Try again in a moment."
+          }
+        }
+      }
+    },
+    "The rest of the week is updated.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rest of the week is updated."
           }
         }
       }
