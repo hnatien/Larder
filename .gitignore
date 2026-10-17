@@ -16,3 +16,6 @@ AssetsInbox/
 
 # LarderBench output
 bench-results/
+
+# Claude Code session worktrees
+.claude/worktrees/
