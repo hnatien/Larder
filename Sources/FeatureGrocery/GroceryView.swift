@@ -33,10 +33,12 @@ public struct GroceryView: View {
                 }
                 .listRowBackground(LarderColor.surface.raised)
                 if let error = model.error {
-                    Label(GroceryCopy.message(for: error), systemImage: "exclamationmark.triangle")
-                        .font(LarderFont.body(.body))
-                        .foregroundStyle(LarderColor.status(.warning))
-                        .listRowBackground(Color.clear)
+                    InlineBanner(
+                        GroceryCopy.message(for: error),
+                        action: error == .loadFailed ? .init(title: GroceryCopy.tryAgain) { Task { await model.load() } } : nil
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
                 }
                 if model.isEmpty && !model.isLoading {
                     EmptyShelf(
@@ -85,6 +87,17 @@ public struct GroceryView: View {
             .refreshable { await model.load() }
             .task { await model.load() }
             .sensoryFeedback(.selection, trigger: model.checked)
+            .larderToast(toast, onExpire: model.dismissNotice)
+        }
+    }
+
+    /// The last tick that landed food, or the last removal, with Undo.
+    private var toast: LarderToast? {
+        model.notice.map { notice in
+            let symbol = if case .landed = notice.kind { "refrigerator.fill" } else { "trash.circle.fill" }
+            return LarderToast(id: notice.id, GroceryCopy.notice(notice.kind), systemImage: symbol, actionTitle: GroceryCopy.undo) {
+                Task { await model.undoNotice() }
+            }
         }
     }
 
@@ -107,6 +120,7 @@ public struct GroceryView: View {
         GroceryRowView(
             name: entry.name,
             quantity: model.quantityText(entry),
+            source: model.sourceText(entry),
             partiallyInPantry: entry.partiallyInPantry,
             isChecked: model.checked.contains(entry.key)
         ) {

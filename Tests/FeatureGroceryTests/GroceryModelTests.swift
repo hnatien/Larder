@@ -355,6 +355,93 @@ func day(_ days: Int) -> Date? {
         #expect(await world.basket.storedManualItems.map(\.name) == ["Candles"])
     }
 
+    @Test func undoPutsARemovedManualItemAndItsTickBack() async throws {
+        let model = await world.model(meals: [], lines: [])
+        await model.addManual(name: "Candles")
+        let item = model.manualItems[0]
+        await model.toggle(item)
+        await model.removeManual(item)
+        #expect(model.notice?.kind == .removed(count: 1))
+
+        await model.undoNotice()
+
+        #expect(model.notice == nil)
+        #expect(model.manualItems.map(\.id) == [item.id])
+        #expect(model.checked.contains(GroceryItemKey(item)))
+        #expect(await world.basket.storedManualItems.map(\.id) == [item.id])
+    }
+
+    @Test func undoPutsClearedBoughtItemsBack() async throws {
+        let model = await world.model(
+            meals: [world.meal()],
+            lines: [world.line(world.spinach, grams: 100, in: world.recipe), world.line(world.rice, grams: 200, in: world.recipe)]
+        )
+        await model.load()
+        await model.addManual(name: "Lemons")
+        await model.toggle(try world.item(model, "Spinach"))
+        await model.toggle(model.manualItems[0])
+        await model.clearChecked()
+        #expect(model.notice?.kind == .removed(count: 2))
+
+        await model.undoNotice()
+
+        #expect(model.basket.flatMap(\.entries).count == 2)
+        #expect(model.manualItems.map(\.name) == ["Lemons"])
+        #expect(await world.basket.storedLines.count == 2)
+    }
+
+    @Test func tickingFoodOntoTheShelvesOffersUndo() async throws {
+        let model = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 100, in: world.recipe)])
+        await model.load()
+        await model.toggle(try world.item(model, "Spinach"))
+        let notice = try #require(model.notice)
+        #expect(notice.kind == .landed(name: "Spinach"))
+        let written = try #require(await world.store.upserts.first)
+
+        await model.undoNotice()
+
+        #expect(model.checked.isEmpty)
+        #expect(await world.store.removals == [written.id])
+    }
+
+    @Test func tickingSomethingThatIsNoFoodOffersNothing() async {
+        let model = await world.model(meals: [], lines: [])
+        await model.addManual(name: "Candles")
+        await model.toggle(model.manualItems[0])
+        #expect(model.notice == nil)
+    }
+
+    @Test func plannedLinesSayWhichDinnerNeedsThem() async throws {
+        let model = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 100, in: world.recipe)])
+        await model.load()
+        let entry = GroceryEntry.planned(try world.item(model, "Spinach"))
+        let weekday = world.plan.startDate.formatted(Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone).weekday(.wide))
+        #expect(model.sourceText(entry) == "For Stir fry on \(weekday)")
+        #expect(model.sourceText(.manual(ManualItem(name: "Candles"))) == nil)
+    }
+
+    @Test(arguments: [
+        ("2 milk", "milk", "2"),
+        ("500 g flour", "flour", "500 g"),
+        ("2 tins chopped tomatoes", "chopped tomatoes", "2 tins"),
+        ("eggs", "eggs", ""),
+        ("7up", "7up", ""),
+        ("2", "2", ""),
+        ("3 kg", "kg", "3"),
+    ])
+    func aLeadingQuantityIsSplitOff(text: String, name: String, quantity: String) {
+        let split = GroceryModel.splitQuantity(text)
+        #expect(split.name == name)
+        #expect(split.quantity == quantity)
+    }
+
+    @Test func typedQuantitiesAreKeptApartFromTheName() async {
+        let model = world.relaunched()
+        await model.addManual(name: "2 tins tomatoes")
+        #expect(model.manualItems.map(\.name) == ["tomatoes"])
+        #expect(model.manualItems.map(\.quantity) == ["2 tins"])
+    }
+
     @Test func aRelaunchKeepsTicksAndManualItemsAndUntickStillTakesTheFoodOff() async throws {
         let first = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 120, in: world.recipe)])
         await first.load()

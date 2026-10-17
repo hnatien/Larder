@@ -15,7 +15,7 @@ struct AddItemField: View {
                 .foregroundStyle(LarderColor.accent.brand)
                 .accessibilityHidden(true)
             // Vertical so it grows with Dynamic Type instead of clipping; Return adds the item rather than a new line.
-            TextField(GroceryCopy.itemToBuy, text: $text, prompt: Text(GroceryCopy.addAnItem), axis: .vertical)
+            TextField(GroceryCopy.itemToBuy, text: $text, prompt: Text(GroceryCopy.addAnItem).foregroundStyle(LarderColor.ink.tertiary), axis: .vertical)
                 .font(LarderFont.body(.body))
                 .textFieldStyle(.plain)
                 .submitLabel(.done)

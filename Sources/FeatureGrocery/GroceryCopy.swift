@@ -33,9 +33,29 @@ nonisolated enum GroceryCopy {
         return head.isEmpty ? name : head
     }
 
-    static func markBought(_ name: String) -> String {
-        String(localized: "Mark bought: \(name)", bundle: Copy.bundle)
+    /// The dinner a planned line is for, and how many others need it too.
+    static func forMeal(_ dish: String, day weekday: String, more count: Int) -> String {
+        count == 0
+            ? String(localized: "For \(dish) on \(weekday)", bundle: Copy.bundle)
+            : String(localized: "For \(dish) on \(weekday) and \(count) more", bundle: Copy.bundle)
     }
+
+    /// The toast after a tick or a removal.
+    static func notice(_ kind: GroceryNotice.Kind) -> String {
+        switch kind {
+        case .landed(let name):
+            return String(localized: "\(name) is in your pantry", bundle: Copy.bundle)
+        case .removed(let count):
+            return count == 1
+                ? String(localized: "Removed from the list", bundle: Copy.bundle)
+                : String(localized: "\(count) items removed from the list", bundle: Copy.bundle)
+        }
+    }
+
+    static var undo: String { String(localized: "Undo", bundle: Copy.bundle) }
+    static var tryAgain: String { String(localized: "Try again", bundle: Copy.bundle) }
+    static var dismiss: String { String(localized: "Dismiss", bundle: Copy.bundle) }
+    static var markBoughtHint: String { String(localized: "Ticking puts it in your pantry", bundle: Copy.bundle) }
 
     /// The heading shown above an aisle.
     static func name(of aisle: Aisle) -> String {
@@ -54,7 +74,7 @@ nonisolated enum GroceryCopy {
 
     static func message(for error: GroceryError) -> String {
         switch error {
-        case .loadFailed: String(localized: "Couldn't load the list. Pull down to try again.", bundle: Copy.bundle)
+        case .loadFailed: String(localized: "Couldn't load the list.", bundle: Copy.bundle)
         case .pantryUpdateFailed: String(localized: "Couldn't update your pantry. The item is unchanged.", bundle: Copy.bundle)
         case .basketUpdateFailed: String(localized: "Couldn't save the list. Try again.", bundle: Copy.bundle)
         }

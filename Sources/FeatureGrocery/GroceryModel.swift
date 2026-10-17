@@ -60,6 +60,29 @@ public enum GroceryError: Error, Equatable, Sendable {
     case basketUpdateFailed
 }
 
+/// The last change the grocery toast can take back.
+public struct GroceryNotice: Identifiable, Equatable, Sendable {
+    /// What happened.
+    public enum Kind: Equatable, Sendable {
+        /// A tick put the item on the shelves.
+        case landed(name: String)
+        /// Hand-written items or bought lines were removed from the list.
+        case removed(count: Int)
+    }
+
+    /// What undo puts back.
+    enum Restore: Equatable, Sendable {
+        case untick(GroceryItemKey)
+        case removed(manual: [ManualItem], lines: [BasketLine])
+    }
+
+    public let id = UUID()
+    public let kind: Kind
+    let restore: Restore
+
+    public static func == (lhs: GroceryNotice, rhs: GroceryNotice) -> Bool { lhs.id == rhs.id }
+}
+
 /// The grocery tab's state: the list for the plan's planned meals, ticks, and hand-written items.
 ///
 /// Ticks and hand-written items are stored, so a relaunch keeps them and a plan change never drops them: a ticked
@@ -70,8 +93,12 @@ public final class GroceryModel {
     public private(set) var manualItems: [ManualItem] = []
     public private(set) var isLoading = false
     public private(set) var error: GroceryError?
+    /// The last tick that landed food or removal, while it can be taken back.
+    public private(set) var notice: GroceryNotice?
     /// Ticked lines in the order they were ticked.
     private var basketLines: [BasketLine] = []
+    /// The dish and day of each planned meal, so a line can say which dinner needs it.
+    private var mealSources: [PlannedMealID: (title: String, date: Date)] = [:]
 
     private let plans: any PlanRepository
     private let recipes: any RecipeRepository
@@ -130,6 +157,7 @@ public final class GroceryModel {
             guard let plan = try await plans.currentPlan() else {
                 list = GroceryList(sections: [])
                 foodsByID = [:]
+                mealSources = [:]
                 error = nil
                 return
             }
@@ -146,6 +174,10 @@ public final class GroceryModel {
             let landed = Set(storedLines.compactMap(\.pantryItemID))
             let shelves = try await pantry.items().filter { !landed.contains($0.id) }
             foodsByID = Dictionary(loadedFoods.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            mealSources = Dictionary(
+                meals.compactMap { meal in recipesByID[meal.recipeID].map { (meal.id, (title: $0.title, date: meal.date)) } },
+                uniquingKeysWith: { first, _ in first }
+            )
             list = GroceryListBuilder().build(
                 meals: meals, recipes: recipesByID, ingredients: ingredientsByRecipe,
                 foods: foodsByID, pantry: shelves
@@ -193,11 +225,14 @@ public final class GroceryModel {
         }
     }
 
-    /// Adds a hand-written item; blank names are ignored.
+    /// Adds a hand-written item; blank names are ignored. Without a quantity, one typed first is split off, so
+    /// "2 tins tomatoes" is tomatoes, 2 tins.
     public func addManual(name: String, quantity: String = "", aisle: Aisle = .other) async {
-        let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        var name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        var quantity = quantity.trimmingCharacters(in: .whitespacesAndNewlines)
+        if quantity.isEmpty { (name, quantity) = Self.splitQuantity(name) }
         guard !name.isEmpty else { return }
-        let item = ManualItem(name: name, quantity: quantity.trimmingCharacters(in: .whitespacesAndNewlines), aisle: aisle)
+        let item = ManualItem(name: name, quantity: quantity, aisle: aisle)
         do {
             try await basketStore.saveManualItem(item)
         } catch {
@@ -208,8 +243,10 @@ public final class GroceryModel {
         error = nil
     }
 
-    /// Removes a hand-written item and its tick; food the tick put on the shelves stays there.
+    /// Removes a hand-written item and its tick; food the tick put on the shelves stays there. `notice` offers to
+    /// put it back.
     public func removeManual(_ item: ManualItem) async {
+        let lines = basketLines.filter { $0.key == GroceryItemKey(item) }
         do {
             try await basketStore.removeManualItem(item.id)
         } catch {
@@ -218,17 +255,21 @@ public final class GroceryModel {
         }
         manualItems.removeAll { $0.id == item.id }
         basketLines.removeAll { $0.key == GroceryItemKey(item) }
+        notice = GroceryNotice(kind: .removed(count: 1), restore: .removed(manual: [item], lines: lines))
         error = nil
     }
 
-    /// Clears the basket. Bought items stay on the shelves.
+    /// Clears the basket. Bought items stay on the shelves. `notice` offers to put the lines back.
     public func clearChecked() async {
+        let removedLines = basketLines
+        let removedManual = manualItems.filter { item in removedLines.contains { $0.key == GroceryItemKey(item) } }
         do {
             try await basketStore.clearBasket()
         } catch {
             self.error = .basketUpdateFailed
             return
         }
+        notice = GroceryNotice(kind: .removed(count: removedLines.count), restore: .removed(manual: removedManual, lines: removedLines))
         let basketKeys = checked
         manualItems.removeAll { basketKeys.contains(GroceryItemKey($0)) }
         if let list {
@@ -239,6 +280,61 @@ public final class GroceryModel {
         }
         basketLines = []
         error = nil
+    }
+
+    /// Takes back the change `notice` describes: unticks a landed item, or puts removed items and ticks back.
+    public func undoNotice() async {
+        guard let notice else { return }
+        self.notice = nil
+        switch notice.restore {
+        case .untick(let key):
+            if let line = basketLines.first(where: { $0.key == key }) { await untick(line) }
+        case .removed(let manual, let lines):
+            do {
+                for item in manual { try await basketStore.saveManualItem(item) }
+                for line in lines { try await basketStore.saveBasketLine(line) }
+            } catch {
+                self.error = .basketUpdateFailed
+            }
+            await load()
+        }
+    }
+
+    /// Lets the last change stand.
+    public func dismissNotice() {
+        notice = nil
+    }
+
+    /// Which dinner needs a planned line: "For Spinach dal on Tuesday", with how many more; `nil` for other lines.
+    public func sourceText(_ entry: GroceryEntry) -> String? {
+        guard case .planned(let item) = entry else { return nil }
+        let sources = item.forMeals.compactMap { mealSources[$0] }.sorted { $0.date < $1.date }
+        guard let first = sources.first else { return nil }
+        let day = first.date.formatted(Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone).weekday(.wide))
+        return GroceryCopy.forMeal(first.title, day: day, more: sources.count - 1)
+    }
+
+    /// Units a hand-written quantity may carry after its number.
+    private static let quantityUnits: Set<String> = [
+        "g", "kg", "ml", "l", "lb", "lbs", "oz", "x", "tin", "tins", "can", "cans", "pack", "packs", "packet", "packets",
+        "bottle", "bottles", "bag", "bags", "jar", "jars", "box", "boxes", "bunch", "bunches", "dozen",
+    ]
+
+    /// Splits a leading quantity off a typed item: "2 milk" is ("milk", "2"), "500 g flour" is ("flour", "500 g").
+    /// Text without a leading number, or with nothing after it, is all name.
+    static func splitQuantity(_ text: String) -> (name: String, quantity: String) {
+        let words = text.split(whereSeparator: \.isWhitespace).map(String.init)
+        guard let first = words.first, first.first?.isNumber == true,
+              first.allSatisfy({ $0.isNumber || $0 == "." || $0 == "," || $0 == "/" || $0 == "x" })
+        else { return (text, "") }
+        var quantityWords = [first]
+        var rest = Array(words.dropFirst())
+        if let unit = rest.first, quantityUnits.contains(unit.lowercased()), rest.count > 1 {
+            quantityWords.append(unit)
+            rest.removeFirst()
+        }
+        guard !rest.isEmpty else { return (text, "") }
+        return (rest.joined(separator: " "), quantityWords.joined(separator: " "))
     }
 
     /// Plain text for the share sheet: aisle headings with "- quantity name" lines, unchecked items only.
@@ -292,6 +388,7 @@ public final class GroceryModel {
         if let landing {
             do {
                 try await pantry.upsert(landing)
+                notice = GroceryNotice(kind: .landed(name: landing.rawName), restore: .untick(line.key))
             } catch {
                 self.error = .pantryUpdateFailed
                 do {

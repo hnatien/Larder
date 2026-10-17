@@ -5,6 +5,8 @@ import SwiftUI
 struct GroceryRowView: View {
     let name: String
     let quantity: String
+    /// Which dinner needs it, for planned lines.
+    var source: String?
     let partiallyInPantry: Bool
     let isChecked: Bool
     let toggle: () -> Void
@@ -24,6 +26,9 @@ struct GroceryRowView: View {
                         .strikethrough(isChecked)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
+                    if let source, !isChecked {
+                        MetaLabel(source, systemImage: "fork.knife")
+                    }
                     if partiallyInPantry {
                         MetaLabel(GroceryCopy.haveSome, systemImage: "refrigerator")
                     }
@@ -41,15 +46,16 @@ struct GroceryRowView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel([GroceryCopy.markBought(name), quantity].filter { !$0.isEmpty }.joined(separator: ", "))
+        .accessibilityLabel(([name, quantity] + (isChecked ? [] : [source].compactMap { $0 })).filter { !$0.isEmpty }.joined(separator: ", "))
         .accessibilityValue(isChecked ? GroceryCopy.bought : GroceryCopy.toBuy)
+        .accessibilityHint(isChecked ? "" : GroceryCopy.markBoughtHint)
         .accessibilityAddTraits(.isButton)
     }
 }
 
 #Preview("GroceryRowView") {
     VStack(spacing: LarderSpacing.s) {
-        GroceryRowView(name: "Spinach", quantity: "200 g", partiallyInPantry: true, isChecked: false) {}
+        GroceryRowView(name: "Spinach", quantity: "200 g", source: "For Spinach dal on Tuesday", partiallyInPantry: true, isChecked: false) {}
         GroceryRowView(name: "Rice", quantity: "500 g", partiallyInPantry: false, isChecked: true) {}
     }
     .padding(LarderSpacing.l)
