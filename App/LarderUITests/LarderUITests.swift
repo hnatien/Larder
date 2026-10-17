@@ -78,6 +78,39 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Sesame"].waitForExistence(timeout: Self.loadTimeout), "Sesame was lost when setup was left for later")
     }
 
+    /// Adjust this week on the Plan tab, the scanner from Add food and photo import from Recipes are reachable and pass
+    /// the audit. The Simulator has no live scanner, so the scanner shows its photo fallback.
+    @MainActor
+    func testAssistantAndScanEntryPointsPassAccessibilityAudit() throws {
+        let app = launch()
+        open(.plan, in: app)
+        app.buttons["Plan my week"].tap()
+        XCTAssertTrue(app.buttons["Replan week"].waitForExistence(timeout: Self.loadTimeout), "The week was not planned")
+        let adjust = app.descendants(matching: .any)["ledger.adjust"]
+        XCTAssertTrue(adjust.waitForExistence(timeout: Self.loadTimeout), "Adjust this week is missing from the Plan tab")
+        XCTAssertTrue(app.buttons["Ask"].exists, "Adjust this week has no Ask button")
+        XCTAssertFalse(app.buttons["Ask"].isEnabled, "Ask is enabled with nothing typed")
+        try audit(app)
+
+        open(.pantry, in: app)
+        app.navigationBars.buttons["Add food"].tap()
+        XCTAssertTrue(app.navigationBars["Add food"].waitForExistence(timeout: Self.loadTimeout))
+        app.buttons["Scan a barcode or receipt"].tap()
+        XCTAssertTrue(app.navigationBars["Scan"].waitForExistence(timeout: Self.loadTimeout), "The scanner did not open")
+        XCTAssertTrue(app.buttons["Choose a photo instead"].exists, "The scanner offers no photo fallback")
+        try audit(app)
+        app.buttons["Receipt"].tap()
+        XCTAssertTrue(app.staticTexts["Fit the whole receipt in view, then read it. The photo stays on this iPhone."].waitForExistence(timeout: Self.loadTimeout))
+        try audit(app)
+        app.buttons["Close"].firstMatch.tap()
+        app.buttons["Cancel"].tap()
+
+        open(.recipes, in: app)
+        app.navigationBars.buttons["Import a recipe"].tap()
+        XCTAssertTrue(app.buttons["Choose a photo"].waitForExistence(timeout: Self.loadTimeout), "Import has no photo option")
+        try audit(app)
+    }
+
     @MainActor
     func testDynamicTypeAX3() throws {
         let app = launch(["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
