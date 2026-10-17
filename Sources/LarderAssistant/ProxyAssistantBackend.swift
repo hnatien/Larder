@@ -240,6 +240,9 @@ public struct ProxyAssistantBackend: AssistantBackend {
             return offsets.isEmpty ? [.removeDislike(value)] : nil
         case ("useUp", false):
             return offsets.isEmpty ? [.useUp(value)] : nil
+        case ("goal", false):
+            guard let goal = Goal(rawValue: value), offsets.isEmpty else { return nil }
+            return [.setGoal(goal)]
         default:
             return nil
         }

@@ -148,6 +148,19 @@ nonisolated enum LedgerCopy {
             return String(localized: "No \(food) this week", bundle: Copy.bundle)
         case .useUp(let food):
             return String(localized: "Use up the \(food)", bundle: Copy.bundle)
+        case .goal(let goal):
+            return weekGoal(goal)
+        }
+    }
+
+    private static func weekGoal(_ goal: Goal) -> String {
+        switch goal {
+        case .eatBetter: String(localized: "Eat a bit better this week", bundle: Copy.bundle)
+        case .moreVariety: String(localized: "More variety this week", bundle: Copy.bundle)
+        case .lessWaste: String(localized: "Waste less food this week", bundle: Copy.bundle)
+        case .saveMoney: String(localized: "Spend less this week", bundle: Copy.bundle)
+        case .moreProtein: String(localized: "More protein this week", bundle: Copy.bundle)
+        case .maintain: String(localized: "Plan as usual this week", bundle: Copy.bundle)
         }
     }
 

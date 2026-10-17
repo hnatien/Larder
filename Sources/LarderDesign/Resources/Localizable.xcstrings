@@ -2105,6 +2105,17 @@
         }
       }
     },
+    "Eat a bit better this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat a bit better this week"
+          }
+        }
+      }
+    },
     "Eating disorder history": {
       "extractionState": "manual",
       "localizations": {
@@ -3470,6 +3481,17 @@
         }
       }
     },
+    "More protein this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More protein this week"
+          }
+        }
+      }
+    },
     "More variety": {
       "extractionState": "manual",
       "localizations": {
@@ -3477,6 +3499,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "More variety"
+          }
+        }
+      }
+    },
+    "More variety this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More variety this week"
           }
         }
       }
@@ -4137,6 +4170,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plan"
+          }
+        }
+      }
+    },
+    "Plan as usual this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan as usual this week"
           }
         }
       }
@@ -5171,6 +5215,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spend less"
+          }
+        }
+      }
+    },
+    "Spend less this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spend less this week"
           }
         }
       }
@@ -6283,6 +6338,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Waste less food"
+          }
+        }
+      }
+    },
+    "Waste less food this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waste less food this week"
           }
         }
       }

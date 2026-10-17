@@ -182,5 +182,7 @@ public struct ConstraintEdit: Hashable, Codable, Sendable {
         case addDislike(String)
         case removeDislike(String)
         case useUp(String)
+        /// Plan the whole plan around this goal instead of the profile's.
+        case setGoal(Goal)
     }
 }

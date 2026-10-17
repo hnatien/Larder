@@ -16,6 +16,8 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
         case avoid(String)
         /// Prefer recipes that use this pantry food.
         case useUp(String)
+        /// Rank recipes for this goal instead of the profile's.
+        case goal(Goal)
     }
 
     /// What one day of the plan must meet on top of the week's rules.
@@ -47,6 +49,8 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
                 let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !trimmed.isEmpty else { continue }
                 append(.useUp(trimmed))
+            case .setGoal(let goal):
+                append(.goal(goal))
             case .removeDiet, .removeDislike:
                 setAsideCount += 1
             }
@@ -63,6 +67,13 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
         }.first
     }
 
+    /// The week's goal: the last one proposed, else `nil` to keep the profile's.
+    var goal: Goal? {
+        items.reversed().lazy.compactMap { item -> Goal? in
+            if case .goal(let goal) = item { goal } else { nil }
+        }.first
+    }
+
     /// `base` plus the week's diets as hard rules and its foods to avoid as hard dislikes; existing rules are kept.
     func constraints(adding base: [DietaryConstraint], at date: Date) -> [DietaryConstraint] {
         var kinds: [ConstraintKind] = []
@@ -70,7 +81,7 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
             switch item {
             case .diet(let pattern, nil): kinds.append(.diet(pattern))
             case .avoid(let name): kinds.append(.dislike(.name(name)))
-            case .diet, .maxMinutes, .useUp: break
+            case .diet, .maxMinutes, .useUp, .goal: break
             }
         }
         let added = kinds
@@ -89,7 +100,7 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
             switch item {
             case .diet(let pattern, let offset?): rules[offset, default: DayRule()].diets.insert(pattern)
             case .maxMinutes(let minutes, let offset?): rules[offset, default: DayRule()].maxCookMinutes = minutes
-            case .diet, .maxMinutes, .avoid, .useUp: break
+            case .diet, .maxMinutes, .avoid, .useUp, .goal: break
             }
         }
         return rules

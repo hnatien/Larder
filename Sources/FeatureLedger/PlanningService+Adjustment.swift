@@ -29,6 +29,7 @@ nonisolated extension PlanningService {
             inputs.compiled.maxCookMinutes = minutes
             inputs.context.maxCookMinutes = minutes
         }
+        if let goal = adjustment.goal { inputs.context.goal = goal }
         inputs.context.useUp = adjustment.useUpFoods(in: inputs.context.pantry, foods: catalogue.foods)
 
         var result = WeekPlanner.plan(

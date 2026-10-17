@@ -222,6 +222,25 @@ struct ProxyAssistantBackendTests {
         #expect(edit.summary.contains("allergen:peanut, religious:halal, diet:carnivore, diet:vegan, diet:vegan, diet:vegan, diet:vegan."))
     }
 
+    @Test func adjustMapsAWholeWeekGoalAndDropsOthers() async throws {
+        let reply = """
+            {"edits":[\
+            {"op":"add","constraint":{"axis":"goal","kind":"goal:moreProtein","strictness":"soft"},"scope":{}},\
+            {"op":"replace","constraint":{"axis":"goal","kind":"goal:saveMoney","strictness":"soft"},"scope":{}},\
+            {"op":"add","constraint":{"axis":"goal","kind":"goal:moreProtein","strictness":"soft"},"scope":{"dates":["2026-10-20"]}},\
+            {"op":"add","constraint":{"axis":"goal","kind":"goal:bulkUp","strictness":"soft"},"scope":{}},\
+            {"op":"remove","constraint":{"axis":"goal","kind":"goal:lessWaste","strictness":"soft"},"scope":{}}],\
+            "clarifyingQuestion":null}
+            """
+        let stub = stubbed(Fixtures.adjustPath, .json(200, reply))
+        let edit = try await Fixtures.backend(stub).adjust(
+            request: AdjustRequest(message: "More protein", maxCookMinutes: 30, dietPatterns: [], goal: .lessWaste)
+        )
+
+        #expect(edit.changes == [.setGoal(.moreProtein), .setGoal(.saveMoney)])
+        #expect(edit.droppedCount == 3)
+    }
+
     @Test func blankClarifyingQuestionCountsAsNone() async throws {
         let stub = stubbed(Fixtures.adjustPath, .json(200, #"{"edits":[],"clarifyingQuestion":"  "}"#))
         let edit = try await Fixtures.backend(stub).adjust(

@@ -53,6 +53,15 @@ struct WeekAdjustmentTests {
         #expect(combined.dropFirst(2).allSatisfy { $0.strictness == .hard })
     }
 
+    @Test func aGoalIsAppliedNotSetAsideAndTheLastOneWins() {
+        let adjustment = WeekAdjustment(ConstraintEdit(changes: [.setGoal(.saveMoney), .setGoal(.moreProtein)], summary: ""))
+
+        #expect(adjustment.items == [.goal(.saveMoney), .goal(.moreProtein)])
+        #expect(adjustment.setAsideCount == 0)
+        #expect(adjustment.goal == .moreProtein)
+        #expect(WeekAdjustment(ConstraintEdit(changes: [.useUp("rice")], summary: "")).goal == nil)
+    }
+
     @Test func useUpMatchesShelfItemsAndFoodNames() {
         let adjustment = WeekAdjustment(ConstraintEdit(changes: [.useUp("rice"), .useUp("spinach")], summary: ""))
         let empty = Fixtures.pantryItem(Fixtures.onion, grams: 0)
@@ -272,6 +281,20 @@ struct ReplacingMealTests {
             #expect(dish.recipe.prepMinutes + dish.recipe.cookMinutes <= 30)
             #expect(!dish.lines.contains { $0.foodID == Fixtures.rice.id })
         }
+    }
+
+    @Test func aWeekGoalPlansAsIfTheProfileHadIt() async throws {
+        var world = consentingWorld()
+        world.profiles.storedConstraints = []
+        let adjustment = WeekAdjustment(ConstraintEdit(changes: [.setGoal(.moreProtein)], summary: ""))
+
+        let adjusted = try await world.service().planWeek(startDate: Fixtures.day(0), seed: 7, locked: [], adjustment: adjustment)
+        let usual = try await world.service().planWeek(startDate: Fixtures.day(0), seed: 7, locked: [])
+        world.profiles.stored?.goal = .moreProtein
+        let protein = try await world.service().planWeek(startDate: Fixtures.day(0), seed: 7, locked: [])
+
+        #expect(adjusted.result.meals.map(\.recipeID) == protein.meals.map(\.recipeID))
+        #expect(adjusted.result.meals.map(\.recipeID) != usual.meals.map(\.recipeID))
     }
 
     @Test func aLockedDinnerKeepsItsPlaceAndItsDayIsReported() async throws {

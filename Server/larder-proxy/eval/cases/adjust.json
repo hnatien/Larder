@@ -47,6 +47,11 @@
       { "axis": "medical", "kind": "allergen:sesame", "strictness": "hard" },
       { "axis": "religious", "kind": "religious:halal", "strictness": "hard" },
       { "axis": "preference", "kind": "dislike:olives", "strictness": "soft" }
+    ],
+    "sesameEatBetter": [
+      { "axis": "medical", "kind": "allergen:sesame", "strictness": "hard" },
+      { "axis": "preference", "kind": "time:maxMinutes:30", "strictness": "soft" },
+      { "axis": "goal", "kind": "goal:eatBetter", "strictness": "soft" }
     ]
   },
   "cases": [
@@ -241,6 +246,12 @@
       "tags": ["global"],
       "request": { "instruction": "Olives are fine now, take that one off.", "currentConstraints": "$shellfishSesame", "planContext": "$week" },
       "expect": { "edits": "some", "clarify": "any", "require": [{ "op": "remove", "kind": "olive" }] }
+    },
+    {
+      "id": "goal-more-protein",
+      "tags": ["global", "goal"],
+      "request": { "instruction": "More protein", "currentConstraints": "$sesameEatBetter", "planContext": "$week" },
+      "expect": { "edits": "some", "clarify": "any", "require": [{ "op": ["add", "replace"], "axis": "goal", "kind": "goal:moreProtein", "scope": "global" }] }
     },
     {
       "id": "followup-answers-which-day",
