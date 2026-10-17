@@ -375,9 +375,10 @@ struct RecipeImporterTests {
             #expect(!message.contains("!"))
             #expect(!message.contains("\u{2014}"))
         }
-        // There is no paste-the-text path, so the message must not offer one.
-        #expect(!RecipesCopy.message(for: .noStructuredRecipe).contains("paste"))
+        // The sheet's Write it yourself section is the way on, so the message points to it as well as to Plus.
+        #expect(RecipesCopy.message(for: .noStructuredRecipe).contains("Write it out below"))
         #expect(RecipesCopy.message(for: .noStructuredRecipe).contains("Plus"))
+        #expect(!RecipesCopy.message(for: .noWrittenRecipe).isEmpty)
     }
 }
 
@@ -586,5 +587,40 @@ struct PhotoImportTests {
         #expect(model.preview?.recipe.title == "Lemon dal")
         model.photoUnavailable()
         #expect(model.phase == .failed(.unreadablePhoto))
+    }
+}
+
+@Suite struct WrittenRecipeTests {
+    private func importer() -> RecipeImporter {
+        RecipeImporter(foods: FakeStore(), profile: FakeStore(), assistant: FakeAssistant(), isPlus: { false })
+    }
+
+    @Test func linesDropBlanksAndListMarkers() {
+        #expect(RecipeImporter.lines("- 2 eggs\n\n• 1 onion\n3. Fry\n  salt  ") == ["2 eggs", "1 onion", "Fry", "salt"])
+    }
+
+    @Test func aWrittenRecipeIsReadOnThisDeviceForFree() async throws {
+        let result = try await importer().import(
+            title: "  Egg fried rice ",
+            ingredients: "2 eggs\n200 g rice",
+            steps: "1. Fry the rice for 5 minutes\n2. Stir in the eggs",
+            minutes: 20
+        )
+        #expect(result.source == .written)
+        #expect(result.recipe.title == "Egg fried rice")
+        #expect(result.recipe.origin == .userImport)
+        #expect(result.recipe.cookMinutes == 20)
+        #expect(result.ingredients.map(\.rawText) == ["2 eggs", "200 g rice"])
+        #expect(result.recipe.steps.map(\.text) == ["Fry the rice for 5 minutes", "Stir in the eggs"])
+        #expect(result.recipe.steps.first?.timerSeconds == 300)
+    }
+
+    @Test func aWrittenRecipeNeedsATitleAndSomething() async {
+        await #expect(throws: ImportError.noWrittenRecipe) {
+            try await importer().import(title: " ", ingredients: "2 eggs", steps: "", minutes: nil)
+        }
+        await #expect(throws: ImportError.noWrittenRecipe) {
+            try await importer().import(title: "Toast", ingredients: "\n", steps: " ", minutes: nil)
+        }
     }
 }

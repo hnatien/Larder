@@ -91,6 +91,11 @@ public final class CookingSession {
     }
 
     /// Stops every timer; call when cooking mode closes.
+    /// Whether any timer is running or paused, so leaving would lose it.
+    public var hasActiveTimers: Bool {
+        timers.values.contains { $0.state == .running || $0.state == .paused }
+    }
+
     public func stopTimers() {
         timers.values.forEach { $0.reset() }
     }

@@ -58,7 +58,8 @@ nonisolated enum RecipesCopy {
         case .loadFailed: String(localized: "Couldn't read your recipes. Pull down to try again.", bundle: Copy.bundle)
         case .saveFailed: String(localized: "Couldn't save that recipe. Try again.", bundle: Copy.bundle)
         case .deleteFailed: String(localized: "Couldn't delete that recipe. Try again.", bundle: Copy.bundle)
-        case .notDeletable: String(localized: "Only recipes you imported can be deleted.", bundle: Copy.bundle)
+        case .notDeletable: String(localized: "Only recipes you imported can be deleted. You can hide this one instead.", bundle: Copy.bundle)
+        case .markFailed: String(localized: "Couldn't save that change. Try again.", bundle: Copy.bundle)
         }
     }
 
@@ -82,6 +83,107 @@ nonisolated enum RecipesCopy {
         String(localized: "From \(host)", bundle: Copy.bundle)
     }
     static var detailFailed: String { String(localized: "Couldn't read this recipe. Try again.", bundle: Copy.bundle) }
+    static var shown: String { String(localized: "Shown", bundle: Copy.bundle) }
+    static var hidden: String { String(localized: "Hidden", bundle: Copy.bundle) }
+    static var writeItTitle: String { String(localized: "Write it yourself", bundle: Copy.bundle) }
+    static var writeItHint: String {
+        String(localized: "Type or paste it: one ingredient per line, one step per line. Free and stays on this iPhone.", bundle: Copy.bundle)
+    }
+    static var recipeTitle: String { String(localized: "Recipe name", bundle: Copy.bundle) }
+    static var ingredientLines: String { String(localized: "Ingredients, one per line", bundle: Copy.bundle) }
+    static var stepLines: String { String(localized: "Method, one step per line", bundle: Copy.bundle) }
+    static var totalMinutes: String { String(localized: "Minutes in total", bundle: Copy.bundle) }
+    static var previewWritten: String { String(localized: "Preview recipe", bundle: Copy.bundle) }
+    static var showAllSteps: String { String(localized: "Show every step", bundle: Copy.bundle) }
+    static var writtenNote: String { String(localized: "Written by you. Check the amounts before saving.", bundle: Copy.bundle) }
+
+    static var favourites: String { String(localized: "Favourites", bundle: Copy.bundle) }
+    static var moreFilters: String { String(localized: "Filters", bundle: Copy.bundle) }
+    static var filtersTitle: String { String(localized: "Filters", bundle: Copy.bundle) }
+    static var mealFilter: String { String(localized: "Meal", bundle: Copy.bundle) }
+    static var dietFilter: String { String(localized: "Diet", bundle: Copy.bundle) }
+    static var timeFilter: String { String(localized: "Time", bundle: Copy.bundle) }
+    static var sortTitle: String { String(localized: "Sort", bundle: Copy.bundle) }
+    static var hiddenTitle: String { String(localized: "Hidden recipes", bundle: Copy.bundle) }
+    static var showAgain: String { String(localized: "Show again", bundle: Copy.bundle) }
+    static var hiddenEmpty: String { String(localized: "Nothing is hidden.", bundle: Copy.bundle) }
+    static var hiddenHint: String {
+        String(localized: "Hidden recipes stay out of the library and out of your plans.", bundle: Copy.bundle)
+    }
+
+    static func showAgainNamed(_ title: String) -> String {
+        String(localized: "Show \(title) again", bundle: Copy.bundle)
+    }
+
+    /// The Filters chip with how many filters in the sheet are on.
+    static func moreFilters(_ count: Int) -> String {
+        String(localized: "Filters, \(count) on", bundle: Copy.bundle)
+    }
+
+    /// A time filter: any time, or at most so many minutes.
+    static func timeLimit(_ minutes: Int?) -> String {
+        guard let minutes else { return String(localized: "Any time", bundle: Copy.bundle) }
+        return String(localized: "\(minutes) min or less", bundle: Copy.bundle)
+    }
+
+    /// The button that closes Filters, with how many recipes match.
+    static func showResults(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "Show 1 recipe", bundle: Copy.bundle)
+            : String(localized: "Show \(count) recipes", bundle: Copy.bundle)
+    }
+
+    static func name(of sort: RecipeSort) -> String {
+        switch sort {
+        case .name: String(localized: "Name", bundle: Copy.bundle)
+        case .quickest: String(localized: "Quickest first", bundle: Copy.bundle)
+        case .mostInPantry: String(localized: "Most in your pantry", bundle: Copy.bundle)
+        }
+    }
+
+    /// "You have 6 of 8" under a library row.
+    static func youHave(_ coverage: PantryCoverage) -> String {
+        let count = coverage.have
+        let total = coverage.total
+        return String(localized: "You have \(count) of \(total)", bundle: Copy.bundle)
+    }
+
+    static var favourite: String { String(localized: "Add to favourites", bundle: Copy.bundle) }
+    static var unfavourite: String { String(localized: "Remove from favourites", bundle: Copy.bundle) }
+    static var hideRecipe: String { String(localized: "Hide recipe", bundle: Copy.bundle) }
+    static var inYourPantry: String { String(localized: "In your pantry", bundle: Copy.bundle) }
+    static var toBuy: String { String(localized: "To buy", bundle: Copy.bundle) }
+    static var fitsYourSettings: String { String(localized: "Fits your allergies and diet.", bundle: Copy.bundle) }
+    static var couldNotAddToGroceries: String {
+        String(localized: "Couldn't add those to Groceries. Try again.", bundle: Copy.bundle)
+    }
+
+    static func optionalLine(_ text: String) -> String {
+        String(localized: "\(text) (optional)", bundle: Copy.bundle)
+    }
+
+    /// The button that puts what the pantry lacks on the grocery list.
+    static func addMissing(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "Add 1 missing item to Groceries", bundle: Copy.bundle)
+            : String(localized: "Add \(count) missing items to Groceries", bundle: Copy.bundle)
+    }
+
+    static func addedToGroceries(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "Added 1 item to Groceries", bundle: Copy.bundle)
+            : String(localized: "Added \(count) items to Groceries", bundle: Copy.bundle)
+    }
+
+    /// Under a day in Add to plan that already has a dinner.
+    static func replaces(_ title: String) -> String {
+        String(localized: "Replaces \(title)", bundle: Copy.bundle)
+    }
+
+    static var stopCookingQuestion: String { String(localized: "Stop cooking?", bundle: Copy.bundle) }
+    static var stopCookingMessage: String { String(localized: "Your timers stop when you leave.", bundle: Copy.bundle) }
+    static var stopCooking: String { String(localized: "Stop cooking", bundle: Copy.bundle) }
+    static var keepCooking: String { String(localized: "Keep cooking", bundle: Copy.bundle) }
     static var retry: String { String(localized: "Try again", bundle: Copy.bundle) }
 
     static var excludedTitle: String { String(localized: "Excluded for you", bundle: Copy.bundle) }
@@ -159,6 +261,8 @@ nonisolated enum RecipesCopy {
 
     static func message(for error: ImportError) -> String {
         switch error {
+        case .noWrittenRecipe:
+            String(localized: "Give the recipe a title and at least one ingredient or step.", bundle: Copy.bundle)
         case .invalidURL:
             String(localized: "That does not look like a web address. Check it and try again.", bundle: Copy.bundle)
         case .fetchFailed:
@@ -166,13 +270,13 @@ nonisolated enum RecipesCopy {
         case .notAWebPage:
             String(localized: "That address is not a web page Larder can read.", bundle: Copy.bundle)
         case .noStructuredRecipe:
-            String(localized: "This page has no recipe Larder can read on its own. With Larder Plus, the assistant can read pages like this one.", bundle: Copy.bundle)
+            String(localized: "This page has no recipe Larder can read on its own. Write it out below, or with Larder Plus the assistant can read pages like this one.", bundle: Copy.bundle)
         case .saveFailed:
             String(localized: "Couldn't save that recipe. Try again.", bundle: Copy.bundle)
         case .assistantFailed(.plusRequired):
             String(localized: "Reading this page needs Larder Plus.", bundle: Copy.bundle)
         case .assistantFailed(.consentRequired):
-            String(localized: "Turn on AI help in Settings before the assistant reads a page.", bundle: Copy.bundle)
+            String(localized: "Reading this page needs AI help, which is off.", bundle: Copy.bundle)
         case .assistantFailed(.declined):
             String(localized: "The assistant would not read this page.", bundle: Copy.bundle)
         case .assistantFailed:
@@ -182,7 +286,7 @@ nonisolated enum RecipesCopy {
         case .unreadablePhoto:
             String(localized: "Couldn't find a recipe in that photo. Try a sharper photo of the whole page.", bundle: Copy.bundle)
         case .photoAssistantFailed(.consentRequired):
-            String(localized: "This iPhone couldn't read the photo on its own. Turn on AI help in Settings to let the assistant read it.", bundle: Copy.bundle)
+            String(localized: "This iPhone couldn't read the photo on its own. With AI help on, the assistant can read it.", bundle: Copy.bundle)
         case .photoAssistantFailed(.declined):
             String(localized: "The assistant would not read this photo.", bundle: Copy.bundle)
         case .photoAssistantFailed(.quotaExceeded):

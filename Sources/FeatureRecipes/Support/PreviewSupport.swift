@@ -3,7 +3,7 @@ import Foundation
 import LarderCore
 
 /// In-memory repositories and sample recipes for SwiftUI previews.
-actor PreviewStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository {
+actor PreviewStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository, PantryRepository, RecipeMarkRepository {
     private var recipeList: [Recipe]
     private var lines: [RecipeID: [Ingredient]]
     private let foodList: [Food]
@@ -48,6 +48,21 @@ actor PreviewStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileR
     func saveConstraints(_ constraints: [DietaryConstraint]) {}
     func targets() -> [NutrientTarget] { [] }
     func saveTargets(_ targets: [NutrientTarget]) {}
+
+    func items() -> [PantryItem] {
+        [PantryItem(foodID: PreviewData.chickpeas.id, rawName: "Chickpeas", quantityGrams: 480, location: .pantry, source: .manual, addedOn: .now)]
+    }
+    func upsert(_ item: PantryItem) {}
+    func remove(_ id: PantryItemID) {}
+    func consume(foodID: FoodID, grams: Double) -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) {}
+    func removeEvents(_ ids: [PantryEventID]) {}
+    func events(from start: Date, to end: Date) -> [PantryEvent] { [] }
+
+    func favourites() -> Set<RecipeID> { [PreviewData.chanaMasala.id] }
+    func setFavourite(_ id: RecipeID, _ isFavourite: Bool) {}
+    func hiddenRecipes() -> [Recipe] { [] }
+    func setHidden(_ id: RecipeID, _ isHidden: Bool) {}
 }
 
 /// An assistant that is never reachable.
@@ -103,7 +118,10 @@ nonisolated enum PreviewData {
 
     @MainActor static func model() -> RecipesModel {
         let store = PreviewStore()
-        return RecipesModel(recipes: store, photos: store, foods: store, profile: store, assistant: PreviewAssistant(), isPlus: { false })
+        return RecipesModel(
+            recipes: store, photos: store, foods: store, profile: store, pantry: store, marks: store,
+            assistant: PreviewAssistant(), isPlus: { false }
+        )
     }
 }
 #endif

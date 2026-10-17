@@ -15,38 +15,45 @@ public struct RecipeDetailView: View {
     static let maximumServings = 99
     /// How many days ahead "Add to plan" offers.
     static let planDays = 7
-    /// How long the Undo after cooking stays on offer.
-    static let undoLifetime: Duration = .seconds(5)
 
     private let model: RecipesModel
     private let recipe: Recipe
     private let onAddToPlan: AddToPlan?
     private let onFinishCooking: FinishCooking?
+    private let onAddToGroceries: AddToGroceries?
+    private let plannedDinners: PlannedDinners?
     private let startsCooking: Bool
     @State private var phase = Phase.loading
     @State private var servings: Int
     @State private var isCooking = false
     @State private var isConfirmingDelete = false
     @State private var ticked: Set<IngredientID> = []
-    @State private var toast: String?
+    @State private var toast: LarderToast?
     @State private var cookingUndo: CookingUndo?
     @State private var hasAutoStarted = false
+    /// Dinners already planned, by day, so Add to plan says what a day would replace.
+    @State private var planned: [Date: String] = [:]
     @Environment(\.dismiss) private var dismiss
 
-    /// Creates the detail for `recipe`; without `onAddToPlan` the Add to plan button is hidden. `onFinishCooking` runs
-    /// when cooking mode's Finish is tapped, with the servings chosen here. `startsCooking` opens cooking mode as soon
-    /// as the recipe has loaded.
+    /// Creates the detail for `recipe`; without `onAddToPlan` the Add to plan button is hidden, and `plannedDinners`
+    /// tells it what each day already has. `onFinishCooking` runs when cooking mode's Finish is tapped, with the
+    /// servings chosen here. `onAddToGroceries` offers to put what the pantry lacks on the grocery list.
+    /// `startsCooking` opens cooking mode as soon as the recipe has loaded.
     public init(
         model: RecipesModel,
         recipe: Recipe,
         onAddToPlan: AddToPlan? = nil,
         onFinishCooking: FinishCooking? = nil,
+        onAddToGroceries: AddToGroceries? = nil,
+        plannedDinners: PlannedDinners? = nil,
         startsCooking: Bool = false
     ) {
         self.model = model
         self.recipe = recipe
         self.onAddToPlan = onAddToPlan
         self.onFinishCooking = onFinishCooking
+        self.onAddToGroceries = onAddToGroceries
+        self.plannedDinners = plannedDinners
         self.startsCooking = startsCooking
         _servings = State(initialValue: recipe.servings)
     }
@@ -73,11 +80,27 @@ public struct RecipeDetailView: View {
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .larderToast(currentToast, onExpire: expireToast)
         .safeAreaInset(edge: .bottom) { actionBar }
         .toolbar {
-            if recipe.origin == .userImport {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(RecipesCopy.deleteRecipe, systemImage: "trash") { isConfirmingDelete = true }
+            ToolbarItem(placement: .primaryAction) {
+                let isFavourite = model.favourites.contains(recipe.id)
+                Button(isFavourite ? RecipesCopy.unfavourite : RecipesCopy.favourite, systemImage: isFavourite ? "heart.fill" : "heart") {
+                    Task { await model.toggleFavourite(recipe) }
+                }
+                .sensoryFeedback(.selection, trigger: isFavourite)
+            }
+            ToolbarItem(placement: .secondaryAction) {
+                if recipe.origin == .userImport {
+                    Button(RecipesCopy.deleteRecipe, systemImage: "trash", role: .destructive) { isConfirmingDelete = true }
+                } else {
+                    // Library recipes cannot be deleted, so they can be hidden instead; Recipes lists them to show again.
+                    Button(RecipesCopy.hideRecipe, systemImage: "eye.slash") {
+                        Task {
+                            await model.hide(recipe)
+                            dismiss()
+                        }
+                    }
                 }
             }
         }
@@ -91,27 +114,30 @@ public struct RecipeDetailView: View {
             Text(RecipesCopy.deleteMessage)
         }
         .cookingCover(isPresented: $isCooking) {
-            CookingModeView(recipe: recipe, ingredients: scaledIngredients, onFinish: finishCooking)
+            CookingModeView(recipe: recipe, ingredients: scaledIngredients, ticked: $ticked, onFinish: finishCooking)
         }
         .task { await loadDetail() }
-        .task(id: toast) {
-            guard toast != nil else { return }
-            try? await Task.sleep(for: .seconds(3))
-            toast = nil
-        }
-        .task(id: cookingUndo?.id) {
-            guard let undo = cookingUndo else { return }
-            AccessibilityNotification.Announcement(undo.message).post()
-            do {
-                try await Task.sleep(for: Self.undoLifetime)
-            } catch {
-                return
+        .task { await loadPlanned() }
+    }
+
+    /// The cooking undo first, since it can take the cooking back, else the last confirmation.
+    private var currentToast: LarderToast? {
+        if let undo = cookingUndo {
+            return LarderToast(id: undo.id, undo.message, actionTitle: Copy.Action.undo) {
+                cookingUndo = nil
+                Task { await undo.undo() }
             }
+        }
+        return toast
+    }
+
+    private func expireToast() {
+        if let undo = cookingUndo {
             undo.dismiss()
             cookingUndo = nil
+        } else {
+            toast = nil
         }
-        .larderAnimation(LarderMotion.tap, value: toast)
-        .larderAnimation(LarderMotion.tap, value: cookingUndo?.id)
     }
 
     private var scaledIngredients: [Ingredient] {
@@ -186,14 +212,32 @@ public struct RecipeDetailView: View {
                         .padding(.vertical, LarderSpacing.s)
                     ForEach(detail.scaled(to: servings)) { ingredient in
                         Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
-                        IngredientLine(ingredient: ingredient, isTicked: ticked.contains(ingredient.id)) {
+                        IngredientLine(
+                            ingredient: ingredient,
+                            inPantry: detail.isInPantry(ingredient),
+                            isTicked: ticked.contains(ingredient.id)
+                        ) {
                             ticked.formSymmetricDifference([ingredient.id])
                         }
                     }
                 }
             }
+            let missing = detail.missing(at: servings)
+            if let onAddToGroceries, !missing.isEmpty {
+                Button {
+                    Task {
+                        toast = await onAddToGroceries(missing)
+                            ? LarderToast(RecipesCopy.addedToGroceries(missing.count), systemImage: "cart.fill")
+                            : LarderToast(RecipesCopy.couldNotAddToGroceries, tone: .problem)
+                    }
+                } label: {
+                    Label(RecipesCopy.addMissing(missing.count), systemImage: "cart.badge.plus")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.larderSecondary)
+            }
         }
-        VerdictView(verdict: detail.verdict)
+        VerdictView(verdict: detail.verdict, hasConstraints: detail.hasConstraints)
         if detail.showsNumbers {
             NutritionList(nutrition: detail.nutrition)
         }
@@ -208,16 +252,6 @@ public struct RecipeDetailView: View {
 
     private var actionBar: some View {
         VStack(spacing: LarderSpacing.s) {
-            if let undo = cookingUndo {
-                ToastBar(undo.message, actionTitle: Copy.Action.undo) {
-                    cookingUndo = nil
-                    Task { await undo.undo() }
-                }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-            } else if let toast {
-                ToastBar(toast)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
             AdaptiveStack(spacing: LarderSpacing.s, stacksFrom: .xLarge) {
                 Button {
                     isCooking = true
@@ -242,7 +276,13 @@ public struct RecipeDetailView: View {
         Menu {
             Section(RecipesCopy.addToPlanQuestion) {
                 ForEach(Self.upcomingDays(from: .now), id: \.self) { day in
-                    Button(Self.dayName(day)) { add(on: day) }
+                    Button { add(on: day) } label: {
+                        Text(Self.dayName(day))
+                        // A day that already has a dinner says which one this would replace.
+                        if let title = planned[day] {
+                            Text(RecipesCopy.replaces(title))
+                        }
+                    }
                 }
             }
         } label: {
@@ -262,12 +302,17 @@ public struct RecipeDetailView: View {
         guard let onAddToPlan else { return }
         Task {
             if await onAddToPlan(recipe, day) {
-                toast = RecipesCopy.addedTo(Self.dayName(day))
-                AccessibilityNotification.Announcement(RecipesCopy.addedTo(Self.dayName(day))).post()
+                toast = LarderToast(RecipesCopy.addedTo(Self.dayName(day)), systemImage: "calendar.badge.checkmark")
+                await loadPlanned()
             } else {
-                toast = RecipesCopy.couldNotAdd
+                toast = LarderToast(RecipesCopy.couldNotAdd, tone: .problem)
             }
         }
+    }
+
+    private func loadPlanned() async {
+        guard let plannedDinners else { return }
+        planned = await plannedDinners()
     }
 
     /// Today and the six days after it, at the start of each day.
@@ -328,11 +373,18 @@ public struct RecipeDetailView: View {
     }
 }
 
-/// One ingredient line; tapping ticks it off while you gather things.
+/// One ingredient line; tapping ticks it off while you gather things. A line matched to a food says whether the
+/// pantry has it, in words and an icon.
 private struct IngredientLine: View {
     let ingredient: Ingredient
+    /// `true` when the pantry has it, `false` when it does not, `nil` when Larder cannot tell.
+    let inPantry: Bool?
     let isTicked: Bool
     let toggle: () -> Void
+
+    private var pantryNote: (text: String, symbol: String)? {
+        inPantry.map { $0 ? (RecipesCopy.inYourPantry, "refrigerator") : (RecipesCopy.toBuy, "cart") }
+    }
 
     private var showsOptionalMarker: Bool {
         ingredient.isOptional && ingredient.rawText.range(of: RecipesCopy.optional, options: .caseInsensitive) == nil
@@ -344,13 +396,18 @@ private struct IngredientLine: View {
                 Image(systemName: isTicked ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(isTicked ? LarderColor.accent.second : LarderColor.ink.tertiary)
                     .accessibilityHidden(true)
-                Text(showsOptionalMarker ? "\(ingredient.rawText) (\(RecipesCopy.optional))" : ingredient.rawText)
-                    .font(LarderFont.body(.body))
-                    .foregroundStyle(isTicked ? LarderColor.ink.secondary : LarderColor.ink.primary)
-                    .strikethrough(isTicked)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
+                    Text(showsOptionalMarker ? RecipesCopy.optionalLine(ingredient.rawText) : ingredient.rawText)
+                        .font(LarderFont.body(.body))
+                        .foregroundStyle(isTicked ? LarderColor.ink.secondary : LarderColor.ink.primary)
+                        .strikethrough(isTicked)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let pantryNote, !isTicked {
+                        MetaLabel(pantryNote.text, systemImage: pantryNote.symbol)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.horizontal, LarderSpacing.l)
             .padding(.vertical, LarderSpacing.s)
@@ -363,16 +420,26 @@ private struct IngredientLine: View {
     }
 }
 
-/// The constraint verdict: nothing for a pass, then always the label reminder.
+/// The constraint verdict. A pass says it fits only when there are rules to fit, so the label reminder is not
+/// repeated on every recipe for someone with none; a problem always carries it.
 private struct VerdictView: View {
     let verdict: FilterVerdict
+    let hasConstraints: Bool
 
     var body: some View {
         switch verdict {
         case .pass:
-            Text(Copy.Allergen.checkTheLabel)
-                .font(LarderFont.body(.body))
+            if hasConstraints {
+                Label {
+                    Text(RecipesCopy.fitsYourSettings + " " + Copy.Allergen.checkTheLabel)
+                        .fixedSize(horizontal: false, vertical: true)
+                } icon: {
+                    Image(systemName: "checkmark.shield")
+                        .foregroundStyle(LarderColor.accent.second)
+                }
+                .font(LarderFont.body(.subheadline))
                 .foregroundStyle(LarderColor.ink.secondary)
+            }
         case .excluded(let reasons):
             card(title: RecipesCopy.excludedTitle, tone: .danger, reasons: reasons)
         case .uncertain(let reasons):

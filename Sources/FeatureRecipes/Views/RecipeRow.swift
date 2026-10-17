@@ -6,6 +6,13 @@ import SwiftUI
 struct RecipeRow: View {
     @ScaledSpacing(.m) private var gap
     let recipe: Recipe
+    var isFavourite = false
+    /// How much of it is on the shelves; shown when Larder can match at least two of its foods.
+    var coverage: PantryCoverage?
+
+    private var coverageText: String? {
+        coverage.flatMap { $0.total >= 2 ? RecipesCopy.youHave($0) : nil }
+    }
 
     private var minutes: Int { recipe.prepMinutes + recipe.cookMinutes }
 
@@ -21,12 +28,24 @@ struct RecipeRow: View {
         HStack(spacing: LarderSpacing.m) {
             RecipeImage(title: recipe.title, photoFileName: recipe.photoFileName, size: .medium)
             VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
-                Text(recipe.title)
-                    .font(LarderFont.body(.body, weight: .semibold))
-                    .foregroundStyle(LarderColor.ink.primary)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                MetaLabel(Copy.Ledger.minutes(minutes), systemImage: "clock", spoken: Copy.Ledger.spokenMinutes(minutes))
+                HStack(alignment: .firstTextBaseline, spacing: LarderSpacing.xs) {
+                    Text(recipe.title)
+                        .font(LarderFont.body(.body, weight: .semibold))
+                        .foregroundStyle(LarderColor.ink.primary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if isFavourite {
+                        Image(systemName: "heart.fill")
+                            .font(LarderFont.body(.footnote))
+                            .foregroundStyle(LarderColor.accent.brand)
+                    }
+                }
+                AdaptiveStack(spacing: LarderSpacing.m, stacksFrom: .accessibility1) {
+                    MetaLabel(Copy.Ledger.minutes(minutes), systemImage: "clock", spoken: Copy.Ledger.spokenMinutes(minutes))
+                    if let coverageText {
+                        MetaLabel(coverageText, systemImage: "refrigerator")
+                    }
+                }
                 if !words.isEmpty {
                     Text(words.joined(separator: " \u{B7} "))
                         .font(LarderFont.body(.footnote))
@@ -46,14 +65,17 @@ struct RecipeRow: View {
         .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(([recipe.title, Copy.Ledger.spokenMinutes(minutes)] + words).joined(separator: ", "))
+        .accessibilityLabel(
+            ([recipe.title] + (isFavourite ? [RecipesCopy.favourites] : []) + [Copy.Ledger.spokenMinutes(minutes)]
+                + [coverageText].compactMap { $0 } + words).joined(separator: ", ")
+        )
     }
 }
 
 #if DEBUG
 #Preview("RecipeRow") {
     VStack(spacing: 0) {
-        RecipeRow(recipe: PreviewData.chanaMasala)
+        RecipeRow(recipe: PreviewData.chanaMasala, isFavourite: true, coverage: PantryCoverage(have: 3, total: 5))
         Divider().overlay(LarderColor.line.hairline)
         RecipeRow(recipe: PreviewData.porridge)
     }

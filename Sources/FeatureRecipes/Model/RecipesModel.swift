@@ -9,6 +9,29 @@ public nonisolated enum RecipesError: Error, Hashable, Sendable {
     case deleteFailed
     /// Only recipes the user imported can be deleted.
     case notDeletable
+    /// A favourite or a hidden recipe could not be saved.
+    case markFailed
+}
+
+/// How much of a recipe's food is on the shelves: lines matched to a food, and how many of those you have.
+public nonisolated struct PantryCoverage: Hashable, Sendable {
+    public var have: Int
+    public var total: Int
+
+    /// Creates a coverage count.
+    public init(have: Int, total: Int) {
+        self.have = have
+        self.total = total
+    }
+
+    /// The share of matched lines on the shelves, from 0 to 1; 0 when nothing is matched.
+    public var fraction: Double { total == 0 ? 0 : Double(have) / Double(total) }
+
+    /// The coverage of `ingredients` by `pantry`: optional lines and garnish are left out, and each food counts once.
+    public static func of(_ ingredients: [Ingredient], pantry: Set<FoodID>) -> PantryCoverage {
+        let foods = Set(ingredients.filter { !$0.isOptional && !$0.isGarnish }.compactMap(\.foodID))
+        return PantryCoverage(have: foods.intersection(pantry).count, total: foods.count)
+    }
 }
 
 /// The recipe library: list, search, filters, detail, import and delete.
@@ -22,6 +45,13 @@ public final class RecipesModel {
     /// Text for full-text search; empty shows every recipe.
     public var query = ""
     public var filters = RecipeFilters()
+    public var sort = RecipeSort.name
+    /// The recipes marked as favourites.
+    public private(set) var favourites: Set<RecipeID> = []
+    /// The recipes hidden from the library, for showing them again.
+    public private(set) var hiddenRecipes: [Recipe] = []
+    /// How much of each recipe is on the shelves.
+    public private(set) var coverage: [RecipeID: PantryCoverage] = [:]
     public private(set) var isLoading = false
     /// Whether the library has been read at least once.
     public private(set) var hasLoaded = false
@@ -32,15 +62,20 @@ public final class RecipesModel {
     private let photos: any RecipePhotoStore
     private let foods: any FoodRepository
     private let profile: any ProfileRepository
+    private let pantry: any PantryRepository
+    private let marks: any RecipeMarkRepository
     private let assistant: any AssistantBackend
     private let isPlus: @Sendable () async -> Bool
 
-    /// Creates a model over the given repositories; `isPlus` says whether the assistant may read pages.
+    /// Creates a model over the given repositories; `pantry` says what you have for each recipe, `marks` keeps
+    /// favourites and hidden recipes, and `isPlus` says whether the assistant may read pages.
     public init(
         recipes: any RecipeRepository,
         photos: any RecipePhotoStore,
         foods: any FoodRepository,
         profile: any ProfileRepository,
+        pantry: any PantryRepository,
+        marks: any RecipeMarkRepository,
         assistant: any AssistantBackend,
         isPlus: @escaping @Sendable () async -> Bool
     ) {
@@ -48,12 +83,29 @@ public final class RecipesModel {
         self.photos = photos
         self.foods = foods
         self.profile = profile
+        self.pantry = pantry
+        self.marks = marks
         self.assistant = assistant
         self.isPlus = isPlus
     }
 
-    /// Search hits or the whole library, with the filters applied.
-    public var results: [Recipe] { candidates.filter(filters.matches) }
+    /// Search hits or the whole library, with the filters applied, in the chosen order; search hits keep their
+    /// best-match order unless another sort is chosen.
+    public var results: [Recipe] {
+        let filtered = candidates.filter { filters.matches($0) && (!filters.favouritesOnly || favourites.contains($0.id)) }
+        switch sort {
+        case .name:
+            return filtered
+        case .quickest:
+            return filtered.sorted { ($0.prepMinutes + $0.cookMinutes, $0.title) < ($1.prepMinutes + $1.cookMinutes, $1.title) }
+        case .mostInPantry:
+            return filtered.sorted { lhs, rhs in
+                let left = coverage[lhs.id]?.fraction ?? 0
+                let right = coverage[rhs.id]?.fraction ?? 0
+                return left == right ? lhs.title < rhs.title : left > right
+            }
+        }
+    }
 
     /// Cuisines present in the library, sorted, for the cuisine filter.
     public var cuisines: [String] {
@@ -66,6 +118,8 @@ public final class RecipesModel {
         defer { isLoading = false }
         do {
             recipes = try await repository.all()
+            favourites = try await marks.favourites()
+            hiddenRecipes = try await marks.hiddenRecipes()
             hasLoaded = true
             error = nil
         } catch {
@@ -73,6 +127,59 @@ public final class RecipesModel {
             return
         }
         await refreshCandidates()
+        await refreshCoverage()
+    }
+
+    /// Recounts what each recipe has on the shelves, after the pantry changed; a failed read keeps the last counts.
+    public func refreshCoverage() async {
+        do {
+            let onShelves = try await pantryFoodIDs()
+            var counts: [RecipeID: PantryCoverage] = [:]
+            for recipe in recipes {
+                counts[recipe.id] = PantryCoverage.of(try await repository.ingredients(for: recipe.id), pantry: onShelves)
+            }
+            coverage = counts
+        } catch {
+            return
+        }
+    }
+
+    /// Marks a recipe as a favourite, or unmarks it.
+    public func toggleFavourite(_ recipe: Recipe) async {
+        let isFavourite = !favourites.contains(recipe.id)
+        do {
+            try await marks.setFavourite(recipe.id, isFavourite)
+        } catch {
+            self.error = .markFailed
+            return
+        }
+        if isFavourite { favourites.insert(recipe.id) } else { favourites.remove(recipe.id) }
+    }
+
+    /// Hides a recipe from the library and from planning; it stays readable for plans that already use it.
+    public func hide(_ recipe: Recipe) async {
+        do {
+            try await marks.setHidden(recipe.id, true)
+        } catch {
+            self.error = .markFailed
+            return
+        }
+        await load()
+    }
+
+    /// Shows a hidden recipe again.
+    public func unhide(_ recipe: Recipe) async {
+        do {
+            try await marks.setHidden(recipe.id, false)
+        } catch {
+            self.error = .markFailed
+            return
+        }
+        await load()
+    }
+
+    private func pantryFoodIDs() async throws -> Set<FoodID> {
+        Set(try await pantry.items().filter { $0.quantityGrams > 0 }.compactMap(\.foodID))
     }
 
     /// Refreshes the results for the current `query`, loading the library first if needed.
@@ -93,7 +200,9 @@ public final class RecipesModel {
             ingredients: ingredients,
             nutrition: NutritionCalculator().nutrition(for: recipe, ingredients: ingredients, foods: foodsByID),
             verdict: ConstraintFilter().verdict(recipe: recipe, ingredients: ingredients, foods: foodsByID, constraints: constraints),
-            showsNumbers: showsNumbers
+            showsNumbers: showsNumbers,
+            pantryFoods: try await pantryFoodIDs(),
+            hasConstraints: !constraints.isEmpty
         )
     }
 
@@ -122,7 +231,17 @@ public final class RecipesModel {
     /// A model for the import sheet that saves into this library.
     public func makeImportModel() -> ImportModel {
         let importer = RecipeImporter(foods: foods, profile: profile, assistant: assistant, isPlus: isPlus)
-        return ImportModel(importer: importer) { [self] result in
+        let profiles = profile
+        return ImportModel(importer: importer, allowAI: {
+            do {
+                guard var stored = try await profiles.profile() else { return false }
+                stored.consents.aiProcessing = true
+                try await profiles.save(stored)
+                return true
+            } catch {
+                return false
+            }
+        }) { [self] result in
             try await save(result)
         }
     }

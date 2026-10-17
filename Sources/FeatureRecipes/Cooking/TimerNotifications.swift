@@ -22,6 +22,25 @@ public protocol TimerNotifying: AnyObject {
     func cancel(id: String)
 }
 
+/// Shows timer notifications as banners while Larder is open, so a timer that ends on another step or behind another
+/// screen is still seen; the system would otherwise drop them in the foreground.
+public final class TimerNotificationPresenter: NSObject, UNUserNotificationCenterDelegate {
+    /// The one presenter; the notification center keeps only a weak reference to its delegate.
+    public static let shared = TimerNotificationPresenter()
+
+    /// Makes this the notification center's delegate. Call once at launch.
+    public func install() {
+        UNUserNotificationCenter.current().delegate = self
+    }
+
+    public func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        [.banner, .sound]
+    }
+}
+
 /// Timer notifications through `UNUserNotificationCenter`.
 public final class SystemTimerNotifications: TimerNotifying {
     private nonisolated static let logger = Logger(subsystem: "com.larder.Larder", category: "Timers")

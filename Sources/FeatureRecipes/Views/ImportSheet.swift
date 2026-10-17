@@ -2,13 +2,19 @@ import LarderCore
 import LarderDesign
 import PhotosUI
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
-/// Import from a web address or a photo of a recipe: preview what was found, then save.
+/// Import from a web address, a photo of a recipe, or by writing it out: preview what was found, then save with the
+/// button pinned to the bottom.
 public struct ImportSheet: View {
     @Bindable private var model: ImportModel
     @Environment(\.dismiss) private var dismiss
     @State private var pickedPhoto: PhotosPickerItem?
     @State private var showsCamera = false
+    @State private var showsWriteForm = false
+    @State private var asksForConsent = false
 
     /// Creates the sheet over `model`, from `RecipesModel.makeImportModel()`.
     public init(model: ImportModel) {
@@ -17,19 +23,31 @@ public struct ImportSheet: View {
 
     public var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: LarderSpacing.xl) {
-                    addressField
-                    photoSection
-                    status
-                    if let result = model.preview {
-                        PreviewCard(result: result, servings: Binding(get: { result.recipe.servings }, set: { model.setServings($0) }))
-                        actions
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: LarderSpacing.xl) {
+                        if let result = model.preview {
+                            PreviewCard(result: result, servings: Binding(get: { result.recipe.servings }, set: { model.setServings($0) }))
+                        } else {
+                            status { showWriteForm(proxy) }
+                            addressField
+                            photoSection
+                            writeSection
+                                .id(Self.writeSectionID)
+                        }
                     }
+                    .padding(LarderSpacing.l)
                 }
-                .padding(LarderSpacing.l)
+                .background(LarderColor.surface.canvas)
             }
-            .background(LarderColor.surface.canvas)
+            .safeAreaInset(edge: .bottom) {
+                if model.preview != nil || model.phase == .saving {
+                    actions
+                        .padding(.horizontal, LarderSpacing.l)
+                        .padding(.vertical, LarderSpacing.s)
+                        .background(LarderColor.surface.canvas)
+                }
+            }
             .navigationTitle(RecipesCopy.importTitle)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -62,6 +80,15 @@ public struct ImportSheet: View {
                     await model.readPhoto(data)
                 }
             }
+            .sheet(isPresented: $asksForConsent) {
+                AIConsentSheet {
+                    asksForConsent = false
+                    Task { await model.allowAIAndRetry() }
+                } onDecline: {
+                    asksForConsent = false
+                }
+                .presentationDetents([.medium, .large])
+            }
             #if os(iOS)
             .fullScreenCover(isPresented: $showsCamera) {
                 CameraCapture { data in
@@ -72,6 +99,74 @@ public struct ImportSheet: View {
             }
             #endif
         }
+    }
+
+    private static let writeSectionID = "write"
+
+    private func showWriteForm(_ proxy: ScrollViewProxy) {
+        showsWriteForm = true
+        withAnimation(LarderMotion.layout) { proxy.scrollTo(Self.writeSectionID, anchor: .top) }
+    }
+
+    /// Writing the recipe out: free, on this device, and always there when a page or photo cannot be read.
+    private var writeSection: some View {
+        VStack(alignment: .leading, spacing: LarderSpacing.m) {
+            Button {
+                showsWriteForm.toggle()
+            } label: {
+                HStack {
+                    SectionHeading(RecipesCopy.writeItTitle)
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .rotationEffect(.degrees(showsWriteForm ? 180 : 0))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                        .accessibilityHidden(true)
+                }
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityValue(showsWriteForm ? RecipesCopy.shown : RecipesCopy.hidden)
+            Text(RecipesCopy.writeItHint)
+                .font(LarderFont.body(.footnote))
+                .foregroundStyle(LarderColor.ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if showsWriteForm {
+                field(RecipesCopy.recipeTitle, text: $model.writtenTitle, lines: 1...2)
+                field(RecipesCopy.ingredientLines, text: $model.writtenIngredients, lines: 4...12)
+                field(RecipesCopy.stepLines, text: $model.writtenSteps, lines: 4...12)
+                LabeledContent(RecipesCopy.totalMinutes) {
+                    TextField(RecipesCopy.totalMinutes, value: $model.writtenMinutes, format: .number)
+                        .multilineTextAlignment(.trailing)
+                        #if os(iOS)
+                        .keyboardType(.numberPad)
+                        #endif
+                }
+                .font(LarderFont.body(.body))
+                .foregroundStyle(LarderColor.ink.primary)
+                .frame(minHeight: 44)
+                Button(RecipesCopy.previewWritten) {
+                    Task { await model.readWritten() }
+                }
+                .buttonStyle(.larderPrimary)
+                .disabled(!model.canReadWritten || model.isBusy)
+            }
+        }
+        .larderAnimation(LarderMotion.layout, value: showsWriteForm)
+    }
+
+    private func field(_ title: String, text: Binding<String>, lines: ClosedRange<Int>) -> some View {
+        TextField(title, text: text, prompt: Text(title).foregroundStyle(LarderColor.ink.tertiary), axis: .vertical)
+            .lineLimit(lines)
+            .font(LarderFont.body(.body))
+            .foregroundStyle(LarderColor.ink.primary)
+            .padding(LarderSpacing.m)
+            .frame(minHeight: 44)
+            .background(LarderColor.surface.raised, in: RoundedRectangle(cornerRadius: LarderRadius.field))
+            .overlay {
+                RoundedRectangle(cornerRadius: LarderRadius.field)
+                    .strokeBorder(LarderColor.line.strong, lineWidth: 1)
+            }
     }
 
     private var photoSection: some View {
@@ -131,18 +226,20 @@ public struct ImportSheet: View {
         .disabled(model.addressText.trimmingCharacters(in: .whitespaces).isEmpty || model.isBusy)
     }
 
-    @ViewBuilder private var status: some View {
+    /// Progress, or what went wrong with a way on: every failure but a written one offers to write the recipe out.
+    @ViewBuilder private func status(onWrite: @escaping () -> Void) -> some View {
         switch model.phase {
         case .loading:
             ProgressView(RecipesCopy.readingPage)
         case .readingPhoto:
             ProgressView(RecipesCopy.readingPhoto)
         case .failed(let error):
-            Label(RecipesCopy.message(for: error), systemImage: "exclamationmark.triangle.fill")
-                .font(LarderFont.body(.body))
-                .foregroundStyle(LarderColor.status(.danger))
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
+            InlineBanner(
+                RecipesCopy.message(for: error),
+                action: model.canAllowAI
+                    ? .init(title: Copy.Consent.allow) { asksForConsent = true }
+                    : error == .noWrittenRecipe ? nil : .init(title: RecipesCopy.writeItTitle, perform: onWrite)
+            )
         case .saving:
             ProgressView()
         case .idle, .preview, .saved:
@@ -151,30 +248,47 @@ public struct ImportSheet: View {
     }
 
     private var actions: some View {
-        VStack(spacing: LarderSpacing.m) {
+        AdaptiveStack(spacing: LarderSpacing.s, stacksFrom: .xLarge) {
             Button {
                 Task { await model.save() }
             } label: {
                 Text(RecipesCopy.save).frame(maxWidth: .infinity)
             }
             .buttonStyle(.larderPrimary)
-            Button {
-                model.reset()
-            } label: {
-                Text(RecipesCopy.startOver).frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.larderSecondary)
+            .disabled(model.phase == .saving)
+            Button(RecipesCopy.startOver) { model.reset() }
+                .buttonStyle(.larderQuiet)
+                .disabled(model.phase == .saving)
         }
     }
 }
 
-/// What was found on the page, shown before anything is saved.
+/// What was found on the page, shown before anything is saved: the photo when the page has one, and the first steps
+/// with the rest a tap away, so Save stays close.
 private struct PreviewCard: View {
+    /// Steps shown before "Show every step".
+    static let stepsShown = 3
+
     let result: ImportResult
     @Binding var servings: Int
+    @State private var showsAllSteps = false
+
+    private var steps: [RecipeStep] {
+        showsAllSteps ? result.recipe.steps : Array(result.recipe.steps.prefix(Self.stepsShown))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.l) {
+            #if os(iOS)
+            if let data = result.photo, let image = UIImage(data: data) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous))
+                    .accessibilityHidden(true)
+            }
+            #endif
             Text(result.recipe.title)
                 .font(LarderFont.display(.title))
                 .foregroundStyle(LarderColor.ink.primary)
@@ -185,6 +299,7 @@ private struct PreviewCard: View {
             switch result.source {
             case .assistant: ReasonLine(text: RecipesCopy.assistantNote)
             case .photo: ReasonLine(text: RecipesCopy.photoNote)
+            case .written: ReasonLine(text: RecipesCopy.writtenNote)
             case .structuredData: EmptyView()
             }
             Stepper(value: $servings, in: 1...RecipeDetailView.maximumServings) {
@@ -210,13 +325,17 @@ private struct PreviewCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             SectionHeading(RecipesCopy.method)
-            ForEach(Array(result.recipe.steps.enumerated()), id: \.offset) { offset, step in
+            ForEach(Array(steps.enumerated()), id: \.offset) { offset, step in
                 Text(RecipesCopy.numberedStep(offset + 1, text: step.text))
                     .font(LarderFont.body(.body))
                     .foregroundStyle(LarderColor.ink.primary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            if result.recipe.steps.count > Self.stepsShown, !showsAllSteps {
+                Button(RecipesCopy.showAllSteps) { showsAllSteps = true }
+                    .buttonStyle(.larderQuiet)
             }
         }
     }

@@ -19,9 +19,13 @@ struct TimerControl: View {
             Text(name)
                 .font(LarderFont.body(.headline))
                 .foregroundStyle(LarderColor.ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text(TimerFormat.clock(timer.remainingSeconds))
                 .font(LarderFont.mono(.largeTitle))
                 .foregroundStyle(LarderColor.ink.primary)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityLabel(name)
                 .accessibilityValue(TimerFormat.spoken(timer.remainingSeconds))
             if let status {

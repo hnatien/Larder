@@ -21,6 +21,8 @@ public nonisolated enum ImportError: Error, Hashable, Sendable {
     case unreadablePhoto
     /// The assistant was asked to read the photo and could not.
     case photoAssistantFailed(LarderError)
+    /// A written recipe needs a title and at least one ingredient or step.
+    case noWrittenRecipe
 }
 
 /// A recipe ready to preview and save.
@@ -31,6 +33,8 @@ public nonisolated struct ImportResult: Hashable, Sendable {
         case assistant
         /// Read from a photo of a recipe page or card.
         case photo
+        /// Typed or pasted by the cook.
+        case written
     }
 
     public var recipe: Recipe
@@ -109,6 +113,31 @@ nonisolated struct RecipeImporter: Sendable {
             imported.photo = try await photo(at: address, on: url, fetch: fetch)
         }
         return imported
+    }
+
+    /// Builds a recipe from what the cook typed or pasted, on this device and free: one ingredient per line, one step
+    /// per line. Throws `noWrittenRecipe` without a title or without any ingredient or step.
+    func `import`(title: String, ingredients: String, steps: String, minutes: Int?) async throws -> ImportResult {
+        let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lines = Self.lines(ingredients).map { line in
+            let parsed = IngredientLineParser.parse(line)
+            return ParsedIngredient(rawText: line, name: parsed.name, quantity: parsed.quantity, unit: parsed.unit)
+        }
+        let method = Self.lines(steps).map { RecipeStep(text: $0, timerSeconds: TimerDetector.seconds(in: $0)) }
+        guard !title.isEmpty, !lines.isEmpty || !method.isEmpty else { throw ImportError.noWrittenRecipe }
+        let parsed = ParsedRecipe(title: title, cookMinutes: minutes.flatMap { $0 > 0 ? $0 : nil }, ingredients: lines, steps: method)
+        return await result(from: StructuredRecipe(recipe: parsed, tags: RecipeTags()), url: nil, source: .written)
+    }
+
+    /// The non-blank lines of `text`, trimmed, with list markers such as "-" or "1." taken off.
+    static func lines(_ text: String) -> [String] {
+        text.split(whereSeparator: \.isNewline).compactMap { line in
+            var trimmed = line.trimmingCharacters(in: .whitespaces)
+            if let marker = trimmed.firstMatch(of: /^(?:[-*\u{2022}]|\d+[.)])\s+/) {
+                trimmed.removeSubrange(marker.range)
+            }
+            return trimmed.isEmpty ? nil : trimmed
+        }
     }
 
     /// Reads the recipe in a photo of a page or card, for Plus users. The assistant reads it on this device first

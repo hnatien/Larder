@@ -11,6 +11,8 @@ public struct CookingModeView: View {
     @State private var session: CookingSession
     @State private var isFlashing = false
     @State private var showsIngredients = false
+    @State private var isConfirmingClose = false
+    @Binding private var ticked: Set<IngredientID>
     @AccessibilityFocusState private var focusedStep: Int?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -18,12 +20,19 @@ public struct CookingModeView: View {
     private let ingredients: [Ingredient]
     private let onFinish: (() -> Void)?
 
-    /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step, and `onFinish` runs
-    /// when Finish on the last step is tapped, before cooking mode closes. Closing with the cross does not run it.
-    public init(recipe: Recipe, ingredients: [Ingredient], onFinish: (() -> Void)? = nil) {
+    /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step, `ticked` the lines
+    /// already gathered, shared with the recipe's own list, and `onFinish` runs when Finish on the last step is tapped,
+    /// before cooking mode closes. Closing with the cross does not run it.
+    public init(
+        recipe: Recipe,
+        ingredients: [Ingredient],
+        ticked: Binding<Set<IngredientID>> = .constant([]),
+        onFinish: (() -> Void)? = nil
+    ) {
         _session = State(initialValue: CookingSession(
             recipe: recipe, ingredients: ingredients, notifications: SystemTimerNotifications()
         ))
+        _ticked = ticked
         self.ingredients = ingredients
         self.onFinish = onFinish
     }
@@ -54,9 +63,15 @@ public struct CookingModeView: View {
         }
         .sensoryFeedback(.success, trigger: session.finishCount) { _, _ in flashesAndVibrates }
         .sheet(isPresented: $showsIngredients) {
-            IngredientsSheet(ingredients: ingredients)
+            IngredientsSheet(ingredients: ingredients, ticked: $ticked)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
+        }
+        .confirmationDialog(RecipesCopy.stopCookingQuestion, isPresented: $isConfirmingClose, titleVisibility: .visible) {
+            Button(RecipesCopy.stopCooking, role: .destructive) { dismiss() }
+            Button(RecipesCopy.keepCooking, role: .cancel) {}
+        } message: {
+            Text(RecipesCopy.stopCookingMessage)
         }
         .alert(RecipesCopy.timerNotificationsTitle, isPresented: $session.asksForNotificationPermission) {
             Button(RecipesCopy.continueAction) {
@@ -92,7 +107,8 @@ public struct CookingModeView: View {
         VStack(alignment: .leading, spacing: LarderSpacing.s) {
             HStack(spacing: LarderSpacing.m) {
                 Button {
-                    dismiss()
+                    // A running timer would be lost, so leaving asks first.
+                    if session.hasActiveTimers { isConfirmingClose = true } else { dismiss() }
                 } label: {
                     Image(systemName: "xmark")
                         .font(LarderFont.body(.body, weight: .semibold))
@@ -112,7 +128,13 @@ public struct CookingModeView: View {
                     Button {
                         showsIngredients = true
                     } label: {
-                        Label(RecipesCopy.ingredients, systemImage: "list.bullet")
+                        // Plain text, not a Label, so it wraps at the largest sizes instead of clipping.
+                        HStack(spacing: LarderSpacing.xs) {
+                            Image(systemName: "list.bullet")
+                                .accessibilityHidden(true)
+                            Text(RecipesCopy.ingredients)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                     .buttonStyle(.larderSecondary)
                 }
@@ -214,10 +236,11 @@ public struct CookingModeView: View {
     }
 }
 
-/// Every ingredient at the chosen servings, to glance at without leaving the step; tap to tick one off.
+/// Every ingredient at the chosen servings, to glance at without leaving the step; tap to tick one off. Ticks are the
+/// recipe screen's, so what was gathered there stays ticked here.
 private struct IngredientsSheet: View {
     let ingredients: [Ingredient]
-    @State private var ticked: Set<IngredientID> = []
+    @Binding var ticked: Set<IngredientID>
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -276,22 +299,25 @@ private struct StepPage: View {
                         Image(systemName: "basket")
                             .foregroundStyle(LarderColor.accent.second)
                     }
-                    .font(LarderFont.body(.body))
-                    .foregroundStyle(LarderColor.ink.secondary)
+                    .font(LarderFont.body(.title3, weight: .medium))
+                    .foregroundStyle(LarderColor.ink.primary)
                     .padding(LarderSpacing.m)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(LarderColor.surface.raised, in: RoundedRectangle(cornerRadius: LarderRadius.card, style: .continuous))
                 }
+                // The timer sits above the text, so it can be started without reading to the end of a long step.
+                if let timer {
+                    TimerControl(timer: timer, name: RecipesCopy.stepTimerName(number))
+                }
+                // Read at arm's length: the largest display size that still leaves room for a long step.
                 Text(step.text)
-                    .font(LarderFont.display(.title2))
+                    .font(LarderFont.display(.largeTitle))
+                    .lineSpacing(LarderSpacing.xs)
                     .foregroundStyle(LarderColor.ink.primary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityLabel(RecipesCopy.stepPosition(number, of: count) + ". " + step.text)
                     .accessibilityFocused(focus, equals: index)
-                if let timer {
-                    TimerControl(timer: timer, name: RecipesCopy.stepTimerName(number))
-                }
             }
             .padding(LarderSpacing.l)
             .frame(maxWidth: .infinity, alignment: .leading)

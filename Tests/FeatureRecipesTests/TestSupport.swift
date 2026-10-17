@@ -19,8 +19,12 @@ enum Fixture {
 
 struct StoreFailure: Error {}
 
-actor FakeStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository {
+actor FakeStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepository, PantryRepository, RecipeMarkRepository {
     var recipes: [Recipe]
+    var pantryItems: [PantryItem] = []
+    var favouriteIDs: Set<RecipeID> = []
+    var hiddenIDs: Set<RecipeID> = []
+    var failMarks = false
     var ingredientsByRecipe: [RecipeID: [Ingredient]]
     var foodList: [Food]
     var profileValue: UserProfile?
@@ -53,10 +57,31 @@ actor FakeStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepo
     func setFailDelete(_ value: Bool) { failDelete = value }
     func setFailPhotoSave(_ value: Bool) { failPhotoSave = value }
     func setProfile(_ value: UserProfile?) { profileValue = value }
+    func setPantry(_ items: [PantryItem]) { pantryItems = items }
+    func setFailMarks(_ value: Bool) { failMarks = value }
 
     func all() throws -> [Recipe] {
         if failReads { throw StoreFailure() }
-        return recipes
+        return recipes.filter { !hiddenIDs.contains($0.id) }
+    }
+
+    func items() -> [PantryItem] { pantryItems }
+    func upsert(_ item: PantryItem) { pantryItems.append(item) }
+    func remove(_ id: PantryItemID) { pantryItems.removeAll { $0.id == id } }
+    func consume(foodID: FoodID, grams: Double) -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) {}
+    func removeEvents(_ ids: [PantryEventID]) {}
+    func events(from start: Date, to end: Date) -> [PantryEvent] { [] }
+
+    func favourites() throws -> Set<RecipeID> { favouriteIDs }
+    func setFavourite(_ id: RecipeID, _ isFavourite: Bool) throws {
+        if failMarks { throw StoreFailure() }
+        if isFavourite { favouriteIDs.insert(id) } else { favouriteIDs.remove(id) }
+    }
+    func hiddenRecipes() -> [Recipe] { recipes.filter { hiddenIDs.contains($0.id) } }
+    func setHidden(_ id: RecipeID, _ isHidden: Bool) throws {
+        if failMarks { throw StoreFailure() }
+        if isHidden { hiddenIDs.insert(id) } else { hiddenIDs.remove(id) }
     }
 
     func search(text: String, limit: Int) throws -> [Recipe] {
@@ -173,7 +198,10 @@ enum Sample {
         assistant: FakeAssistant = FakeAssistant(),
         isPlus: @escaping @Sendable () async -> Bool = { false }
     ) -> RecipesModel {
-        RecipesModel(recipes: store, photos: store, foods: store, profile: store, assistant: assistant, isPlus: isPlus)
+        RecipesModel(
+            recipes: store, photos: store, foods: store, profile: store, pantry: store, marks: store,
+            assistant: assistant, isPlus: isPlus
+        )
     }
 
     static func html(recipeJSON: String) -> String {
