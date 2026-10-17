@@ -14,7 +14,7 @@ nonisolated enum LedgerCopy {
     static var planSubtitle: String { String(localized: "Dinners for the next seven days", bundle: Copy.bundle) }
     static var replanQuestion: String { String(localized: "Replan the week?", bundle: Copy.bundle) }
     static var replanMessage: String {
-        String(localized: "Unlocked dinners are chosen again from what you have. Locked ones stay where they are.", bundle: Copy.bundle)
+        String(localized: "Unlocked dinners are chosen again from what you have. Locked and cooked ones stay where they are.", bundle: Copy.bundle)
     }
     static var moreActions: String { String(localized: "More", bundle: Copy.bundle) }
     static var balanceLegend: String {
@@ -26,6 +26,7 @@ nonisolated enum LedgerCopy {
     static var whyThisWeek: String { String(localized: "Why this week?", bundle: Copy.bundle) }
     static var whyThis: String { String(localized: "Why this?", bundle: Copy.bundle) }
     static var nothingFits: String { String(localized: "No dinner planned", bundle: Copy.bundle) }
+    static var nothingFitsTitle: String { String(localized: "Nothing fits tonight", bundle: Copy.bundle) }
     static var nothingFitsTonight: String {
         String(localized: "Nothing in your pantry fits your settings tonight. Add a few more things and Larder will look again.", bundle: Copy.bundle)
     }
@@ -40,14 +41,29 @@ nonisolated enum LedgerCopy {
     static var useThis: String { String(localized: "Use this", bundle: Copy.bundle) }
     static var done: String { String(localized: "Done", bundle: Copy.bundle) }
     static var dismiss: String { String(localized: "Dismiss", bundle: Copy.bundle) }
-    static var emptyShelvesTitle: String { String(localized: "Your pantry is empty", bundle: Copy.bundle) }
+    static var tryAgain: String { String(localized: "Try again", bundle: Copy.bundle) }
+    static var emptyShelvesTitle: String { String(localized: "Nothing to cook from yet", bundle: Copy.bundle) }
+    static var tonightLoadFailed: String {
+        String(localized: "Couldn't load tonight's ideas. Your pantry and plan are safe.", bundle: Copy.bundle)
+    }
+    static var noOtherIdeas: String {
+        String(localized: "Nothing else in your pantry fits tonight.", bundle: Copy.bundle)
+    }
+    static var noRulesReminder: String {
+        String(localized: "Nothing is left out yet. Add allergies or a diet in Settings and every idea leaves them out.", bundle: Copy.bundle)
+    }
+    static var markPlanned: String { String(localized: "Put back on the plan", bundle: Copy.bundle) }
+    static var weekOver: String {
+        String(localized: "This week has ended. Plan the next seven days when you're ready.", bundle: Copy.bundle)
+    }
+    static var cookedTonight: String { String(localized: "Cooked", bundle: Copy.bundle) }
+    static var replaceKeep: String { String(localized: "Keep it", bundle: Copy.bundle) }
     static var noPlanTitle: String { String(localized: "No plan yet", bundle: Copy.bundle) }
     static var noPlanMessage: String {
         String(localized: "Larder picks seven dinners from what you have and writes the grocery list. You can swap, skip or move any of them.", bundle: Copy.bundle)
     }
     static var shelfHeading: String { String(localized: "Nutrition balance", bundle: Copy.bundle) }
     static var perDayHeading: String { String(localized: "Per day on average", bundle: Copy.bundle) }
-    static var onForTonight: String { String(localized: "On for tonight", bundle: Copy.bundle) }
     static var noSwaps: String { String(localized: "Nothing else fits this slot right now.", bundle: Copy.bundle) }
     static var planning: String { String(localized: "Planning the week", bundle: Copy.bundle) }
     static var explaining: String { String(localized: "Working out the reasons", bundle: Copy.bundle) }
@@ -65,7 +81,7 @@ nonisolated enum LedgerCopy {
     static var proposalTitle: String { String(localized: "Changes for this week", bundle: Copy.bundle) }
     static var applyAndReplan: String { String(localized: "Apply and replan", bundle: Copy.bundle) }
     static var adjustNeedsConsent: String {
-        String(localized: "Adjusting the week uses Larder's assistant. Allow AI help in Settings first.", bundle: Copy.bundle)
+        String(localized: "Adjusting the week uses AI help, which is off.", bundle: Copy.bundle)
     }
     static var openSettings: String { String(localized: "Open Settings", bundle: Copy.bundle) }
     static var assistantAsks: String { String(localized: "The assistant asks", bundle: Copy.bundle) }
@@ -180,6 +196,35 @@ nonisolated enum LedgerCopy {
         String(localized: "Use \(title)", bundle: Copy.bundle)
     }
 
+    /// The question before an idea replaces the dinner already planned for tonight.
+    static func replaceTonight(_ planned: String) -> String {
+        String(localized: "\(planned) is on for tonight. Cook this instead?", bundle: Copy.bundle)
+    }
+
+    static func cookInstead(_ title: String) -> String {
+        String(localized: "Cook \(title) instead", bundle: Copy.bundle)
+    }
+
+    /// The pill on tonight's dinner when it is a leftover: the weekday the dish was cooked.
+    static func leftoversFrom(_ dayName: String) -> String {
+        String(localized: "Leftovers from \(dayName)", bundle: Copy.bundle)
+    }
+
+    /// The toast after a skip or a move, which offers Undo.
+    static func changed(_ undo: MealChangeUndo, dayName: (Date) -> String) -> String {
+        let dish = undo.title
+        switch undo.kind {
+        case .skipped:
+            return String(localized: "\(dish) skipped", bundle: Copy.bundle)
+        case .moved(let date, nil):
+            let weekday = dayName(date)
+            return String(localized: "\(dish) moved to \(weekday)", bundle: Copy.bundle)
+        case .moved(let date, let other?):
+            let weekday = dayName(date)
+            return String(localized: "\(dish) moved to \(weekday). \(other) takes its place.", bundle: Copy.bundle)
+        }
+    }
+
     static func cookingTonight(_ title: String) -> String {
         String(localized: "\(title) is on for tonight.", bundle: Copy.bundle)
     }
@@ -230,7 +275,7 @@ nonisolated enum LedgerCopy {
         case .invalidResponse, .declined:
             String(localized: "The assistant couldn't explain this week. The reasons are under each meal.", bundle: Copy.bundle)
         case .consentRequired:
-            String(localized: "Cloud help is switched off. The reasons are under each meal.", bundle: Copy.bundle)
+            String(localized: "AI help is off. The reasons are under each meal.", bundle: Copy.bundle)
         case .plusRequired:
             String(localized: "That needs Larder Plus.", bundle: Copy.bundle)
         }

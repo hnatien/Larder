@@ -317,6 +317,90 @@ import Testing
         #expect(model.meals.first { $0.id == meals[1].id }?.date == Fixtures.day(0))
     }
 
+    @Test func skipOffersAnUndoThatPutsTheMealBack() async throws {
+        let (model, meals) = await loaded { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0)] }
+        await model.skip(meals[0])
+        let undo = try #require(model.changeUndo)
+        #expect(undo.kind == .skipped)
+        #expect(undo.title == Fixtures.lentilSoup.recipe.title)
+
+        await model.undoChange()
+
+        #expect(model.changeUndo == nil)
+        #expect(model.meals[0].status == .planned)
+        #expect(await world.plans.meals(for: meals[0].planID)[0].status == .planned)
+    }
+
+    @Test func markPlannedPutsASkippedMealBack() async {
+        let (model, meals) = await loaded { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0, status: .skipped)] }
+        await model.markPlanned(meals[0])
+        #expect(model.meals[0].status == .planned)
+        #expect(await world.plans.meals(for: meals[0].planID)[0].status == .planned)
+    }
+
+    @Test func markPlannedLeavesACookedMealAlone() async {
+        let (model, meals) = await loaded { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0, status: .cooked)] }
+        await model.markPlanned(meals[0])
+        #expect(model.meals[0].status == .cooked)
+    }
+
+    @Test func skippingTwiceOffersNoSecondUndo() async {
+        let (model, meals) = await loaded { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0, status: .skipped)] }
+        await model.skip(meals[0])
+        #expect(model.changeUndo == nil)
+    }
+
+    @Test func moveOffersAnUndoNamingTheSwappedDinner() async throws {
+        let (model, meals) = await loaded { plan in
+            [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0), Fixtures.meal(Fixtures.beefRagu, in: plan, day: 2)]
+        }
+        await model.moveMeal(meals[0], to: Fixtures.day(2))
+        let undo = try #require(model.changeUndo)
+        #expect(undo.kind == .moved(to: Fixtures.day(2), swappedWith: Fixtures.beefRagu.recipe.title))
+
+        await model.undoChange()
+
+        #expect(model.meals.first { $0.id == meals[0].id }?.date == Fixtures.day(0))
+        #expect(model.meals.first { $0.id == meals[1].id }?.date == Fixtures.day(2))
+        #expect(await world.plans.meals(for: meals[0].planID).first { $0.id == meals[1].id }?.date == Fixtures.day(2))
+    }
+
+    @Test func moveToAnEmptyDayNamesNoOtherDinner() async throws {
+        let (model, meals) = await loaded { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0)] }
+        await model.moveMeal(meals[0], to: Fixtures.day(4))
+        #expect(model.changeUndo?.kind == .moved(to: Fixtures.day(4), swappedWith: nil))
+    }
+
+    @Test func replanKeepsTodaysCookedDinner() async throws {
+        let world = World()
+        let model = world.ledger()
+        await model.planWeek()
+        let tonight = try #require(model.meals.first { $0.leftoverOf == nil && $0.date == Fixtures.today })
+        await model.markCooked(tonight)
+        model.dismissCookUndo()
+
+        await model.replan(keepingLocked: true)
+
+        let kept = try #require(model.meals.first { $0.id == tonight.id })
+        #expect(kept.status == .cooked)
+        #expect(kept.recipeID == tonight.recipeID)
+    }
+
+    @Test func pastDaysOfferNoOpenSlot() async {
+        let (_, _) = await world.seed(Fixtures.plan(start: Fixtures.day(-2))) { _ in [] }
+        let model = world.ledger()
+        await model.load()
+        #expect(model.days.map(\.openSlots.isEmpty) == [true, true, false, false, false, false, false])
+        #expect(!model.isWeekOver)
+    }
+
+    @Test func aPlanThatEndedBeforeTodayIsOver() async {
+        let (_, _) = await world.seed(Fixtures.plan(start: Fixtures.day(-7))) { _ in [] }
+        let model = world.ledger()
+        await model.load()
+        #expect(model.isWeekOver)
+    }
+
     @Test func leftoverTagCountsFromTheCookedMeal() async throws {
         let (model, meals) = await loaded { plan in
             let cooked = Fixtures.meal(Fixtures.chickpeaCurry, in: plan, day: 0, servings: 4)
@@ -437,6 +521,15 @@ import Testing
         let model = world.ledger()
         await model.load()
         return (model, seeded)
+    }
+
+    @Test func undoingASkipDropsTheRepairItPrompted() async throws {
+        let (model, meals) = await loadedWithLeftover()
+        await model.skip(meals[0])
+        #expect(model.proposedRepair != nil)
+        await model.undoChange()
+        #expect(model.proposedRepair == nil)
+        #expect(model.meals.first { $0.id == meals[0].id }?.status == .planned)
     }
 
     @Test func skipProposesARepairWithoutApplyingIt() async throws {

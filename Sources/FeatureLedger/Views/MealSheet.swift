@@ -123,10 +123,16 @@ struct MealSheet: View {
                 }
                 .disabled(meal.status == .cooked)
                 Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
-                ActionRow(title: Copy.Action.skip, systemImage: "forward") {
-                    Task { await model.skip(meal) }
+                if meal.status == .skipped {
+                    ActionRow(title: LedgerCopy.markPlanned, systemImage: "arrow.uturn.backward") {
+                        Task { await model.markPlanned(meal) }
+                    }
+                } else {
+                    ActionRow(title: Copy.Action.skip, systemImage: "forward") {
+                        Task { await model.skip(meal) }
+                    }
+                    .disabled(meal.status == .cooked)
                 }
-                .disabled(meal.status == .skipped)
                 Divider().overlay(LarderColor.line.hairline).padding(.leading, LarderSpacing.l)
                 ActionRow(title: meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock, systemImage: meal.isLocked ? "lock.open" : "lock") {
                     Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }

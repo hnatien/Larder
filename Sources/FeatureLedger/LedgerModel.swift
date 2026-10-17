@@ -30,9 +30,6 @@ public nonisolated struct LedgerDay: Identifiable, Hashable, Sendable {
 
 /// A cooked meal whose cooking can still be taken back.
 public nonisolated struct CookedMealUndo: Identifiable, Hashable, Sendable {
-    /// How long the undo stays on offer.
-    public static let lifetime: Duration = .seconds(5)
-
     public let id = UUID()
     /// The meal as it was before it was marked cooked; `nil` for a recipe cooked outside the plan.
     public let meal: PlannedMeal?
@@ -40,6 +37,23 @@ public nonisolated struct CookedMealUndo: Identifiable, Hashable, Sendable {
     public let title: String
     /// What cooking took off the shelves.
     public let draw: ShelfDraw
+}
+
+/// A meal change the toast can still take back: a skip, or a move to another day.
+public nonisolated struct MealChangeUndo: Identifiable, Hashable, Sendable {
+    /// What happened, for the toast.
+    public enum Kind: Hashable, Sendable {
+        case skipped
+        /// Moved to `date`; `swappedWith` is the dinner that was there and took the meal's old day.
+        case moved(to: Date, swappedWith: String?)
+    }
+
+    public let id = UUID()
+    public let kind: Kind
+    /// The meal's title, for the toast.
+    public let title: String
+    /// The meals the change touched, as they were before it.
+    public let before: [PlannedMeal]
 }
 
 /// One change of a proposed repair as the ledger shows it.
@@ -94,6 +108,8 @@ public final class LedgerModel {
     public private(set) var unmetAdjustmentDays: [Date] = []
     /// The last cooking, while it can still be undone.
     public private(set) var cookUndo: CookedMealUndo?
+    /// The last skip or move, while it can still be undone.
+    public private(set) var changeUndo: MealChangeUndo?
 
     /// Changes for the rest of the week after a skip, a day left uncooked or a lost food, waiting for the user to
     /// apply them or not; never applied on its own.
@@ -111,6 +127,10 @@ public final class LedgerModel {
     private let profileRepository: any ProfileRepository
     /// Meal identifiers in the order of the last explain request, so meal notes map back to meals.
     private var explainedMealIDs: [PlannedMealID] = []
+    /// Ingredient lines of the recipes in view, so reasons can name the pantry foods a recipe uses.
+    private var ingredientsByRecipe: [RecipeID: [Ingredient]] = [:]
+    /// The foods on the shelves at the last load.
+    private var pantryFoods: Set<FoodID> = []
     /// The meals `proposedRepair` was worked out from, and the skips it answers; a proposal for other meals is stale.
     private var repairBase: [PlannedMeal] = []
     private var repairSkipped: Set<PlannedMealID> = []
@@ -160,13 +180,22 @@ public final class LedgerModel {
                 .sorted { Self.slotOrder($0.slot) < Self.slotOrder($1.slot) }
                 .map { ledgerMeal($0, source: $0.leftoverOf.flatMap { byID[$0] }) }
             let filled = Set(dayMeals.map(\.meal.slot))
+            let isPast = date < calendar.startOfDay(for: dates.now)
             return LedgerDay(
                 date: date,
                 isToday: calendar.isDate(date, inSameDayAs: dates.now),
                 meals: dayMeals,
-                openSlots: Self.plannedSlots.filter { !filled.contains($0) }
+                openSlots: isPast ? [] : Self.plannedSlots.filter { !filled.contains($0) }
             )
         }
+    }
+
+    /// Whether every day of the plan is behind today, so the plan on screen is last week's.
+    public var isWeekOver: Bool {
+        guard let plan, let end = calendar.date(byAdding: .day, value: plan.days, to: calendar.startOfDay(for: plan.startDate)) else {
+            return false
+        }
+        return end <= calendar.startOfDay(for: dates.now)
     }
 
     /// The week's food-group bands, once the plan has been verified.
@@ -207,12 +236,12 @@ public final class LedgerModel {
 
     /// Reason lines for a meal, from its reason codes.
     public func reasons(for meal: PlannedMeal, limit: Int = .max) -> [String] {
-        ReasonCopy.lines(for: meal.reasonCodes, lookup: reasonLookup, limit: limit)
+        ReasonCopy.lines(for: meal.reasonCodes, lookup: reasonLookup(using: ingredientsByRecipe[meal.recipeID] ?? []), limit: limit)
     }
 
     /// Reason lines for a candidate recipe.
     public func reasons(for option: ScoredRecipe, limit: Int = .max) -> [String] {
-        ReasonCopy.lines(for: option.reasonCodes, lookup: reasonLookup, limit: limit)
+        ReasonCopy.lines(for: option.reasonCodes, lookup: reasonLookup(using: option.candidate.ingredients), limit: limit)
     }
 
     /// The assistant's note for `meal`, when the last explanation has one.
@@ -222,10 +251,16 @@ public final class LedgerModel {
     }
 
     private var reasonLookup: ReasonCopy.Lookup {
+        reasonLookup(using: [])
+    }
+
+    /// The lookup for one recipe's reasons: `ingredients` decide which pantry foods its overlap reason names.
+    private func reasonLookup(using ingredients: [Ingredient]) -> ReasonCopy.Lookup {
         ReasonCopy.Lookup(
             foodNames: foodsByID.mapValues(\.name),
             mealDates: Dictionary(meals.map { ($0.id, $0.date) }, uniquingKeysWith: { first, _ in first }),
-            calendar: calendar
+            calendar: calendar,
+            pantryFoods: PlanningService.pantryFoods(in: ingredients, pantry: pantryFoods)
         )
     }
 
@@ -287,11 +322,15 @@ public final class LedgerModel {
         }
         let catalogue = try await service.catalogue(for: Set(meals.map(\.recipeID)))
         remember(catalogue)
+        pantryFoods = try await service.pantryFoodIDs()
         verification = try await service.verify(meals: meals, days: plan.days, catalogue: catalogue)
     }
 
     private func remember(_ catalogue: PlanningCatalogue) {
-        for candidate in catalogue.candidates { recipesByID[candidate.recipe.id] = candidate.recipe }
+        for candidate in catalogue.candidates {
+            recipesByID[candidate.recipe.id] = candidate.recipe
+            ingredientsByRecipe[candidate.recipe.id] = candidate.ingredients
+        }
         foodsByID.merge(catalogue.foods) { _, new in new }
     }
 
@@ -304,7 +343,12 @@ public final class LedgerModel {
 
     /// Generates a fresh week from today, keeping locked meals when asked.
     public func replan(keepingLocked: Bool) async {
-        await generate(locked: keepingLocked ? meals.filter(\.isLocked) : [])
+        await generate(locked: keepingLocked ? kept : [])
+    }
+
+    /// Meals a replan leaves alone: locked ones, and cooked ones, since what was cooked stays cooked.
+    private var kept: [PlannedMeal] {
+        meals.filter { $0.isLocked || $0.status == .cooked }
     }
 
     private func generate(locked: [PlannedMeal], adjustment: WeekAdjustment? = nil) async {
@@ -409,12 +453,28 @@ public final class LedgerModel {
         }
     }
 
+    /// Turns on AI help after the user allowed it from the consent sheet, then asks again for the adjustment that
+    /// needed it.
+    public func allowAIHelp() async {
+        do {
+            guard var profile = try await profileRepository.profile() else { throw LarderError.notFound }
+            profile.consents.aiProcessing = true
+            try await profileRepository.save(profile)
+            self.profile = profile
+        } catch {
+            adjustError = error as? LarderError ?? .storageFailure
+            return
+        }
+        adjustNeedsConsent = false
+        await requestAdjustment()
+    }
+
     /// Replans the week with the proposed changes, keeping locked dinners; Settings stay as they are.
     public func applyAdjustment() async {
         guard let adjustment = proposedAdjustment, !adjustment.isEmpty else { return }
         proposedAdjustment = nil
         adjustQuestion = nil
-        await generate(locked: meals.filter(\.isLocked), adjustment: adjustment)
+        await generate(locked: kept, adjustment: adjustment)
         if error == nil, !paywallRequested { adjustDraft = "" }
     }
 
@@ -617,9 +677,46 @@ public final class LedgerModel {
     /// Marks a meal as skipped; it dims, stops counting towards the shelf, and the rest of the week gets a repair to
     /// apply or not.
     public func skip(_ meal: PlannedMeal) async {
-        guard await update(meal, { $0.status = .skipped }) else { return }
+        guard let current = meals.first(where: { $0.id == meal.id }), current.status != .skipped else { return }
+        guard await update(current, { $0.status = .skipped }) else { return }
+        changeUndo = MealChangeUndo(kind: .skipped, title: recipesByID[current.recipeID]?.title ?? "", before: [current])
         await reverify()
         await proposeRepair(skipped: (proposedRepair == nil ? [] : repairSkipped).union([meal.id]))
+    }
+
+    /// Puts a skipped meal back on the plan; the repair its skip prompted is worked out again without it.
+    public func markPlanned(_ meal: PlannedMeal) async {
+        guard let current = meals.first(where: { $0.id == meal.id }), current.status == .skipped else { return }
+        guard await update(current, { $0.status = .planned }) else { return }
+        if changeUndo?.before.contains(where: { $0.id == current.id }) == true { changeUndo = nil }
+        await reverify()
+        await reconsiderRepair(withoutSkip: current.id)
+    }
+
+    /// Takes back the last skip or move: the meals it touched return to how they were.
+    public func undoChange() async {
+        guard let undo = changeUndo else { return }
+        changeUndo = nil
+        for meal in undo.before {
+            let before = meal
+            guard await update(meal, { $0 = before }) else { return }
+        }
+        await reverify()
+        if case .skipped = undo.kind, let meal = undo.before.first { await reconsiderRepair(withoutSkip: meal.id) }
+    }
+
+    /// Lets the last skip or move stand.
+    public func dismissChangeUndo() {
+        changeUndo = nil
+    }
+
+    /// Drops a skip from the pending repair: the repair is worked out again for the skips left, or cleared.
+    private func reconsiderRepair(withoutSkip id: PlannedMealID) async {
+        guard proposedRepair != nil, repairSkipped.contains(id) else { return }
+        let rest = repairSkipped.subtracting([id])
+        proposedRepair = nil
+        repairSkipped = []
+        if !rest.isEmpty { await proposeRepair(skipped: rest) }
     }
 
     /// Pins a meal so replanning keeps it.
@@ -633,14 +730,21 @@ public final class LedgerModel {
     }
 
     /// Slides a meal to another day; a meal already in that day's slot trades places with it.
+    /// `changeUndo` says where it went and what it swapped with, and can take it back.
     public func moveMeal(_ meal: PlannedMeal, to date: Date) async {
         guard let current = meals.first(where: { $0.id == meal.id }),
               !calendar.isDate(current.date, inSameDayAs: date)
         else { return }
-        if let occupant = meals.first(where: { $0.id != meal.id && $0.slot == meal.slot && calendar.isDate($0.date, inSameDayAs: date) }) {
+        let occupant = meals.first { $0.id != meal.id && $0.slot == meal.slot && calendar.isDate($0.date, inSameDayAs: date) }
+        if let occupant {
             guard await update(occupant, { $0.date = current.date }) else { return }
         }
-        await update(meal) { $0.date = date }
+        guard await update(current, { $0.date = date }) else { return }
+        changeUndo = MealChangeUndo(
+            kind: .moved(to: date, swappedWith: occupant.flatMap { recipesByID[$0.recipeID]?.title }),
+            title: recipesByID[current.recipeID]?.title ?? "",
+            before: [current] + (occupant.map { [$0] } ?? [])
+        )
     }
 
     /// Loads replacements for `meal` into `swapCandidates`.

@@ -23,7 +23,8 @@ public struct LedgerView: View {
     private let onOpenAccount: (() -> Void)?
     @State private var sheet: LedgerSheet?
     @State private var isConfirmingReplan = false
-    @State private var showsSavedToast = false
+    /// Set when a plan is saved, so the toast confirms it.
+    @State private var savedToastID: UUID?
     @AccessibilityFocusState private var headingFocused: Bool
     @Namespace private var dayRotor
 
@@ -57,24 +58,7 @@ public struct LedgerView: View {
                         }
                     }
                 }
-                .safeAreaInset(edge: .bottom) {
-                    if let undo = model.cookUndo {
-                        ToastBar(
-                            Copy.Voice.cooked(dish: undo.title, usedPantry: !undo.draw.isEmpty),
-                            actionTitle: Copy.Action.undo
-                        ) {
-                            Task { await model.undoCooked() }
-                        }
-                        .padding(.horizontal, LarderSpacing.l)
-                        .padding(.bottom, LarderSpacing.s)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                    } else if showsSavedToast {
-                        ToastBar(LedgerCopy.planSaved)
-                            .padding(.horizontal, LarderSpacing.l)
-                            .padding(.bottom, LarderSpacing.s)
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                    }
-                }
+                .larderToast(toast, onExpire: expireToast)
                 .confirmationDialog(LedgerCopy.replanQuestion, isPresented: $isConfirmingReplan, titleVisibility: .visible) {
                     Button(LedgerCopy.replan) { Task { await model.replan(keepingLocked: true) } }
                     Button(Copy.Action.notNow, role: .cancel) {}
@@ -97,28 +81,36 @@ public struct LedgerView: View {
             if proposed { AccessibilityNotification.Announcement(LedgerCopy.repairTitle).post() }
         }
         .onChange(of: model.savedPlanCount) {
-            AccessibilityNotification.Announcement(Copy.Voice.planSaved).post()
             headingFocused = true
-            showsSavedToast = true
-        }
-        .task(id: showsSavedToast) {
-            guard showsSavedToast else { return }
-            try? await Task.sleep(for: .seconds(3))
-            showsSavedToast = false
-        }
-        .task(id: model.cookUndo?.id) {
-            guard let undo = model.cookUndo else { return }
-            AccessibilityNotification.Announcement(Copy.Voice.cooked(dish: undo.title, usedPantry: !undo.draw.isEmpty)).post()
-            do {
-                try await Task.sleep(for: CookedMealUndo.lifetime)
-            } catch {
-                return
-            }
-            model.dismissCookUndo()
+            savedToastID = UUID()
         }
         .sensoryFeedback(.success, trigger: model.savedPlanCount)
-        .larderAnimation(LarderMotion.tap, value: showsSavedToast)
-        .larderAnimation(LarderMotion.tap, value: model.cookUndo)
+    }
+
+    /// The one toast on screen: the last cooking or meal change with its Undo, else the saved-plan confirmation.
+    private var toast: LarderToast? {
+        if let undo = model.cookUndo {
+            return LarderToast(id: undo.id, Copy.Voice.cooked(dish: undo.title, usedPantry: !undo.draw.isEmpty), actionTitle: Copy.Action.undo) {
+                Task { await model.undoCooked() }
+            }
+        }
+        if let undo = model.changeUndo {
+            let symbol = if case .skipped = undo.kind { "forward.circle.fill" } else { "calendar.circle.fill" }
+            return LarderToast(id: undo.id, LedgerCopy.changed(undo, dayName: Self.weekday), systemImage: symbol, actionTitle: Copy.Action.undo) {
+                Task { await model.undoChange() }
+            }
+        }
+        return savedToastID.map { LarderToast(id: $0, LedgerCopy.planSaved) }
+    }
+
+    private func expireToast() {
+        if model.cookUndo != nil {
+            model.dismissCookUndo()
+        } else if model.changeUndo != nil {
+            model.dismissChangeUndo()
+        } else {
+            savedToastID = nil
+        }
     }
 
     private var list: some View {
@@ -153,6 +145,8 @@ public struct LedgerView: View {
             }
         }
         .larderAnimation(LarderMotion.layout, value: model.meals)
+        // A new plan settles with the one bounce the app has: the stamp.
+        .larderAnimation(LarderMotion.stamped, value: model.savedPlanCount)
     }
 
     private var header: some View {
@@ -168,7 +162,14 @@ public struct LedgerView: View {
                 .accessibilityFocused($headingFocused)
             }
             if let error = model.error {
-                LedgerNotice(error: error, onDismiss: model.clearError)
+                LedgerNotice(error: error, onRetry: { Task { await model.load() } }, onDismiss: model.clearError)
+            }
+            if model.isWeekOver, !model.isPlanning {
+                InlineBanner(
+                    LedgerCopy.weekOver,
+                    tone: .info,
+                    action: .init(title: Copy.Action.planMyWeek) { Task { await model.planWeek() } }
+                )
             }
             if model.plan == nil, !model.isPlanning {
                 EmptyShelf(
@@ -246,10 +247,16 @@ public struct LedgerView: View {
         }
         .swipeActions(edge: .trailing) {
             if let meal = day.meals.first?.meal {
-                Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
-                    .tint(LarderColor.ink.secondary)
+                // Swap comes first, so a full swipe opens the choices instead of skipping the meal.
                 Button(Copy.Action.swap, systemImage: "arrow.left.arrow.right") { sheet = .meal(meal.id, swapping: true) }
                     .tint(LarderColor.accent.brand)
+                if meal.status == .skipped {
+                    Button(LedgerCopy.markPlanned, systemImage: "arrow.uturn.backward") { Task { await model.markPlanned(meal) } }
+                        .tint(LarderColor.ink.secondary)
+                } else {
+                    Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
+                        .tint(LarderColor.ink.secondary)
+                }
             }
         }
     }
@@ -268,13 +275,16 @@ public struct LedgerView: View {
                     }
                 }
             }
-            .opacity(meal.status == .skipped ? Self.skippedOpacity : 1)
         }
         .buttonStyle(.plain)
         .contextMenu {
             Button(Copy.Action.swap, systemImage: "arrow.left.arrow.right") { sheet = .meal(meal.id, swapping: true) }
             Button(Copy.Action.markCooked, systemImage: "checkmark") { Task { await model.markCooked(meal) } }
-            Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
+            if meal.status == .skipped {
+                Button(LedgerCopy.markPlanned, systemImage: "arrow.uturn.backward") { Task { await model.markPlanned(meal) } }
+            } else {
+                Button(Copy.Action.skip, systemImage: "forward") { Task { await model.skip(meal) } }
+            }
             Button(meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock, systemImage: meal.isLocked ? "lock.open" : "lock") {
                 Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }
             }
@@ -285,7 +295,9 @@ public struct LedgerView: View {
         .accessibilityValue(Self.statusWords(meal).joined(separator: ", "))
         .accessibilityAddTraits(.isButton)
         .accessibilityAction(named: Copy.Action.swap) { sheet = .meal(meal.id, swapping: true) }
-        .accessibilityAction(named: Copy.Action.skip) { Task { await model.skip(meal) } }
+        .accessibilityAction(named: meal.status == .skipped ? LedgerCopy.markPlanned : Copy.Action.skip) {
+            Task { meal.status == .skipped ? await model.markPlanned(meal) : await model.skip(meal) }
+        }
         .accessibilityAction(named: Copy.Action.markCooked) { Task { await model.markCooked(meal) } }
         .accessibilityAction(named: meal.isLocked ? LedgerCopy.unlock : LedgerCopy.lock) {
             Task { meal.isLocked ? await model.unlock(meal) : await model.lock(meal) }
@@ -298,9 +310,6 @@ public struct LedgerView: View {
         }
     }
 
-    /// Skipped meals dim; they are never marked as a failure.
-    static let skippedOpacity = 0.6
-
     static func statusWords(_ meal: PlannedMeal) -> [String] {
         var words: [String] = []
         switch meal.status {
@@ -310,6 +319,10 @@ public struct LedgerView: View {
         }
         if meal.isLocked { words.append(LedgerCopy.locked) }
         return words
+    }
+
+    static func weekday(_ date: Date) -> String {
+        date.formatted(.dateTime.weekday(.wide))
     }
 
     static func shortDay(_ date: Date) -> String {
@@ -373,9 +386,8 @@ private struct OpenSlotLabel: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(LedgerCopy.name(of: slot) + ", " + LedgerCopy.nothingFits)
+        .accessibilityLabel([LedgerCopy.pickOne, LedgerCopy.name(of: slot), LedgerCopy.nothingFits].joined(separator: ", "))
         .accessibilityAddTraits(.isButton)
-        .accessibilityHint(LedgerCopy.pickOne)
     }
 }
 

@@ -52,6 +52,21 @@ public nonisolated struct PlanningService: Sendable {
     }
 
     /// Every stored recipe as a candidate, with its ingredient lines and referenced foods.
+    /// The foods on the shelves now, by identifier; items with no amount left are not counted.
+    public func pantryFoodIDs() async throws -> Set<FoodID> {
+        Set(try await pantry.items().filter { $0.quantityGrams > 0 }.compactMap(\.foodID))
+    }
+
+    /// The foods in `ingredients` that are in `pantry`, in recipe order and once each, garnish left out; what a
+    /// "uses N things you have" reason names.
+    public static func pantryFoods(in ingredients: [Ingredient], pantry: Set<FoodID>) -> [FoodID] {
+        var seen = Set<FoodID>()
+        return ingredients.compactMap { line -> FoodID? in
+            guard !line.isGarnish, let food = line.foodID, pantry.contains(food), seen.insert(food).inserted else { return nil }
+            return food
+        }
+    }
+
     public func candidates() async throws -> [RecipeCandidate] {
         try await catalogue().candidates
     }

@@ -10,6 +10,8 @@ nonisolated enum ReasonCopy {
         var mealDates: [PlannedMealID: Date] = [:]
         var locale: Locale = .current
         var calendar: Calendar = .current
+        /// The foods the recipe uses that are in the pantry, in recipe order, so "uses N things you have" can name them.
+        var pantryFoods: [FoodID] = []
     }
 
     /// One line per code, in order, at most `limit`.
@@ -26,8 +28,15 @@ nonisolated enum ReasonCopy {
                 return String(localized: "Uses what's best by \(dayName)", bundle: Copy.bundle)
             }
             return String(localized: "Uses the \(name) before \(dayName)", bundle: Copy.bundle)
-        case .pantryOverlap(let count):
-            return String(localized: "Uses \(count) things you have", bundle: Copy.bundle)
+        case .pantryOverlap(let total):
+            let names = lookup.pantryFoods.compactMap { lookup.foodNames[$0].map(displayName) }.filter { !$0.isEmpty }
+            guard names.count >= 2 else { return String(localized: "Uses \(total) things you have", bundle: Copy.bundle) }
+            let first = names[0]
+            let second = names[1]
+            let count = names.count - 2
+            return count == 0
+                ? String(localized: "Uses the \(first) and \(second) you have", bundle: Copy.bundle)
+                : String(localized: "Uses the \(first), \(second) and \(count) more you have", bundle: Copy.bundle)
         case .quick(let minutes):
             return String(localized: "On the table in \(minutes) minutes", bundle: Copy.bundle)
         case .varietyCuisine:

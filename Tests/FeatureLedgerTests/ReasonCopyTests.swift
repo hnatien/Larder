@@ -33,6 +33,23 @@ import Testing
         #expect(ReasonCopy.line(for: .pantryOverlap(count: 4), lookup: lookup) == "Uses 4 things you have")
     }
 
+    @Test func pantryOverlapNamesTwoFoods() {
+        var named = lookup
+        named.foodNames[Fixtures.lentils.id] = Fixtures.lentils.name
+        named.pantryFoods = [Fixtures.spinach.id, Fixtures.lentils.id]
+        #expect(ReasonCopy.line(for: .pantryOverlap(count: 2), lookup: named) == "Uses the spinach and red lentils you have")
+    }
+
+    @Test func pantryOverlapNamesTwoAndCountsTheRest() {
+        var named = lookup
+        named.foodNames[Fixtures.lentils.id] = Fixtures.lentils.name
+        named.pantryFoods = [Fixtures.spinach.id, Fixtures.lentils.id, FoodID(), FoodID()]
+        // Foods without a known name are left out of the names and the count.
+        #expect(ReasonCopy.line(for: .pantryOverlap(count: 4), lookup: named) == "Uses the spinach and red lentils you have")
+        named.foodNames[named.pantryFoods[2]] = "Onion, raw"
+        #expect(ReasonCopy.line(for: .pantryOverlap(count: 4), lookup: named) == "Uses the spinach, red lentils and 1 more you have")
+    }
+
     @Test func quickGivesMinutes() {
         #expect(ReasonCopy.line(for: .quick(minutes: 20), lookup: lookup) == "On the table in 20 minutes")
     }

@@ -46,6 +46,58 @@ import Testing
         #expect(model.dinner == nil)
     }
 
+    @Test func aCookedDinnerStaysAndSaysSo() async throws {
+        let world = World()
+        await world.seed { plan in [Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 0, status: .cooked)] }
+        let model = world.tonight()
+        await model.load()
+        let dinner = try #require(model.dinner)
+        #expect(dinner.isCooked)
+        #expect(dinner.leftoverFrom == nil)
+    }
+
+    @Test func aLeftoverDinnerNamesTheDayItWasCooked() async throws {
+        let world = World()
+        await world.seed(Fixtures.plan(start: Fixtures.day(-1))) { plan in
+            let cooked = Fixtures.meal(Fixtures.chickpeaCurry, in: plan, day: 0, servings: 4, status: .cooked)
+            return [cooked, Fixtures.meal(Fixtures.chickpeaCurry, in: plan, day: 1, leftoverOf: cooked.id)]
+        }
+        let model = world.tonight()
+        await model.load()
+        let dinner = try #require(model.dinner)
+        #expect(!dinner.isCooked)
+        #expect(dinner.leftoverFrom == Fixtures.day(-1))
+    }
+
+    @Test func aFailedLoadIsReportedUntilDismissed() async {
+        var world = World()
+        world.profiles.stored = nil
+        let model = world.tonight()
+        await model.load()
+        #expect(model.loadFailed)
+        model.clearError()
+        #expect(!model.loadFailed)
+        #expect(model.error == nil)
+    }
+
+    @Test func overlapReasonsNameThePantryFoods() async throws {
+        let model = World().tonight()
+        await model.load()
+        let option = try #require(model.options.first { option in
+            option.reasonCodes.contains { if case .pantryOverlap = $0 { true } else { false } }
+        })
+        let line = try #require(model.reasons(for: option).first { $0.hasPrefix("Uses the") && $0.hasSuffix("you have") })
+        #expect(!line.contains("things"))
+    }
+
+    @Test func aProfileWithNoRulesIsReported() async {
+        var world = World()
+        world.profiles.storedConstraints = []
+        let model = world.tonight()
+        await model.load()
+        #expect(model.hasNoRules)
+    }
+
     @Test func emptyShelvesAreReported() async {
         var world = World()
         world.pantry = FakePantryRepository(stored: [])

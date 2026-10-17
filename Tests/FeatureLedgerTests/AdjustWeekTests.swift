@@ -147,6 +147,20 @@ struct ReplacingMealTests {
         #expect(await world.assistant.adjustRequests.isEmpty)
     }
 
+    @Test func allowingAIHelpSavesTheConsentAndAsksAgain() async {
+        let world = World(isPlus: true)
+        let model = world.ledger()
+        model.adjustDraft = "vegetarian Tuesday"
+        await model.requestAdjustment()
+        #expect(model.adjustNeedsConsent)
+
+        await model.allowAIHelp()
+
+        #expect(world.profiles.profile()?.consents.aiProcessing == true)
+        #expect(!model.adjustNeedsConsent)
+        #expect(await world.assistant.adjustRequests.count == 1)
+    }
+
     @Test func blankRequestDoesNothing() async {
         let world = consentingWorld()
         let model = world.ledger()

@@ -9,6 +9,10 @@ public struct TonightDinner: Equatable, Sendable {
     public var minutes: Int
     /// The recipe's photo in the photo store, if it has one.
     public var photoFileName: String?
+    /// Whether tonight's dinner has been marked as cooked.
+    public var isCooked = false
+    /// For leftovers, the day the dish was cooked; `nil` for a dinner cooked fresh tonight.
+    public var leftoverFrom: Date?
 }
 
 /// Drives the Tonight tab: tonight's planned dinner, and pantry-first ideas three at a time, offline and deterministic.
@@ -30,9 +34,15 @@ public final class TonightModel {
     public private(set) var shelvesAreEmpty = false
     public private(set) var isLoading = false
     public private(set) var error: LarderError?
+    /// Whether the last load failed, so the screen offers Try again instead of an empty state.
+    public private(set) var loadFailed = false
+    /// Whether the profile has no allergy, diet or health rule, as after "Set up later", so Tonight can say so.
+    public private(set) var hasNoRules = false
     /// Tonight's dinner in the current plan, when there is one and it is not skipped.
     public private(set) var dinner: TonightDinner?
     private var foodsByID: [FoodID: Food] = [:]
+    /// The foods on the shelves at the last load, so reasons can name the ones an idea uses.
+    private var pantryFoods: Set<FoodID> = []
 
     private let plans: any PlanRepository
     private let recipes: any RecipeRepository
@@ -87,18 +97,26 @@ public final class TonightModel {
         isLoading = true
         defer { isLoading = false }
         do {
-            shelvesAreEmpty = try await pantry.items().isEmpty
+            let shelves = try await pantry.items()
+            shelvesAreEmpty = shelves.isEmpty
+            hasNoRules = try await profiles.constraints().isEmpty
+            pantryFoods = Set(shelves.filter { $0.quantityGrams > 0 }.compactMap(\.foodID))
             dinner = try await loadDinner()
             let found = try await service.tonight(limit: Self.poolLimit)
-            let foodIDs = Set(found.flatMap(\.reasonCodes).compactMap { code -> FoodID? in
+            var foodIDs = Set(found.flatMap(\.reasonCodes).compactMap { code -> FoodID? in
                 if case .usesExpiring(let food, _) = code { food } else { nil }
             })
+            for option in found {
+                foodIDs.formUnion(PlanningService.pantryFoods(in: option.candidate.ingredients, pantry: pantryFoods))
+            }
             let named = try await foods.foods(byIDs: Array(foodIDs))
             foodsByID = Dictionary(named.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
             pool = found
             if page * Self.optionLimit >= ideas.count { page = 0 }
+            loadFailed = false
         } catch {
             record(error)
+            if !(error is CancellationError) { loadFailed = true }
         }
     }
 
@@ -144,17 +162,22 @@ public final class TonightModel {
     public func reasons(for option: ScoredRecipe, limit: Int = .max) -> [String] {
         ReasonCopy.lines(
             for: option.reasonCodes,
-            lookup: ReasonCopy.Lookup(foodNames: foodsByID.mapValues(\.name), calendar: calendar),
+            lookup: ReasonCopy.Lookup(
+                foodNames: foodsByID.mapValues(\.name),
+                calendar: calendar,
+                pantryFoods: PlanningService.pantryFoods(in: option.candidate.ingredients, pantry: pantryFoods)
+            ),
             limit: limit
         )
     }
 
-    /// Clears the current error.
+    /// Clears the current error, and the failed-load notice with it.
     public func clearError() {
         error = nil
+        loadFailed = false
     }
 
-    /// Today's dinner in the active plan, skipping a skipped one.
+    /// Today's dinner in the active plan, skipping a skipped one; a cooked one and a leftover say so.
     private func loadDinner() async throws -> TonightDinner? {
         let today = calendar.startOfDay(for: dates.now)
         guard let plan = try await plans.currentPlan(), covers(plan, today) else { return nil }
@@ -166,7 +189,9 @@ public final class TonightModel {
             recipeID: recipe.id,
             title: recipe.title,
             minutes: recipe.prepMinutes + recipe.cookMinutes,
-            photoFileName: recipe.photoFileName
+            photoFileName: recipe.photoFileName,
+            isCooked: meal.status == .cooked,
+            leftoverFrom: meal.leftoverOf.flatMap { source in meals.first { $0.id == source }?.date }
         )
     }
 

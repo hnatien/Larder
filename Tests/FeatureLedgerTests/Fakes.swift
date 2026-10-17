@@ -130,11 +130,17 @@ actor FakePantryRepository: PantryRepository {
 }
 
 struct FakeProfileRepository: ProfileRepository {
+    /// Holds a saved profile, so a save is read back while `stored` stays the test's starting value.
+    final class Saved: @unchecked Sendable {
+        var profile: UserProfile?
+    }
+
     var stored: UserProfile? = Fixtures.profile()
     var storedConstraints: [DietaryConstraint] = []
+    let saved = Saved()
 
-    func profile() -> UserProfile? { stored }
-    func save(_ profile: UserProfile) {}
+    func profile() -> UserProfile? { saved.profile ?? stored }
+    func save(_ profile: UserProfile) { saved.profile = profile }
     func constraints() -> [DietaryConstraint] { storedConstraints }
     func saveConstraints(_ constraints: [DietaryConstraint]) {}
     func targets() -> [NutrientTarget] { [] }
