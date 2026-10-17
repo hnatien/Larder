@@ -138,7 +138,7 @@ export async function runCase(route: RouteName, evalCase: EvalCase, client: Anth
 
   let outcome = "ok";
   if (!result.ok) outcome = result.reply.body.error;
-  else outcome = assist.checkOutput?.(result.output)?.body.error ?? "ok";
+  else outcome = assist.checkOutput?.(result.output, evalCase.request)?.body.error ?? "ok";
 
   const system = Array.isArray(params.system) ? params.system.map((block) => block.text).join("\n") : (params.system ?? "");
   const text = response.content.flatMap((block) => (block.type === "text" ? [block.text] : [])).join("\n");

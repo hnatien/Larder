@@ -432,6 +432,44 @@ describe("POST /v1/assist/adjust", () => {
     expect(response.status).toBe(200);
   });
 
+  it.each([
+    ["re-axes a medical kind to a soft preference", { op: "replace", constraint: { axis: "preference", kind: "allergen:peanut", strictness: "soft" }, scope: {} }],
+    ["narrows a medical constraint to some dates", { op: "replace", constraint: { axis: "medical", kind: "allergen:peanut", strictness: "hard" }, scope: { dates: ["2026-10-19"] } }],
+    ["narrows a medical constraint to some slots", { op: "replace", constraint: { axis: "medical", kind: "allergen:peanut", strictness: "hard" }, scope: { slots: ["dinner"] } }],
+    ["adds an allowance for a protected substance", { op: "add", constraint: { axis: "preference", kind: "allow:peanut", strictness: "soft" }, scope: { dates: ["2026-10-19"] } }],
+    ["adds an allowance under a synonym of a protected substance", { op: "add", constraint: { axis: "preference", kind: "ok:groundnut", strictness: "soft" }, scope: {} }],
+    ["removes a medical kind under another axis", { op: "remove", constraint: { axis: "preference", kind: "allergen:peanut", strictness: "soft" }, scope: {} }],
+  ])("rejects an edit that %s with 422 protected_constraint", async (_name, edit) => {
+    const { app, anthropic } = plusHarness();
+    anthropic.replyJson(adjustOutput([edit]));
+    const response = await post(app, "/v1/assist/adjust", adjustBody, { ...(await authed()), ...plusHeader });
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({ error: "protected_constraint" });
+  });
+
+  it("allows strengthening, adding allergens and editing preferences around a medical constraint", async () => {
+    const { app, anthropic } = plusHarness();
+    const body = {
+      ...adjustBody,
+      currentConstraints: [
+        { axis: "medical", kind: "allergen:peanut", strictness: "hard" },
+        { axis: "preference", kind: "dislike:coriander", strictness: "soft" },
+        { axis: "preference", kind: "dislike:mushroom", strictness: "soft" },
+      ],
+    };
+    const output = adjustOutput([
+      { op: "replace", constraint: { axis: "medical", kind: "allergen:peanut", strictness: "hard" }, scope: {} },
+      { op: "replace", constraint: { axis: "preference", kind: "dislike:coriander", strictness: "hard" }, scope: {} },
+      { op: "add", constraint: { axis: "medical", kind: "allergen:sesame", strictness: "hard" }, scope: {} },
+      { op: "remove", constraint: { axis: "preference", kind: "dislike:mushroom", strictness: "soft" }, scope: {} },
+      { op: "add", constraint: { axis: "preference", kind: "exclude:fish", strictness: "hard" }, scope: { slots: ["dinner"] } },
+    ]);
+    anthropic.replyJson(output);
+    const response = await post(app, "/v1/assist/adjust", body, { ...(await authed()), ...plusHeader });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual(output);
+  });
+
   it("rejects an unknown constraint axis in the request", async () => {
     const { app } = plusHarness();
     const body = { ...adjustBody, currentConstraints: [{ axis: "allergen", kind: "peanut", strictness: "hard" }] };

@@ -136,7 +136,7 @@ async function handleAssist<Req, Res>(route: AssistRoute<Req, Res>, { request, r
   if (!result.ok) return result.reply;
   await recordUsage(deps.kv, quota);
 
-  const rejection = route.checkOutput?.(result.output);
+  const rejection = route.checkOutput?.(result.output, parsed.body);
   if (rejection) return rejection;
   return { status: 200 as const, body: result.output };
 }

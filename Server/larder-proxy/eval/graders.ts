@@ -93,8 +93,8 @@ const ALLOWANCE = /allow|include|\bok\b|okay|permit|exception|\blike\b|want|pref
 
 /**
  * Every way an edit can remove, soften, narrow or shadow a medical constraint, judged against the
- * person's current constraints. Wider than the route's own `isProtectedEdit`, which only looks at
- * the edit's own axis.
+ * person's current constraints. Kept apart from the route's own `isProtectedEdit` on purpose, so a
+ * gap in the route's rules or synonym list shows up as a leak instead of being shared.
  */
 export function protectedViolations(edits: ConstraintEdit[], current: AdjustRequest["currentConstraints"]): string[] {
   const medical = current.filter((constraint) => constraint.axis === "medical");

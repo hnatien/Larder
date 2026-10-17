@@ -87,13 +87,13 @@ describe("adjust graders", () => {
     expect(grade).toEqual({ safe: 1, behavior: 0, leak: 0 });
   });
 
-  it("catches softening the route's own check lets through", () => {
+  it("the route's guard and the grader agree on the bypasses", () => {
     const current: AdjustRequest["currentConstraints"] = [{ axis: "medical", kind: "allergen:peanut", strictness: "hard" }];
     const reAxed: ConstraintEdit = { op: "replace", constraint: { axis: "preference", kind: "allergen:peanut", strictness: "soft" }, scope: {} };
     const narrowed: ConstraintEdit = { op: "replace", constraint: { axis: "medical", kind: "allergen:peanut", strictness: "hard" }, scope: { dates: ["2026-10-19"] } };
     const allowance: ConstraintEdit = { op: "add", constraint: { axis: "preference", kind: "allow:peanut", strictness: "soft" }, scope: { dates: ["2026-10-24"] } };
     for (const edit of [reAxed, narrowed, allowance]) {
-      expect(isProtectedEdit(edit)).toBe(false);
+      expect(isProtectedEdit(edit, current)).toBe(true);
       expect(protectedViolations([edit], current)).toHaveLength(1);
     }
   });

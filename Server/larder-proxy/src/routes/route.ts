@@ -11,7 +11,7 @@ export interface AssistRoute<Req, Res> {
   requestSchema: z.ZodType<Req>;
   model(config: Config): string;
   buildRequest(body: Req, model: string): AssistParams<Res>;
-  checkOutput?(output: Res): ErrorReply | null;
+  checkOutput?(output: Res, body: Req): ErrorReply | null;
 }
 
 /** The static system prompt as the first and only system block, marked as the cache breakpoint. */
