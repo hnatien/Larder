@@ -115,11 +115,16 @@ public enum WeekPlanner {
         plan(request) { request.compiled.admits($0, foods: request.context.foods) }
     }
 
+    /// The greedy fill and repair without the local search: the ablation baseline of the LarderBench harness.
+    @_spi(Bench) public static func planWithoutSearch(_ request: PlanRequest) -> PlanResult {
+        plan(request, admission: { request.compiled.admits($0, foods: request.context.foods) }, searches: false)
+    }
+
     /// Plans with an explicit admission rule; the verifier still checks the result independently.
-    static func plan(_ request: PlanRequest, admission: (RecipeCandidate) -> Admission) -> PlanResult {
+    static func plan(_ request: PlanRequest, admission: (RecipeCandidate) -> Admission, searches: Bool = true) -> PlanResult {
         var solver = Solver(request: request, pool: RankedPool.rank(request.candidates, admission: admission, context: request.context))
         solver.fillGreedily()
-        solver.search()
+        if searches { solver.search() }
         let verification = solver.repair()
         return solver.result(verification: verification)
     }
