@@ -29,6 +29,7 @@ public nonisolated enum Copy {
         public static var planMyWeek: String { String(localized: "Plan my week", bundle: .module) }
         public static var otherIdeas: String { String(localized: "Show other ideas", bundle: .module) }
         public static var addFood: String { String(localized: "Add food", bundle: .module) }
+        public static var undo: String { String(localized: "Undo", bundle: .module) }
     }
 
     /// Freshness words; each has an icon in `FreshnessStyle`.
@@ -156,6 +157,13 @@ public nonisolated enum Copy {
         }
 
         public static var planSaved: String { String(localized: "Stamped. The week is yours.", bundle: .module) }
+
+        /// Confirms a cooked dish; `usedPantry` says whether cooking took anything off the shelves.
+        public static func cooked(dish: String, usedPantry: Bool) -> String {
+            usedPantry
+                ? String(localized: "\(dish) cooked. What it used is off your pantry.", bundle: .module)
+                : String(localized: "\(dish) marked as cooked", bundle: .module)
+        }
 
         public static var offline: String {
             String(

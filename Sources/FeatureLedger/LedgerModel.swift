@@ -28,6 +28,20 @@ public nonisolated struct LedgerDay: Identifiable, Hashable, Sendable {
     public var id: Date { date }
 }
 
+/// A cooked meal whose cooking can still be taken back.
+public nonisolated struct CookedMealUndo: Identifiable, Hashable, Sendable {
+    /// How long the undo stays on offer.
+    public static let lifetime: Duration = .seconds(5)
+
+    public let id = UUID()
+    /// The meal as it was before it was marked cooked; `nil` for a recipe cooked outside the plan.
+    public let meal: PlannedMeal?
+    /// The dish's name, for the toast.
+    public let title: String
+    /// What cooking took off the shelves.
+    public let draw: ShelfDraw
+}
+
 /// Drives the week ledger: planning, swaps, skips, slides and leftovers, with the shelf balance from verification.
 @Observable
 @MainActor
@@ -69,9 +83,12 @@ public final class LedgerModel {
     public private(set) var adjustError: LarderError?
     /// Days of the last adjusted plan whose own change nothing could meet; they kept the planner's dinner.
     public private(set) var unmetAdjustmentDays: [Date] = []
+    /// The last cooking, while it can still be undone.
+    public private(set) var cookUndo: CookedMealUndo?
 
     private let plans: any PlanRepository
     private let service: PlanningService
+    private let depletion: PantryDepletion
     private let assistant: any AssistantBackend
     private let dates: any DateProvider
     private let calendar: Calendar
@@ -100,6 +117,7 @@ public final class LedgerModel {
         self.service = PlanningService(
             plans: plans, recipes: recipes, foods: foods, pantry: pantry, profiles: profiles, dates: dates, calendar: calendar
         )
+        self.depletion = PantryDepletion(recipes: recipes, foods: foods, pantry: pantry, dates: dates)
         self.profileRepository = profiles
         self.assistant = assistant
         self.dates = dates
@@ -413,9 +431,60 @@ public final class LedgerModel {
 
     // MARK: Meal actions
 
-    /// Marks a meal as cooked.
+    /// Marks a meal as cooked and takes what it used off the shelves, scaled to its servings; a leftover takes
+    /// nothing, since its food went with the meal it came from. A meal already cooked is left alone. `cookUndo`
+    /// offers to take it back.
     public func markCooked(_ meal: PlannedMeal) async {
-        await update(meal) { $0.status = .cooked }
+        guard let current = meals.first(where: { $0.id == meal.id }), current.status != .cooked else { return }
+        error = nil
+        let draw: ShelfDraw
+        do {
+            draw = try await depletion.deplete(cooking: current)
+        } catch {
+            record(error)
+            return
+        }
+        guard await update(current, { $0.status = .cooked }) else {
+            await putBack(draw)
+            return
+        }
+        cookUndo = CookedMealUndo(meal: current, title: recipesByID[current.recipeID]?.title ?? "", draw: draw)
+    }
+
+    /// Takes what cooking `recipe` for `servings` used off the shelves, for a recipe cooked outside the plan.
+    /// `cookUndo` offers to take it back.
+    public func cookOffPlan(_ recipe: Recipe, servings: Int) async {
+        error = nil
+        do {
+            let draw = try await depletion.deplete(cooking: recipe, servings: servings)
+            cookUndo = CookedMealUndo(meal: nil, title: recipe.title, draw: draw)
+        } catch {
+            record(error)
+        }
+    }
+
+    /// Puts back what the last cooking took and returns its meal to how it was.
+    public func undoCooked() async {
+        guard let undo = cookUndo else { return }
+        cookUndo = nil
+        error = nil
+        await putBack(undo.draw)
+        if let meal = undo.meal {
+            await update(meal) { $0.status = meal.status }
+        }
+    }
+
+    /// Lets the last cooking stand.
+    public func dismissCookUndo() {
+        cookUndo = nil
+    }
+
+    private func putBack(_ draw: ShelfDraw) async {
+        do {
+            try await depletion.restore(draw)
+        } catch {
+            record(error)
+        }
     }
 
     /// Marks a meal as skipped; it dims and stops counting towards the shelf, nothing more.

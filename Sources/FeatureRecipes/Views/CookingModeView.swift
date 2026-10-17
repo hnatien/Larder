@@ -16,13 +16,16 @@ public struct CookingModeView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.timersFlashAndVibrate) private var flashesAndVibrates
     private let ingredients: [Ingredient]
+    private let onFinish: (() -> Void)?
 
-    /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step.
-    public init(recipe: Recipe, ingredients: [Ingredient]) {
+    /// Creates cooking mode for `recipe`; `ingredients` are the lines to match against each step, and `onFinish` runs
+    /// when Finish on the last step is tapped, before cooking mode closes. Closing with the cross does not run it.
+    public init(recipe: Recipe, ingredients: [Ingredient], onFinish: (() -> Void)? = nil) {
         _session = State(initialValue: CookingSession(
             recipe: recipe, ingredients: ingredients, notifications: SystemTimerNotifications()
         ))
         self.ingredients = ingredients
+        self.onFinish = onFinish
     }
 
     public var body: some View {
@@ -180,7 +183,12 @@ public struct CookingModeView: View {
         .buttonStyle(.larderSecondary)
         .disabled(session.isFirst)
         Button {
-            if session.isLast { dismiss() } else { session.next() }
+            if session.isLast {
+                onFinish?()
+                dismiss()
+            } else {
+                session.next()
+            }
         } label: {
             Text(session.isLast ? RecipesCopy.finish : RecipesCopy.next)
                 .font(LarderFont.body(.title3, weight: .semibold))

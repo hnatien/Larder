@@ -107,7 +107,12 @@ struct RootView: View {
                 ShelvesView(model: dependencies.shelves, isAdding: $isAddingFood, onOpenAccount: openSettings)
             }
             Tab(Copy.Tab.recipes, systemImage: "book", value: AppTab.recipes) {
-                RecipesView(model: dependencies.recipes, onAddToPlan: addToPlan, onOpenSettings: openSettings)
+                RecipesView(
+                    model: dependencies.recipes,
+                    onAddToPlan: addToPlan,
+                    onFinishCooking: finishCooking,
+                    onOpenSettings: openSettings
+                )
             }
             Tab(Copy.Tab.grocery, systemImage: "cart", value: AppTab.grocery) {
                 GroceryView(model: dependencies.grocery, onOpenPlan: { state.selectedTab = .ledger }, onOpenSettings: openSettings)
@@ -117,6 +122,7 @@ struct RootView: View {
         .onChange(of: dependencies.ledger.meals) {
             Task {
                 await dependencies.snapshots.write()
+                await dependencies.shelves.load()
                 await dependencies.tonight.load()
                 await dependencies.grocery.load()
             }
@@ -133,6 +139,7 @@ struct RootView: View {
                     model: dependencies.recipes,
                     recipe: presented.recipe,
                     onAddToPlan: addToPlan,
+                    onFinishCooking: finishCooking,
                     startsCooking: presented.startsCooking
                 )
                 .toolbar {
@@ -179,6 +186,11 @@ struct RootView: View {
                 notice = .recipeUnreadable
             }
         }
+    }
+
+    /// Marks the recipe cooked when cooking mode finishes; the detail offers the returned undo in a toast.
+    private func finishCooking(_ recipe: Recipe, servings: Int) async -> CookingUndo? {
+        await dependencies.finishCooking(recipe, servings: servings)
     }
 
     /// Puts the recipe on the day's dinner and stays where the user is; the detail confirms with a toast.

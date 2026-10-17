@@ -6,6 +6,7 @@ import FeatureShelves
 import Foundation
 import LarderAssistant
 import LarderCore
+import LarderDesign
 import LarderOnDeviceAI
 import LarderPersistence
 import OSLog
@@ -303,6 +304,44 @@ final class AppDependencies {
             throw error
         }
         await ledger.load()
+        await grocery.load()
+    }
+
+    /// Records cooking `recipe` from cooking mode and returns its undo, or `nil` when nothing was recorded.
+    ///
+    /// Today's planned meal of the recipe is marked cooked at its servings; with none, the recipe counts as cooked
+    /// outside the plan at `servings`. Either way what it used comes off the shelves.
+    func finishCooking(_ recipe: Recipe, servings: Int) async -> CookingUndo? {
+        let earlier = ledger.cookUndo?.id
+        await ledger.load()
+        let today = ledger.meals.filter {
+            $0.recipeID == recipe.id && $0.status == .planned && Calendar.current.isDate($0.date, inSameDayAs: dates.now)
+        }
+        if let meal = today.first(where: { $0.leftoverOf == nil }) ?? today.first {
+            await ledger.markCooked(meal)
+        } else {
+            await ledger.cookOffPlan(recipe, servings: servings)
+        }
+        guard let cooked = ledger.cookUndo, cooked.id != earlier else { return nil }
+        await reloadAfterCooking()
+        return CookingUndo(
+            message: Copy.Voice.cooked(dish: recipe.title, usedPantry: !cooked.draw.isEmpty),
+            undo: { [weak self] in
+                guard let self, ledger.cookUndo?.id == cooked.id else { return }
+                await ledger.undoCooked()
+                await reloadAfterCooking()
+            },
+            dismiss: { [weak self] in
+                guard let self, ledger.cookUndo?.id == cooked.id else { return }
+                ledger.dismissCookUndo()
+            }
+        )
+    }
+
+    /// Shows the shelves cooking changed everywhere they appear.
+    private func reloadAfterCooking() async {
+        await shelves.load()
+        await tonight.load()
         await grocery.load()
     }
 

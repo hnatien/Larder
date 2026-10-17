@@ -5,18 +5,45 @@ import SwiftUI
 /// Puts a recipe on a day's dinner and reports whether it worked.
 public typealias AddToPlan = (Recipe, Date) async -> Bool
 
+/// What finishing a recipe changed, offered back as a toast with Undo.
+public struct CookingUndo: Identifiable {
+    public let id = UUID()
+    public let message: String
+    /// Takes the cooking back.
+    public let undo: @MainActor () async -> Void
+    /// Lets the cooking stand once the toast has gone.
+    public let dismiss: @MainActor () -> Void
+
+    /// Creates an undo.
+    public init(message: String, undo: @escaping @MainActor () async -> Void, dismiss: @escaping @MainActor () -> Void) {
+        self.message = message
+        self.undo = undo
+        self.dismiss = dismiss
+    }
+}
+
+/// Records that the cook finished a recipe at the given servings; returns the undo, or `nil` when nothing was recorded.
+public typealias FinishCooking = (Recipe, Int) async -> CookingUndo?
+
 /// The Recipes tab: a searchable, filterable library; + imports a recipe from the web.
 public struct RecipesView: View {
     @Bindable private var model: RecipesModel
     private let onAddToPlan: AddToPlan?
+    private let onFinishCooking: FinishCooking?
     private let onOpenSettings: (() -> Void)?
     @State private var importModel: ImportModel?
 
-    /// Creates the tab root; `onAddToPlan` is offered on each recipe's detail, and `onOpenSettings` adds the
-    /// Settings button.
-    public init(model: RecipesModel, onAddToPlan: AddToPlan? = nil, onOpenSettings: (() -> Void)? = nil) {
+    /// Creates the tab root; `onAddToPlan` is offered on each recipe's detail, `onFinishCooking` runs when cooking
+    /// mode's Finish is tapped, and `onOpenSettings` adds the Settings button.
+    public init(
+        model: RecipesModel,
+        onAddToPlan: AddToPlan? = nil,
+        onFinishCooking: FinishCooking? = nil,
+        onOpenSettings: (() -> Void)? = nil
+    ) {
         self.model = model
         self.onAddToPlan = onAddToPlan
+        self.onFinishCooking = onFinishCooking
         self.onOpenSettings = onOpenSettings
     }
 
@@ -28,7 +55,7 @@ public struct RecipesView: View {
                 .navigationTitle(Copy.Tab.recipes)
                 .navigationSubtitle(RecipesCopy.subtitle)
                 .navigationDestination(for: Recipe.self) { recipe in
-                    RecipeDetailView(model: model, recipe: recipe, onAddToPlan: onAddToPlan)
+                    RecipeDetailView(model: model, recipe: recipe, onAddToPlan: onAddToPlan, onFinishCooking: onFinishCooking)
                 }
                 .searchable(text: $model.query, prompt: RecipesCopy.searchPrompt)
                 .task(id: model.query) { await model.search() }
