@@ -25,8 +25,8 @@ targets:
     info:
       path: App/Larder/Info.plist
       properties:
-        # Placeholder until the proxy is deployed; point it at your own Worker for development.
-        LarderProxyBaseURL: https://proxy.larder.app
+        # Set per configuration below: Debug uses `wrangler dev` on this Mac, Release the deployed proxy.
+        LarderProxyBaseURL: $(LARDER_PROXY_BASE_URL)
         # The paper canvas and the jar mark while the first frame loads.
         UILaunchScreen:
           UIColorName: LaunchBackground
@@ -78,6 +78,13 @@ targets:
           this device. If it can't read a recipe photo and AI help is on, that photo goes to Larder's assistant.
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
+      configs:
+        # The Simulator reaches the Mac's `npx wrangler dev` at localhost.
+        Debug:
+          LARDER_PROXY_BASE_URL: http://localhost:8787
+        # Placeholder until the proxy is deployed.
+        Release:
+          LARDER_PROXY_BASE_URL: https://proxy.larder.app
   LarderWidgets:
     type: app-extension
     platform: iOS
@@ -134,6 +141,9 @@ schemes:
     run:
       config: Debug
       storeKitConfiguration: App/Larder/Resources/Larder.storekit
+      environmentVariables:
+        # Scripts/generate.sh fills this from Server/larder-proxy/.dev.vars; the generated project is git-ignored.
+        LARDER_DEV_CLIENT_SECRET: ${LARDER_DEV_CLIENT_SECRET}
     test:
       config: Debug
       gatherCoverageData: false

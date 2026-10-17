@@ -19,8 +19,8 @@ A fresh install starts at onboarding. The seed foods and recipes load on first l
 
 ### Assistant proxy
 
-`LarderProxyBaseURL` in the app's Info.plist (set under `info.properties` in `project.yml`) is a placeholder, `https://proxy.larder.app`, until the proxy is deployed; point it at your own Worker for development.
-Devices prove themselves with App Attest: the app attests a Secure Enclave key once, then signs an assertion for each session. The Simulator has no App Attest, so Debug builds there send the development attestation secret from the `LARDER_DEV_CLIENT_SECRET` environment variable instead: set it in the scheme's Run environment, never in source. Release builds never send it.
+`LarderProxyBaseURL` in the app's Info.plist comes from the `LARDER_PROXY_BASE_URL` build setting in `project.yml`: Debug uses `http://localhost:8787`, where `npx wrangler dev` in `Server/larder-proxy` serves the proxy (see its README), and Release uses the placeholder `https://proxy.larder.app` until the proxy is deployed.
+Devices prove themselves with App Attest: the app attests a Secure Enclave key once, then signs an assertion for each session. The Simulator has no App Attest, so Debug builds there send the development attestation secret from the `LARDER_DEV_CLIENT_SECRET` environment variable instead. `Scripts/generate.sh` puts it in the scheme's Run environment, taking it from that variable or else from `DEV_CLIENT_SECRET` in `Server/larder-proxy/.dev.vars`; the generated project is git-ignored, so the secret never reaches source. Run the app from Xcode to get it; `simctl launch` needs `SIMCTL_CHILD_LARDER_DEV_CLIENT_SECRET` instead. Release builds never send it.
 The cloud assistant is only called after the user allows AI help; everything else runs on device.
 
 ### StoreKit testing

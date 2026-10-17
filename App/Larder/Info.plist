@@ -19,7 +19,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LarderProxyBaseURL</key>
-	<string>https://proxy.larder.app</string>
+	<string>$(LARDER_PROXY_BASE_URL)</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
