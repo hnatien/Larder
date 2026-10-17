@@ -49,7 +49,9 @@ export const ExplainRequest = z.object({
 });
 
 export const ExplainResponse = z.object({
-  headline: z.string().max(90),
+  // 90 characters is the prompt's target, not a limit: structured outputs cannot enforce maxLength,
+  // so a cap here turned a two-character overrun into a 502. The client wraps the text.
+  headline: z.string().describe("One sentence of at most 90 characters."),
   perDay: z.array(z.object({ date: IsoDate, sentence: z.string() })),
   swapsOffered: z.array(
     z.object({ date: IsoDate, slot: MealSlot, alternativeTitle: z.string(), reason: z.string() }),

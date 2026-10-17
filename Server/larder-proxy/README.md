@@ -10,9 +10,9 @@ All endpoints take and return JSON. Every response carries `content-type: applic
 |---|---|---|---|---|
 | `POST /v1/challenge` | none | none | | |
 | `POST /v1/session` | none | none | | |
-| `POST /v1/assist/explain` | free | `MODEL_FAST` | low | 2048 |
+| `POST /v1/assist/explain` | free | `MODEL_FAST` | low | 4096 |
 | `POST /v1/assist/parse-pantry` | free | `MODEL_FAST` | low | 1024 |
-| `POST /v1/assist/parse-recipe` | Plus | `MODEL_CAPABLE` | medium | 1024 |
+| `POST /v1/assist/parse-recipe` | Plus | `MODEL_CAPABLE` | medium | 8192 |
 | `POST /v1/assist/adjust` | Plus | `MODEL_CAPABLE` | medium | 2048 |
 
 Session flow: `POST /v1/challenge` returns `{ challenge, expiresAt }`. The device signs `clientDataHash = SHA-256(UTF-8 challenge)` and posts one of:

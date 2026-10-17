@@ -19,9 +19,11 @@ export function buildParseRecipeRequest(body: ParseRecipeRequest, model: string)
     type: "text",
     text: body.text === undefined ? "Extract the recipe from the image." : `Recipe text:\n${body.text}`,
   });
+  // Medium effort thinks for up to ~1000 tokens before the JSON, and a long recipe's JSON can run
+  // past 2000, so the ceiling leaves room for both; only generated tokens are billed.
   return {
     model,
-    max_tokens: 1024,
+    max_tokens: 8192,
     system: cachedSystem(PARSE_RECIPE_SYSTEM_PROMPT),
     messages: [{ role: "user" as const, content }],
     output_config: { effort: "medium" as const, format },

@@ -72,5 +72,5 @@
     "src/routes/parseRecipe.ts",
     "src/prompts/parseRecipe.ts"
   ],
-  "harness_sha": "526e41ea8d1e73ada5281e3b09c70c161e5f920d393c99c39edbf0a6da24b793"
+  "harness_sha": "3fb4100afa01a7a8b90d620ba569ebb048f794acc1e95e2389782a61586e298e"
 }

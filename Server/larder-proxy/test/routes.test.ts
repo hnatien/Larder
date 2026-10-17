@@ -92,7 +92,7 @@ describe("routing", () => {
 });
 
 describe("POST /v1/assist/explain", () => {
-  it("returns the parsed explanation using the fast model, low effort and 2048 max tokens", async () => {
+  it("returns the parsed explanation using the fast model, low effort and 4096 max tokens", async () => {
     const { app, anthropic } = makeHarness();
     anthropic.replyJson(explainOutput);
     const response = await post(app, "/v1/assist/explain", explainBody, await authed());
@@ -101,7 +101,7 @@ describe("POST /v1/assist/explain", () => {
     expect(await response.json()).toEqual(explainOutput);
     const call = anthropic.calls[0];
     expect(call?.model).toBe("claude-haiku-5-5");
-    expect(call?.max_tokens).toBe(2048);
+    expect(call?.max_tokens).toBe(4096);
     expect(call?.output_config?.effort).toBe("low");
     expect(call).not.toHaveProperty("thinking");
     expect(call).not.toHaveProperty("temperature");
@@ -206,9 +206,19 @@ describe("POST /v1/assist/explain", () => {
     expect(kv.store.size).toBe(0);
   });
 
+  it("serves a headline past the prompt's 90-character target", async () => {
+    const { app, anthropic } = makeHarness();
+    const output = { ...explainOutput, headline: "Two dinners mostly use what is already on the shelf this week. Greens and legumes run light." };
+    expect(output.headline.length).toBeGreaterThan(90);
+    anthropic.replyJson(output);
+    const response = await post(app, "/v1/assist/explain", explainBody, await authed());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual(output);
+  });
+
   it("maps output that fails the response schema to 502 unparseable", async () => {
     const { app, anthropic, kv } = makeHarness();
-    anthropic.replyJson({ ...explainOutput, headline: "x".repeat(91) });
+    anthropic.replyJson({ ...explainOutput, perDay: [{ date: "Monday", sentence: "Dal night." }] });
     const response = await post(app, "/v1/assist/explain", explainBody, await authed());
     expect(response.status).toBe(502);
     expect(await response.json()).toEqual({ error: "unparseable" });
@@ -314,7 +324,7 @@ describe("POST /v1/assist/parse-recipe", () => {
     expect((await post(app, "/v1/assist/parse-recipe", { text: "Dal" }, headers)).status).toBe(402);
   });
 
-  it("parses text for Plus with the capable model at medium effort", async () => {
+  it("parses text for Plus with the capable model at medium effort and 8192 max tokens", async () => {
     const { app, anthropic } = plusHarness();
     anthropic.replyJson(recipeOutput);
     const headers = { ...(await authed()), ...plusHeader };
@@ -322,7 +332,7 @@ describe("POST /v1/assist/parse-recipe", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(recipeOutput);
     const call = anthropic.calls[0];
-    expect(call).toMatchObject({ model: "claude-sonnet-5-5", max_tokens: 1024 });
+    expect(call).toMatchObject({ model: "claude-sonnet-5-5", max_tokens: 8192 });
     expect(call?.output_config?.effort).toBe("medium");
   });
 
@@ -468,6 +478,16 @@ describe("POST /v1/assist/adjust", () => {
     const response = await post(app, "/v1/assist/adjust", body, { ...(await authed()), ...plusHeader });
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(output);
+  });
+
+  it("rejects an axis outside the enum in the output as unparseable", async () => {
+    const { app, anthropic } = plusHarness();
+    anthropic.replyJson(
+      adjustOutput([{ op: "add", constraint: { axis: "diet", kind: "diet:vegetarian", strictness: "hard" }, scope: { slots: ["dinner"] } }]),
+    );
+    const response = await post(app, "/v1/assist/adjust", adjustBody, { ...(await authed()), ...plusHeader });
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({ error: "unparseable" });
   });
 
   it("rejects an unknown constraint axis in the request", async () => {

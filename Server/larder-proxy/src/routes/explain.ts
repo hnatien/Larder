@@ -7,9 +7,10 @@ const format = outputFormat(ExplainResponse);
 
 /** Builds the Messages API request for a plan explanation. Per-user data goes only in the user turn. */
 export function buildExplainRequest(body: ExplainRequest, model: string) {
+  // Low effort still thought for up to ~1400 tokens on a two-week plan, whose JSON runs ~700.
   return {
     model,
-    max_tokens: 2048,
+    max_tokens: 4096,
     system: cachedSystem(EXPLAIN_SYSTEM_PROMPT),
     messages: [
       {

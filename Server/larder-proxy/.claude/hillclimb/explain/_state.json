@@ -77,5 +77,5 @@
     "src/routes/explain.ts",
     "src/prompts/explain.ts"
   ],
-  "harness_sha": "e6f38061678f08daa7ed7dfd6d447fedfe689a96e22b7b263dfb5ecc0a1fbc79"
+  "harness_sha": "c8d4d805f23f55fdc18b19227d7ac276ea30040dc0fa4a64b136f47248a3591f"
 }

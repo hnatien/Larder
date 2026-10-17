@@ -65,5 +65,5 @@
     "src/routes/adjust.ts",
     "src/prompts/adjust.ts"
   ],
-  "harness_sha": "b5d88dd1fd578e6d78722c8715290389eccb36fb280811047cc0086896bbf806"
+  "harness_sha": "6164c69beced04d718d6843540971ff57c6d41fae9e391a9076e9b097dd2f8a4"
 }
