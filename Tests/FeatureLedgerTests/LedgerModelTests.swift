@@ -531,7 +531,7 @@ import Testing
 
     @Test func loadOffersToMoveYesterdaysUncookedDinner() async throws {
         var world = World()
-        world.pantry.stored = Fixtures.pantry + [Fixtures.pantryItem(Fixtures.eggs, grams: 200)]
+        world.pantry = FakePantryRepository(stored: Fixtures.pantry + [Fixtures.pantryItem(Fixtures.eggs, grams: 200)])
         let (_, meals) = await world.seed(Fixtures.plan(start: Fixtures.day(-1))) { plan in
             [Fixtures.meal(Fixtures.spinachRice, in: plan, day: 0), Fixtures.meal(Fixtures.beefRagu, in: plan, day: 2)]
         }

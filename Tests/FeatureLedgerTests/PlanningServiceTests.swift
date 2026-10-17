@@ -142,7 +142,7 @@ import Testing
 
     @Test func repairReplacesAMealWhoseExpiringFoodRanOut() async throws {
         var world = World()
-        world.pantry.stored = Fixtures.pantry.filter { $0.foodID != Fixtures.spinach.id }
+        world.pantry = FakePantryRepository(stored: Fixtures.pantry.filter { $0.foodID != Fixtures.spinach.id })
         let plan = Fixtures.plan()
         let omelette = Fixtures.meal(
             Fixtures.spinachOmelette, in: plan, day: 2, reasons: [.usesExpiring(food: Fixtures.spinach.id, bestBy: Fixtures.day(3))]
