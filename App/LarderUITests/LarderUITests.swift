@@ -86,6 +86,9 @@ final class LarderUITests: XCTestCase {
         open(.plan, in: app)
         app.buttons["Plan my week"].tap()
         XCTAssertTrue(app.buttons["Replan week"].waitForExistence(timeout: Self.loadTimeout), "The week was not planned")
+        let opener = app.buttons["Adjust this week"]
+        XCTAssertTrue(opener.waitForExistence(timeout: Self.loadTimeout), "Adjust this week is missing from the Plan tab")
+        opener.tap()
         let adjust = app.descendants(matching: .any)["ledger.adjust"]
         XCTAssertTrue(adjust.waitForExistence(timeout: Self.loadTimeout), "Adjust this week is missing from the Plan tab")
         XCTAssertTrue(app.buttons["Ask"].exists, "Adjust this week has no Ask button")
@@ -111,13 +114,91 @@ final class LarderUITests: XCTestCase {
         try audit(app)
     }
 
+    /// The paywall shows both plans with the pitch, keeps "Not now" in words, and passes the audit.
+    @MainActor
+    func testPaywallShowsEveryPlanAndPassesAccessibilityAudit() throws {
+        let app = launch()
+        try openPaywall(in: app)
+        for plan in ["Monthly", "Annual"] {
+            let match = app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", plan)).firstMatch
+            XCTAssertTrue(match.waitForExistence(timeout: Self.loadTimeout), "The \(plan) plan is not shown")
+        }
+        XCTAssertTrue(app.staticTexts["Larder Plus"].isHittable, "The pitch is hidden behind the store controls")
+        try audit(app)
+        app.buttons["Not now"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: Self.loadTimeout), "Not now did not close the paywall")
+    }
+
     @MainActor
     func testDynamicTypeAX3() throws {
         let app = launch(["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"])
-        for tab in [Tab.tonight, .plan] {
+        for tab in Tab.allCases {
             open(tab, in: app)
             try audit(app)
         }
+    }
+
+    /// Every tab in dark mode, where contrast is measured against the dark paper.
+    @MainActor
+    func testEveryTabPassesAccessibilityAuditInDarkMode() throws {
+        let app = launch(["-AppleInterfaceStyle", "Dark"])
+        for tab in Tab.allCases {
+            open(tab, in: app)
+            try audit(app)
+        }
+    }
+
+    /// The sheets and screens the tab audits never reach: recipe detail, cooking mode, Filters, writing a recipe,
+    /// the meal sheet, editing an item, and Add food.
+    @MainActor
+    func testSheetsPassAccessibilityAudit() throws {
+        let app = launch()
+        open(.recipes, in: app)
+        app.buttons["Filters"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Filters"].waitForExistence(timeout: Self.loadTimeout), "Filters did not open")
+        // At their medium height sheets are inset and their content drawn smaller; audit them opened all the way.
+        app.navigationBars["Filters"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.05)))
+        try auditSettled(app)
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Show ")).firstMatch.tap()
+
+        app.navigationBars.buttons["Import a recipe"].tap()
+        app.buttons["Write it yourself"].tap()
+        XCTAssertTrue(app.buttons["Preview recipe"].waitForExistence(timeout: Self.loadTimeout), "Write it yourself did not open")
+        try auditSettled(app)
+        app.buttons["Close"].firstMatch.tap()
+
+        app.scrollViews.firstMatch.buttons.matching(NSPredicate(format: "label CONTAINS %@", "minutes")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["recipe.startCooking"].waitForExistence(timeout: Self.loadTimeout), "Recipe detail did not open")
+        try auditSettled(app)
+        app.buttons["recipe.startCooking"].tap()
+        XCTAssertTrue(app.buttons["Next"].waitForExistence(timeout: Self.loadTimeout), "Cooking mode did not open")
+        try auditSettled(app)
+        app.buttons["Close"].firstMatch.tap()
+
+        open(.plan, in: app)
+        app.buttons["Plan my week"].tap()
+        XCTAssertTrue(app.buttons["Replan week"].waitForExistence(timeout: Self.loadTimeout), "The week was not planned")
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Dinner, ")).firstMatch.tap()
+        XCTAssertTrue(app.buttons["Swap"].waitForExistence(timeout: Self.loadTimeout), "The meal sheet did not open")
+        // Drag the sheet up by its top edge, beside Done, so the drag resizes the sheet rather than scrolling it.
+        let done = app.buttons["Done"].firstMatch
+        done.coordinate(withNormalizedOffset: CGVector(dx: -2, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.05)))
+        try auditSettled(app)
+        app.buttons["Done"].firstMatch.tap()
+
+        open(.pantry, in: app)
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Spinach")).firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Edit item"].waitForExistence(timeout: Self.loadTimeout), "The editor did not open")
+        app.navigationBars["Edit item"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.05)))
+        try auditSettled(app)
+        app.buttons["Cancel"].tap()
+        app.navigationBars.buttons["Add food"].tap()
+        XCTAssertTrue(app.navigationBars["Add food"].waitForExistence(timeout: Self.loadTimeout), "Add food did not open")
+        app.buttons["Eggs"].tap()
+        try auditSettled(app)
     }
 
     @MainActor
@@ -127,8 +208,10 @@ final class LarderUITests: XCTestCase {
         app.buttons["See recipe"].firstMatch.tap()
         XCTAssertTrue(app.buttons["Start cooking"].waitForExistence(timeout: Self.loadTimeout), "Recipe detail did not open from Tonight")
         app.buttons["Add to plan"].tap()
-        XCTAssertTrue(app.buttons["Today"].waitForExistence(timeout: Self.loadTimeout), "Add to plan offered no days")
-        app.buttons["Today"].tap()
+        // A day that already has a dinner also says what it replaces, so match on the day's name.
+        let today = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Today")).firstMatch
+        XCTAssertTrue(today.waitForExistence(timeout: Self.loadTimeout), "Add to plan offered no days")
+        today.tap()
         XCTAssertTrue(app.staticTexts["Added to Today"].waitForExistence(timeout: Self.loadTimeout), "Adding the recipe was not confirmed")
         XCTAssertTrue(app.buttons["Start cooking"].exists, "Recipe detail closed after adding to the plan")
         app.buttons["Close"].firstMatch.tap()
@@ -234,6 +317,35 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: Self.loadTimeout))
         try saveScreenshot(named: "settings-\(appearance)")
         app.terminate()
+
+        do {
+            try openPaywall(in: launch(arguments))
+        } catch is XCTSkip {
+            // Plus is active in the test store, so there is no paywall to capture; the other screens are saved.
+            return
+        }
+        try saveScreenshot(named: "paywall-\(appearance)")
+    }
+
+    /// Opens the paywall from Settings, scrolling down to its row.
+    @MainActor
+    private func openPaywall(in app: XCUIApplication) throws {
+        open(.tonight, in: app)
+        app.navigationBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: Self.loadTimeout), "Settings did not open")
+        let seePlus = app.buttons["See Larder Plus"]
+        let manage = app.buttons["Manage subscription"]
+        var swipes = 0
+        while !seePlus.isHittable, !manage.exists, swipes < 20 {
+            app.swipeUp()
+            swipes += 1
+        }
+        // The simulator's StoreKit test store keeps purchases between runs; with Plus active there is no paywall.
+        if manage.exists {
+            throw XCTSkip("Larder Plus is active in this simulator's StoreKit test store, so Settings shows no paywall")
+        }
+        seePlus.tap()
+        XCTAssertTrue(app.buttons["Not now"].waitForExistence(timeout: Self.loadTimeout), "The paywall did not open")
     }
 
     @MainActor
@@ -254,6 +366,13 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(tab.loadedElement(in: app).waitForExistence(timeout: Self.loadTimeout), "\(tab.rawValue) did not finish loading")
     }
 
+    /// Lets a sheet finish presenting or resizing before the audit, which otherwise measures it scaled mid-animation.
+    @MainActor
+    private func auditSettled(_ app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) throws {
+        Thread.sleep(forTimeInterval: 1)
+        try audit(app, file: file, line: line)
+    }
+
     /// Runs the audit and reports each issue with the element it was found on.
     @MainActor
     private func audit(_ app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) throws {
@@ -261,8 +380,18 @@ final class LarderUITests: XCTestCase {
         try app.performAccessibilityAudit { issue in
             // The Recipes and Pantry search fields are Apple's own UISearchBarTextField from `.searchable`; their clipping
             // at larger sizes is the system's behaviour and no Larder view can change it. Only those elements are skipped.
-            if issue.auditType == .textClipped, issue.element?.elementType == .searchField,
+            // The same fields' placeholder contrast in dark mode is the system's too: Larder cannot colour it.
+            if [.textClipped, .contrast].contains(issue.auditType), issue.element?.elementType == .searchField,
                ["Search recipes", "Search your pantry"].contains(issue.element?.label) {
+                return true
+            }
+            // A sheet's toolbar buttons (Cancel, Save, Done) are Apple's navigation bar chrome on glass; their size
+            // and contrast are the system's. Content scrolled under the bar is measured against the glass, like the
+            // tab bar below. Only elements inside the bar's frame are skipped, each logged.
+            if let element = issue.element, Self.isInNavigationBar(element.frame, in: app) {
+                let description = "\(issue.compactDescription) [\(issue.auditType)] on \(element.label)"
+                XCTContext.runActivity(named: "Skipped navigation bar audit issue: \(description)") { _ in }
+                print("Skipped navigation bar audit issue: \(description)")
                 return true
             }
             // Legibility issues on content under Apple's translucent chrome (the tab bar), cut off by the bottom of the
@@ -317,6 +446,13 @@ final class LarderUITests: XCTestCase {
     private static func screenName(in app: XCUIApplication) -> String {
         let bar = app.navigationBars.firstMatch
         return bar.exists ? bar.identifier : "no bar"
+    }
+
+    /// Whether `frame` lies inside the frontmost navigation bar.
+    @MainActor
+    private static func isInNavigationBar(_ frame: CGRect, in app: XCUIApplication) -> Bool {
+        let bars = app.navigationBars.allElementsBoundByIndex.filter(\.exists)
+        return bars.contains { $0.frame.contains(frame) }
     }
 
     private static func isOccluded(_ frame: CGRect, by occluders: [CGRect]) -> Bool {
