@@ -39,6 +39,7 @@ let testTargets: [Target] = sourceTargets.map {
 /// The offline evaluation harness: macOS only, Core only, never shipped in the app.
 let benchTargets: [Target] = [
     .executableTarget(name: "LarderBench", dependencies: ["LarderCore"]),
+    .testTarget(name: "LarderBenchTests", dependencies: ["LarderBench", "LarderPersistence"]),
 ]
 
 let package = Package(
