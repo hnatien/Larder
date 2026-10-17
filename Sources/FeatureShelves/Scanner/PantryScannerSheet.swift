@@ -1,4 +1,5 @@
 #if os(iOS)
+import AVFoundation
 import LarderDesign
 import PhotosUI
 import SwiftUI
@@ -15,12 +16,17 @@ enum ScanMode: Hashable, CaseIterable {
 struct PantryScannerSheet: View {
     @Bindable var model: ShelvesModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @State private var mode = ScanMode.barcode
     @State private var camera = ScannerCamera()
     @State private var pickedPhoto: PhotosPickerItem?
 
     private var modes: [ScanMode] { model.canReadReceipts ? ScanMode.allCases : [.barcode] }
     private var showsLiveScanner: Bool { LiveScanner.isUsable && !camera.failedToStart }
+    /// Whether the camera is off for Larder in Settings, as opposed to missing or busy.
+    private var cameraAccessIsOff: Bool {
+        [.denied, .restricted].contains(AVCaptureDevice.authorizationStatus(for: .video))
+    }
 
     var body: some View {
         NavigationStack {
@@ -79,16 +85,16 @@ struct PantryScannerSheet: View {
             .frame(height: 360)
             .clipShape(RoundedRectangle(cornerRadius: LarderRadius.panel, style: .continuous))
             .accessibilityHidden(true)
+        } else if cameraAccessIsOff {
+            InlineBanner(
+                ShelvesCopy.cameraAccessOff,
+                tone: .info,
+                action: URL(string: UIApplication.openSettingsURLString).map { url in
+                    .init(title: ShelvesCopy.openSettings) { openURL(url) }
+                }
+            )
         } else {
-            Label {
-                Text(ShelvesCopy.scannerUnavailable)
-                    .font(LarderFont.body(.body))
-                    .foregroundStyle(LarderColor.ink.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-            } icon: {
-                Image(systemName: "camera")
-                    .foregroundStyle(LarderColor.status(.info))
-            }
+            InlineBanner(ShelvesCopy.scannerUnavailable, tone: .info)
         }
     }
 

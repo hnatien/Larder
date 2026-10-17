@@ -4,9 +4,14 @@ import LarderDesign
 
 /// Strings the shelves screen owns; shared strings live in `Copy`.
 enum ShelvesCopy {
-    static var eatFirst: String { String(localized: "Use soon", bundle: Copy.bundle) }
-    static var eatFirstDetail: String { String(localized: "Tonight's ideas use these first.", bundle: Copy.bundle) }
+    static var eatFirst: String { String(localized: "Use these first", bundle: Copy.bundle) }
+    static var eatFirstDetail: String { String(localized: "Closest to their best-by date. Tonight's ideas start with these.", bundle: Copy.bundle) }
     static var subtitle: String { String(localized: "What you have at home", bundle: Copy.bundle) }
+    static var cameraAccessOff: String {
+        String(localized: "Camera access is off for Larder. Turn it on in Settings, or choose a photo instead.", bundle: Copy.bundle)
+    }
+    static var openSettings: String { String(localized: "Open Settings", bundle: Copy.bundle) }
+    static var amount: String { String(localized: "Amount", bundle: Copy.bundle) }
     static var emptyTitle: String { String(localized: "Your pantry is empty", bundle: Copy.bundle) }
     static var draftPrompt: String { String(localized: "For example: 6 eggs, a bag of rice, 2 onions", bundle: Copy.bundle) }
     static var draftLabel: String { String(localized: "What did you bring home?", bundle: Copy.bundle) }
@@ -33,6 +38,11 @@ enum ShelvesCopy {
     static var unit: String { String(localized: "Unit", bundle: Copy.bundle) }
     static var location: String { String(localized: "Kept in", bundle: Copy.bundle) }
     static var bestBy: String { String(localized: "Best by", bundle: Copy.bundle) }
+
+    /// "Best by 27 Oct" or "Best by tomorrow" under a fresh item.
+    static func bestBy(_ date: String) -> String {
+        String(localized: "Best by \(date)", bundle: Copy.bundle)
+    }
     static var chooseDate: String { String(localized: "Choose a date", bundle: Copy.bundle) }
     static var noDate: String { String(localized: "No date", bundle: Copy.bundle) }
     static var inThreeDays: String { String(localized: "In 3 days", bundle: Copy.bundle) }
@@ -81,6 +91,13 @@ enum ShelvesCopy {
     }
 
     /// How many lines wait in Add food after scanning.
+    /// Under the staple chips, where the lines they add go.
+    static func checkBelow(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "1 line to check below", bundle: Copy.bundle)
+            : String(localized: "\(count) lines to check below", bundle: Copy.bundle)
+    }
+
     static func waiting(_ count: Int) -> String {
         count == 1
             ? String(localized: "1 line to check in Add food", bundle: Copy.bundle)
@@ -143,6 +160,19 @@ enum ShelvesCopy {
     /// The amount as a count of things, such as "6 eggs", when a countable portion divides it within a fifth;
     /// otherwise grams or kilograms.
     static func quantity(grams: Double, portions: [Portion], locale: Locale = .current) -> String {
+        guard let counted = count(grams: grams, portions: portions) else { return quantity(grams: grams, locale: locale) }
+        return count(counted.number, of: counted.portion)
+    }
+
+    /// "6 eggs": `number` of a portion, its noun made plural past one.
+    static func count(_ number: Int, of portion: Portion) -> String {
+        let label = number == 1 ? portion.label : plural(portion.label)
+        return String(localized: "\(number) \(label)", bundle: Copy.bundle)
+    }
+
+    /// The countable portion that divides `grams` within a fifth, largest first, and how many of it; `nil` when the
+    /// amount is best said in grams.
+    static func count(grams: Double, portions: [Portion]) -> (portion: Portion, number: Int)? {
         let countable = portions
             .filter { $0.grams > 0 && Set($0.label.lowercased().split(separator: " ").map(String.init)).isDisjoint(with: measureWords) }
             .sorted { $0.grams > $1.grams }
@@ -150,12 +180,10 @@ enum ShelvesCopy {
             let exact = grams / portion.grams
             let count = exact.rounded()
             if count >= 1, count <= 99, abs(exact - count) / count <= 0.2 {
-                let number = Int(count)
-                let label = number == 1 ? portion.label : plural(portion.label)
-                return String(localized: "\(number) \(label)", bundle: Copy.bundle)
+                return (portion, Int(count))
             }
         }
-        return quantity(grams: grams, locale: locale)
+        return nil
     }
 
     /// An English portion label with its noun made plural: "medium onion" to "medium onions", "can drained" to "cans drained".
@@ -204,7 +232,7 @@ enum ShelvesCopy {
     static func message(for error: LarderError) -> String {
         switch error {
         case .consentRequired:
-            String(localized: "Cloud help is switched off. Turn it on in Settings, or add the items by hand.", bundle: Copy.bundle)
+            String(localized: "AI help is off. Turn it on in Settings, or add the items by hand.", bundle: Copy.bundle)
         case .assistantUnavailable:
             String(localized: "Couldn't read that just now. Add the items by hand instead.", bundle: Copy.bundle)
         case .quotaExceeded:

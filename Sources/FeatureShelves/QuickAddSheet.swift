@@ -67,6 +67,7 @@ struct QuickAddSheet: View {
 
     private var describeSection: some View {
         Section {
+            heading(ShelvesCopy.draftLabel)
             TextField(ShelvesCopy.draftLabel, text: $model.quickAddDraft, prompt: Text(ShelvesCopy.draftPrompt), axis: .vertical)
                 .lineLimit(2...6)
                 .submitLabel(.done)
@@ -78,40 +79,54 @@ struct QuickAddSheet: View {
                     if model.isParsing {
                         ProgressView()
                     }
-                    Label(ShelvesCopy.parse, systemImage: "text.viewfinder")
+                    // Plain text, not a Label, so it wraps in a list row instead of clipping.
+                    Image(systemName: "text.viewfinder")
+                        .accessibilityHidden(true)
+                    Text(ShelvesCopy.parse)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(.larderSecondary)
             .disabled(model.isParsing || isDraftBlank)
-        } header: {
-            Text(ShelvesCopy.draftLabel)
-                .font(LarderFont.body(.headline, weight: .semibold))
-                .foregroundStyle(LarderColor.ink.primary)
-                .textCase(nil)
-        } footer: {
             Text(ShelvesCopy.draftHint)
                 .font(LarderFont.body(.footnote))
                 .foregroundStyle(LarderColor.ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .listRowBackground(LarderColor.surface.raised)
     }
 
+    /// A section's heading as its first row; Form section headers and footers do not fully scale with Dynamic Type.
+    private func heading(_ title: String) -> some View {
+        Text(title)
+            .font(LarderFont.body(.headline, weight: .semibold))
+            .foregroundStyle(LarderColor.ink.primary)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityAddTraits(.isHeader)
+    }
+
     private var staplesSection: some View {
         Section {
-            ChipFlow {
-                ForEach(ShelvesCopy.staples) { staple in
-                    ChoiceChip(staple.name, systemImage: "plus", isSelected: model.isPending(staple)) {
-                        model.toggle(staple)
+            VStack(alignment: .leading, spacing: LarderSpacing.s) {
+                heading(ShelvesCopy.staplesTitle)
+                ChipFlow {
+                    ForEach(ShelvesCopy.staples) { staple in
+                        ChoiceChip(staple.name, systemImage: "plus", isSelected: model.isPending(staple)) {
+                            model.toggle(staple)
+                        }
                     }
+                }
+                // The lines a chip adds land further down, so the count says where they went; in the chips' own
+                // row, since section footers do not fully scale with Dynamic Type.
+                if !model.pendingLines.isEmpty {
+                    Text(ShelvesCopy.checkBelow(model.pendingLines.count))
+                        .font(LarderFont.body(.footnote, weight: .semibold))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(.vertical, LarderSpacing.xs)
-        } header: {
-            Text(ShelvesCopy.staplesTitle)
-                .font(LarderFont.body(.headline, weight: .semibold))
-                .foregroundStyle(LarderColor.ink.primary)
-                .textCase(nil)
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
@@ -119,16 +134,12 @@ struct QuickAddSheet: View {
 
     private var linesSection: some View {
         Section {
+            heading(ShelvesCopy.checkTitle)
             ForEach(model.pendingLines) { line in
                 DraftLineEditor(line: binding(for: line), defaultBestBy: model.now) {
                     model.pendingLines.removeAll { $0.id == line.id }
                 }
             }
-        } header: {
-            Text(ShelvesCopy.checkTitle)
-                .font(LarderFont.body(.headline, weight: .semibold))
-                .foregroundStyle(LarderColor.ink.primary)
-                .textCase(nil)
         }
         .listRowBackground(LarderColor.surface.raised)
     }

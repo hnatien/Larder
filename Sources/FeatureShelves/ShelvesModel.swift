@@ -24,6 +24,9 @@ public final class ShelvesModel {
     /// Items this many days from their best-by date, or fewer, belong on the Eat first shelf.
     static let soonDays = 3
 
+    /// The most pieces the item editor counts to; larger amounts are edited in grams.
+    public static let maximumCount = 99
+
     public private(set) var items: [PantryItem] = []
     public private(set) var foodsByID: [FoodID: Food] = [:]
     public private(set) var isLoading = false
@@ -331,14 +334,22 @@ public final class ShelvesModel {
         await reload()
     }
 
-    /// Saves an edited item; a blank name or an amount that is not positive and finite is ignored.
+    /// Saves an edited item; a blank name or an amount that is not positive and finite is ignored. A smaller amount
+    /// than before is logged as eaten, so using some of an item counts the same as using it up.
     public func update(_ item: PantryItem) async {
         var edited = item
         edited.rawName = item.rawName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !edited.rawName.isEmpty, edited.quantityGrams.isFinite, edited.quantityGrams > 0 else { return }
         error = nil
+        let before = items.first { $0.id == item.id }
         do {
             try await pantry.upsert(edited)
+            if let before, before.quantityGrams > edited.quantityGrams {
+                try await pantry.record([PantryEvent(
+                    kind: .eaten, foodID: edited.foodID, name: edited.rawName,
+                    grams: before.quantityGrams - edited.quantityGrams, date: dates.now
+                )])
+            }
         } catch {
             record(error, fallback: .storageFailure)
         }
@@ -347,7 +358,16 @@ public final class ShelvesModel {
 
     /// The amount of an item in words, counting pieces when its food has a countable portion.
     public func quantityText(for item: PantryItem) -> String {
-        ShelvesCopy.quantity(grams: item.quantityGrams, portions: item.foodID.flatMap { foodsByID[$0] }?.portions ?? [])
+        ShelvesCopy.quantity(grams: item.quantityGrams, portions: portions(for: item))
+    }
+
+    /// The portion an item is counted in and how many it holds, such as 6 of "egg"; `nil` when it is measured in grams.
+    public func count(for item: PantryItem) -> (portion: Portion, number: Int)? {
+        ShelvesCopy.count(grams: item.quantityGrams, portions: portions(for: item))
+    }
+
+    private func portions(for item: PantryItem) -> [Portion] {
+        item.foodID.flatMap { foodsByID[$0] }?.portions ?? []
     }
 
     /// Puts the last removed item back on the shelves and drops what its removal logged.

@@ -32,6 +32,33 @@ struct PantryEventLogTests {
         #expect(await pantry.loggedEvents.map(\.kind) == [kind])
     }
 
+    @Test @MainActor func usingSomeLogsTheDifferenceAsEaten() async throws {
+        let item = Fixture.item("Rice", grams: 750)
+        let (model, pantry, _) = Fixture.model(items: [item])
+        await model.load()
+        var edited = item
+        edited.quantityGrams = 500
+        await model.update(edited)
+        let event = try #require(await pantry.loggedEvents.first)
+        #expect(event.kind == .eaten)
+        #expect(event.grams == 250)
+        var more = edited
+        more.quantityGrams = 900
+        await model.update(more)
+        #expect(await pantry.loggedEvents.count == 1)
+    }
+
+    @Test @MainActor func countedItemsReportTheirPortionAndNumber() async throws {
+        let egg = Food(name: "Eggs", source: .seedApproximate, portions: [Portion(label: "egg", grams: 50)], foodGroup: .protein)
+        let item = Fixture.item("Eggs", grams: 300, foodID: egg.id)
+        let (model, _, _) = Fixture.model(items: [item], foods: [egg])
+        await model.load()
+        let counted = try #require(model.count(for: item))
+        #expect(counted.number == 6)
+        #expect(counted.portion.label == "egg")
+        #expect(ShelvesCopy.count(5, of: counted.portion) == "5 eggs")
+    }
+
     @Test @MainActor func undoDropsTheLoggedEvent() async {
         let item = Fixture.item("Rice")
         let (model, pantry, _) = Fixture.model(items: [item])

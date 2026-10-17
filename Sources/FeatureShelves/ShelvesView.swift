@@ -28,18 +28,9 @@ public struct ShelvesView: View {
                         Button(Copy.Action.addFood, systemImage: "plus") { isAdding = true }
                     }
                 }
-                .safeAreaInset(edge: .bottom) { bottomBar }
+                .larderToast(toast, onExpire: model.dismissUndo)
         }
         .task { await model.load() }
-        .task(id: model.undo?.id) {
-            guard model.undo != nil else { return }
-            do {
-                try await Task.sleep(for: UndoAction.lifetime)
-            } catch {
-                return
-            }
-            model.dismissUndo()
-        }
         .sheet(isPresented: $isAdding) {
             QuickAddSheet(model: model)
                 .presentationDragIndicator(.visible)
@@ -50,11 +41,6 @@ public struct ShelvesView: View {
                 .presentationDragIndicator(.visible)
         }
         .sensoryFeedback(.success, trigger: model.undo?.id) { _, new in new != nil }
-        .onChange(of: model.undo) { _, action in
-            if let action {
-                AccessibilityNotification.Announcement(ShelvesCopy.removed(action)).post()
-            }
-        }
         .onChange(of: model.error) { _, error in
             if let error, !isAdding {
                 AccessibilityNotification.Announcement(ShelvesCopy.message(for: error)).post()
@@ -170,14 +156,20 @@ public struct ShelvesView: View {
         )
         .listRowBackground(LarderColor.surface.raised)
         .listRowSeparatorTint(LarderColor.line.hairline)
+        .listRowInsets(EdgeInsets(top: LarderSpacing.xs, leading: LarderSpacing.l, bottom: LarderSpacing.xs, trailing: LarderSpacing.l))
     }
 
-    @ViewBuilder private var bottomBar: some View {
-        if let action = model.undo {
-            UndoBar(action: action) { Task { await model.undoRemove() } }
-                .padding(.horizontal, LarderSpacing.l)
-                .padding(.bottom, LarderSpacing.s)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+    /// The last removal, with Undo.
+    private var toast: LarderToast? {
+        model.undo.map { action in
+            LarderToast(
+                id: action.id,
+                ShelvesCopy.removed(action),
+                systemImage: action.kind == .eaten ? "checkmark.circle.fill" : "trash.circle.fill",
+                actionTitle: ShelvesCopy.undo
+            ) {
+                Task { await model.undoRemove() }
+            }
         }
     }
 }

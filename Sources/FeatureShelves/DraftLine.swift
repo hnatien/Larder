@@ -70,9 +70,6 @@ public struct UndoAction: Identifiable, Hashable, Sendable {
         case eaten, letGo
     }
 
-    /// How long the undo stays on offer.
-    public static let lifetime: Duration = .seconds(5)
-
     public let id = UUID()
     public let item: PantryItem
     public let kind: Kind
