@@ -55,6 +55,86 @@ nonisolated enum LedgerCopy {
     static var hidden: String { String(localized: "Hidden", bundle: Copy.bundle) }
     static var daysRotor: String { String(localized: "Days", bundle: Copy.bundle) }
 
+    static var adjustTitle: String { String(localized: "Adjust this week", bundle: Copy.bundle) }
+    static var adjustPrompt: String { String(localized: "Vegetarian Tuesday, quicker dinners, use the rice", bundle: Copy.bundle) }
+    static var adjustHint: String {
+        String(localized: "The assistant turns this into changes for this week. Your settings stay as they are.", bundle: Copy.bundle)
+    }
+    static var adjustAsk: String { String(localized: "Ask", bundle: Copy.bundle) }
+    static var adjusting: String { String(localized: "Reading your request", bundle: Copy.bundle) }
+    static var proposalTitle: String { String(localized: "Changes for this week", bundle: Copy.bundle) }
+    static var applyAndReplan: String { String(localized: "Apply and replan", bundle: Copy.bundle) }
+    static var adjustNeedsConsent: String {
+        String(localized: "Adjusting the week uses Larder's assistant. Allow AI help in Settings first.", bundle: Copy.bundle)
+    }
+    static var openSettings: String { String(localized: "Open Settings", bundle: Copy.bundle) }
+    static var assistantAsks: String { String(localized: "The assistant asks", bundle: Copy.bundle) }
+
+    /// The note under a proposal when some changes were left for Settings.
+    static func setAside(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "One change was left out. Allergies, health, faith and the diets you've set are changed in Settings.", bundle: Copy.bundle)
+            : String(localized: "\(count) changes were left out. Allergies, health, faith and the diets you've set are changed in Settings.", bundle: Copy.bundle)
+    }
+
+    /// One proposed change in plain words; `dayName` names the day of a change limited to one day.
+    static func describe(_ item: WeekAdjustment.Item, dayName: (Int) -> String) -> String {
+        switch item {
+        case .diet(let pattern, nil):
+            let diet = name(of: pattern)
+            return String(localized: "\(diet) all week", bundle: Copy.bundle)
+        case .diet(let pattern, let offset?):
+            let diet = name(of: pattern)
+            let weekday = dayName(offset)
+            return String(localized: "\(diet) on \(weekday)", bundle: Copy.bundle)
+        case .maxMinutes(let minutes, nil):
+            return String(localized: "Dinners in \(minutes) minutes or less", bundle: Copy.bundle)
+        case .maxMinutes(let minutes, let offset?):
+            let weekday = dayName(offset)
+            return String(localized: "Dinner on \(weekday) in \(minutes) minutes or less", bundle: Copy.bundle)
+        case .avoid(let food):
+            return String(localized: "No \(food) this week", bundle: Copy.bundle)
+        case .useUp(let food):
+            return String(localized: "Use up the \(food)", bundle: Copy.bundle)
+        }
+    }
+
+    /// The notice after an adjusted replan when some days' changes could not be met.
+    static func unmetDays(_ dayNames: String) -> String {
+        String(localized: "Nothing in your recipes fits the change for \(dayNames), so it keeps its dinner.", bundle: Copy.bundle)
+    }
+
+    static func name(of diet: DietPattern) -> String {
+        switch diet {
+        case .vegetarian: String(localized: "Vegetarian", bundle: Copy.bundle)
+        case .vegan: String(localized: "Vegan", bundle: Copy.bundle)
+        case .pescatarian: String(localized: "Pescatarian", bundle: Copy.bundle)
+        case .mediterranean: String(localized: "Mediterranean", bundle: Copy.bundle)
+        case .dash: String(localized: "DASH", bundle: Copy.bundle)
+        }
+    }
+
+    static func adjustMessage(for error: LarderError) -> String {
+        switch error {
+        case .notFound:
+            String(localized: "Finish setting up your profile, then plan the week.", bundle: Copy.bundle)
+        case .storageFailure:
+            String(localized: "Couldn't save to this device. Check your storage and try again.", bundle: Copy.bundle)
+        case .assistantUnavailable:
+            String(localized: "Couldn't reach the assistant. Your plan hasn't changed.", bundle: Copy.bundle)
+        case .quotaExceeded:
+            String(localized: "This month's assistant allowance is used up. You can still swap any dinner.", bundle: Copy.bundle)
+        case .invalidResponse:
+            String(localized: "Larder couldn't turn that into a change. Try saying it another way.", bundle: Copy.bundle)
+        case .declined:
+            String(localized: "The assistant would not make that change.", bundle: Copy.bundle)
+        case .consentRequired:
+            adjustNeedsConsent
+        case .plusRequired:
+            String(localized: "Adjusting the week needs Larder Plus.", bundle: Copy.bundle)
+        }
+    }
+
     /// A reason under "Why this week?", prefixed by its day.
     static func dayNote(day dayName: String, text: String) -> String {
         String(localized: "\(dayName): \(text)", bundle: Copy.bundle)

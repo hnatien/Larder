@@ -55,6 +55,20 @@ public final class LedgerModel {
     public private(set) var swapCandidates: [ScoredRecipe] = []
     /// Counts plans saved by `planWeek` and `replan`, so the view can announce each one.
     public private(set) var savedPlanCount = 0
+    /// What the user asks the assistant to change about the week, such as "vegetarian Tuesday, use the rice".
+    public var adjustDraft = ""
+    /// Whether the assistant is reading `adjustDraft`.
+    public private(set) var isAdjusting = false
+    /// The changes the assistant proposed, waiting for the user to apply them or not.
+    public private(set) var proposedAdjustment: WeekAdjustment?
+    /// The assistant's question back, when the request was unclear or asked for something it cannot change here.
+    public private(set) var adjustQuestion: String?
+    /// Set when the user asks for an adjustment before allowing AI help in Settings.
+    public private(set) var adjustNeedsConsent = false
+    /// Why the last adjustment request failed.
+    public private(set) var adjustError: LarderError?
+    /// Days of the last adjusted plan whose own change nothing could meet; they kept the planner's dinner.
+    public private(set) var unmetAdjustmentDays: [Date] = []
 
     private let plans: any PlanRepository
     private let service: PlanningService
@@ -225,7 +239,7 @@ public final class LedgerModel {
         await generate(locked: keepingLocked ? meals.filter(\.isLocked) : [])
     }
 
-    private func generate(locked: [PlannedMeal]) async {
+    private func generate(locked: [PlannedMeal], adjustment: WeekAdjustment? = nil) async {
         guard !isPlanning else { return }
         error = nil
         isPlanning = true
@@ -239,12 +253,19 @@ public final class LedgerModel {
         }
         do {
             let now = dates.now
-            let result = try await service.planWeek(
-                startDate: calendar.startOfDay(for: now),
-                slots: Self.plannedSlots,
-                seed: UInt64(max(now.timeIntervalSince1970, 0)),
-                locked: locked
-            )
+            let startDate = calendar.startOfDay(for: now)
+            let seed = UInt64(max(now.timeIntervalSince1970, 0))
+            let result: PlanResult
+            var unmetOffsets: [Int] = []
+            if let adjustment {
+                let adjusted = try await service.planWeek(
+                    startDate: startDate, slots: Self.plannedSlots, seed: seed, locked: locked, adjustment: adjustment
+                )
+                result = adjusted.result
+                unmetOffsets = adjusted.unmetDayOffsets
+            } else {
+                result = try await service.planWeek(startDate: startDate, slots: Self.plannedSlots, seed: seed, locked: locked)
+            }
             var newPlan = result.plan
             newPlan.status = .active
             let newMeals = result.meals.map { meal in
@@ -260,6 +281,7 @@ public final class LedgerModel {
             explanation = nil
             explainedMealIDs = []
             showsExplanation = false
+            unmetAdjustmentDays = unmetOffsets.compactMap { calendar.date(byAdding: .day, value: $0, to: startDate) }
             if !plus { await markFreeWeekUsed() }
             remember(try await service.catalogue(for: Set(newMeals.map(\.recipeID))))
             savedPlanCount += 1
@@ -276,6 +298,67 @@ public final class LedgerModel {
         let previousMeals = try await plans.meals(for: previous.id)
         previous.status = .archived
         try await plans.save(previous, meals: previousMeals.filter { !carried.contains($0.id) })
+    }
+
+    // MARK: Adjusting
+
+    /// Asks the assistant to turn `adjustDraft` into changes for this week; a Plus feature that needs AI help allowed.
+    ///
+    /// The proposal waits in `proposedAdjustment` until `applyAdjustment()`; a question back lands in `adjustQuestion`.
+    public func requestAdjustment() async {
+        let message = adjustDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !message.isEmpty, !isAdjusting, !isPlanning else { return }
+        dismissAdjustment()
+        guard await isPlus() else {
+            paywallRequested = true
+            return
+        }
+        isAdjusting = true
+        defer { isAdjusting = false }
+        do {
+            guard let profile = try await profileRepository.profile() else { throw LarderError.notFound }
+            guard profile.consents.aiProcessing else {
+                adjustNeedsConsent = true
+                return
+            }
+            let diets = try await profileRepository.constraints()
+                .filter { $0.axis != .medical && $0.axis != .religious }
+                .compactMap { constraint -> DietPattern? in if case .diet(let pattern) = constraint.kind { pattern } else { nil } }
+            let edit = try await assistant.adjust(
+                request: AdjustRequest(message: message, maxCookMinutes: profile.maxCookMinutes, dietPatterns: Set(diets), goal: profile.goal)
+            )
+            let adjustment = WeekAdjustment(edit)
+            adjustQuestion = edit.clarifyingQuestion
+            if !adjustment.isEmpty || adjustment.setAsideCount > 0 { proposedAdjustment = adjustment }
+            if adjustQuestion == nil, proposedAdjustment == nil { adjustError = .invalidResponse }
+        } catch is CancellationError {
+            return
+        } catch {
+            adjustError = error as? LarderError ?? .assistantUnavailable
+        }
+    }
+
+    /// Replans the week with the proposed changes, keeping locked dinners; Settings stay as they are.
+    public func applyAdjustment() async {
+        guard let adjustment = proposedAdjustment, !adjustment.isEmpty else { return }
+        proposedAdjustment = nil
+        adjustQuestion = nil
+        await generate(locked: meals.filter(\.isLocked), adjustment: adjustment)
+        if error == nil, !paywallRequested { adjustDraft = "" }
+    }
+
+    /// The day a proposed change limited to one day falls on: `offset` days from today, where the next plan starts.
+    public func adjustmentDay(_ offset: Int) -> Date? {
+        calendar.date(byAdding: .day, value: offset, to: calendar.startOfDay(for: dates.now))
+    }
+
+    /// Drops the proposal, the question and any adjustment notice; the typed request stays.
+    public func dismissAdjustment() {
+        proposedAdjustment = nil
+        adjustQuestion = nil
+        adjustNeedsConsent = false
+        adjustError = nil
+        unmetAdjustmentDays = []
     }
 
     // MARK: Explaining

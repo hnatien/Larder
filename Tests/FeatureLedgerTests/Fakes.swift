@@ -89,11 +89,13 @@ struct FakeProfileRepository: ProfileRepository {
     func saveTargets(_ targets: [NutrientTarget]) {}
 }
 
-/// Records every explain request and answers with a fixed result.
+/// Records every explain and adjust request and answers with fixed results.
 actor FakeAssistant: AssistantBackend {
     private(set) var explainRequests: [PlanExplainRequest] = []
     private var result: Result<PlanExplanation, LarderError>
+    private(set) var adjustRequests: [AdjustRequest] = []
 
+    private var adjustResult: Result<ConstraintEdit, LarderError> = .failure(.assistantUnavailable)
     init(result: Result<PlanExplanation, LarderError> = .success(PlanExplanation(summary: "A steady week.", mealNotes: []))) {
         self.result = result
     }
@@ -101,13 +103,18 @@ actor FakeAssistant: AssistantBackend {
     func setResult(_ result: Result<PlanExplanation, LarderError>) { self.result = result }
 
     func explain(plan: PlanExplainRequest) throws -> PlanExplanation {
+    func setAdjustResult(_ result: Result<ConstraintEdit, LarderError>) { adjustResult = result }
+
         explainRequests.append(plan)
         return try result.get()
     }
 
     func parsePantry(text: String) throws -> [ParsedPantryLine] { throw LarderError.assistantUnavailable }
     func parseRecipe(text: String, imageData: Data?) throws -> ParsedRecipe { throw LarderError.assistantUnavailable }
-    func adjust(request: AdjustRequest) throws -> ConstraintEdit { throw LarderError.assistantUnavailable }
+    func adjust(request: AdjustRequest) throws -> ConstraintEdit {
+        adjustRequests.append(request)
+        return try adjustResult.get()
+    }
 }
 
 /// Plus and free-week state, counting each question and mark.

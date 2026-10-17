@@ -192,13 +192,19 @@ public struct ProxyAssistantBackend: AssistantBackend {
             }
         }
         var summary: [String] = []
-        if let question = response.clarifyingQuestion {
+        let question = response.clarifyingQuestion?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let question, !question.isEmpty {
             summary.append(question)
         }
         if !dropped.isEmpty {
             summary.append("Not applied here: \(dropped.joined(separator: ", ")).")
         }
-        return ConstraintEdit(changes: changes, summary: summary.joined(separator: " "))
+        return ConstraintEdit(
+            changes: changes,
+            summary: summary.joined(separator: " "),
+            clarifyingQuestion: question?.isEmpty == false ? question : nil,
+            droppedCount: dropped.count
+        )
     }
 
     private static func changes(for edit: AdjustResponseBody.Edit, dayOffsets: [String: Int]) -> [ConstraintEdit.Change]? {

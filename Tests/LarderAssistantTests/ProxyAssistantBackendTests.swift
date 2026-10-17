@@ -216,8 +216,20 @@ struct ProxyAssistantBackendTests {
             .addDislike("coriander"),
             .useUp("rice"),
         ])
+        #expect(edit.clarifyingQuestion == "Peanut allergies are changed in Settings.")
+        #expect(edit.droppedCount == 7)
         #expect(edit.summary.hasPrefix("Peanut allergies are changed in Settings. Not applied here: "))
         #expect(edit.summary.contains("allergen:peanut, religious:halal, diet:carnivore, diet:vegan, diet:vegan, diet:vegan, diet:vegan."))
+    }
+
+    @Test func blankClarifyingQuestionCountsAsNone() async throws {
+        let stub = stubbed(Fixtures.adjustPath, .json(200, #"{"edits":[],"clarifyingQuestion":"  "}"#))
+        let edit = try await Fixtures.backend(stub).adjust(
+            request: AdjustRequest(message: "quick dinners", maxCookMinutes: 30, dietPatterns: [], goal: .maintain)
+        )
+        #expect(edit.clarifyingQuestion == nil)
+        #expect(edit.droppedCount == 0)
+        #expect(edit.summary.isEmpty)
     }
 
     @Test func emptyAdjustInstructionIsRejectedBeforeTheNetwork() async {

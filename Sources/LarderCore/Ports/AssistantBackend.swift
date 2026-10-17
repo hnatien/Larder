@@ -161,11 +161,17 @@ public struct ConstraintEdit: Hashable, Codable, Sendable {
     public var changes: [Change]
     /// A one-line description shown when asking the user to confirm.
     public var summary: String
+    /// A question the assistant asks back when the request was unclear or asked for something it cannot change here.
+    public var clarifyingQuestion: String?
+    /// How many proposed edits were left out because a request cannot make them, such as allergen, medical or religious ones.
+    public var droppedCount: Int
 
     /// Creates a constraint edit.
-    public init(changes: [Change], summary: String) {
+    public init(changes: [Change], summary: String, clarifyingQuestion: String? = nil, droppedCount: Int = 0) {
         self.changes = changes
         self.summary = summary
+        self.clarifyingQuestion = clarifyingQuestion
+        self.droppedCount = droppedCount
     }
 
     /// One proposed change; `dayOffset` limits it to one day of the plan, `nil` means the whole plan.

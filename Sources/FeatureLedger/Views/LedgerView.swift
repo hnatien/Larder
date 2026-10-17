@@ -105,6 +105,10 @@ public struct LedgerView: View {
                 explanationCard
                     .ledgerListRow()
             }
+            if model.plan != nil {
+                AdjustWeekCard(model: model, onOpenSettings: onOpenAccount)
+                    .ledgerListRow()
+            }
             ForEach(model.days) { day in
                 dayRow(day)
             }
@@ -155,7 +159,7 @@ public struct LedgerView: View {
                         Task { await model.requestExplanation() }
                     }
                 } label: {
-                    Label(LedgerCopy.whyThisWeek, systemImage: "info.circle")
+                    Text(LedgerCopy.whyThisWeek)
                 }
                 .buttonStyle(.larderQuiet)
                 .accessibilityValue(model.showsExplanation ? Text(LedgerCopy.shown) : Text(LedgerCopy.hidden))
