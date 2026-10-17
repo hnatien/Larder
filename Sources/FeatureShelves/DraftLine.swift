@@ -76,10 +76,13 @@ public struct UndoAction: Identifiable, Hashable, Sendable {
     public let id = UUID()
     public let item: PantryItem
     public let kind: Kind
+    /// The log entries the removal wrote, dropped again on undo.
+    public let eventIDs: [PantryEventID]
 
     /// Creates an undo for a removed item.
-    public init(item: PantryItem, kind: Kind) {
+    public init(item: PantryItem, kind: Kind, eventIDs: [PantryEventID] = []) {
         self.item = item
         self.kind = kind
+        self.eventIDs = eventIDs
     }
 }

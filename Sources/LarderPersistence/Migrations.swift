@@ -6,7 +6,43 @@ enum Migrations {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("v1-schema", migrate: createV1Schema)
         migrator.registerMigration("v2-recipe-photo", migrate: addRecipePhoto)
+        migrator.registerMigration("v3-pantry-loop", migrate: addPantryLoop)
         return migrator
+    }
+
+    /// The log of food leaving the shelves, and the grocery basket and hand-written items, so a relaunch keeps them.
+    ///
+    /// A basket line's key is its identity kind ("food", "name" or "manual"), the identity's text and the unit of a
+    /// line that could not be weighed, empty for a weighed one so the primary key has no NULL.
+    private static func addPantryLoop(_ db: Database) throws {
+        try db.create(table: "pantryEvent") { t in
+            t.primaryKey("id", .text)
+            t.column("kind", .text).notNull()
+            t.column("foodID", .text)
+            t.column("name", .text).notNull()
+            t.column("grams", .double).notNull()
+            t.column("date", .datetime).notNull()
+            t.column("plannedMealID", .text)
+        }
+        try db.create(indexOn: "pantryEvent", columns: ["date"])
+
+        try db.create(table: "groceryManualItem") { t in
+            t.primaryKey("id", .text)
+            t.column("position", .integer).notNull()
+            t.column("name", .text).notNull()
+            t.column("quantity", .text).notNull()
+            t.column("aisle", .text).notNull()
+        }
+
+        try db.create(table: "groceryBasketLine") { t in
+            t.column("identityKind", .text).notNull()
+            t.column("identity", .text).notNull()
+            t.column("unit", .text).notNull()
+            t.column("item", .jsonText)
+            t.column("pantryItemID", .text)
+            t.column("checkedOn", .datetime).notNull()
+            t.primaryKey(["identityKind", "identity", "unit"])
+        }
     }
 
     /// Imported recipes can keep the page's photo; the column holds its file name in the photo store.

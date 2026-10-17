@@ -159,7 +159,7 @@ public final class ShelvesModel {
             var draft = DraftLine(parsed: line, source: source)
             if line.location == nil {
                 // The catalogue only sharpens the guess, so a failed lookup falls back to the name alone.
-                let food = try? await matchingFood(for: line.name)
+                let food = try? await foods.match(forItemNamed: line.name)
                 draft.location = .usual(forItemNamed: line.name, food: food)
             }
             drafts.append(draft)
@@ -307,12 +307,13 @@ public final class ShelvesModel {
         await reload()
     }
 
-    /// Removes an item that was eaten, keeping an undo on offer.
+    /// Removes an item that was eaten and logs it as eaten, keeping an undo on offer.
     public func eat(_ item: PantryItem) async {
         await remove(item, kind: .eaten)
     }
 
-    /// Removes an item that went unused, keeping an undo on offer.
+    /// Removes an item that went unused and logs it as let go, or as expired once past its best-by date, keeping an
+    /// undo on offer.
     public func letGo(_ item: PantryItem) async {
         await remove(item, kind: .letGo)
     }
@@ -349,12 +350,13 @@ public final class ShelvesModel {
         ShelvesCopy.quantity(grams: item.quantityGrams, portions: item.foodID.flatMap { foodsByID[$0] }?.portions ?? [])
     }
 
-    /// Puts the last removed item back on the shelves.
+    /// Puts the last removed item back on the shelves and drops what its removal logged.
     public func undoRemove() async {
         guard let action = undo else { return }
         undo = nil
         do {
             try await pantry.upsert(action.item)
+            try await pantry.removeEvents(action.eventIDs)
         } catch {
             record(error, fallback: .storageFailure)
         }
@@ -371,14 +373,34 @@ public final class ShelvesModel {
         error = nil
     }
 
+    /// Removes the item, then logs why it left; a failed log still offers the undo, since the item is gone.
     private func remove(_ item: PantryItem, kind: UndoAction.Kind) async {
         do {
             try await pantry.remove(item.id)
-            undo = UndoAction(item: item, kind: kind)
         } catch {
+            record(error, fallback: .storageFailure)
+            await reload()
+            return
+        }
+        let event = PantryEvent(
+            kind: eventKind(for: item, removedAs: kind), foodID: item.foodID, name: item.rawName,
+            grams: item.quantityGrams, date: dates.now
+        )
+        do {
+            try await pantry.record([event])
+            undo = UndoAction(item: item, kind: kind, eventIDs: [event.id])
+        } catch {
+            undo = UndoAction(item: item, kind: kind)
             record(error, fallback: .storageFailure)
         }
         await reload()
+    }
+
+    private func eventKind(for item: PantryItem, removedAs kind: UndoAction.Kind) -> PantryEventKind {
+        switch kind {
+        case .eaten: .eaten
+        case .letGo: freshness(for: item) == .past ? .expired : .letGo
+        }
     }
 
     private func reload() async {
@@ -395,7 +417,7 @@ public final class ShelvesModel {
 
     private func save(_ line: DraftLine, source: PantrySource) async throws {
         let name = line.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let food = try await matchingFood(for: name)
+        let food = try await foods.match(forItemNamed: name)
         // A quantity that cannot become grams (a count with no portion, a volume with no density) is stored as entered.
         let grams = (try? UnitConverter.grams(
             from: line.quantity, unit: line.unit, density: food?.densityGPerMl, portion: food?.portions.first
@@ -411,23 +433,6 @@ public final class ShelvesModel {
                 addedOn: dates.now
             )
         )
-    }
-
-    /// The top search hit, accepted only when its name starts with the same word as `name`, ignoring case and a plural s.
-    private func matchingFood(for name: String) async throws -> Food? {
-        guard let word = Self.firstWord(of: name),
-            let hit = try await foods.search(text: name, limit: 1).first,
-            Self.firstWord(of: hit.name) == word
-        else { return nil }
-        return hit
-    }
-
-    /// The first word, lowercased, with a plural "s" dropped so "onions" meets "Onion, raw".
-    private static func firstWord(of text: String) -> String? {
-        text.split(whereSeparator: { !$0.isLetter }).first.map { word in
-            let lowered = word.lowercased()
-            return lowered.count > 3 && lowered.hasSuffix("s") ? String(lowered.dropLast()) : lowered
-        }
     }
 
     private func record(_ failure: any Error, fallback: LarderError) {

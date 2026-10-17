@@ -5,8 +5,20 @@ import LarderCore
 
 let locale = Locale(identifier: "en_US")
 
+let calendar: Calendar = {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = .gmt
+    return calendar
+}()
+
+/// The start of the day `days` after `FixedDates().now`.
+func day(_ days: Int) -> Date? {
+    calendar.date(byAdding: .day, value: days, to: calendar.startOfDay(for: FixedDates().now))
+}
+
 @MainActor struct World {
     let store = FakeStore()
+    let basket = FakeBasket()
     let plan = MealPlan(startDate: Date(timeIntervalSince1970: 1_800_000_000), days: 7, constraintsSnapshot: "", solverVersion: "t", seed: 1, status: .active)
     let spinach = Food(name: "Spinach", source: .seedApproximate, foodGroup: .produce)
     let chicken = Food(name: "Chicken", source: .seedApproximate, foodGroup: .protein, tags: [.poultry])
@@ -28,7 +40,12 @@ let locale = Locale(identifier: "en_US")
             plan: plan, meals: meals, recipes: [recipe], ingredients: [recipe.id: lines],
             foods: [spinach, chicken, milk, rice, oil], pantry: pantry
         )
-        return GroceryModel(plans: store, recipes: store, foods: store, pantry: store, dates: FixedDates(), locale: locale)
+        return relaunched()
+    }
+
+    /// A new model over the same stores, as after a relaunch.
+    func relaunched() -> GroceryModel {
+        GroceryModel(plans: store, recipes: store, foods: store, pantry: store, basket: basket, dates: FixedDates(), calendar: calendar, locale: locale)
     }
 
     func item(_ model: GroceryModel, _ name: String) throws -> GroceryItem {
@@ -62,7 +79,7 @@ let locale = Locale(identifier: "en_US")
     }
 
     @Test func loadWithoutPlanGivesEmptyList() async {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
+        let model = world.relaunched()
         await model.load()
         #expect(model.list?.items.isEmpty == true)
         #expect(model.isEmpty)
@@ -111,7 +128,7 @@ let locale = Locale(identifier: "en_US")
         #expect(model.list?.items.count == 1)
     }
 
-    @Test func toggleWritesPantryItemWithGramsAndLocation() async throws {
+    @Test func toggleWritesPantryItemWithGramsLocationAndBestBy() async throws {
         let model = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 120, in: world.recipe)])
         await model.load()
         let spinach = try world.item(model, "Spinach")
@@ -120,10 +137,20 @@ let locale = Locale(identifier: "en_US")
         #expect(written.quantityGrams == 120)
         #expect(written.foodID == world.spinach.id)
         #expect(written.location == .fridge)
-        #expect(written.source == .manual)
-        #expect(written.bestBy == nil)
+        #expect(written.source == .groceryList)
+        #expect(written.bestBy == day(ShelfLife.days(forItemNamed: "Spinach", food: world.spinach, in: .fridge)))
+        #expect(written.bestBy == day(5))
         #expect(written.addedOn == FixedDates().now)
         #expect(model.checked.contains(GroceryItemKey(spinach)))
+    }
+
+    @Test(arguments: [("Chicken", 2), ("Milk", 7), ("Rice", 180), ("Olive oil", 180)])
+    func bestByFollowsTheShelfLifeOfTheFoodGroup(name: String, days: Int) async throws {
+        let foods = [world.chicken, world.milk, world.rice, world.oil]
+        let model = await world.model(meals: [world.meal()], lines: foods.map { world.line($0, grams: 50, in: world.recipe) })
+        await model.load()
+        await model.toggle(try world.item(model, name))
+        #expect(await world.store.upserts.first?.bestBy == day(days))
     }
 
     @Test(arguments: [
@@ -149,7 +176,7 @@ let locale = Locale(identifier: "en_US")
         #expect(model.checked.isEmpty)
     }
 
-    @Test func itemsWithoutGramsTickWithoutWriting() async throws {
+    @Test func itemsWithoutGramsLandWithTheirNumberAndComeOffAgain() async throws {
         let limes = Ingredient(recipeID: world.recipe.id, rawText: "limes", quantity: 2, unit: .piece)
         let model = await world.model(meals: [world.meal()], lines: [limes])
         await model.load()
@@ -157,19 +184,50 @@ let locale = Locale(identifier: "en_US")
         #expect(item.neededGrams == nil)
         await model.toggle(item)
         #expect(model.checked.contains(GroceryItemKey(item)))
-        #expect(await world.store.upserts.isEmpty)
+        let written = try #require(await world.store.upserts.first)
+        #expect(written.rawName == "limes")
+        #expect(written.foodID == nil)
+        #expect(written.quantityGrams == 2)
+        #expect(written.source == .groceryList)
+        #expect(written.bestBy == day(ShelfLife.days(forItemNamed: "limes", food: nil, in: written.location)))
         await model.toggle(item)
         #expect(model.checked.isEmpty)
-        #expect(await world.store.removals.isEmpty)
+        #expect(await world.store.removals == [written.id])
     }
 
-    @Test func failedPantryWriteLeavesItemUnticked() async throws {
+    @Test func unweighedItemOfAFoodWithAPortionLandsInGrams() async throws {
+        let egg = Food(name: "Egg", source: .seedApproximate, portions: [Portion(label: "1 large", grams: 50)], foodGroup: .protein, tags: [.egg])
+        let eggs = Ingredient(recipeID: world.recipe.id, rawText: "eggs", quantity: 3, unit: .piece, foodID: egg.id)
+        await world.store.seed(plan: world.plan, meals: [world.meal()], recipes: [world.recipe], ingredients: [world.recipe.id: [eggs]], foods: [egg])
+        let model = world.relaunched()
+        await model.load()
+        let item = try world.item(model, "Egg")
+        #expect(item.neededGrams == 150)
+        await model.toggle(item)
+        let written = try #require(await world.store.upserts.first)
+        #expect(written.quantityGrams == 150)
+        #expect(written.location == .fridge)
+        #expect(written.bestBy == day(21))
+    }
+
+    @Test func failedPantryWriteLeavesItemUntickedInMemoryAndInTheStore() async throws {
         let model = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 120, in: world.recipe)])
         await model.load()
         await world.store.setFailPantryWrites(true)
         await model.toggle(try world.item(model, "Spinach"))
         #expect(model.error == .pantryUpdateFailed)
         #expect(model.checked.isEmpty)
+        #expect(await world.basket.storedLines.isEmpty)
+    }
+
+    @Test func failedBasketWriteLeavesTheShelvesAlone() async throws {
+        let model = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 120, in: world.recipe)])
+        await model.load()
+        await world.basket.setFailWrites(true)
+        await model.toggle(try world.item(model, "Spinach"))
+        #expect(model.error == .basketUpdateFailed)
+        #expect(model.checked.isEmpty)
+        #expect(await world.store.upserts.isEmpty)
     }
 
     @Test func failedPantryRemovalKeepsItemTicked() async throws {
@@ -193,18 +251,18 @@ let locale = Locale(identifier: "en_US")
         #expect(model.basket.flatMap(\.entries) == [.planned(spinach)])
     }
 
-    @Test func manualItemsAreTrimmedAndBlankOnesIgnored() {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
-        model.addManual(name: "  Lemons ", quantity: " 3 ")
-        model.addManual(name: "   ")
+    @Test func manualItemsAreTrimmedAndBlankOnesIgnored() async {
+        let model = world.relaunched()
+        await model.addManual(name: "  Lemons ", quantity: " 3 ")
+        await model.addManual(name: "   ")
         #expect(model.manualItems.map(\.name) == ["Lemons"])
         #expect(model.manualItems.first?.quantity == "3")
     }
 
-    @Test func manualItemsAppearInShareText() {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
-        model.addManual(name: "Oat milk", quantity: "2 cartons", aisle: .dairyAndEggs)
-        model.addManual(name: "Candles")
+    @Test func manualItemsAppearInShareText() async {
+        let model = world.relaunched()
+        await model.addManual(name: "Oat milk", quantity: "2 cartons", aisle: .dairyAndEggs)
+        await model.addManual(name: "Candles")
         #expect(model.shareText() == "Dairy and eggs\n- 2 cartons Oat milk\n\nOther\n- Candles")
     }
 
@@ -218,7 +276,7 @@ let locale = Locale(identifier: "en_US")
             ]
         )
         await model.load()
-        model.addManual(name: "Candles")
+        await model.addManual(name: "Candles")
         #expect(model.shareText() == "Produce\n- 250 g Spinach\n\nDairy and eggs\n- 100 g Milk\n\nDry staples\n- 500 g Rice\n\nOther\n- Candles")
         await model.toggle(try world.item(model, "Milk"))
         #expect(!model.shareText().contains("Milk"))
@@ -226,27 +284,55 @@ let locale = Locale(identifier: "en_US")
     }
 
     @Test func shareTextIsEmptyWithNothingToBuy() {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
+        let model = world.relaunched()
         #expect(model.shareText().isEmpty)
     }
 
-    @Test func removeManualDropsTheItem() {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
-        model.addManual(name: "Lemons")
+    @Test func removeManualDropsTheItemAndKeepsWhatItPutOnTheShelves() async throws {
+        let model = await world.model(meals: [], lines: [])
+        await model.addManual(name: "Rice")
         let item = model.manualItems[0]
-        model.toggle(item)
-        model.removeManual(item)
+        await model.toggle(item)
+        await model.removeManual(item)
         #expect(model.manualItems.isEmpty)
         #expect(model.checked.isEmpty)
+        #expect(await world.basket.storedManualItems.isEmpty)
+        #expect(await world.basket.storedLines.isEmpty)
+        #expect(await world.store.upserts.count == 1)
+        #expect(await world.store.removals.isEmpty)
     }
 
-    @Test func manualItemsTickWithoutTouchingThePantry() async {
-        let model = GroceryModel(plans: world.store, recipes: world.store, foods: world.store, pantry: world.store, dates: FixedDates(), locale: locale)
-        model.addManual(name: "Lemons")
+    @Test func manualItemThatIsNoFoodTicksWithoutTouchingThePantry() async {
+        let model = await world.model(meals: [], lines: [])
+        await model.addManual(name: "Candles")
         await model.toggle(GroceryEntry.manual(model.manualItems[0]))
         #expect(model.basket.flatMap(\.entries).count == 1)
         #expect(model.toBuy.isEmpty)
         #expect(await world.store.upserts.isEmpty)
+    }
+
+    @Test func manualItemThatNamesAFoodLandsWithSourceManualAndItsAmount() async throws {
+        let model = await world.model(meals: [], lines: [])
+        await model.addManual(name: "Rice", quantity: "2 kg")
+        let item = model.manualItems[0]
+        await model.toggle(item)
+        let written = try #require(await world.store.upserts.first)
+        #expect(written.foodID == world.rice.id)
+        #expect(written.rawName == "Rice")
+        #expect(written.quantityGrams == 2_000)
+        #expect(written.source == .manual)
+        #expect(written.location == .pantry)
+        #expect(written.bestBy == day(180))
+        await model.toggle(item)
+        #expect(await world.store.removals == [written.id])
+    }
+
+    @Test func failedManualSaveKeepsTheListAsItWas() async {
+        let model = world.relaunched()
+        await world.basket.setFailWrites(true)
+        await model.addManual(name: "Lemons")
+        #expect(model.manualItems.isEmpty)
+        #expect(model.error == .basketUpdateFailed)
     }
 
     @Test func clearCheckedEmptiesTheBasketAndKeepsTheRest() async throws {
@@ -255,16 +341,67 @@ let locale = Locale(identifier: "en_US")
             lines: [world.line(world.spinach, grams: 100, in: world.recipe), world.line(world.rice, grams: 200, in: world.recipe)]
         )
         await model.load()
-        model.addManual(name: "Lemons")
-        model.addManual(name: "Candles")
+        await model.addManual(name: "Lemons")
+        await model.addManual(name: "Candles")
         await model.toggle(try world.item(model, "Spinach"))
-        model.toggle(model.manualItems[0])
-        model.clearChecked()
+        await model.toggle(model.manualItems[0])
+        await model.clearChecked()
         #expect(model.checked.isEmpty)
         #expect(model.manualItems.map(\.name) == ["Candles"])
         #expect(model.list?.items.map(\.name) == ["Rice"])
         #expect(model.basket.isEmpty)
         #expect(await world.store.removals.isEmpty)
+        #expect(await world.basket.storedLines.isEmpty)
+        #expect(await world.basket.storedManualItems.map(\.name) == ["Candles"])
+    }
+
+    @Test func aRelaunchKeepsTicksAndManualItemsAndUntickStillTakesTheFoodOff() async throws {
+        let first = await world.model(meals: [world.meal()], lines: [world.line(world.spinach, grams: 120, in: world.recipe)])
+        await first.load()
+        let spinach = try world.item(first, "Spinach")
+        await first.addManual(name: "Lemons", quantity: "3")
+        await first.addManual(name: "Candles")
+        await first.toggle(spinach)
+        await first.toggle(first.manualItems[1])
+        let landed = try #require(await world.store.upserts.first?.id)
+
+        let relaunched = world.relaunched()
+        await relaunched.load()
+
+        #expect(relaunched.manualItems == first.manualItems)
+        #expect(relaunched.checked == first.checked)
+        #expect(relaunched.basket == first.basket)
+        // The food the tick landed is not netted off the list, so the line stays where it was.
+        #expect(try world.item(relaunched, "Spinach").neededGrams == 120)
+        await relaunched.toggle(spinach)
+        #expect(await world.store.removals == [landed])
+        #expect(relaunched.checked == [GroceryItemKey(first.manualItems[1])])
+    }
+
+    @Test func aPlanChangeNeverDropsTicksOrManualItems() async throws {
+        let model = await world.model(
+            meals: [world.meal()],
+            lines: [world.line(world.spinach, grams: 120, in: world.recipe), world.line(world.rice, grams: 200, in: world.recipe)]
+        )
+        await model.load()
+        let spinach = try world.item(model, "Spinach")
+        await model.toggle(spinach)
+        await model.addManual(name: "Candles")
+        await model.toggle(model.manualItems[0])
+        await model.addManual(name: "Lemons")
+
+        let other = Recipe(title: "Porridge", origin: .generated, servings: 1, prepMinutes: 2, cookMinutes: 5)
+        let porridge = PlannedMeal(planID: world.plan.id, date: world.plan.startDate, slot: .breakfast, recipeID: other.id, servings: 1)
+        await world.store.seed(
+            plan: world.plan, meals: [porridge], recipes: [other], ingredients: [other.id: [world.line(world.milk, grams: 250, in: other)]],
+            foods: [world.milk], pantry: await world.store.shelves
+        )
+        await model.load()
+
+        #expect(model.list?.items.map(\.name) == ["Milk"])
+        #expect(model.basket.flatMap(\.entries) == [.planned(spinach), .manual(model.manualItems[0])])
+        #expect(model.manualItems.map(\.name) == ["Candles", "Lemons"])
+        #expect(model.toBuy.flatMap(\.entries).map(\.name) == ["Milk", "Lemons"])
     }
 
     @Test func keysMatchForTheSameFoodWhateverItsName() {

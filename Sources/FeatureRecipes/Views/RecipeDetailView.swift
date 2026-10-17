@@ -15,10 +15,13 @@ public struct RecipeDetailView: View {
     static let maximumServings = 99
     /// How many days ahead "Add to plan" offers.
     static let planDays = 7
+    /// How long the Undo after cooking stays on offer.
+    static let undoLifetime: Duration = .seconds(5)
 
     private let model: RecipesModel
     private let recipe: Recipe
     private let onAddToPlan: AddToPlan?
+    private let onFinishCooking: FinishCooking?
     private let startsCooking: Bool
     @State private var phase = Phase.loading
     @State private var servings: Int
@@ -26,15 +29,24 @@ public struct RecipeDetailView: View {
     @State private var isConfirmingDelete = false
     @State private var ticked: Set<IngredientID> = []
     @State private var toast: String?
+    @State private var cookingUndo: CookingUndo?
     @State private var hasAutoStarted = false
     @Environment(\.dismiss) private var dismiss
 
-    /// Creates the detail for `recipe`; without `onAddToPlan` the Add to plan button is hidden. `startsCooking` opens
-    /// cooking mode as soon as the recipe has loaded.
-    public init(model: RecipesModel, recipe: Recipe, onAddToPlan: AddToPlan? = nil, startsCooking: Bool = false) {
+    /// Creates the detail for `recipe`; without `onAddToPlan` the Add to plan button is hidden. `onFinishCooking` runs
+    /// when cooking mode's Finish is tapped, with the servings chosen here. `startsCooking` opens cooking mode as soon
+    /// as the recipe has loaded.
+    public init(
+        model: RecipesModel,
+        recipe: Recipe,
+        onAddToPlan: AddToPlan? = nil,
+        onFinishCooking: FinishCooking? = nil,
+        startsCooking: Bool = false
+    ) {
         self.model = model
         self.recipe = recipe
         self.onAddToPlan = onAddToPlan
+        self.onFinishCooking = onFinishCooking
         self.startsCooking = startsCooking
         _servings = State(initialValue: recipe.servings)
     }
@@ -79,7 +91,7 @@ public struct RecipeDetailView: View {
             Text(RecipesCopy.deleteMessage)
         }
         .cookingCover(isPresented: $isCooking) {
-            CookingModeView(recipe: recipe, ingredients: scaledIngredients)
+            CookingModeView(recipe: recipe, ingredients: scaledIngredients, onFinish: finishCooking)
         }
         .task { await loadDetail() }
         .task(id: toast) {
@@ -87,7 +99,19 @@ public struct RecipeDetailView: View {
             try? await Task.sleep(for: .seconds(3))
             toast = nil
         }
+        .task(id: cookingUndo?.id) {
+            guard let undo = cookingUndo else { return }
+            AccessibilityNotification.Announcement(undo.message).post()
+            do {
+                try await Task.sleep(for: Self.undoLifetime)
+            } catch {
+                return
+            }
+            undo.dismiss()
+            cookingUndo = nil
+        }
         .larderAnimation(LarderMotion.tap, value: toast)
+        .larderAnimation(LarderMotion.tap, value: cookingUndo?.id)
     }
 
     private var scaledIngredients: [Ingredient] {
@@ -184,7 +208,13 @@ public struct RecipeDetailView: View {
 
     private var actionBar: some View {
         VStack(spacing: LarderSpacing.s) {
-            if let toast {
+            if let undo = cookingUndo {
+                ToastBar(undo.message, actionTitle: Copy.Action.undo) {
+                    cookingUndo = nil
+                    Task { await undo.undo() }
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            } else if let toast {
                 ToastBar(toast)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
@@ -220,6 +250,12 @@ public struct RecipeDetailView: View {
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.larderSecondary)
+    }
+
+    /// Reports the finished cooking at the servings chosen here and offers its undo.
+    private func finishCooking() {
+        guard let onFinishCooking else { return }
+        Task { cookingUndo = await onFinishCooking(recipe, servings) }
     }
 
     private func add(on day: Date) {

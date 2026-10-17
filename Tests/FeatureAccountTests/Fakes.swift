@@ -206,7 +206,10 @@ actor FakeLibrary: RecipeRepository, PantryRepository, PlanRepository {
     func items() -> [PantryItem] { pantryItems }
     func upsert(_ item: PantryItem) { pantryItems.append(item) }
     func remove(_ id: PantryItemID) { pantryItems.removeAll { $0.id == id } }
-    func consume(foodID: FoodID, grams: Double) {}
+    func consume(foodID: FoodID, grams: Double) -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) {}
+    func removeEvents(_ ids: [PantryEventID]) {}
+    func events(from start: Date, to end: Date) -> [PantryEvent] { [] }
 
     func currentPlan() -> MealPlan? { mealPlans.first }
     func plans() -> [MealPlan] { mealPlans }

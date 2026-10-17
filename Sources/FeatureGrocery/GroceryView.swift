@@ -23,7 +23,7 @@ public struct GroceryView: View {
         NavigationStack {
             List {
                 Section {
-                    AddItemField { model.addManual(name: $0) }
+                    AddItemField { name in Task { await model.addManual(name: name) } }
                 } footer: {
                     if !model.isEmpty {
                         Text(GroceryCopy.tickHint)
@@ -59,7 +59,7 @@ public struct GroceryView: View {
                     Section {
                         DisclosureGroup(isExpanded: $basketExpanded) {
                             ForEach(model.basket.flatMap(\.entries)) { row($0) }
-                            Button(GroceryCopy.clearBasket, systemImage: "trash") { model.clearChecked() }
+                            Button(GroceryCopy.clearBasket, systemImage: "trash") { Task { await model.clearChecked() } }
                                 .foregroundStyle(LarderColor.accent.brand)
                                 .frame(minHeight: 44)
                         } label: {
@@ -116,17 +116,17 @@ public struct GroceryView: View {
         .listRowSeparatorTint(LarderColor.line.hairline)
         .swipeActions(edge: .trailing) {
             if case .manual(let item) = entry {
-                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { model.removeManual(item) }
+                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { Task { await model.removeManual(item) } }
             }
         }
         .contextMenu {
             if case .manual(let item) = entry {
-                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { model.removeManual(item) }
+                Button(GroceryCopy.delete, systemImage: "trash", role: .destructive) { Task { await model.removeManual(item) } }
             }
         }
         .accessibilityActions {
             if case .manual(let item) = entry {
-                Button(GroceryCopy.delete) { model.removeManual(item) }
+                Button(GroceryCopy.delete) { Task { await model.removeManual(item) } }
             }
         }
     }
@@ -154,14 +154,32 @@ private struct PreviewStore: PlanRepository, RecipeRepository, FoodRepository, P
     func items() async throws -> [PantryItem] { [] }
     func upsert(_ item: PantryItem) async throws {}
     func remove(_ id: PantryItemID) async throws {}
-    func consume(foodID: FoodID, grams: Double) async throws {}
+    func consume(foodID: FoodID, grams: Double) async throws -> [PantryItem] { [] }
+    func record(_ events: [PantryEvent]) async throws {}
+    func removeEvents(_ ids: [PantryEventID]) async throws {}
+    func events(from start: Date, to end: Date) async throws -> [PantryEvent] { [] }
+}
+
+/// Hand-written items for previews; nothing else is kept.
+private actor PreviewBasket: GroceryBasketRepository {
+    private var items: [ManualItem]
+
+    init(manual: [String]) {
+        items = manual.map { ManualItem(name: $0, quantity: "2") }
+    }
+
+    func manualItems() -> [ManualItem] { items }
+    func saveManualItem(_ item: ManualItem) { items.append(item) }
+    func removeManualItem(_ id: ManualItemID) { items.removeAll { $0.id == id } }
+    func basketLines() -> [BasketLine] { [] }
+    func saveBasketLine(_ line: BasketLine) {}
+    func removeBasketLine(_ key: GroceryItemKey) {}
+    func clearBasket() {}
 }
 
 @MainActor private func previewModel(manual: [String]) -> GroceryModel {
     let store = PreviewStore()
-    let model = GroceryModel(plans: store, recipes: store, foods: store, pantry: store, dates: store)
-    for name in manual { model.addManual(name: name, quantity: "2") }
-    return model
+    return GroceryModel(plans: store, recipes: store, foods: store, pantry: store, basket: PreviewBasket(manual: manual), dates: store)
 }
 
 #Preview("GroceryView") {

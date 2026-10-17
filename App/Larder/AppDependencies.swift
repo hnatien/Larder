@@ -6,6 +6,7 @@ import FeatureShelves
 import Foundation
 import LarderAssistant
 import LarderCore
+import LarderDesign
 import LarderOnDeviceAI
 import LarderPersistence
 import OSLog
@@ -82,6 +83,7 @@ final class AppDependencies {
     private let database: LarderDatabase
     private let foods: GRDBFoodRepository
     private let pantry: GRDBPantryRepository
+    private let basket: GRDBGroceryBasketRepository
     private let plans: GRDBPlanRepository
     private let profiles: GRDBProfileRepository
     private let dates: any DateProvider
@@ -116,6 +118,7 @@ final class AppDependencies {
         foods = GRDBFoodRepository(database: database)
         recipeRepository = GRDBRecipeRepository(database: database)
         pantry = GRDBPantryRepository(database: database)
+        basket = GRDBGroceryBasketRepository(database: database)
         plans = GRDBPlanRepository(database: database)
         profiles = GRDBProfileRepository(database: database)
         let dates = SystemDateProvider()
@@ -162,7 +165,7 @@ final class AppDependencies {
         recipes = RecipesModel(
             recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
         )
-        grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, dates: dates)
+        grocery = GroceryModel(plans: plans, recipes: recipeRepository, foods: foods, pantry: pantry, basket: basket, dates: dates)
         onboarding = OnboardingModel(profiles: profiles, preferences: preferences, dates: dates)
         dinners = DinnerReader(plans: plans, recipes: recipeRepository, calendar: .current)
         snapshots = TodaySnapshotWriter(reader: dinners, dates: dates, fileURL: launch.isUITest ? nil : TodaySnapshot.fileURL)
@@ -301,6 +304,44 @@ final class AppDependencies {
             throw error
         }
         await ledger.load()
+        await grocery.load()
+    }
+
+    /// Records cooking `recipe` from cooking mode and returns its undo, or `nil` when nothing was recorded.
+    ///
+    /// Today's planned meal of the recipe is marked cooked at its servings; with none, the recipe counts as cooked
+    /// outside the plan at `servings`. Either way what it used comes off the shelves.
+    func finishCooking(_ recipe: Recipe, servings: Int) async -> CookingUndo? {
+        let earlier = ledger.cookUndo?.id
+        await ledger.load()
+        let today = ledger.meals.filter {
+            $0.recipeID == recipe.id && $0.status == .planned && Calendar.current.isDate($0.date, inSameDayAs: dates.now)
+        }
+        if let meal = today.first(where: { $0.leftoverOf == nil }) ?? today.first {
+            await ledger.markCooked(meal)
+        } else {
+            await ledger.cookOffPlan(recipe, servings: servings)
+        }
+        guard let cooked = ledger.cookUndo, cooked.id != earlier else { return nil }
+        await reloadAfterCooking()
+        return CookingUndo(
+            message: Copy.Voice.cooked(dish: recipe.title, usedPantry: !cooked.draw.isEmpty),
+            undo: { [weak self] in
+                guard let self, ledger.cookUndo?.id == cooked.id else { return }
+                await ledger.undoCooked()
+                await reloadAfterCooking()
+            },
+            dismiss: { [weak self] in
+                guard let self, ledger.cookUndo?.id == cooked.id else { return }
+                ledger.dismissCookUndo()
+            }
+        )
+    }
+
+    /// Shows the shelves cooking changed everywhere they appear.
+    private func reloadAfterCooking() async {
+        await shelves.load()
+        await tonight.load()
         await grocery.load()
     }
 

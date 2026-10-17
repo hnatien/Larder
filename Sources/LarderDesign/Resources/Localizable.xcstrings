@@ -67,6 +67,17 @@
         }
       }
     },
+    "%@ cooked. What it used is off your pantry.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ cooked. What it used is off your pantry."
+          }
+        }
+      }
+    },
     "%@ every %lld %@": {
       "extractionState": "manual",
       "localizations": {
@@ -96,6 +107,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ is on for tonight."
+          }
+        }
+      }
+    },
+    "%@ marked as cooked": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ marked as cooked"
           }
         }
       }
@@ -1375,6 +1397,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't save that recipe. Try again."
+          }
+        }
+      }
+    },
+    "Couldn't save the list. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save the list. Try again."
           }
         }
       }

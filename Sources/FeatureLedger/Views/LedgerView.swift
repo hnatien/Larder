@@ -58,7 +58,17 @@ public struct LedgerView: View {
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
-                    if showsSavedToast {
+                    if let undo = model.cookUndo {
+                        ToastBar(
+                            Copy.Voice.cooked(dish: undo.title, usedPantry: !undo.draw.isEmpty),
+                            actionTitle: Copy.Action.undo
+                        ) {
+                            Task { await model.undoCooked() }
+                        }
+                        .padding(.horizontal, LarderSpacing.l)
+                        .padding(.bottom, LarderSpacing.s)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    } else if showsSavedToast {
                         ToastBar(LedgerCopy.planSaved)
                             .padding(.horizontal, LarderSpacing.l)
                             .padding(.bottom, LarderSpacing.s)
@@ -93,8 +103,19 @@ public struct LedgerView: View {
             try? await Task.sleep(for: .seconds(3))
             showsSavedToast = false
         }
+        .task(id: model.cookUndo?.id) {
+            guard let undo = model.cookUndo else { return }
+            AccessibilityNotification.Announcement(Copy.Voice.cooked(dish: undo.title, usedPantry: !undo.draw.isEmpty)).post()
+            do {
+                try await Task.sleep(for: CookedMealUndo.lifetime)
+            } catch {
+                return
+            }
+            model.dismissCookUndo()
+        }
         .sensoryFeedback(.success, trigger: model.savedPlanCount)
         .larderAnimation(LarderMotion.tap, value: showsSavedToast)
+        .larderAnimation(LarderMotion.tap, value: model.cookUndo)
     }
 
     private var list: some View {

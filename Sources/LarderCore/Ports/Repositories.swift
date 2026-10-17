@@ -14,6 +14,26 @@ public protocol FoodRepository: Sendable {
     func upsert(_ foods: [Food]) async throws
 }
 
+extension FoodRepository {
+    /// The food an item the user named is, if any: the top search hit, accepted only when its name starts with the
+    /// same word as `name`, ignoring case and a plural s.
+    public func match(forItemNamed name: String) async throws -> Food? {
+        guard let word = Self.firstWord(of: name),
+            let hit = try await search(text: name, limit: 1).first,
+            Self.firstWord(of: hit.name) == word
+        else { return nil }
+        return hit
+    }
+
+    /// The first word, lowercased, with a plural "s" dropped so "onions" meets "Onion, raw".
+    private static func firstWord(of text: String) -> String? {
+        text.split(whereSeparator: { !$0.isLetter }).first.map { word in
+            let lowered = word.lowercased()
+            return lowered.count > 3 && lowered.hasSuffix("s") ? String(lowered.dropLast()) : lowered
+        }
+    }
+}
+
 /// Reads and writes recipes and their ingredient lines.
 public protocol RecipeRepository: Sendable {
     /// Every recipe.
@@ -46,8 +66,34 @@ public protocol PantryRepository: Sendable {
     func upsert(_ item: PantryItem) async throws
     /// Removes a pantry item.
     func remove(_ id: PantryItemID) async throws
-    /// Deducts `grams` of a food from the shelves, earliest best-by first.
-    func consume(foodID: FoodID, grams: Double) async throws
+    /// Deducts `grams` of a food from the shelves, earliest best-by first, and returns the items it changed or
+    /// removed as they were before, so the deduction can be undone.
+    @discardableResult
+    func consume(foodID: FoodID, grams: Double) async throws -> [PantryItem]
+    /// Adds events to the log of food leaving the shelves.
+    func record(_ events: [PantryEvent]) async throws
+    /// Removes events from the log, when the action that wrote them is undone.
+    func removeEvents(_ ids: [PantryEventID]) async throws
+    /// Logged events dated from `start` up to but not including `end`, oldest first.
+    func events(from start: Date, to end: Date) async throws -> [PantryEvent]
+}
+
+/// Keeps the grocery basket and the hand-written items between launches.
+public protocol GroceryBasketRepository: Sendable {
+    /// Hand-written items, in the order they were added.
+    func manualItems() async throws -> [ManualItem]
+    /// Adds a hand-written item after the others, or replaces it by identifier in its place.
+    func saveManualItem(_ item: ManualItem) async throws
+    /// Removes a hand-written item and its basket line.
+    func removeManualItem(_ id: ManualItemID) async throws
+    /// Basket lines, in the order they were ticked.
+    func basketLines() async throws -> [BasketLine]
+    /// Adds a basket line, or replaces the one with the same key.
+    func saveBasketLine(_ line: BasketLine) async throws
+    /// Removes the basket line with `key`; a missing line is not an error.
+    func removeBasketLine(_ key: GroceryItemKey) async throws
+    /// Empties the basket and removes the hand-written items that were in it.
+    func clearBasket() async throws
 }
 
 /// Reads and writes meal plans and their meals.

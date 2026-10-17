@@ -38,3 +38,5 @@ public typealias DietaryConstraintID = Identifier<DietaryConstraint>
 public typealias MealPlanID = Identifier<MealPlan>
 /// Identifies a `PlannedMeal`.
 public typealias PlannedMealID = Identifier<PlannedMeal>
+/// Identifies a `PantryEvent`.
+public typealias PantryEventID = Identifier<PantryEvent>
