@@ -23,6 +23,10 @@ public struct LedgerView: View {
     private let onOpenAccount: (() -> Void)?
     @State private var sheet: LedgerSheet?
     @State private var isConfirmingReplan = false
+    @State private var isAdjustOpen = false
+    @State private var adjustDetent: PresentationDetent = .large
+    /// What to open once the adjust chat has closed, since only one sheet shows at a time.
+    @State private var afterAdjust: (() -> Void)?
     /// Set when a plan is saved, so the toast confirms it.
     @State private var savedToastID: UUID?
     @AccessibilityFocusState private var headingFocused: Bool
@@ -59,6 +63,11 @@ public struct LedgerView: View {
                     }
                 }
                 .larderToast(toast, onExpire: expireToast)
+                .sheet(isPresented: $isAdjustOpen, onDismiss: runAfterAdjust) {
+                    AdjustChatView(model: model, onOpenSettings: onOpenAccount.map { open in { closeAdjust(then: open) } })
+                        .presentationDetents([.medium, .large], selection: $adjustDetent)
+                        .presentationDragIndicator(.visible)
+                }
                 .confirmationDialog(LedgerCopy.replanQuestion, isPresented: $isConfirmingReplan, titleVisibility: .visible) {
                     Button(LedgerCopy.replan) { Task { await model.replan(keepingLocked: true) } }
                     Button(Copy.Action.notNow, role: .cancel) {}
@@ -75,7 +84,11 @@ public struct LedgerView: View {
         .onChange(of: model.paywallRequested) { _, requested in
             guard requested else { return }
             model.paywallRequested = false
-            onShowPaywall()
+            if isAdjustOpen {
+                closeAdjust(then: onShowPaywall)
+            } else {
+                onShowPaywall()
+            }
         }
         .onChange(of: model.proposedRepair != nil) { _, proposed in
             if proposed { AccessibilityNotification.Announcement(LedgerCopy.repairTitle).post() }
@@ -103,6 +116,17 @@ public struct LedgerView: View {
         return savedToastID.map { LarderToast(id: $0, LedgerCopy.planSaved) }
     }
 
+    private func closeAdjust(then next: @escaping () -> Void) {
+        afterAdjust = next
+        isAdjustOpen = false
+    }
+
+    private func runAfterAdjust() {
+        let next = afterAdjust
+        afterAdjust = nil
+        next?()
+    }
+
     private func expireToast() {
         if model.cookUndo != nil {
             model.dismissCookUndo()
@@ -126,7 +150,10 @@ public struct LedgerView: View {
                     .ledgerListRow()
             }
             if model.plan != nil {
-                AdjustWeekCard(model: model, onOpenSettings: onOpenAccount)
+                AdjustWeekCard(model: model) {
+                    adjustDetent = .large
+                    isAdjustOpen = true
+                }
                     .ledgerListRow()
             }
             ForEach(model.days) { day in

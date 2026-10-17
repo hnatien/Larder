@@ -60,6 +60,18 @@ public nonisolated struct WeekAdjustment: Hashable, Sendable {
     /// Whether there is nothing to apply.
     public var isEmpty: Bool { items.isEmpty }
 
+    /// These changes followed by `later`'s, each kept once at its latest place so a later time limit or goal wins;
+    /// the set-aside count is `later`'s, since it describes the latest answer.
+    func adding(_ later: WeekAdjustment) -> WeekAdjustment {
+        var combined = self
+        for item in later.items {
+            combined.items.removeAll { $0 == item }
+            combined.items.append(item)
+        }
+        combined.setAsideCount = later.setAsideCount
+        return combined
+    }
+
     /// The week's time limit: the last whole-week one proposed, else `nil` to keep the profile's.
     var maxCookMinutes: Int? {
         items.reversed().lazy.compactMap { item -> Int? in

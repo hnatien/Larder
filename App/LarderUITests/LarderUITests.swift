@@ -93,7 +93,9 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(adjust.waitForExistence(timeout: Self.loadTimeout), "Adjust this week is missing from the Plan tab")
         XCTAssertTrue(app.buttons["Ask"].exists, "Adjust this week has no Ask button")
         XCTAssertFalse(app.buttons["Ask"].isEnabled, "Ask is enabled with nothing typed")
+        XCTAssertTrue(app.buttons["Vegetarian on Tuesday"].exists, "The empty chat offers no suggestions")
         try audit(app)
+        app.navigationBars["Adjust this week"].buttons["Done"].tap()
 
         open(.pantry, in: app)
         app.navigationBars.buttons["Add food"].tap()

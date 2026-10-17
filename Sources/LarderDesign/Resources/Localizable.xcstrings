@@ -1038,6 +1038,17 @@
         }
       }
     },
+    "Applied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applied"
+          }
+        }
+      }
+    },
     "Apply and replan": {
       "extractionState": "manual",
       "localizations": {
@@ -1056,6 +1067,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ask"
+          }
+        }
+      }
+    },
+    "Ask for a change": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ask for a change"
           }
         }
       }
@@ -2002,6 +2024,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dinners in %lld minutes or less"
+          }
+        }
+      }
+    },
+    "Dinners under 30 minutes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinners under 30 minutes"
           }
         }
       }
@@ -3569,6 +3602,17 @@
         }
       }
     },
+    "New chat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New chat"
+          }
+        }
+      }
+    },
     "Next": {
       "extractionState": "manual",
       "localizations": {
@@ -3635,6 +3679,17 @@
         }
       }
     },
+    "No fish this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No fish this week"
+          }
+        }
+      }
+    },
     "No matches": {
       "extractionState": "manual",
       "localizations": {
@@ -3675,6 +3730,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No recipes yet"
+          }
+        }
+      }
+    },
+    "Not applied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not applied"
           }
         }
       }
@@ -4911,6 +4977,17 @@
         }
       }
     },
+    "See the week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the week"
+          }
+        }
+      }
+    },
     "Serves %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -5758,6 +5835,17 @@
         }
       }
     },
+    "The week is replanned with these changes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The week is replanned with these changes."
+          }
+        }
+      }
+    },
     "This iPhone couldn't read the photo on its own. With AI help on, the assistant can read it.": {
       "extractionState": "manual",
       "localizations": {
@@ -6121,6 +6209,17 @@
         }
       }
     },
+    "Updated below": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated below"
+          }
+        }
+      }
+    },
     "Use %@": {
       "extractionState": "manual",
       "localizations": {
@@ -6309,6 +6408,17 @@
         }
       }
     },
+    "Vegetarian on Tuesday": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vegetarian on Tuesday"
+          }
+        }
+      }
+    },
     "Version %@": {
       "extractionState": "manual",
       "localizations": {
@@ -6393,6 +6503,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "What matters most"
+          }
+        }
+      }
+    },
+    "What should change this week?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What should change this week?"
           }
         }
       }

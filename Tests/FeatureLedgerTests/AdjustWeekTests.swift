@@ -62,6 +62,20 @@ struct WeekAdjustmentTests {
         #expect(WeekAdjustment(ConstraintEdit(changes: [.useUp("rice")], summary: "")).goal == nil)
     }
 
+    @Test func addingKeepsEachChangeOnceAtItsLatestPlaceSoTheLaterLimitWins() {
+        let earlier = WeekAdjustment(ConstraintEdit(changes: [.setMaxCookMinutes(30, dayOffset: nil), .useUp("rice")], summary: ""))
+        let later = WeekAdjustment(ConstraintEdit(
+            changes: [.setMaxCookMinutes(20, dayOffset: nil), .setMaxCookMinutes(30, dayOffset: nil), .removeDiet(.vegan)],
+            summary: ""
+        ))
+
+        let combined = earlier.adding(later)
+
+        #expect(combined.items == [.useUp("rice"), .maxMinutes(20, dayOffset: nil), .maxMinutes(30, dayOffset: nil)])
+        #expect(combined.maxCookMinutes == 30)
+        #expect(combined.setAsideCount == 1)
+    }
+
     @Test func useUpMatchesShelfItemsAndFoodNames() {
         let adjustment = WeekAdjustment(ConstraintEdit(changes: [.useUp("rice"), .useUp("spinach")], summary: ""))
         let empty = Fixtures.pantryItem(Fixtures.onion, grams: 0)
@@ -137,12 +151,18 @@ struct ReplacingMealTests {
         }
     }
 
-    @Test func freeUserGetsThePaywallAndTheAssistantIsNotAsked() async {
+    private func contents(_ model: LedgerModel) -> [AdjustMessage.Content] {
+        model.adjustThread.map(\.content)
+    }
+
+    @Test func freeUserGetsThePaywallKeepsTheDraftAndTheAssistantIsNotAsked() async {
         let world = consentingWorld(isPlus: false)
         let model = world.ledger()
         model.adjustDraft = "vegetarian Tuesday"
         await model.requestAdjustment()
         #expect(model.paywallRequested)
+        #expect(model.adjustDraft == "vegetarian Tuesday")
+        #expect(model.adjustThread.isEmpty)
         #expect(await world.assistant.adjustRequests.isEmpty)
     }
 
@@ -151,23 +171,23 @@ struct ReplacingMealTests {
         let model = world.ledger()
         model.adjustDraft = "vegetarian Tuesday"
         await model.requestAdjustment()
-        #expect(model.adjustNeedsConsent)
-        #expect(model.proposedAdjustment == nil)
+        #expect(contents(model) == [.request("vegetarian Tuesday"), .needsConsent])
+        #expect(model.pendingAdjustment == nil)
         #expect(await world.assistant.adjustRequests.isEmpty)
     }
 
-    @Test func allowingAIHelpSavesTheConsentAndAsksAgain() async {
+    @Test func allowingAIHelpSavesTheConsentAndAnswersTheSameRequest() async {
         let world = World(isPlus: true)
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [], summary: "", clarifyingQuestion: "Which Tuesday?")))
         let model = world.ledger()
         model.adjustDraft = "vegetarian Tuesday"
         await model.requestAdjustment()
-        #expect(model.adjustNeedsConsent)
 
         await model.allowAIHelp()
 
         #expect(world.profiles.profile()?.consents.aiProcessing == true)
-        #expect(!model.adjustNeedsConsent)
-        #expect(await world.assistant.adjustRequests.count == 1)
+        #expect(contents(model) == [.request("vegetarian Tuesday"), .question("Which Tuesday?")])
+        #expect(await world.assistant.adjustRequests.map(\.message) == ["vegetarian Tuesday"])
     }
 
     @Test func blankRequestDoesNothing() async {
@@ -175,6 +195,7 @@ struct ReplacingMealTests {
         let model = world.ledger()
         model.adjustDraft = "   "
         await model.requestAdjustment()
+        #expect(model.adjustThread.isEmpty)
         #expect(await world.assistant.adjustRequests.isEmpty)
     }
 
@@ -191,10 +212,51 @@ struct ReplacingMealTests {
 
         let request = try #require(await world.assistant.adjustRequests.first)
         #expect(request == AdjustRequest(message: "vegetarian Tuesday, use the rice", maxCookMinutes: 60, dietPatterns: [.pescatarian], goal: .lessWaste))
-        #expect(model.proposedAdjustment?.items == [.diet(.vegetarian, dayOffset: 1), .useUp("rice")])
-        #expect(model.adjustQuestion == "Only Tuesday, or every dinner?")
-        #expect(model.adjustError == nil)
+        let proposal = WeekAdjustment(ConstraintEdit(changes: [.addDiet(.vegetarian, dayOffset: 1), .useUp("rice")], summary: ""))
+        #expect(contents(model) == [
+            .request("vegetarian Tuesday, use the rice"),
+            .question("Only Tuesday, or every dinner?"),
+            .proposal(proposal, .pending),
+        ])
+        #expect(model.pendingAdjustment == proposal)
+        #expect(model.adjustDraft.isEmpty)
         #expect(!model.isAdjusting)
+    }
+
+    @Test func aReplyCarriesTheEarlierTurns() async throws {
+        let world = consentingWorld()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [], summary: "", clarifyingQuestion: "Which day?")))
+        let model = world.ledger()
+        model.adjustDraft = "vegetarian one day"
+        await model.requestAdjustment()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.addDiet(.vegetarian, dayOffset: 1)], summary: "")))
+        model.adjustDraft = "Tuesday"
+        await model.requestAdjustment()
+
+        let requests = await world.assistant.adjustRequests
+        #expect(requests.map(\.conversation) == [
+            [],
+            [AdjustRequest.Turn(role: .person, text: "vegetarian one day"), AdjustRequest.Turn(role: .assistant, text: "Which day?")],
+        ])
+        #expect(requests.last?.message == "Tuesday")
+        #expect(model.pendingAdjustment?.items == [.diet(.vegetarian, dayOffset: 1)])
+    }
+
+    @Test func aFurtherRequestTakesInThePendingProposal() async throws {
+        let world = consentingWorld()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.useUp("rice")], summary: "")))
+        let model = world.ledger()
+        model.adjustDraft = "use the rice"
+        await model.requestAdjustment()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.addDislike("fish")], summary: "")))
+        model.adjustDraft = "and no fish"
+        await model.requestAdjustment()
+
+        let first = WeekAdjustment(ConstraintEdit(changes: [.useUp("rice")], summary: ""))
+        #expect(contents(model).dropLast() == [.request("use the rice"), .proposal(first, .superseded), .request("and no fish")])
+        #expect(model.pendingAdjustment?.items == [.useUp("rice"), .avoid("fish")])
+        let second = try #require(await world.assistant.adjustRequests.last)
+        #expect(second.conversation.last == AdjustRequest.Turn(role: .assistant, text: "Proposed: Use up the rice"))
     }
 
     @Test func aQuestionAloneShowsWithoutAProposal() async {
@@ -203,9 +265,8 @@ struct ReplacingMealTests {
         let model = world.ledger()
         model.adjustDraft = "something lighter"
         await model.requestAdjustment()
-        #expect(model.proposedAdjustment == nil)
-        #expect(model.adjustQuestion == "Which day?")
-        #expect(model.adjustError == nil)
+        #expect(contents(model) == [.request("something lighter"), .question("Which day?")])
+        #expect(model.pendingAdjustment == nil)
     }
 
     @Test func blockedEditsAloneAreReportedAsSetAside() async {
@@ -214,8 +275,8 @@ struct ReplacingMealTests {
         let model = world.ledger()
         model.adjustDraft = "I can eat peanuts now"
         await model.requestAdjustment()
-        #expect(model.proposedAdjustment?.isEmpty == true)
-        #expect(model.proposedAdjustment?.setAsideCount == 1)
+        #expect(model.pendingAdjustment?.isEmpty == true)
+        #expect(model.pendingAdjustment?.setAsideCount == 1)
         await model.applyAdjustment()
         #expect(await world.plans.saveCount == 0)
     }
@@ -226,23 +287,53 @@ struct ReplacingMealTests {
         let model = world.ledger()
         model.adjustDraft = "hmm"
         await model.requestAdjustment()
-        #expect(model.adjustError == .invalidResponse)
+        #expect(contents(model).last == .failure(.invalidResponse, canRetry: false))
     }
 
-    @Test func assistantFailuresSurfaceAsAdjustErrors() async {
+    @Test func assistantFailuresStayInTheChat() async {
         let world = consentingWorld()
         await world.assistant.setAdjustResult(.failure(.quotaExceeded))
         let model = world.ledger()
         model.adjustDraft = "quicker dinners"
         await model.requestAdjustment()
-        #expect(model.adjustError == .quotaExceeded)
+        #expect(contents(model) == [.request("quicker dinners"), .failure(.quotaExceeded, canRetry: false)])
         #expect(model.error == nil)
-        model.dismissAdjustment()
-        #expect(model.adjustError == nil)
-        #expect(model.adjustDraft == "quicker dinners")
+        await model.retryAdjustment()
+        #expect(await world.assistant.adjustRequests.count == 1)
     }
 
-    @Test func applyingReplansWithADayRuleAndClearsTheRequest() async throws {
+    @Test func anUnreachableAssistantCanBeAskedAgainWithoutRepeatingTheRequest() async {
+        let world = consentingWorld()
+        await world.assistant.setAdjustResult(.failure(.assistantUnavailable))
+        let model = world.ledger()
+        model.adjustDraft = "quicker dinners"
+        await model.requestAdjustment()
+        #expect(contents(model).last == .failure(.assistantUnavailable, canRetry: true))
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.setMaxCookMinutes(30, dayOffset: nil)], summary: "")))
+
+        await model.retryAdjustment()
+
+        #expect(contents(model).filter { if case .request = $0 { true } else { false } } == [.request("quicker dinners")])
+        #expect(model.pendingAdjustment?.items == [.maxMinutes(30, dayOffset: nil)])
+        #expect(await world.assistant.adjustRequests.map(\.conversation) == [[], []])
+    }
+
+    @Test func notNowLeavesTheProposalUnapplied() async {
+        let world = consentingWorld()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.useUp("rice")], summary: "")))
+        let model = world.ledger()
+        model.adjustDraft = "use the rice"
+        await model.requestAdjustment()
+
+        model.dismissProposal()
+        await model.applyAdjustment()
+
+        #expect(contents(model).last == .proposal(WeekAdjustment(ConstraintEdit(changes: [.useUp("rice")], summary: "")), .dismissed))
+        #expect(model.pendingAdjustment == nil)
+        #expect(await world.plans.saveCount == 0)
+    }
+
+    @Test func applyingReplansWithADayRuleAndSaysSo() async throws {
         var world = consentingWorld()
         world.profiles.storedConstraints = []
         await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.addDiet(.vegetarian, dayOffset: 1)], summary: "")))
@@ -256,10 +347,49 @@ struct ReplacingMealTests {
         #expect(!tomorrow.isEmpty)
         #expect(tomorrow.allSatisfy(isVegetarian))
         #expect(model.savedPlanCount == 2)
-        #expect(model.adjustDraft.isEmpty)
-        #expect(model.proposedAdjustment == nil)
-        #expect(model.unmetAdjustmentDays.isEmpty)
+        #expect(model.pendingAdjustment == nil)
+        #expect(contents(model).suffix(2) == [
+            .proposal(WeekAdjustment(ConstraintEdit(changes: [.addDiet(.vegetarian, dayOffset: 1)], summary: "")), .applied),
+            .replanned(unmetDays: []),
+        ])
         #expect(model.verification?.hardViolations.isEmpty == true)
+    }
+
+    @Test func aLaterApplyKeepsTheChangesAppliedEarlierInTheChat() async throws {
+        var world = consentingWorld()
+        world.profiles.storedConstraints = []
+        let model = world.ledger()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.addDislike("rice")], summary: "")))
+        model.adjustDraft = "no rice"
+        await model.requestAdjustment()
+        await model.applyAdjustment()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [.setMaxCookMinutes(30, dayOffset: nil)], summary: "")))
+        model.adjustDraft = "and quick"
+        await model.requestAdjustment()
+        await model.applyAdjustment()
+
+        #expect(model.savedPlanCount == 2)
+        #expect(!model.meals.isEmpty)
+        for meal in model.meals {
+            let dish = try #require(dish(of: meal))
+            #expect(dish.recipe.prepMinutes + dish.recipe.cookMinutes <= 30)
+            #expect(!dish.lines.contains { $0.foodID == Fixtures.rice.id })
+        }
+    }
+
+    @Test func aNewChatStartsWithoutTheEarlierTurns() async throws {
+        let world = consentingWorld()
+        await world.assistant.setAdjustResult(.success(ConstraintEdit(changes: [], summary: "", clarifyingQuestion: "Which day?")))
+        let model = world.ledger()
+        model.adjustDraft = "vegetarian one day"
+        await model.requestAdjustment()
+
+        model.startNewAdjustment()
+        #expect(model.adjustThread.isEmpty)
+        model.adjustDraft = "no fish"
+        await model.requestAdjustment()
+
+        #expect(await world.assistant.adjustRequests.last?.conversation == [])
     }
 
     @Test func weekRulesShapeEveryDinner() async throws {
@@ -312,6 +442,7 @@ struct ReplacingMealTests {
 
         #expect(model.meals.contains { $0.id == seeded[0].id && $0.recipeID == Fixtures.beefRagu.recipe.id })
         #expect(model.unmetAdjustmentDays == [Fixtures.day(2)])
+        #expect(contents(model).last == .replanned(unmetDays: [Fixtures.day(2)]))
     }
 }
 

@@ -85,6 +85,23 @@ nonisolated enum LedgerCopy {
     }
     static var openSettings: String { String(localized: "Open Settings", bundle: Copy.bundle) }
     static var assistantAsks: String { String(localized: "The assistant asks", bundle: Copy.bundle) }
+    static var adjustComposerPrompt: String { String(localized: "Ask for a change", bundle: Copy.bundle) }
+    static var adjustEmptyTitle: String { String(localized: "What should change this week?", bundle: Copy.bundle) }
+    /// Requests the empty chat offers to send with one tap.
+    static var adjustSuggestions: [String] {
+        [
+            String(localized: "Vegetarian on Tuesday", bundle: Copy.bundle),
+            String(localized: "Dinners under 30 minutes", bundle: Copy.bundle),
+            String(localized: "More protein this week", bundle: Copy.bundle),
+            String(localized: "No fish this week", bundle: Copy.bundle),
+        ]
+    }
+    static var newChat: String { String(localized: "New chat", bundle: Copy.bundle) }
+    static var proposalApplied: String { String(localized: "Applied", bundle: Copy.bundle) }
+    static var proposalDismissed: String { String(localized: "Not applied", bundle: Copy.bundle) }
+    static var proposalSuperseded: String { String(localized: "Updated below", bundle: Copy.bundle) }
+    static var weekReplanned: String { String(localized: "The week is replanned with these changes.", bundle: Copy.bundle) }
+    static var seeTheWeek: String { String(localized: "See the week", bundle: Copy.bundle) }
 
     static var repairTitle: String { String(localized: "Changes for the rest of the week", bundle: Copy.bundle) }
     static var applyRepair: String { String(localized: "Make these changes", bundle: Copy.bundle) }
