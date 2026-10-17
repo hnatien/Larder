@@ -40,6 +40,13 @@ nonisolated enum ReasonCopy {
             return String(localized: "Easy on the budget", bundle: Copy.bundle)
         case .fibreGap:
             return String(localized: "Adds the fibre this week is short of", bundle: Copy.bundle)
+        case .cooksOften(let cuisine):
+            return String(localized: "You cook a lot of \(cuisine) food", bundle: Copy.bundle)
+        case .cooksOftenWith(let food):
+            guard let name = lookup.foodNames[food].map(displayName), !name.isEmpty else {
+                return String(localized: "Like what you cook most", bundle: Copy.bundle)
+            }
+            return String(localized: "You cook a lot with \(name)", bundle: Copy.bundle)
         }
     }
 

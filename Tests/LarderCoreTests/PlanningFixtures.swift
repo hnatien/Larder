@@ -208,14 +208,16 @@ enum Planning {
         liked: Set<RecipeID> = [],
         skipped: Set<RecipeID> = []
     ) -> ScoringContext {
-        ScoringContext(
+        var affinity: [RecipeID: Double] = [:]
+        for id in liked { affinity[id, default: 0] += 1 }
+        for id in skipped { affinity[id, default: 0] -= 1 }
+        return ScoringContext(
             pantry: pantry,
             foods: foods,
             now: now,
             recentlyPlanned: recentlyPlanned,
             recentCuisines: recentCuisines,
-            liked: liked,
-            skipped: skipped,
+            taste: TasteAffinity(values: affinity),
             goal: goal,
             maxCookMinutes: maxCookMinutes
         )

@@ -60,6 +60,14 @@ public struct ReasonCodeWire: Codable, Hashable, Sendable {
             self.init(code: "leftoverOf")
         case .underBudget:
             self.init(code: "underBudget")
+        case .cooksOften(let cuisine):
+            self.init(code: "cooksOften", params: ["cuisine": .string(PromptSanitizer().scrub(cuisine, limit: 80))])
+        case .cooksOftenWith(let food):
+            var params: [String: Param] = [:]
+            if let name = foodNames[food] {
+                params["food"] = .string(PromptSanitizer().scrub(name, limit: 80))
+            }
+            self.init(code: "cooksOftenWith", params: params)
         }
     }
 }

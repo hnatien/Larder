@@ -242,6 +242,19 @@ struct PlanningScorerTests {
         #expect(Kitchen.isClose(scored.components.costProxy, 1.0 / 3.0))
     }
 
+    @Test func aFoodToUseUpCountsAsFullyUrgentWithoutAReasonDate() {
+        let pantry = [Planning.pantryItem(Planning.rice, grams: 1000)]
+        var context = Planning.context(pantry: pantry)
+        context.useUp = [Planning.rice.id]
+
+        let scored = RecipeScorer.score(bowl, context: context)
+
+        #expect(scored.components.expiryUrgency == 1)
+        #expect(!scored.reasonCodes.contains { if case .usesExpiring = $0 { true } else { false } })
+        context.useUp = [Planning.broccoli.id]
+        #expect(RecipeScorer.score(bowl, context: context).components.expiryUrgency == 0)
+    }
+
     @Test func timeFitClampsAtZeroAndANonPositiveCapGivesZero() {
         #expect(RecipeScorer.score(Planning.beefRagu, context: Planning.context(maxCookMinutes: 30)).components.timeFit == 0)
         #expect(RecipeScorer.score(bowl, context: Planning.context(maxCookMinutes: 0)).components.timeFit == 0)
@@ -267,12 +280,71 @@ struct PlanningScorerTests {
         #expect(Kitchen.isClose(novelty, expected))
     }
 
-    @Test func tasteFollowsLikesAndSkips() {
-        let id = bowl.recipe.id
+    @Test func tasteIsTheRecipesAffinity() {
+        var context = Planning.context()
+        context.taste = TasteAffinity(values: [bowl.recipe.id: 0.4])
 
-        #expect(RecipeScorer.score(bowl, context: Planning.context(liked: [id])).components.taste == 1)
-        #expect(RecipeScorer.score(bowl, context: Planning.context(skipped: [id])).components.taste == -1)
-        #expect(RecipeScorer.score(bowl, context: Planning.context(liked: [id], skipped: [id])).components.taste == 0)
+        #expect(RecipeScorer.score(bowl, context: context).components.taste == 0.4)
+        #expect(RecipeScorer.score(Planning.beefRagu, context: context).components.taste == 0)
+    }
+
+    @Test func tasteReasonOnlyWithPositiveAffinity() {
+        let reason = ReasonCode.cooksOften(cuisine: "Thai")
+        var context = Planning.context()
+        context.taste = TasteAffinity(values: [bowl.recipe.id: 0.5], reasons: [bowl.recipe.id: reason])
+
+        #expect(RecipeScorer.score(bowl, context: context).reasonCodes.last == reason)
+        context.taste.values[bowl.recipe.id] = -0.5
+        #expect(!RecipeScorer.score(bowl, context: context).reasonCodes.contains(reason))
+    }
+
+    private func plate(_ nutrients: Nutrients, groups: [FoodGroup: Double]) -> RecipeCandidate {
+        RecipeCandidate(
+            recipe: Kitchen.recipe("Plate", servings: 1), ingredients: [],
+            nutrition: RecipeNutrition(perServing: nutrients, perRecipe: nutrients, coverage: 1, unresolved: []),
+            foodGroupsGrams: groups
+        )
+    }
+
+    @Test func nutritionQualitySpansMinusOneToOne() {
+        // 7 g fibre in 500 kcal is 14 g per 1,000 kcal; all of it produce
+        let best = plate(Nutrients(energyKcal: 500, saturatedFatG: 2, fiberG: 7, sodiumMg: 300), groups: [.produce: 400])
+        // 2,300 mg per 1,000 kcal is twice the sodium density, 100 kcal of 500 twice the saturated-fat share
+        let worst = plate(Nutrients(energyKcal: 500, saturatedFatG: 100.0 / 9, fiberG: 0, sodiumMg: 1150), groups: [.grains: 400])
+        // half of each: 7 g per 1,000 kcal, a quarter of the plate, 1.5 times sodium, 15 % saturated fat
+        let middle = plate(
+            Nutrients(energyKcal: 500, saturatedFatG: 75.0 / 9, fiberG: 3.5, sodiumMg: 862.5),
+            groups: [.legumes: 100, .grains: 300]
+        )
+
+        #expect(Kitchen.isClose(RecipeScorer.nutritionQuality(best), 1))
+        #expect(Kitchen.isClose(RecipeScorer.nutritionQuality(worst), -1))
+        #expect(Kitchen.isClose(RecipeScorer.nutritionQuality(middle), 0))
+    }
+
+    @Test func nutritionQualityWithoutEnergyCountsOnlyThePlate() {
+        let unknown = plate(Nutrients(fiberG: 20, sodiumMg: 5000), groups: [.produce: 100, .grains: 300])
+
+        #expect(Kitchen.isClose(RecipeScorer.nutritionQuality(unknown), 0.25))
+        #expect(RecipeScorer.nutritionQuality(plate(Nutrients(), groups: [:])) == 0)
+    }
+
+    @Test func eatBetterWeighsNutritionAndMaintainDoesNot() {
+        let context = { (goal: Goal) in Planning.context(pantry: [], goal: goal) }
+        let lentils = RecipeScorer.score(Planning.lentilSoup, context: context(.eatBetter))
+        let maintained = RecipeScorer.score(Planning.lentilSoup, context: context(.maintain))
+
+        #expect(lentils.components.nutrition > 0)
+        #expect(Kitchen.isClose(lentils.score - maintained.score, 2 * lentils.components.nutrition))
+    }
+
+    @Test func eatBetterRanksTheSaltyRecipeBelowTheProduceOne() {
+        let teriyaki = { (goal: Goal) in RecipeScorer.score(Planning.salmonTeriyaki, context: Planning.context(pantry: [], goal: goal)) }
+        let lentils = { (goal: Goal) in RecipeScorer.score(Planning.lentilSoup, context: Planning.context(pantry: [], goal: goal)) }
+
+        #expect(teriyaki(.maintain).score > lentils(.maintain).score)
+        #expect(lentils(.eatBetter).score > teriyaki(.eatBetter).score)
+        #expect(teriyaki(.eatBetter).components.nutrition < lentils(.eatBetter).components.nutrition)
     }
 
     @Test func varietyCuisineIsDroppedWhenTheCuisineWasPlannedThisWeek() {
@@ -331,7 +403,7 @@ struct PlanningScorerTests {
             return (RecipeScorer.score(familiar, context: context).score, RecipeScorer.score(fresh, context: context).score)
         }
 
-        let balanced = scores(.eatBetter)
+        let balanced = scores(.maintain)
         let variety = scores(.moreVariety)
 
         #expect(balanced.0 > balanced.1)

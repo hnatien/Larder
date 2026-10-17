@@ -21,16 +21,16 @@ public nonisolated struct PlanningService: Sendable {
     static let recentDays = 28
     /// Days within which a cuisine counts as already eaten this week.
     static let recentCuisineDays = 7
-    /// Skips of the same recipe after which it counts as disliked.
-    static let skipsToDislike = 2
+    /// Days of history taste affinity learns from; older events have decayed to under a twentieth.
+    static let tasteDays = 90
 
     private let plans: any PlanRepository
     private let recipes: any RecipeRepository
     private let foods: any FoodRepository
     private let pantry: any PantryRepository
     private let profiles: any ProfileRepository
-    private let dates: any DateProvider
-    private let calendar: Calendar
+    let dates: any DateProvider
+    let calendar: Calendar
 
     /// Creates a service over the given ports; `calendar` steps days and decides what counts as the same day.
     public init(
@@ -81,8 +81,8 @@ public nonisolated struct PlanningService: Sendable {
         )
     }
 
-    /// What the scorer knows: recency from the last 28 days, cuisines from the last 7, liked from cooked meals
-    /// and skipped from recipes skipped at least twice in `recentPlans`.
+    /// What the scorer knows: recency from the last 28 days, cuisines from the last 7, and taste affinity learned
+    /// from what `recentPlans` cooked, skipped and swapped away (`TasteAffinity`).
     public func context(
         for profile: UserProfile,
         pantry: [PantryItem],
@@ -99,8 +99,6 @@ public nonisolated struct PlanningService: Sendable {
 
         var recentlyPlanned: [RecipeID: Date] = [:]
         var recentCuisines: [String: Date] = [:]
-        var liked = Set<RecipeID>()
-        var skips: [RecipeID: Int] = [:]
         for meal in recentPlans {
             if meal.date > recentStart, meal.date <= now {
                 recentlyPlanned[meal.recipeID] = max(recentlyPlanned[meal.recipeID] ?? meal.date, meal.date)
@@ -108,11 +106,6 @@ public nonisolated struct PlanningService: Sendable {
                     let key = cuisine.lowercased()
                     recentCuisines[key] = max(recentCuisines[key] ?? meal.date, meal.date)
                 }
-            }
-            switch meal.status {
-            case .cooked: liked.insert(meal.recipeID)
-            case .skipped: skips[meal.recipeID, default: 0] += 1
-            case .planned: break
             }
         }
 
@@ -122,8 +115,7 @@ public nonisolated struct PlanningService: Sendable {
             now: now,
             recentlyPlanned: recentlyPlanned,
             recentCuisines: recentCuisines,
-            liked: liked,
-            skipped: Set(skips.filter { $0.value >= Self.skipsToDislike }.keys),
+            taste: TasteAffinity.learn(from: recentPlans, candidates: catalogue.candidates, foods: catalogue.foods, now: now),
             goal: profile.goal,
             maxCookMinutes: profile.maxCookMinutes,
             weeklyBudget: profile.weeklyBudget
@@ -212,12 +204,12 @@ public nonisolated struct PlanningService: Sendable {
 
     // MARK: Inputs
 
-    private struct Inputs {
+    struct Inputs {
         var compiled: CompiledConstraints
         var context: ScoringContext
     }
 
-    private func inputs(catalogue: PlanningCatalogue) async throws -> Inputs {
+    func inputs(catalogue: PlanningCatalogue) async throws -> Inputs {
         let (profile, constraints, targets) = try await profileInputs()
         let shelves = try await pantry.items()
         let recent = try await recentMeals()
@@ -238,10 +230,10 @@ public nonisolated struct PlanningService: Sendable {
         return (profile, constraints, targets)
     }
 
-    /// Meals of every plan that reaches into the recency window.
+    /// Meals of every plan that reaches into the taste window, which covers the recency window.
     private func recentMeals() async throws -> [PlannedMeal] {
         let now = dates.now
-        let windowStart = calendar.date(byAdding: .day, value: -Self.recentDays, to: now) ?? now
+        let windowStart = calendar.date(byAdding: .day, value: -Self.tasteDays, to: now) ?? now
         var meals: [PlannedMeal] = []
         for plan in try await plans.plans() {
             let end = calendar.date(byAdding: .day, value: plan.days, to: plan.startDate) ?? plan.startDate

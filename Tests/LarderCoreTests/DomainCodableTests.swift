@@ -101,7 +101,7 @@ struct DomainCodableTests {
     }
 
     @Test func fixturesCoverEveryReasonCode() {
-        #expect(Set(Fixtures.allReasonCodes.map(Fixtures.caseName)).count == 7)
+        #expect(Set(Fixtures.allReasonCodes.map(Fixtures.caseName)).count == 9)
     }
 
     @Test(arguments: Fixtures.allReasonCodes)

@@ -54,19 +54,27 @@ import Testing
         #expect(context.recentCuisines["moroccan"] == nil)
     }
 
-    @Test func cookedMeansLikedAndOnlyTwoSkipsMeanSkipped() async throws {
+    @Test func tasteIsLearnedFromCookedSkippedAndSwappedMeals() async throws {
         let service = world.service()
         let catalogue = try await service.catalogue()
         let plan = Fixtures.plan(start: Fixtures.day(-7))
+        var swapped = Fixtures.meal(Fixtures.lentilSoup, in: plan, day: 3)
+        swapped.swapHistory = [Fixtures.beanTacos.recipe.id]
         let meals = [
             Fixtures.meal(Fixtures.chickenTikka, in: plan, day: 0, status: .cooked),
             Fixtures.meal(Fixtures.beefRagu, in: plan, day: 1, status: .skipped),
             Fixtures.meal(Fixtures.tofuBowl, in: plan, day: 2, status: .skipped),
             Fixtures.meal(Fixtures.tofuBowl, in: plan, day: 4, status: .skipped),
+            swapped,
         ]
         let context = service.context(for: Fixtures.profile(), pantry: [], recentPlans: meals, catalogue: catalogue)
-        #expect(context.liked == [Fixtures.chickenTikka.recipe.id])
-        #expect(context.skipped == [Fixtures.tofuBowl.recipe.id])
+        let taste = context.taste
+        #expect(taste.affinity(for: Fixtures.chickenTikka.recipe.id) > 0)
+        #expect(taste.affinity(for: Fixtures.beefRagu.recipe.id) < 0)
+        #expect(taste.affinity(for: Fixtures.tofuBowl.recipe.id) < taste.affinity(for: Fixtures.beefRagu.recipe.id))
+        #expect(taste.affinity(for: Fixtures.beanTacos.recipe.id) < 0)
+        // the curry was never cooked but shares the tikka's cuisine
+        #expect(taste.affinity(for: Fixtures.chickpeaCurry.recipe.id) > 0)
     }
 
     @Test func compiledFollowsTheProfile() {

@@ -9,12 +9,14 @@ public struct ScoringContext: Sendable {
     public var recentlyPlanned: [RecipeID: Date]
     /// When each cuisine was last planned, keyed by cuisine name in any case.
     public var recentCuisines: [String: Date]
-    public var liked: Set<RecipeID>
-    public var skipped: Set<RecipeID>
+    /// What the household's history says it likes.
+    public var taste: TasteAffinity
     public var goal: Goal
     public var maxCookMinutes: Int
     /// Carried for budget-aware callers; recipes have no prices yet, so scoring uses the pantry cost proxy.
     public var weeklyBudget: Decimal?
+    /// Pantry foods the user asked to use up; a recipe using one scores as if it used something about to turn.
+    public var useUp: Set<FoodID>
 
     /// Creates a scoring context.
     public init(
@@ -23,30 +25,31 @@ public struct ScoringContext: Sendable {
         now: Date,
         recentlyPlanned: [RecipeID: Date] = [:],
         recentCuisines: [String: Date] = [:],
-        liked: Set<RecipeID> = [],
-        skipped: Set<RecipeID> = [],
+        taste: TasteAffinity = TasteAffinity(),
         goal: Goal,
         maxCookMinutes: Int,
-        weeklyBudget: Decimal? = nil
+        weeklyBudget: Decimal? = nil,
+        useUp: Set<FoodID> = []
     ) {
         self.pantry = pantry
         self.foods = foods
         self.now = now
         self.recentlyPlanned = recentlyPlanned
         self.recentCuisines = recentCuisines
-        self.liked = liked
-        self.skipped = skipped
+        self.taste = taste
         self.goal = goal
         self.maxCookMinutes = maxCookMinutes
         self.weeklyBudget = weeklyBudget
+        self.useUp = useUp
     }
 }
 
-/// Unweighted score parts; each is 0...1 except `taste`, which is -1...1.
+/// Unweighted score parts; each is 0...1 except `taste` and `nutrition`, which are -1...1.
 public struct ScoreComponents: Hashable, Sendable {
     /// Fraction of non-optional, non-garnish ingredient grams the pantry covers.
     public var pantryOverlap: Double
-    /// Sum over used pantry items expiring within 3 days of (3 - days left) / 3, each term and the sum capped at 1.
+    /// Sum over used pantry items expiring within 3 days of (3 - days left) / 3, each term and the sum capped at 1;
+    /// 1 when the recipe uses a food the user asked to use up.
     public var expiryUrgency: Double
     /// 1 - total minutes / time cap, at least 0.
     public var timeFit: Double
@@ -54,10 +57,13 @@ public struct ScoreComponents: Hashable, Sendable {
     public var costProxy: Double
     /// 0 when planned within 14 days, rising linearly to 1 at 28 days; 1 when never planned.
     public var novelty: Double
-    /// 1 liked, -1 skipped, 0 otherwise.
+    /// The recipe's `TasteAffinity`.
     public var taste: Double
     /// Protein grams per serving / 40, capped at 1; weighted only for the more-protein goal.
     public var protein: Double
+    /// Half of fibre density and produce share, less sodium and saturated fat beyond their limits; weighted only for
+    /// the eat-better goal (see `RecipeScorer.nutritionQuality`).
+    public var nutrition: Double
 
     /// Creates components.
     public init(
@@ -67,7 +73,8 @@ public struct ScoreComponents: Hashable, Sendable {
         costProxy: Double,
         novelty: Double,
         taste: Double,
-        protein: Double
+        protein: Double,
+        nutrition: Double = 0
     ) {
         self.pantryOverlap = pantryOverlap
         self.expiryUrgency = expiryUrgency
@@ -76,6 +83,7 @@ public struct ScoreComponents: Hashable, Sendable {
         self.novelty = novelty
         self.taste = taste
         self.protein = protein
+        self.nutrition = nutrition
     }
 }
 
@@ -140,12 +148,15 @@ public enum RecipeScorer {
         let minutes = candidate.totalMinutes
         let components = ScoreComponents(
             pantryOverlap: requiredGrams > 0 ? coveredGrams / requiredGrams : 0,
-            expiryUrgency: min(urgent.reduce(0) { $0 + clamp((urgentDays - $1.daysLeft) / urgentDays) }, 1),
+            expiryUrgency: usedFoods.isDisjoint(with: context.useUp)
+                ? min(urgent.reduce(0) { $0 + clamp((urgentDays - $1.daysLeft) / urgentDays) }, 1)
+                : 1,
             timeFit: context.maxCookMinutes > 0 ? max(1 - Double(minutes) / Double(context.maxCookMinutes), 0) : 0,
             costProxy: required.isEmpty ? 0 : 1 - Double(uncovered) / Double(required.count),
             novelty: novelty(lastPlanned: context.recentlyPlanned[candidate.recipe.id], now: context.now),
-            taste: (context.liked.contains(candidate.recipe.id) ? 1 : 0) - (context.skipped.contains(candidate.recipe.id) ? 1 : 0),
-            protein: clamp((candidate.nutrition.perServing.proteinG ?? 0) / 40)
+            taste: context.taste.affinity(for: candidate.recipe.id),
+            protein: clamp((candidate.nutrition.perServing.proteinG ?? 0) / 40),
+            nutrition: nutritionQuality(candidate)
         )
 
         var codes: [ReasonCode] = urgent.compactMap { entry in
@@ -157,6 +168,7 @@ public enum RecipeScorer {
             codes.append(.varietyCuisine(cuisine: cuisine))
         }
         if context.goal == .saveMoney, components.costProxy >= 0.6 { codes.append(.underBudget) }
+        if components.taste > 0, let reason = context.taste.reasons[candidate.recipe.id] { codes.append(reason) }
 
         return ScoredRecipe(
             candidate: candidate,
@@ -164,6 +176,35 @@ public enum RecipeScorer {
             components: components,
             reasonCodes: codes
         )
+    }
+
+    /// Fibre per 1,000 kcal that earns full credit: the DGA 2025 density.
+    static let fibrePer1000kcal = 14.0
+    /// Sodium per 1,000 kcal at the DGA limit (2,300 mg in 2,000 kcal); double it is the full penalty.
+    static let sodiumPer1000kcal = 1150.0
+    /// Saturated fat share of energy at the DGA limit, in percent; double it is the full penalty.
+    static let saturatedFatPercent = 10.0
+    /// Share of the recipe's grams from produce and pulses that earns full credit.
+    static let plantShare = 0.5
+
+    /// How well a serving fits healthy-eating guidance, -1...1: half of (fibre density against 14 g per 1,000 kcal
+    /// plus produce-and-pulse share against half the plate, each capped at 1) minus half of (sodium density and
+    /// saturated-fat energy share beyond their limits, each reaching 1 at twice the limit). Densities need the
+    /// serving's energy; a nutrient without data adds nothing either way.
+    static func nutritionQuality(_ candidate: RecipeCandidate) -> Double {
+        let serving = candidate.nutrition.perServing
+        let totalGrams = candidate.foodGroupsGrams.values.reduce(0, +)
+        let plants = (candidate.foodGroupsGrams[.produce] ?? 0) + (candidate.foodGroupsGrams[.legumes] ?? 0)
+        var gains = totalGrams > 0 ? clamp(plants / totalGrams / plantShare) : 0
+        var losses = 0.0
+        if let kcal = serving.energyKcal, kcal.isFinite, kcal > 0 {
+            if let fibre = serving.fiberG { gains += clamp(fibre / kcal * 1000 / fibrePer1000kcal) }
+            if let sodium = serving.sodiumMg { losses += clamp((sodium / kcal * 1000 - sodiumPer1000kcal) / sodiumPer1000kcal) }
+            if let saturated = serving.saturatedFatG {
+                losses += clamp((saturated * 9 / kcal * 100 - saturatedFatPercent) / saturatedFatPercent)
+            }
+        }
+        return (gains - losses) / 2
     }
 
     private static func novelty(lastPlanned: Date?, now: Date) -> Double {
@@ -191,6 +232,7 @@ public enum RecipeScorer {
         var novelty = 1.0
         var taste = 1.0
         var protein = 0.0
+        var nutrition = 0.0
 
         init(goal: Goal) {
             switch goal {
@@ -200,13 +242,15 @@ public enum RecipeScorer {
             case .saveMoney: costProxy = 2
             case .moreVariety: novelty = 2
             case .moreProtein: protein = 1
-            case .eatBetter, .maintain: break
+            case .eatBetter: nutrition = 2
+            case .maintain: break
             }
         }
 
         func apply(to c: ScoreComponents) -> Double {
             pantryOverlap * c.pantryOverlap + expiryUrgency * c.expiryUrgency + timeFit * c.timeFit
                 + costProxy * c.costProxy + novelty * c.novelty + taste * c.taste + protein * c.protein
+                + nutrition * c.nutrition
         }
     }
 }

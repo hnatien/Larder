@@ -16,6 +16,8 @@ struct ReasonCodeWireTests {
         (.varietyCuisine(cuisine: "Korean"), ReasonCodeWire(code: "varietyCuisine", params: ["cuisine": .string("Korean")])),
         (.leftoverOf(meal: PlannedMealID()), ReasonCodeWire(code: "leftoverOf")),
         (.underBudget, ReasonCodeWire(code: "underBudget")),
+        (.cooksOften(cuisine: "Indian"), ReasonCodeWire(code: "cooksOften", params: ["cuisine": .string("Indian")])),
+        (.cooksOftenWith(food: spinach), ReasonCodeWire(code: "cooksOftenWith", params: ["food": .string("spinach")])),
     ]
 
     @Test(arguments: cases)

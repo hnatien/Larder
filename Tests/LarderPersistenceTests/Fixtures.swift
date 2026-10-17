@@ -82,6 +82,8 @@ enum Fixtures {
         .varietyCuisine(cuisine: "Korean"),
         .leftoverOf(meal: PlannedMealID()),
         .underBudget,
+        .cooksOften(cuisine: "Indian"),
+        .cooksOftenWith(food: FoodID()),
     ]
 
     static let allConstraintKinds: [ConstraintKind] = [

@@ -9,4 +9,8 @@ public enum ReasonCode: Hashable, Codable, Sendable {
     case varietyCuisine(cuisine: String)
     case leftoverOf(meal: PlannedMealID)
     case underBudget
+    /// The household cooks a lot of this cuisine.
+    case cooksOften(cuisine: String)
+    /// The household cooks a lot with this food.
+    case cooksOftenWith(food: FoodID)
 }
