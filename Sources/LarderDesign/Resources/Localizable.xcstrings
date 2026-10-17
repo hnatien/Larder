@@ -2369,13 +2369,13 @@
         }
       }
     },
-    "Filters, %lld on": {
+    "Filters · %lld": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filters, %lld on"
+            "value": "Filters · %lld"
           }
         }
       }

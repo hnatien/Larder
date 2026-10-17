@@ -19,22 +19,18 @@ public struct ChoiceChip: View {
 
     public var body: some View {
         Button(action: action) {
-            HStack(spacing: LarderSpacing.xs) {
-                if isSelected {
-                    Image(systemName: "checkmark")
-                        .font(LarderFont.body(.subheadline, weight: .bold))
-                        .accessibilityHidden(true)
-                } else if let systemImage {
-                    Image(systemName: systemImage)
-                        .accessibilityHidden(true)
+            // Both states lay out underneath, so the chip keeps one width as it toggles and its row never reflows.
+            ZStack {
+                Group {
+                    label(selected: true)
+                    label(selected: false)
                 }
-                Text(title)
-                    .font(LarderFont.body(.body, weight: isSelected ? .semibold : .regular))
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                .hidden()
+                .accessibilityHidden(true)
+                label(selected: isSelected)
             }
             .foregroundStyle(isSelected ? LarderColor.ink.onAccent : LarderColor.ink.primary)
-            .padding(.horizontal, LarderSpacing.l)
+            .padding(.horizontal, LarderSpacing.m)
             .padding(.vertical, LarderSpacing.s + LarderSpacing.xxs)
             .frame(minHeight: 44)
             .background(isSelected ? LarderColor.accent.brand : LarderColor.surface.raised, in: Capsule())
@@ -48,6 +44,23 @@ public struct ChoiceChip: View {
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: isSelected)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    private func label(selected: Bool) -> some View {
+        HStack(spacing: LarderSpacing.xs) {
+            if selected {
+                Image(systemName: "checkmark")
+                    .font(LarderFont.body(.subheadline, weight: .bold))
+                    .accessibilityHidden(true)
+            } else if let systemImage {
+                Image(systemName: systemImage)
+                    .accessibilityHidden(true)
+            }
+            Text(title)
+                .font(LarderFont.body(.body, weight: selected ? .semibold : .regular))
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 

@@ -117,7 +117,7 @@ nonisolated enum RecipesCopy {
 
     /// The Filters chip with how many filters in the sheet are on.
     static func moreFilters(_ count: Int) -> String {
-        String(localized: "Filters, \(count) on", bundle: Copy.bundle)
+        String(localized: "Filters · \(count)", bundle: Copy.bundle)
     }
 
     /// A time filter: any time, or at most so many minutes.
