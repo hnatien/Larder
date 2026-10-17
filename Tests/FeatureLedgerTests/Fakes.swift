@@ -65,6 +65,7 @@ struct FakeFoodRepository: FoodRepository {
     func search(text: String, limit: Int) -> [Food] { [] }
     func food(by id: FoodID) -> Food? { foods.first { $0.id == id } }
     func foods(byIDs ids: [FoodID]) -> [Food] { foods.filter { ids.contains($0.id) } }
+    func food(byGTIN gtin: String) -> Food? { nil }
     func upsert(_ foods: [Food]) {}
 }
 
@@ -92,19 +93,19 @@ struct FakeProfileRepository: ProfileRepository {
 /// Records every explain and adjust request and answers with fixed results.
 actor FakeAssistant: AssistantBackend {
     private(set) var explainRequests: [PlanExplainRequest] = []
-    private var result: Result<PlanExplanation, LarderError>
     private(set) var adjustRequests: [AdjustRequest] = []
-
+    private var result: Result<PlanExplanation, LarderError>
     private var adjustResult: Result<ConstraintEdit, LarderError> = .failure(.assistantUnavailable)
+
     init(result: Result<PlanExplanation, LarderError> = .success(PlanExplanation(summary: "A steady week.", mealNotes: []))) {
         self.result = result
     }
 
     func setResult(_ result: Result<PlanExplanation, LarderError>) { self.result = result }
 
-    func explain(plan: PlanExplainRequest) throws -> PlanExplanation {
     func setAdjustResult(_ result: Result<ConstraintEdit, LarderError>) { adjustResult = result }
 
+    func explain(plan: PlanExplainRequest) throws -> PlanExplanation {
         explainRequests.append(plan)
         return try result.get()
     }

@@ -8,6 +8,8 @@ public protocol FoodRepository: Sendable {
     func food(by id: FoodID) async throws -> Food?
     /// The foods with the given identifiers; unknown identifiers are skipped.
     func foods(byIDs ids: [FoodID]) async throws -> [Food]
+    /// The food whose barcode is `gtin` in any of its spellings (see `GTIN.spellings(of:)`), or `nil`.
+    func food(byGTIN gtin: String) async throws -> Food?
     /// Inserts or replaces foods by identifier.
     func upsert(_ foods: [Food]) async throws
 }

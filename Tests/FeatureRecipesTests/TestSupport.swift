@@ -103,6 +103,7 @@ actor FakeStore: RecipeRepository, RecipePhotoStore, FoodRepository, ProfileRepo
 
     func food(by id: FoodID) -> Food? { foodList.first { $0.id == id } }
     func foods(byIDs ids: [FoodID]) -> [Food] { foodList.filter { ids.contains($0.id) } }
+    func food(byGTIN gtin: String) -> Food? { nil }
     func upsert(_ foods: [Food]) {}
 
     func profile() throws -> UserProfile? {

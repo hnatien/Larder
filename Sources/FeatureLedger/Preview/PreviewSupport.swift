@@ -53,6 +53,7 @@ actor PreviewStore: PlanRepository, RecipeRepository, FoodRepository, PantryRepo
     func search(text: String, limit: Int) -> [Food] { [] }
     func food(by id: FoodID) -> Food? { foodList.first { $0.id == id } }
     func foods(byIDs ids: [FoodID]) -> [Food] { foodList.filter { ids.contains($0.id) } }
+    func food(byGTIN gtin: String) -> Food? { nil }
     func upsert(_ foods: [Food]) {}
 
     func items() -> [PantryItem] { shelves }

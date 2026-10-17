@@ -149,6 +149,7 @@ private struct PreviewStore: PlanRepository, RecipeRepository, FoodRepository, P
     func search(text: String, limit: Int) async throws -> [Food] { [] }
     func food(by id: FoodID) async throws -> Food? { nil }
     func foods(byIDs ids: [FoodID]) async throws -> [Food] { [] }
+    func food(byGTIN gtin: String) async throws -> Food? { nil }
     func upsert(_ foods: [Food]) async throws {}
     func items() async throws -> [PantryItem] { [] }
     func upsert(_ item: PantryItem) async throws {}

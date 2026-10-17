@@ -6,6 +6,7 @@ import SwiftUI
 struct QuickAddSheet: View {
     @Bindable var model: ShelvesModel
     @Environment(\.dismiss) private var dismiss
+    @State private var isScanning = false
 
     private var isDraftBlank: Bool {
         model.quickAddDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -21,6 +22,12 @@ struct QuickAddSheet: View {
                     .listRowBackground(LarderColor.surface.raised)
                 }
                 describeSection
+                #if os(iOS)
+                Section {
+                    Button(ShelvesCopy.scan, systemImage: "barcode.viewfinder") { isScanning = true }
+                }
+                .listRowBackground(LarderColor.surface.raised)
+                #endif
                 staplesSection
                 if !model.pendingLines.isEmpty {
                     linesSection
@@ -51,6 +58,11 @@ struct QuickAddSheet: View {
             }
         }
         .onDisappear { model.discardPending() }
+        #if os(iOS)
+        .fullScreenCover(isPresented: $isScanning) {
+            PantryScannerSheet(model: model)
+        }
+        #endif
     }
 
     private var describeSection: some View {

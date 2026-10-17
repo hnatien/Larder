@@ -56,6 +56,18 @@ public struct GRDBFoodRepository: FoodRepository {
         }
     }
 
+    public func food(byGTIN gtin: String) async throws -> Food? {
+        let spellings = GTIN.spellings(of: gtin)
+        guard !spellings.isEmpty else { return nil }
+        return try await database.read { db in
+            try FoodRecord
+                .filter(spellings.contains(Column("gtin")))
+                .order(Column("name"))
+                .fetchOne(db)?
+                .food()
+        }
+    }
+
     public func upsert(_ foods: [Food]) async throws {
         try await database.write { db in
             for food in foods {

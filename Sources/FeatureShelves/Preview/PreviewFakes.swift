@@ -89,6 +89,12 @@ actor FakeFoodRepository: FoodRepository {
         return stored.filter { ids.contains($0.id) }
     }
 
+    func food(byGTIN gtin: String) throws -> Food? {
+        try failIfNeeded()
+        let spellings = GTIN.spellings(of: gtin)
+        return stored.first { food in food.gtin.map(spellings.contains) ?? false }
+    }
+
     func upsert(_ foods: [Food]) throws {
         try failIfNeeded()
         for food in foods {

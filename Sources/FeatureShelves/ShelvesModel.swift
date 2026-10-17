@@ -3,6 +3,20 @@ import LarderCore
 import LarderDesign
 import Observation
 
+/// Something a scan found that the Add food sheet tells the user about.
+public enum ScanNotice: Hashable, Sendable {
+    /// A barcode that matches no food in Larder; a blank line waits for its name.
+    case unknownBarcode
+    /// A photo with no barcode Larder could read.
+    case noBarcode
+    /// A receipt with no food lines on it.
+    case nothingOnReceipt
+    /// A receipt photo that could not be read at all.
+    case unreadableReceipt
+    /// A free user tried a receipt; reading receipts is a Larder Plus feature.
+    case receiptNeedsPlus
+}
+
 /// Drives the shelves screen; every mutation reloads from the repository so the UI shows persisted truth.
 @Observable
 @MainActor
@@ -20,27 +34,51 @@ public final class ShelvesModel {
     public var pendingLines: [DraftLine] = []
     /// Narrows the lists to items whose name contains this text; empty shows everything.
     public var searchText = ""
+    /// What the last scan found that needs saying, such as a barcode Larder does not know.
+    public private(set) var scanNotice: ScanNotice?
+    /// The food the last scanned barcode matched, for announcing it.
+    public private(set) var lastScannedName: String?
 
     private let pantry: any PantryRepository
     private let foods: any FoodRepository
     private let assistant: any AssistantBackend
     private let dates: any DateProvider
     private let calendar: Calendar
+    private let receiptReader: (@Sendable (Data) async throws -> [ParsedPantryLine])?
+    private let barcodeReader: (@Sendable (Data) async throws -> [String])?
+    private let isPlus: @Sendable () async -> Bool
+    /// Barcodes already turned into lines since the sheet opened, so a code the camera keeps seeing adds one line.
+    private var scannedBarcodes: Set<String> = []
 
     /// Creates a model over the given ports; `calendar` decides which instants count as the same day.
+    ///
+    /// `receiptReader` turns a receipt photo into lines (a Plus feature, checked with `isPlus`) and `barcodeReader`
+    /// finds the barcodes in a photo; without them the scanner offers neither.
     public init(
         pantry: any PantryRepository,
         foods: any FoodRepository,
         assistant: any AssistantBackend,
         dates: any DateProvider,
-        calendar: Calendar = .current
+        calendar: Calendar = .current,
+        receiptReader: (@Sendable (Data) async throws -> [ParsedPantryLine])? = nil,
+        barcodeReader: (@Sendable (Data) async throws -> [String])? = nil,
+        isPlus: @escaping @Sendable () async -> Bool = { false }
     ) {
         self.pantry = pantry
         self.foods = foods
         self.assistant = assistant
         self.dates = dates
         self.calendar = calendar
+        self.receiptReader = receiptReader
+        self.barcodeReader = barcodeReader
+        self.isPlus = isPlus
     }
+
+    /// Whether receipt photos can be read on this build.
+    public var canReadReceipts: Bool { receiptReader != nil }
+
+    /// Whether barcodes can be read from a still photo on this build.
+    public var canReadBarcodePhotos: Bool { barcodeReader != nil }
 
     /// The current moment, for defaulting a best-by date.
     public var now: Date { dates.now }
@@ -107,21 +145,107 @@ public final class ShelvesModel {
                 error = .invalidResponse
                 return
             }
-            var drafts: [DraftLine] = []
-            for line in parsed {
-                var draft = DraftLine(parsed: line)
-                if line.location == nil {
-                    // The catalogue only sharpens the guess, so a failed lookup falls back to the name alone.
-                    let food = try? await matchingFood(for: line.name)
-                    draft.location = .usual(forItemNamed: line.name, food: food)
-                }
-                drafts.append(draft)
-            }
-            pendingLines += drafts
+            pendingLines += await drafts(from: parsed, source: .naturalLanguage)
             quickAddDraft = ""
         } catch {
             record(error, fallback: .assistantUnavailable)
         }
+    }
+
+    /// Pending lines for parsed lines, each kept where that food usually lives unless the text said otherwise.
+    private func drafts(from parsed: [ParsedPantryLine], source: PantrySource) async -> [DraftLine] {
+        var drafts: [DraftLine] = []
+        for line in parsed {
+            var draft = DraftLine(parsed: line, source: source)
+            if line.location == nil {
+                // The catalogue only sharpens the guess, so a failed lookup falls back to the name alone.
+                let food = try? await matchingFood(for: line.name)
+                draft.location = .usual(forItemNamed: line.name, food: food)
+            }
+            drafts.append(draft)
+        }
+        return drafts
+    }
+
+    // MARK: Scanning
+
+    /// Adds a pending line for a scanned barcode: the matching food, or a blank line to name when no food has it.
+    /// A barcode already scanned since the sheet opened is ignored, as is anything that is not a retail barcode.
+    public func addBarcode(_ code: String) async {
+        guard let gtin = GTIN.normalized(code), !scannedBarcodes.contains(gtin) else { return }
+        scannedBarcodes.insert(gtin)
+        error = nil
+        scanNotice = nil
+        let food: Food?
+        do {
+            food = try await foods.food(byGTIN: gtin)
+        } catch {
+            scannedBarcodes.remove(gtin)
+            record(error, fallback: .storageFailure)
+            return
+        }
+        guard let food else {
+            pendingLines.append(DraftLine(source: .barcode))
+            scanNotice = .unknownBarcode
+            return
+        }
+        pendingLines.append(DraftLine(name: food.name, location: .usual(forItemNamed: food.name, food: food), source: .barcode))
+        lastScannedName = food.name
+    }
+
+    /// Adds a line for each barcode in a still photo.
+    public func readBarcodes(inPhoto data: Data) async {
+        guard let barcodeReader else { return }
+        error = nil
+        scanNotice = nil
+        isParsing = true
+        defer { isParsing = false }
+        let codes: [String]
+        do {
+            codes = try await barcodeReader(data)
+        } catch is CancellationError {
+            return
+        } catch {
+            scanNotice = .noBarcode
+            return
+        }
+        guard !codes.isEmpty else {
+            scanNotice = .noBarcode
+            return
+        }
+        for code in codes { await addBarcode(code) }
+    }
+
+    /// Reads a receipt photo into pending lines; a Plus feature, so a free user is told so and nothing is read.
+    public func readReceipt(_ data: Data) async {
+        guard let receiptReader else { return }
+        guard await isPlus() else {
+            scanNotice = .receiptNeedsPlus
+            return
+        }
+        error = nil
+        scanNotice = nil
+        isParsing = true
+        defer { isParsing = false }
+        do {
+            let parsed = try await receiptReader(data).filter { !$0.name.trimmingCharacters(in: .whitespaces).isEmpty }
+            guard !parsed.isEmpty else {
+                scanNotice = .nothingOnReceipt
+                return
+            }
+            pendingLines += await drafts(from: parsed, source: .receipt)
+        } catch let failure as LarderError {
+            record(failure, fallback: .assistantUnavailable)
+        } catch is CancellationError {
+            return
+        } catch {
+            scanNotice = .unreadableReceipt
+        }
+    }
+
+    /// Clears the scan notice once the sheet has shown it.
+    public func clearScanNotice() {
+        scanNotice = nil
     }
 
     /// Whether a pending line already carries this staple.
@@ -143,10 +267,13 @@ public final class ShelvesModel {
         pendingLines.append(DraftLine())
     }
 
-    /// Drops the pending lines and the draft.
+    /// Drops the pending lines, the draft and what was scanned.
     public func discardPending() {
         pendingLines = []
         quickAddDraft = ""
+        scannedBarcodes = []
+        scanNotice = nil
+        lastScannedName = nil
     }
 
     /// Saves every valid pending line and returns how many were added; lines that fail to save stay pending.

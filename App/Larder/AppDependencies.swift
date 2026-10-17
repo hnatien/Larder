@@ -149,7 +149,16 @@ final class AppDependencies {
             canGenerateFreeWeek: { trialWeek.canGenerateFreeWeek },
             markFreeWeekUsed: { trialWeek.markFreeWeekUsed() }
         )
-        shelves = ShelvesModel(pantry: pantry, foods: foods, assistant: assistant.router, dates: dates)
+        let router = assistant.router
+        shelves = ShelvesModel(
+            pantry: pantry,
+            foods: foods,
+            assistant: router,
+            dates: dates,
+            receiptReader: { try await ReceiptToPantry.parse(imageData: $0, assistant: router) },
+            barcodeReader: { try await BarcodeReader().barcodes(in: $0) },
+            isPlus: entitlements.isPlus
+        )
         recipes = RecipesModel(
             recipes: recipeRepository, photos: photos, foods: foods, profile: profiles, assistant: assistant.router, isPlus: entitlements.isPlus
         )

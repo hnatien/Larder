@@ -51,6 +51,7 @@ actor FakeStore: PlanRepository, RecipeRepository, FoodRepository, PantryReposit
     func search(text: String, limit: Int) async throws -> [Food] { [] }
     func food(by id: FoodID) async throws -> Food? { foodList.first { $0.id == id } }
     func foods(byIDs ids: [FoodID]) async throws -> [Food] { foodList.filter { ids.contains($0.id) } }
+    func food(byGTIN gtin: String) async throws -> Food? { nil }
     func upsert(_ foods: [Food]) async throws {}
 
     func items() async throws -> [PantryItem] { shelves }

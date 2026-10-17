@@ -58,6 +58,50 @@ enum ShelvesCopy {
         ]
     }
 
+    static var scan: String { String(localized: "Scan a barcode or receipt", bundle: Copy.bundle) }
+    static var scannerTitle: String { String(localized: "Scan", bundle: Copy.bundle) }
+    static var scanMode: String { String(localized: "What to scan", bundle: Copy.bundle) }
+    static var barcode: String { String(localized: "Barcode", bundle: Copy.bundle) }
+    static var receipt: String { String(localized: "Receipt", bundle: Copy.bundle) }
+    static var barcodeHint: String {
+        String(localized: "Point the camera at a barcode. Each one adds a line to check.", bundle: Copy.bundle)
+    }
+    static var receiptHint: String {
+        String(localized: "Fit the whole receipt in view, then read it. The photo stays on this iPhone.", bundle: Copy.bundle)
+    }
+    static var readReceipt: String { String(localized: "Read this receipt", bundle: Copy.bundle) }
+    static var choosePhoto: String { String(localized: "Choose a photo instead", bundle: Copy.bundle) }
+    static var readingReceipt: String { String(localized: "Reading the receipt", bundle: Copy.bundle) }
+    static var scannerUnavailable: String {
+        String(localized: "The camera scanner isn't available here. You can choose a photo instead.", bundle: Copy.bundle)
+    }
+
+    static func scanned(_ name: String) -> String {
+        String(localized: "Added \(name)", bundle: Copy.bundle)
+    }
+
+    /// How many lines wait in Add food after scanning.
+    static func waiting(_ count: Int) -> String {
+        count == 1
+            ? String(localized: "1 line to check in Add food", bundle: Copy.bundle)
+            : String(localized: "\(count) lines to check in Add food", bundle: Copy.bundle)
+    }
+
+    static func message(for notice: ScanNotice) -> String {
+        switch notice {
+        case .unknownBarcode:
+            String(localized: "Larder doesn't know that barcode yet. Name it in the list to add it.", bundle: Copy.bundle)
+        case .noBarcode:
+            String(localized: "Couldn't find a barcode in that photo.", bundle: Copy.bundle)
+        case .nothingOnReceipt:
+            String(localized: "Couldn't find any food on that receipt.", bundle: Copy.bundle)
+        case .unreadableReceipt:
+            String(localized: "Couldn't read that receipt. Try a flatter, brighter photo.", bundle: Copy.bundle)
+        case .receiptNeedsPlus:
+            String(localized: "Reading receipts comes with Larder Plus. You can subscribe in Settings.", bundle: Copy.bundle)
+        }
+    }
+
     static func name(of location: StorageLocation) -> String {
         switch location {
         case .fridge: String(localized: "Fridge", bundle: Copy.bundle)

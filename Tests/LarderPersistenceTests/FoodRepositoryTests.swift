@@ -28,6 +28,20 @@ struct FoodRepositoryTests {
         try await Fixtures.checkSearchIndexes(in: database)
     }
 
+    @Test func gtinLookupMatchesAnySpellingOfTheBarcode() async throws {
+        var oats = Fixtures.food("Oats")
+        oats.gtin = "012345678905"
+        var milk = Fixtures.food("Milk")
+        milk.gtin = "50123452"
+        try await foods.upsert([oats, milk, Fixtures.food("Rice")])
+
+        #expect(try await foods.food(byGTIN: "0012345678905") == oats)
+        #expect(try await foods.food(byGTIN: "00012345678905") == oats)
+        #expect(try await foods.food(byGTIN: "50123452") == milk)
+        #expect(try await foods.food(byGTIN: "4006381333931") == nil)
+        #expect(try await foods.food(byGTIN: "not a code") == nil)
+    }
+
     @Test func prefixSearchFindsChicken() async throws {
         try await foods.upsert([Fixtures.food("Chicken breast, raw"), Fixtures.food("Rice, white")])
         let names = try await foods.search(text: "chick", limit: 10).map(\.name)
