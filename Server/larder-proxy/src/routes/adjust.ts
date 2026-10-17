@@ -6,6 +6,14 @@ import { cachedSystem, type AssistRoute } from "./route.js";
 
 const format = outputFormat(AdjustResponse);
 
+const SPEAKERS = { person: "Person", larder: "Larder" } as const;
+
+/** The earlier turns as a transcript block, or nothing when the instruction opens the chat. */
+function conversationBlock(conversation: AdjustRequest["conversation"]): string {
+  if (!conversation?.length) return "";
+  return `Conversation so far:\n${conversation.map((turn) => `${SPEAKERS[turn.role]}: ${turn.text}`).join("\n")}\n\n`;
+}
+
 /** Builds the Messages API request for a conversational constraint change. */
 export function buildAdjustRequest(body: AdjustRequest, model: string) {
   return {
@@ -15,7 +23,7 @@ export function buildAdjustRequest(body: AdjustRequest, model: string) {
     messages: [
       {
         role: "user" as const,
-        content: `Instruction:\n${body.instruction}\n\nCurrent constraints:\n${JSON.stringify(body.currentConstraints)}\n\nPlan:\n${JSON.stringify(body.planContext.days)}`,
+        content: `${conversationBlock(body.conversation)}Instruction:\n${body.instruction}\n\nCurrent constraints:\n${JSON.stringify(body.currentConstraints)}\n\nPlan:\n${JSON.stringify(body.planContext.days)}`,
       },
     ],
     output_config: { effort: "medium" as const, format },

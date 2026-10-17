@@ -530,6 +530,17 @@ describe("POST /v1/assist/adjust", () => {
     expect((await post(app, "/v1/assist/adjust", body, { ...(await authed()), ...plusHeader })).status).toBe(400);
   });
 
+  it("accepts earlier turns and rejects too many, an unknown speaker or an empty turn", async () => {
+    const { app, anthropic } = plusHarness();
+    const headers = { ...(await authed()), ...plusHeader };
+    const turn = { role: "person", text: "vegetarian one day" };
+    anthropic.replyJson(adjustOutput([]));
+    expect((await post(app, "/v1/assist/adjust", { ...adjustBody, conversation: [turn, { role: "larder", text: "Which day?" }] }, headers)).status).toBe(200);
+    for (const conversation of [Array(9).fill(turn), [{ role: "assistant", text: "Which day?" }], [{ role: "person", text: "  " }]]) {
+      expect((await post(app, "/v1/assist/adjust", { ...adjustBody, conversation }, headers)).status).toBe(400);
+    }
+  });
+
   it("rejects an instruction over 300 characters", async () => {
     const { app } = plusHarness();
     const body = { ...adjustBody, instruction: "a".repeat(301) };

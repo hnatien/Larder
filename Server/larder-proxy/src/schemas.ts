@@ -120,8 +120,15 @@ export const ParseRecipeResponse = z.object({
 
 // POST /v1/assist/adjust
 
+/** One earlier turn of the adjust chat: what the person said, or what Larder asked or proposed back. */
+export const AdjustTurn = z.object({
+  role: z.enum(["person", "larder"]),
+  text: z.string().trim().min(1).max(300),
+});
+
 export const AdjustRequest = z.object({
   instruction: z.string().trim().min(1).max(300),
+  conversation: z.array(AdjustTurn).max(8).optional(),
   currentConstraints: z.array(Constraint).max(60),
   planContext: z.object({ days: z.array(PlanDay).max(14) }),
 });

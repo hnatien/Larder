@@ -57,6 +57,21 @@ describe("prompt caching invariants", () => {
     }
   });
 
+  it("puts the adjust conversation in the user turn ahead of the instruction, and leaves it out when there is none", () => {
+    const body = { instruction: "Tuesday", currentConstraints: [], planContext: { days: [] } };
+    const opening = buildAdjustRequest(body, "m");
+    const reply = buildAdjustRequest(
+      { ...body, conversation: [{ role: "person", text: "vegetarian one day" }, { role: "larder", text: "Which day?" }] },
+      "m",
+    );
+    expect(reply.system).toEqual(opening.system);
+    expect(systemText(reply.system)).not.toContain("vegetarian one day");
+    expect(opening.messages[0]?.content).toMatch(/^Instruction:\nTuesday\n/);
+    expect(reply.messages[0]?.content).toMatch(
+      /^Conversation so far:\nPerson: vegetarian one day\nLarder: Which day\?\n\nInstruction:\nTuesday\n/,
+    );
+  });
+
   it("keeps system prompts free of volatile content", () => {
     for (const prompt of [EXPLAIN_SYSTEM_PROMPT, PARSE_PANTRY_SYSTEM_PROMPT, PARSE_RECIPE_SYSTEM_PROMPT, ADJUST_SYSTEM_PROMPT]) {
       expect(prompt).not.toMatch(/\$\{|undefined|\d{4}-\d{2}-\d{2}/);

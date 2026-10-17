@@ -243,6 +243,34 @@
       "expect": { "edits": "some", "clarify": "any", "require": [{ "op": "remove", "kind": "olive" }] }
     },
     {
+      "id": "followup-answers-which-day",
+      "tags": ["day", "followup"],
+      "request": {
+        "instruction": "Tuesday",
+        "conversation": [
+          { "role": "person", "text": "Vegetarian one day this week" },
+          { "role": "larder", "text": "Happy to. Which day would you like to go vegetarian?" }
+        ],
+        "currentConstraints": "$peanutLactose",
+        "planContext": "$week"
+      },
+      "expect": { "edits": "some", "clarify": false, "require": [{ "op": "add", "kind": "vegetarian", "scope": { "dates": ["2026-10-20"] } }] }
+    },
+    {
+      "id": "followup-adds-without-repeating",
+      "tags": ["global", "followup"],
+      "request": {
+        "instruction": "Also keep dinners under 30 minutes",
+        "conversation": [
+          { "role": "person", "text": "No mushrooms this week" },
+          { "role": "larder", "text": "Proposed: No mushrooms this week" }
+        ],
+        "currentConstraints": "$peanutLactose",
+        "planContext": "$week"
+      },
+      "expect": { "edits": "some", "clarify": "any", "require": [{ "kind": "time:maxMinutes:30", "scope": "global" }] }
+    },
+    {
       "id": "offtopic-weather",
       "tags": ["offtopic"],
       "request": { "instruction": "What's the weather like tomorrow?", "currentConstraints": "$peanutLactose", "planContext": "$week" },
