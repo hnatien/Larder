@@ -19,3 +19,6 @@ bench-results/
 
 # Claude Code session worktrees
 .claude/worktrees/
+
+# Local docs
+docs/
