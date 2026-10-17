@@ -1,10 +1,10 @@
 import SwiftUI
 
-/// A freshness word with its icon and tone, and the best-by date when known: relative within a week ("Tomorrow",
-/// "2 days ago"), else the date, with the year when it is not this year. Colour is never the only signal.
+/// A freshness level as a quiet trailing label: its icon and, when known, the best-by date in its tone, relative
+/// within a week ("Tomorrow", "2 days ago"), else the date, with the year when it is not this year. Without a date it
+/// shows the freshness word. The word is always spoken, and each level has its own icon, so colour is never the only
+/// signal.
 public struct FreshnessStamp: View {
-    @Environment(\.displayScale) private var displayScale
-    @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     private let style: FreshnessStyle
@@ -18,8 +18,9 @@ public struct FreshnessStamp: View {
         self.now = now
     }
 
-    private var dateText: String? {
-        bestBy.map { Self.dateText($0, now: now, calendar: calendar, locale: locale) }
+    /// The date, which says how soon on its own, or the word when there is none.
+    private var shownText: String {
+        bestBy.map { Self.dateText($0, now: now, calendar: calendar, locale: locale) } ?? style.word
     }
 
     /// Days within which a best-by date reads as relative words.
@@ -49,63 +50,24 @@ public struct FreshnessStamp: View {
     }
 
     public var body: some View {
-        let layout = typeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: LarderSpacing.xs))
-            : AnyLayout(HStackLayout(spacing: LarderSpacing.s))
-        layout { parts }
-        .layoutPriority(1)
-        .modifier(Tone(level: style.level))
-        .padding(.horizontal, LarderSpacing.s)
-        .padding(.vertical, LarderSpacing.xs)
-        .background(fill, in: RoundedRectangle(cornerRadius: LarderRadius.stamp))
-        .overlay {
-            RoundedRectangle(cornerRadius: LarderRadius.stamp)
-                .strokeBorder(border, lineWidth: style.level == .past ? 1 : 1 / displayScale)
+        HStack(alignment: .firstTextBaseline, spacing: LarderSpacing.xs) {
+            Image(systemName: style.symbol)
+            Text(shownText)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .font(LarderFont.body(.subheadline, weight: .semibold))
+        .foregroundStyle(tone)
+        .layoutPriority(1)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(spokenLabel)
     }
 
-    @ViewBuilder private var parts: some View {
-        HStack(spacing: LarderSpacing.xs) {
-            Image(systemName: style.symbol)
-            Text(style.word)
-                .fixedSize()
-        }
-        .font(LarderFont.body(.footnote, weight: .semibold))
-        if let dateText {
-            Text(dateText)
-                .font(LarderFont.body(.footnote))
-                .fixedSize()
-        }
-    }
-
-    private var fill: Color {
+    private var tone: Color {
         switch style.level {
-        case .fresh, .past: Color.clear
-        case .soon: LarderColor.accent.spot
+        case .fresh: LarderColor.ink.secondary
+        case .soon: LarderColor.status(.warning)
         case .today: LarderColor.accent.brand
-        }
-    }
-
-    private var border: Color {
-        switch style.level {
-        case .fresh: LarderColor.line.strong
         case .past: LarderColor.status(.danger)
-        case .soon, .today: Color.clear
-        }
-    }
-
-    private struct Tone: ViewModifier {
-        let level: FreshnessStyle.Level
-
-        func body(content: Content) -> some View {
-            switch level {
-            case .fresh: content.foregroundStyle(LarderColor.ink.primary)
-            case .soon: content.onSpotFill()
-            case .today: content.foregroundStyle(LarderColor.ink.onAccent)
-            case .past: content.foregroundStyle(LarderColor.status(.danger))
-            }
         }
     }
 }
