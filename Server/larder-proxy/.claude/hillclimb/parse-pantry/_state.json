@@ -80,5 +80,5 @@
     "src/routes/parsePantry.ts",
     "src/prompts/parsePantry.ts"
   ],
-  "harness_sha": "670e32fdd9362562b7297f63f0e670e115f637d916ed1c219128471554cac27b"
+  "harness_sha": "388fae4514ecac9940940fb98f38d49558299f3039ee1b2794bfabf4eebf9bfb"
 }

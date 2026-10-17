@@ -67,4 +67,10 @@ describe("prompt caching invariants", () => {
   it("states the protected-constraint rule in the adjust prompt", () => {
     expect(ADJUST_SYSTEM_PROMPT).toMatch(/can be added but never removed/);
   });
+
+  it("states the dozen and same-unit merge rules in the pantry prompt", () => {
+    expect(PARSE_PANTRY_SYSTEM_PROMPT).toMatch(/A dozen is a count, not a unit/);
+    expect(PARSE_PANTRY_SYSTEM_PROMPT).toMatch(/Singular and plural forms are the same unit/);
+    expect(PARSE_PANTRY_SYSTEM_PROMPT).toMatch(/Keep separate lines when the units differ/);
+  });
 });
