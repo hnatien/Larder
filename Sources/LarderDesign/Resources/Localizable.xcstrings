@@ -12,6 +12,17 @@
         }
       }
     },
+    "%@ (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (optional)"
+          }
+        }
+      }
+    },
     "%@ a day": {
       "extractionState": "manual",
       "localizations": {
@@ -122,6 +133,17 @@
         }
       }
     },
+    "%@ is in your pantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is in your pantry"
+          }
+        }
+      }
+    },
     "%@ is on for tonight.": {
       "extractionState": "manual",
       "localizations": {
@@ -129,6 +151,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ is on for tonight."
+          }
+        }
+      }
+    },
+    "%@ is on for tonight. Cook this instead?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is on for tonight. Cook this instead?"
           }
         }
       }
@@ -144,6 +177,28 @@
         }
       }
     },
+    "%@ moved to %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ moved to %@"
+          }
+        }
+      }
+    },
+    "%@ moved to %@. %@ takes its place.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ moved to %@. %@ takes its place."
+          }
+        }
+      }
+    },
     "%@ on %@": {
       "extractionState": "manual",
       "localizations": {
@@ -151,6 +206,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ on %@"
+          }
+        }
+      }
+    },
+    "%@ skipped": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ skipped"
           }
         }
       }
@@ -276,6 +342,28 @@
         }
       }
     },
+    "%lld items removed from the list": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items removed from the list"
+          }
+        }
+      }
+    },
+    "%lld lines to check below": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld lines to check below"
+          }
+        }
+      }
+    },
     "%lld lines to check in Add food": {
       "extractionState": "manual",
       "localizations": {
@@ -294,6 +382,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
+          }
+        }
+      }
+    },
+    "%lld min or less": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min or less"
           }
         }
       }
@@ -389,6 +488,17 @@
         }
       }
     },
+    "1 line to check below": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 line to check below"
+          }
+        }
+      }
+    },
     "1 line to check in Add food": {
       "extractionState": "manual",
       "localizations": {
@@ -455,6 +565,28 @@
         }
       }
     },
+    "AI help is off. The reasons are under each meal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI help is off. The reasons are under each meal."
+          }
+        }
+      }
+    },
+    "AI help is off. Turn it on in Settings, or add the items by hand.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI help is off. Turn it on in Settings, or add the items by hand."
+          }
+        }
+      }
+    },
     "About": {
       "extractionState": "manual",
       "localizations": {
@@ -488,6 +620,17 @@
         }
       }
     },
+    "Add %lld missing items to Groceries": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add %lld missing items to Groceries"
+          }
+        }
+      }
+    },
     "Add 1 item": {
       "extractionState": "manual",
       "localizations": {
@@ -495,6 +638,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add 1 item"
+          }
+        }
+      }
+    },
+    "Add 1 missing item to Groceries": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add 1 missing item to Groceries"
           }
         }
       }
@@ -517,6 +671,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add food"
+          }
+        }
+      }
+    },
+    "Add groceries to your pantry from a receipt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add groceries to your pantry from a receipt"
           }
         }
       }
@@ -561,6 +726,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add something to buy"
+          }
+        }
+      }
+    },
+    "Add to %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to %@"
+          }
+        }
+      }
+    },
+    "Add to favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to favourites"
           }
         }
       }
@@ -620,6 +807,17 @@
         }
       }
     },
+    "Added %lld items to Groceries": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added %lld items to Groceries"
+          }
+        }
+      }
+    },
     "Added %lld items to your pantry": {
       "extractionState": "manual",
       "localizations": {
@@ -627,6 +825,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Added %lld items to your pantry"
+          }
+        }
+      }
+    },
+    "Added 1 item to Groceries": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added 1 item to Groceries"
           }
         }
       }
@@ -686,13 +895,13 @@
         }
       }
     },
-    "Adjusting the week uses Larder's assistant. Allow AI help in Settings first.": {
+    "Adjusting the week uses AI help, which is off.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Adjusting the week uses Larder's assistant. Allow AI help in Settings first."
+            "value": "Adjusting the week uses AI help, which is off."
           }
         }
       }
@@ -752,6 +961,28 @@
         }
       }
     },
+    "Allow AI help?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow AI help?"
+          }
+        }
+      }
+    },
+    "Amount": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
     "Amount in grams": {
       "extractionState": "manual",
       "localizations": {
@@ -770,6 +1001,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Any cuisine"
+          }
+        }
+      }
+    },
+    "Any time": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any time"
           }
         }
       }
@@ -873,6 +1115,17 @@
         }
       }
     },
+    "Best by %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best by %@"
+          }
+        }
+      }
+    },
     "Blender": {
       "extractionState": "manual",
       "localizations": {
@@ -928,13 +1181,24 @@
         }
       }
     },
-    "Calories and nutrient amounts stay hidden unless this is on. Shelf balance uses words either way.": {
+    "Calories and nutrient amounts stay hidden unless this is on. Nutrition balance uses words either way.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calories and nutrient amounts stay hidden unless this is on. Shelf balance uses words either way."
+            "value": "Calories and nutrient amounts stay hidden unless this is on. Nutrition balance uses words either way."
+          }
+        }
+      }
+    },
+    "Camera access is off for Larder. Turn it on in Settings, or choose a photo instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera access is off for Larder. Turn it on in Settings, or choose a photo instead."
           }
         }
       }
@@ -1115,24 +1379,13 @@
         }
       }
     },
-    "Cloud help is switched off. The reasons are under each meal.": {
+    "Closest to their best-by date. Tonight's ideas start with these.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cloud help is switched off. The reasons are under each meal."
-          }
-        }
-      }
-    },
-    "Cloud help is switched off. Turn it on in Settings, or add the items by hand.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cloud help is switched off. Turn it on in Settings, or add the items by hand."
+            "value": "Closest to their best-by date. Tonight's ideas start with these."
           }
         }
       }
@@ -1177,6 +1430,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continue"
+          }
+        }
+      }
+    },
+    "Cook %@ instead": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cook %@ instead"
           }
         }
       }
@@ -1232,6 +1496,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't add that to the plan. Try again."
+          }
+        }
+      }
+    },
+    "Couldn't add those to Groceries. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't add those to Groceries. Try again."
           }
         }
       }
@@ -1313,13 +1588,24 @@
         }
       }
     },
-    "Couldn't load the list. Pull down to try again.": {
+    "Couldn't load the list.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn't load the list. Pull down to try again."
+            "value": "Couldn't load the list."
+          }
+        }
+      }
+    },
+    "Couldn't load tonight's ideas. Your pantry and plan are safe.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load tonight's ideas. Your pantry and plan are safe."
           }
         }
       }
@@ -1331,6 +1617,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't load your settings. Try again."
+          }
+        }
+      }
+    },
+    "Couldn't open that recipe. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't open that recipe. Try again."
           }
         }
       }
@@ -1874,6 +2171,17 @@
         }
       }
     },
+    "Erases everything on this iPhone and starts setup again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erases everything on this iPhone and starts setup again."
+          }
+        }
+      }
+    },
     "Every timer sound also flashes the screen and vibrates.": {
       "extractionState": "manual",
       "localizations": {
@@ -1951,6 +2259,17 @@
         }
       }
     },
+    "Favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourites"
+          }
+        }
+      }
+    },
     "Fibre": {
       "extractionState": "manual",
       "localizations": {
@@ -1991,6 +2310,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fills the gap an uncooked meal left"
+          }
+        }
+      }
+    },
+    "Filters": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters"
+          }
+        }
+      }
+    },
+    "Filters, %lld on": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters, %lld on"
           }
         }
       }
@@ -2039,6 +2380,17 @@
         }
       }
     },
+    "Fits your allergies and diet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fits your allergies and diet."
+          }
+        }
+      }
+    },
     "Food processor": {
       "extractionState": "manual",
       "localizations": {
@@ -2046,6 +2398,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Food processor"
+          }
+        }
+      }
+    },
+    "For %@ on %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For %@ on %@"
+          }
+        }
+      }
+    },
+    "For %@ on %@ and %lld more": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For %@ on %@ and %lld more"
           }
         }
       }
@@ -2248,6 +2622,17 @@
         }
       }
     },
+    "Give the recipe a title and at least one ingredient or step.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give the recipe a title and at least one ingredient or step."
+          }
+        }
+      }
+    },
     "Gluten": {
       "extractionState": "manual",
       "localizations": {
@@ -2392,6 +2777,39 @@
         }
       }
     },
+    "Hidden recipes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hidden recipes"
+          }
+        }
+      }
+    },
+    "Hidden recipes stay out of the library and out of your plans.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hidden recipes stay out of the library and out of your plans."
+          }
+        }
+      }
+    },
+    "Hide recipe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide recipe"
+          }
+        }
+      }
+    },
     "High blood pressure": {
       "extractionState": "manual",
       "localizations": {
@@ -2491,6 +2909,17 @@
         }
       }
     },
+    "In your pantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In your pantry"
+          }
+        }
+      }
+    },
     "Ingredients": {
       "extractionState": "manual",
       "localizations": {
@@ -2498,6 +2927,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ingredients"
+          }
+        }
+      }
+    },
+    "Ingredients, one per line": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingredients, one per line"
           }
         }
       }
@@ -2531,6 +2971,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jain"
+          }
+        }
+      }
+    },
+    "Keep cooking": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep cooking"
           }
         }
       }
@@ -2619,6 +3070,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Larder can tell you when a timer ends while you are in another app."
+          }
+        }
+      }
+    },
+    "Larder couldn't open your data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Larder couldn't open your data"
           }
         }
       }
@@ -2876,13 +3338,13 @@
         }
       }
     },
-    "Mark bought: %@": {
+    "Meal": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mark bought: %@"
+            "value": "Meal"
           }
         }
       }
@@ -2894,6 +3356,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Meat and fish"
+          }
+        }
+      }
+    },
+    "Medical and religious details never leave this iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medical and religious details never leave this iPhone."
           }
         }
       }
@@ -2920,6 +3393,17 @@
         }
       }
     },
+    "Method, one step per line": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Method, one step per line"
+          }
+        }
+      }
+    },
     "Microwave": {
       "extractionState": "manual",
       "localizations": {
@@ -2938,6 +3422,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Milk"
+          }
+        }
+      }
+    },
+    "Minutes in total": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes in total"
           }
         }
       }
@@ -2982,6 +3477,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "More variety"
+          }
+        }
+      }
+    },
+    "Most in your pantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most in your pantry"
           }
         }
       }
@@ -3195,6 +3701,17 @@
         }
       }
     },
+    "Nothing else in your pantry fits tonight.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing else in your pantry fits tonight."
+          }
+        }
+      }
+    },
     "Nothing fits those words and filters. Clear a filter or try another word.": {
       "extractionState": "manual",
       "localizations": {
@@ -3202,6 +3719,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nothing fits those words and filters. Clear a filter or try another word."
+          }
+        }
+      }
+    },
+    "Nothing fits tonight": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing fits tonight"
           }
         }
       }
@@ -3239,6 +3767,28 @@
         }
       }
     },
+    "Nothing is hidden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing is hidden."
+          }
+        }
+      }
+    },
+    "Nothing is left out yet. Add allergies or a diet in Settings and every idea leaves them out.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing is left out yet. Add allergies or a diet in Settings and every idea leaves them out."
+          }
+        }
+      }
+    },
     "Nothing left to buy": {
       "extractionState": "manual",
       "localizations": {
@@ -3268,6 +3818,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nothing to buy"
+          }
+        }
+      }
+    },
+    "Nothing to cook from yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing to cook from yet"
           }
         }
       }
@@ -3327,17 +3888,6 @@
         }
       }
     },
-    "On for tonight": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "On for tonight"
-          }
-        }
-      }
-    },
     "On the table in %lld minutes": {
       "extractionState": "manual",
       "localizations": {
@@ -3393,13 +3943,13 @@
         }
       }
     },
-    "Only recipes you imported can be deleted.": {
+    "Only recipes you imported can be deleted. You can hide this one instead.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only recipes you imported can be deleted."
+            "value": "Only recipes you imported can be deleted. You can hide this one instead."
           }
         }
       }
@@ -3426,13 +3976,13 @@
         }
       }
     },
-    "Optional. These stay on this phone and shape nutrient ranges.": {
+    "Optional. These stay on this phone. Larder plans within the nutrient ranges they call for, even with numbers hidden.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Optional. These stay on this phone and shape nutrient ranges."
+            "value": "Optional. These stay on this phone. Larder plans within the nutrient ranges they call for, even with numbers hidden."
           }
         }
       }
@@ -3569,13 +4119,13 @@
         }
       }
     },
-    "Pick any that apply. Recipes outside them never show up.": {
+    "Pick any that apply. Ideas and plans stick to them.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pick any that apply. Recipes outside them never show up."
+            "value": "Pick any that apply. Ideas and plans stick to them."
           }
         }
       }
@@ -3624,17 +4174,6 @@
         }
       }
     },
-    "Planning one week is free. Larder Plus plans the month and watches your shelf.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Planning one week is free. Larder Plus plans the month and watches your shelf."
-          }
-        }
-      }
-    },
     "Planning the week": {
       "extractionState": "manual",
       "localizations": {
@@ -3642,6 +4181,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Planning the week"
+          }
+        }
+      }
+    },
+    "Planning your first week is free. Larder Plus plans every week and reads recipes and receipts from a photo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planning your first week is free. Larder Plus plans every week and reads recipes and receipts from a photo."
           }
         }
       }
@@ -3745,6 +4295,17 @@
         }
       }
     },
+    "Preview recipe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview recipe"
+          }
+        }
+      }
+    },
     "Privacy policy": {
       "extractionState": "manual",
       "localizations": {
@@ -3789,6 +4350,17 @@
         }
       }
     },
+    "Put back on the plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Put back on the plan"
+          }
+        }
+      }
+    },
     "Quantity": {
       "extractionState": "manual",
       "localizations": {
@@ -3818,6 +4390,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quick add"
+          }
+        }
+      }
+    },
+    "Quickest first": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quickest first"
+          }
+        }
+      }
+    },
+    "Read a recipe from a photo of a book or card": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read a recipe from a photo of a book or card"
           }
         }
       }
@@ -3921,6 +4515,17 @@
         }
       }
     },
+    "Reading this page needs AI help, which is off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading this page needs AI help, which is off."
+          }
+        }
+      }
+    },
     "Reading this page needs Larder Plus.": {
       "extractionState": "manual",
       "localizations": {
@@ -3950,6 +4555,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Receipt"
+          }
+        }
+      }
+    },
+    "Recipe name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recipe name"
+          }
+        }
+      }
+    },
+    "Recipe text and plain settings such as cook time and diet type go to Larder's server and the AI model behind it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recipe text and plain settings such as cook time and diet type go to Larder's server and the AI model behind it."
           }
         }
       }
@@ -4009,6 +4636,17 @@
         }
       }
     },
+    "Remove from favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from favourites"
+          }
+        }
+      }
+    },
     "Remove leftover": {
       "extractionState": "manual",
       "localizations": {
@@ -4027,6 +4665,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove line"
+          }
+        }
+      }
+    },
+    "Removed from the list": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removed from the list"
+          }
+        }
+      }
+    },
+    "Removed. Plans can include it again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removed. Plans can include it again."
+          }
+        }
+      }
+    },
+    "Replaces %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replaces %@"
           }
         }
       }
@@ -4284,6 +4955,61 @@
         }
       }
     },
+    "Show %@ again": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show %@ again"
+          }
+        }
+      }
+    },
+    "Show %lld recipes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show %lld recipes"
+          }
+        }
+      }
+    },
+    "Show 1 recipe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show 1 recipe"
+          }
+        }
+      }
+    },
+    "Show again": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show again"
+          }
+        }
+      }
+    },
+    "Show every step": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show every step"
+          }
+        }
+      }
+    },
     "Show numbers": {
       "extractionState": "manual",
       "localizations": {
@@ -4412,6 +5138,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Something it needed ran out"
+          }
+        }
+      }
+    },
+    "Sort": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort"
           }
         }
       }
@@ -4555,6 +5292,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Steps"
+          }
+        }
+      }
+    },
+    "Stop cooking": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop cooking"
+          }
+        }
+      }
+    },
+    "Stop cooking?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop cooking?"
           }
         }
       }
@@ -4709,6 +5468,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "That needs Larder Plus."
+          }
+        }
+      }
+    },
+    "That recipe is no longer in your library.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That recipe is no longer in your library."
           }
         }
       }
@@ -4933,13 +5703,13 @@
         }
       }
     },
-    "This iPhone couldn't read the photo on its own. Turn on AI help in Settings to let the assistant read it.": {
+    "This iPhone couldn't read the photo on its own. With AI help on, the assistant can read it.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This iPhone couldn't read the photo on its own. Turn on AI help in Settings to let the assistant read it."
+            "value": "This iPhone couldn't read the photo on its own. With AI help on, the assistant can read it."
           }
         }
       }
@@ -4988,13 +5758,13 @@
         }
       }
     },
-    "This page has no recipe Larder can read on its own. With Larder Plus, the assistant can read pages like this one.": {
+    "This page has no recipe Larder can read on its own. Write it out below, or with Larder Plus the assistant can read pages like this one.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This page has no recipe Larder can read on its own. With Larder Plus, the assistant can read pages like this one."
+            "value": "This page has no recipe Larder can read on its own. Write it out below, or with Larder Plus the assistant can read pages like this one."
           }
         }
       }
@@ -5006,6 +5776,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "This recipe has no steps to follow."
+          }
+        }
+      }
+    },
+    "This week has ended. Plan the next seven days when you're ready.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week has ended. Plan the next seven days when you're ready."
           }
         }
       }
@@ -5043,6 +5824,28 @@
         }
       }
     },
+    "Ticking puts it in your pantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ticking puts it in your pantry"
+          }
+        }
+      }
+    },
+    "Time": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
     "Timer done": {
       "extractionState": "manual",
       "localizations": {
@@ -5072,6 +5875,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Timers flash and vibrate"
+          }
+        }
+      }
+    },
+    "To buy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To buy"
           }
         }
       }
@@ -5131,17 +5945,6 @@
         }
       }
     },
-    "Tonight's ideas use these first.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tonight's ideas use these first."
-          }
-        }
-      }
-    },
     "Tree nuts": {
       "extractionState": "manual",
       "localizations": {
@@ -5160,17 +5963,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try again"
-          }
-        }
-      }
-    },
-    "Turn on AI help in Settings before the assistant reads a page.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Turn on AI help in Settings before the assistant reads a page."
           }
         }
       }
@@ -5219,6 +6011,17 @@
         }
       }
     },
+    "Type or paste it: one ingredient per line, one step per line. Free and stays on this iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type or paste it: one ingredient per line, one step per line. Free and stays on this iPhone."
+          }
+        }
+      }
+    },
     "Undo": {
       "extractionState": "manual",
       "localizations": {
@@ -5252,13 +6055,13 @@
         }
       }
     },
-    "Unlocked dinners are chosen again from what you have. Locked ones stay where they are.": {
+    "Unlocked dinners are chosen again from what you have. Locked and cooked ones stay where they are.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unlocked dinners are chosen again from what you have. Locked ones stay where they are."
+            "value": "Unlocked dinners are chosen again from what you have. Locked and cooked ones stay where they are."
           }
         }
       }
@@ -5281,6 +6084,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use soon"
+          }
+        }
+      }
+    },
+    "Use these first": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use these first"
           }
         }
       }
@@ -5363,6 +6177,17 @@
         }
       }
     },
+    "Uses the %@ and %@ you have": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uses the %@ and %@ you have"
+          }
+        }
+      }
+    },
     "Uses the %@ before %@": {
       "extractionState": "manual",
       "localizations": {
@@ -5370,6 +6195,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Uses the %@ before %@"
+          }
+        }
+      }
+    },
+    "Uses the %@, %@ and %lld more you have": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uses the %@, %@ and %lld more you have"
           }
         }
       }
@@ -5605,6 +6441,28 @@
         }
       }
     },
+    "Write it yourself": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write it yourself"
+          }
+        }
+      }
+    },
+    "Written by you. Check the amounts before saving.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Written by you. Check the amounts before saving."
+          }
+        }
+      }
+    },
     "Year you were born": {
       "extractionState": "manual",
       "localizations": {
@@ -5612,6 +6470,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Year you were born"
+          }
+        }
+      }
+    },
+    "You can turn it off in Settings at any time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn it off in Settings at any time."
           }
         }
       }
@@ -5638,6 +6507,17 @@
         }
       }
     },
+    "You have %lld of %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have %lld of %lld"
+          }
+        }
+      }
+    },
     "You have some already.": {
       "extractionState": "manual",
       "localizations": {
@@ -5649,13 +6529,57 @@
         }
       }
     },
-    "You're on the free plan. One week of planning is included.": {
+    "You're on the free plan.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You're on the free plan. One week of planning is included."
+            "value": "You're on the free plan."
+          }
+        }
+      }
+    },
+    "You've used your free planned week. You can still add recipes to any day by hand.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've used your free planned week. You can still add recipes to any day by hand."
+          }
+        }
+      }
+    },
+    "Your data stays on this device. Try again, or close Larder and open it again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your data stays on this device. Try again, or close Larder and open it again."
+          }
+        }
+      }
+    },
+    "Your free planned week is still there to use.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free planned week is still there to use."
+          }
+        }
+      }
+    },
+    "Your pantry has food in it. Here are tonight's ideas.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your pantry has food in it. Here are tonight's ideas."
           }
         }
       }
@@ -5678,6 +6602,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your profile, recipes, pantry and plans are removed and can't be recovered. A subscription is managed by the App Store and is not cancelled."
+          }
+        }
+      }
+    },
+    "Your timers stop when you leave.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your timers stop when you leave."
           }
         }
       }
