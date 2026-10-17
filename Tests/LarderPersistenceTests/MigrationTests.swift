@@ -11,12 +11,12 @@ struct MigrationTests {
             try [
                 "food", "recipe", "ingredient", "pantryItem", "mealPlan", "plannedMeal",
                 "profile", "dietaryConstraint", "nutrientTarget", "recipe_ft", "food_ft",
-                "pantryEvent", "groceryManualItem", "groceryBasketLine",
+                "pantryEvent", "groceryManualItem", "groceryBasketLine", "recipeMark",
             ].filter { try db.tableExists($0) }
         }
-        #expect(tables.count == 14)
+        #expect(tables.count == 15)
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop", "v4-recipe-marks"])
     }
 
     @Test func migratingAgainIsANoOp() async throws {
@@ -24,7 +24,7 @@ struct MigrationTests {
         try await GRDBFoodRepository(database: database).upsert([Fixtures.food("Rice")])
         try Migrations.migrator.migrate(database.writer)
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop", "v4-recipe-marks"])
         #expect(try await Fixtures.count("food", in: database) == 1)
     }
 
@@ -52,7 +52,7 @@ struct MigrationTests {
         let recipe = try await queue.read { db in try RecipeRecord.fetchOne(db, key: id.uuidString)?.recipe }
         #expect(recipe?.title == "Toast")
         #expect(recipe?.photoFileName == nil)
-        #expect(try await queue.read { db in try Migrations.migrator.appliedIdentifiers(db) } == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop"])
+        #expect(try await queue.read { db in try Migrations.migrator.appliedIdentifiers(db) } == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop", "v4-recipe-marks"])
     }
 
     @Test func pantryLoopMigrationKeepsTheShelvesAndStartsEmpty() async throws {
@@ -110,7 +110,7 @@ struct MigrationTests {
             #expect(try await Fixtures.count(table, in: database) == 0)
         }
         let applied = try await database.writer.read { db in try Migrations.migrator.appliedIdentifiers(db) }
-        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop"])
+        #expect(applied == ["v1-schema", "v2-recipe-photo", "v3-pantry-loop", "v4-recipe-marks"])
         #expect(try await GRDBRecipeRepository(database: database).search(text: "rice", limit: 5).isEmpty)
         try await GRDBFoodRepository(database: database).upsert([food])
         #expect(try await GRDBFoodRepository(database: database).food(by: food.id) == food)

@@ -36,9 +36,9 @@ extension FoodRepository {
 
 /// Reads and writes recipes and their ingredient lines.
 public protocol RecipeRepository: Sendable {
-    /// Every recipe.
+    /// Every recipe the user has not hidden.
     func all() async throws -> [Recipe]
-    /// Recipes matching `text`, best match first.
+    /// Recipes matching `text`, best match first, leaving out hidden ones.
     func search(text: String, limit: Int) async throws -> [Recipe]
     /// The recipe with `id`, or `nil` if there is none.
     func recipe(by id: RecipeID) async throws -> Recipe?
@@ -48,6 +48,19 @@ public protocol RecipeRepository: Sendable {
     func delete(_ id: RecipeID) async throws
     /// The ingredient lines of a recipe, in recipe order.
     func ingredients(for recipeID: RecipeID) async throws -> [Ingredient]
+}
+
+/// Keeps which recipes the user marked as a favourite or hid from the library. A hidden recipe stays readable by
+/// identifier, so plans that use it still show it, but `RecipeRepository.all()` and `search` leave it out.
+public protocol RecipeMarkRepository: Sendable {
+    /// The recipes marked as favourites.
+    func favourites() async throws -> Set<RecipeID>
+    /// Marks or unmarks a recipe as a favourite.
+    func setFavourite(_ id: RecipeID, _ isFavourite: Bool) async throws
+    /// The hidden recipes, by title.
+    func hiddenRecipes() async throws -> [Recipe]
+    /// Hides a recipe from the library and the planner, or shows it again.
+    func setHidden(_ id: RecipeID, _ isHidden: Bool) async throws
 }
 
 /// Keeps recipe photos as files on the device.

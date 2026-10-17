@@ -2,8 +2,11 @@ import Foundation
 import GRDB
 import LarderCore
 
-/// `RecipeRepository` backed by the Larder SQLite store; throws `PersistenceError`.
-public struct GRDBRecipeRepository: RecipeRepository {
+/// `RecipeRepository` and `RecipeMarkRepository` backed by the Larder SQLite store; throws `PersistenceError`.
+public struct GRDBRecipeRepository: RecipeRepository, RecipeMarkRepository {
+    /// SQL that is true for a recipe the user has not hidden.
+    private static let notHidden = "recipe.id NOT IN (SELECT recipeID FROM recipeMark WHERE isHidden)"
+
     private let database: LarderDatabase
 
     /// Creates a repository over `database`.
@@ -11,10 +14,10 @@ public struct GRDBRecipeRepository: RecipeRepository {
         self.database = database
     }
 
-    /// Every recipe, by title.
+    /// Every recipe the user has not hidden, by title.
     public func all() async throws -> [Recipe] {
         try await database.read { db in
-            try RecipeRecord.order(Column("title")).fetchAll(db).map(\.recipe)
+            try RecipeRecord.filter(sql: Self.notHidden).order(Column("title")).fetchAll(db).map(\.recipe)
         }
     }
 
@@ -30,7 +33,7 @@ public struct GRDBRecipeRepository: RecipeRepository {
                     sql: """
                         SELECT recipe.* FROM recipe
                         JOIN recipe_ft ON recipe_ft.rowid = recipe.rowid
-                        WHERE recipe_ft MATCH ?
+                        WHERE recipe_ft MATCH ? AND \(Self.notHidden)
                         ORDER BY bm25(recipe_ft), recipe.title
                         LIMIT ?
                         """,
@@ -39,6 +42,7 @@ public struct GRDBRecipeRepository: RecipeRepository {
             }
             return try RecipeRecord
                 .filter(Column("title").like(SearchText.likePattern(for: text), escape: SearchText.likeEscape))
+                .filter(sql: Self.notHidden)
                 .order(Column("title"))
                 .limit(limit)
                 .fetchAll(db)
@@ -63,6 +67,45 @@ public struct GRDBRecipeRepository: RecipeRepository {
         try await database.write { db in
             try Self.removeFromSearchIndex(id, in: db)
             try RecipeRecord.deleteOne(db, key: id.key)
+        }
+    }
+
+    public func favourites() async throws -> Set<RecipeID> {
+        try await database.read { db in
+            let keys = try String.fetchAll(db, sql: "SELECT recipeID FROM recipeMark WHERE isFavourite")
+            return Set(keys.compactMap { UUID(uuidString: $0).map(RecipeID.init(rawValue:)) })
+        }
+    }
+
+    public func setFavourite(_ id: RecipeID, _ isFavourite: Bool) async throws {
+        try await mark(id, column: "isFavourite", isFavourite)
+    }
+
+    public func hiddenRecipes() async throws -> [Recipe] {
+        try await database.read { db in
+            try RecipeRecord
+                .filter(sql: "recipe.id IN (SELECT recipeID FROM recipeMark WHERE isHidden)")
+                .order(Column("title"))
+                .fetchAll(db)
+                .map(\.recipe)
+        }
+    }
+
+    public func setHidden(_ id: RecipeID, _ isHidden: Bool) async throws {
+        try await mark(id, column: "isHidden", isHidden)
+    }
+
+    /// Sets one mark on a recipe, creating its row when needed and dropping a row left with no mark.
+    private func mark(_ id: RecipeID, column: String, _ value: Bool) async throws {
+        try await database.write { db in
+            try db.execute(
+                sql: """
+                    INSERT INTO recipeMark(recipeID, \(column)) VALUES (?, ?)
+                    ON CONFLICT(recipeID) DO UPDATE SET \(column) = excluded.\(column)
+                    """,
+                arguments: [id.key, value]
+            )
+            try db.execute(sql: "DELETE FROM recipeMark WHERE NOT isFavourite AND NOT isHidden")
         }
     }
 

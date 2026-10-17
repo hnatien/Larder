@@ -7,7 +7,17 @@ enum Migrations {
         migrator.registerMigration("v1-schema", migrate: createV1Schema)
         migrator.registerMigration("v2-recipe-photo", migrate: addRecipePhoto)
         migrator.registerMigration("v3-pantry-loop", migrate: addPantryLoop)
+        migrator.registerMigration("v4-recipe-marks", migrate: addRecipeMarks)
         return migrator
+    }
+
+    /// Favourite and hidden recipes, kept apart from `recipe` so reloading the seed library never clears them.
+    private static func addRecipeMarks(_ db: Database) throws {
+        try db.create(table: "recipeMark") { t in
+            t.primaryKey("recipeID", .text).references("recipe", onDelete: .cascade)
+            t.column("isFavourite", .boolean).notNull().defaults(to: false)
+            t.column("isHidden", .boolean).notNull().defaults(to: false)
+        }
     }
 
     /// The log of food leaving the shelves, and the grocery basket and hand-written items, so a relaunch keeps them.
