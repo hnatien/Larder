@@ -31,6 +31,11 @@ targets:
         UILaunchScreen:
           UIColorName: LaunchBackground
           UIImageName: LaunchMark
+        # larder://tonight opens the Tonight tab, from the widget.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.larder.Larder
+            CFBundleURLSchemes:
+              - larder
     entitlements:
       path: App/Larder/Larder.entitlements
       properties:

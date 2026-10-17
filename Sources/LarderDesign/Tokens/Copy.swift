@@ -123,6 +123,7 @@ public nonisolated enum Copy {
         public static var description: String { String(localized: "Tonight's dinner from your plan.", bundle: .module) }
         public static var nothingPlanned: String { String(localized: "Nothing planned", bundle: .module) }
         public static var openForIdeas: String { String(localized: "Open Larder for three ideas.", bundle: .module) }
+        public static var next: String { String(localized: "Next", bundle: .module) }
     }
 
     /// Asking for AI help where it is needed.

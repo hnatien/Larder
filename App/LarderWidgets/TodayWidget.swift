@@ -17,9 +17,14 @@ struct TodayWidget: Widget {
 }
 
 nonisolated struct TodayEntry: TimelineEntry {
+    /// Dinners after tonight the medium widget lists.
+    static let upcomingLimit = 2
+
     let date: Date
     /// `nil` when nothing is planned for the entry's day.
     let dinner: TodaySnapshot.Dinner?
+    /// The next dinners after tonight, for the medium size.
+    var upcoming: [TodaySnapshot.Dinner] = []
 }
 
 /// Reads the snapshot the app writes and refreshes at the next midnight, when "tonight" changes.
@@ -46,7 +51,11 @@ nonisolated struct TodayProvider: TimelineProvider {
         guard let url = TodaySnapshot.fileURL else { return TodayEntry(date: date, dinner: nil) }
         do {
             let snapshot = try TodaySnapshot.read(from: url)
-            return TodayEntry(date: date, dinner: snapshot.dinner(on: date, calendar: .current))
+            return TodayEntry(
+                date: date,
+                dinner: snapshot.dinner(on: date, calendar: .current),
+                upcoming: snapshot.dinners(after: date, limit: TodayEntry.upcomingLimit, calendar: .current)
+            )
         } catch {
             Self.logger.error("Could not read the Today snapshot: \(String(describing: type(of: error)), privacy: .public)")
             return TodayEntry(date: date, dinner: nil)
@@ -55,9 +64,43 @@ nonisolated struct TodayProvider: TimelineProvider {
 }
 
 struct TodayWidgetView: View {
+    @Environment(\.widgetFamily) private var family
     let entry: TodayEntry
 
     var body: some View {
+        HStack(alignment: .top, spacing: LarderSpacing.l) {
+            tonight
+            // The medium size has room for what comes next.
+            if family == .systemMedium, !entry.upcoming.isEmpty {
+                Divider().overlay(LarderColor.line.hairline)
+                upcoming
+            }
+        }
+        .widgetURL(TodaySnapshot.tonightURL)
+    }
+
+    private var upcoming: some View {
+        VStack(alignment: .leading, spacing: LarderSpacing.s) {
+            Text(Copy.Widget.next)
+                .stamp()
+                .foregroundStyle(LarderColor.ink.secondary)
+            ForEach(entry.upcoming, id: \.day) { dinner in
+                VStack(alignment: .leading, spacing: LarderSpacing.xxs) {
+                    Text(dinner.day.formatted(.dateTime.weekday(.wide)))
+                        .font(LarderFont.body(.caption, weight: .semibold))
+                        .foregroundStyle(LarderColor.ink.secondary)
+                    Text(dinner.title)
+                        .font(LarderFont.body(.subheadline, weight: .semibold))
+                        .foregroundStyle(LarderColor.ink.primary)
+                        .lineLimit(2)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+
+    private var tonight: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.s) {
             Text(Copy.Tab.tonight)
                 .stamp()
