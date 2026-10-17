@@ -187,6 +187,33 @@ struct ProxyAssistantBackendTests {
         #expect(!recorded.bodyText.contains("555"))
     }
 
+    @Test func adjustBodySendsTheLatestScrubbedTurnsAndDropsEmptyOnes() async throws {
+        let stub = stubbed(Fixtures.adjustPath, .json(200, #"{"edits":[],"clarifyingQuestion":null}"#))
+        let older = (0..<8).map { AdjustRequest.Turn(role: .person, text: "turn \($0)") }
+        let request = AdjustRequest(
+            message: "Tuesday",
+            maxCookMinutes: 25,
+            dietPatterns: [],
+            goal: .eatBetter,
+            conversation: older + [
+                AdjustRequest.Turn(role: .person, text: "  "),
+                AdjustRequest.Turn(role: .person, text: "Vegetarian one day, mail me at a@b.co"),
+                AdjustRequest.Turn(role: .assistant, text: "Which day?"),
+            ]
+        )
+        _ = try await Fixtures.backend(stub).adjust(request: request)
+        let body = try #require(stub.requests(to: Fixtures.adjustPath).first).json()
+
+        let turns = try #require(body["conversation"] as? [[String: String]])
+        #expect(turns.count == 8)
+        #expect(turns.first == ["role": "person", "text": "turn 2"])
+        #expect(turns.suffix(2) == [
+            ["role": "person", "text": "Vegetarian one day, mail me at [removed]"],
+            ["role": "larder", "text": "Which day?"],
+        ])
+        #expect(body["instruction"] as? String == "Tuesday")
+    }
+
     @Test func adjustMapsEditsAndRecordsWhatItDrops() async throws {
         let reply = """
             {"edits":[\

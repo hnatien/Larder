@@ -30,6 +30,8 @@ public struct ExplainContext: Sendable {
 public struct ProxyAssistantBackend: AssistantBackend {
     static let maxImageBase64Length = 7_000_000
     static let adjustContextDays = 7
+    /// The proxy's limit on earlier turns sent with an adjust request.
+    static let adjustConversationTurns = 8
 
     private let client: ProxyClient
     private let dateProvider: any DateProvider
@@ -109,6 +111,7 @@ public struct ProxyAssistantBackend: AssistantBackend {
         let days = (0..<Self.adjustContextDays).map { PlanWire.Day(date: WireDate.string(dayOffset: $0, from: start), meals: []) }
         let body = AdjustRequestBody(
             instruction: instruction,
+            conversation: conversation(request.conversation),
             currentConstraints: currentConstraints(request),
             planContext: PlanWire(days: days)
         )
@@ -168,6 +171,16 @@ public struct ProxyAssistantBackend: AssistantBackend {
             }
         }
         return PlanExplanation(summary: response.headline, mealNotes: notes)
+    }
+
+    /// The latest turns the proxy accepts, each scrubbed like the instruction; `nil` when none is left.
+    private func conversation(_ turns: [AdjustRequest.Turn]) -> [AdjustRequestBody.Turn]? {
+        let wire = turns.compactMap { turn -> AdjustRequestBody.Turn? in
+            let text = sanitizer.scrub(turn.text, limit: sanitizer.instructionLimit)
+            guard !text.isEmpty else { return nil }
+            return AdjustRequestBody.Turn(role: turn.role == .person ? "person" : "larder", text: text)
+        }
+        return wire.isEmpty ? nil : Array(wire.suffix(Self.adjustConversationTurns))
     }
 
     private func currentConstraints(_ request: AdjustRequest) -> [ConstraintWire] {

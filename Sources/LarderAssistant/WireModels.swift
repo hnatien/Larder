@@ -138,8 +138,15 @@ struct ConstraintWire: Codable, Hashable, Sendable {
 
 struct AdjustRequestBody: Encodable, Sendable {
     var instruction: String
+    /// Left out of the JSON when the instruction opens the chat.
+    var conversation: [Turn]?
     var currentConstraints: [ConstraintWire]
     var planContext: PlanWire
+
+    struct Turn: Encodable, Sendable {
+        var role: String
+        var text: String
+    }
 }
 
 struct AdjustResponseBody: Decodable, Sendable {

@@ -146,13 +146,32 @@ public struct AdjustRequest: Hashable, Codable, Sendable {
     public var maxCookMinutes: Int
     public var dietPatterns: Set<DietPattern>
     public var goal: Goal
+    /// Earlier turns of the same chat, oldest first, so a reply such as "Tuesday" reads as the answer it is.
+    public var conversation: [Turn]
 
     /// Creates an adjust request.
-    public init(message: String, maxCookMinutes: Int, dietPatterns: Set<DietPattern>, goal: Goal) {
+    public init(message: String, maxCookMinutes: Int, dietPatterns: Set<DietPattern>, goal: Goal, conversation: [Turn] = []) {
         self.message = message
         self.maxCookMinutes = maxCookMinutes
         self.dietPatterns = dietPatterns
         self.goal = goal
+        self.conversation = conversation
+    }
+
+    /// One earlier turn: what the person asked, or what the assistant asked or proposed back.
+    public struct Turn: Hashable, Codable, Sendable {
+        public enum Role: String, Hashable, Codable, Sendable {
+            case person, assistant
+        }
+
+        public var role: Role
+        public var text: String
+
+        /// Creates a turn.
+        public init(role: Role, text: String) {
+            self.role = role
+            self.text = text
+        }
     }
 }
 
