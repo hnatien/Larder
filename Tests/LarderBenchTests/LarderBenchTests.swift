@@ -54,8 +54,8 @@ struct SeedCatalogueTests {
         let catalogue = try Bench.catalogue()
 
         #expect(catalogue.foods.count == 113)
-        #expect(catalogue.candidates.count == 42)
-        #expect(catalogue.recipeIDsBySlug.count == 42)
+        #expect(catalogue.candidates.count == 65)
+        #expect(catalogue.recipeIDsBySlug.count == 65)
         for lines in catalogue.ingredients.values {
             #expect(lines.allSatisfy { line in line.foodID.map { catalogue.foods[$0] != nil } ?? true })
         }

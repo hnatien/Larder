@@ -4381,6 +4381,2704 @@
         }
       ],
       "title": "Ethiopian-style spiced lentil stew"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Turkish",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 clove garlic, grated",
+          "unit": "clove"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp salt, plus a pinch for the yoghurt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 eggs, as fresh as possible",
+          "unit": "piece"
+        },
+        {
+          "food": "vinegar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp white vinegar",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g butter",
+          "unit": "gram"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "pita",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 pita breads, warmed, to serve",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "lunch"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "turkish-eggs-with-garlic-yoghurt",
+      "steps": [
+        {
+          "text": "Stir the yoghurt, grated garlic and a pinch of salt together, then spread it across four shallow plates.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Bring a deep pot of water to a boil and stir in the vinegar and a generous pinch of salt.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Crack each egg into a sieve for a few seconds so the thin, watery white drains away.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Take the pot off the heat, slide the eggs in gently, cover, and leave until the whites set.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Melt the butter in a small pan until it sputters, then stir in the paprika and remove from the heat.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Lift the eggs out with a slotted spoon, set one on each yoghurt bed and spoon the red butter over.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Season with a pinch of salt and serve straight away with warm pita for dipping.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Turkish eggs with garlic yoghurt"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Middle Eastern",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "oven",
+        "stovetop",
+        "blender"
+      ],
+      "ingredients": [
+        {
+          "food": "aubergine",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g aubergine, sliced into thin rounds",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "tahini",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp tahini",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 clove garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 290,
+          "text": "290 g cooked chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "turmeric",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.25,
+          "text": "1 1/4 tsp ground turmeric",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.25,
+          "text": "1 1/4 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch paprika",
+          "unit": "pinch"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp salt",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "lunch"
+      ],
+      "prepMinutes": 20,
+      "servings": 2,
+      "slug": "chickpea-scramble-with-aubergine-dip",
+      "steps": [
+        {
+          "text": "Rub the aubergine rounds with half the oil and a little salt, then grill until deep golden on both sides.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Stack the hot slices in foil, wrap tightly and leave them to steam until the skins loosen.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Peel off the skins, then blend the aubergine with tahini, garlic, lemon juice and a pinch of salt until smooth.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the chickpeas with the turmeric, cumin, paprika and a splash of water, mashing about half with a fork.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fry the chickpeas in the remaining oil over medium heat, stirring now and then, until hot and golden.",
+          "timerSeconds": 210
+        },
+        {
+          "text": "Stir in four to six spoonfuls of the dip and cook until the scramble turns dry and golden.",
+          "timerSeconds": 210
+        },
+        {
+          "text": "Spoon into bowls with the leftover dip; the chickpea scramble keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Chickpea scramble with aubergine dip"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Japanese",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "oats",
+          "garnish": false,
+          "optional": false,
+          "quantity": 110,
+          "text": "110 g rolled oats",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 cloves garlic, grated",
+          "unit": "clove"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 625,
+          "text": "625 ml water",
+          "unit": "millilitre"
+        },
+        {
+          "food": "miso",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp white miso paste",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp soy sauce",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "kale",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g kale, stems removed and chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "mushroom",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g mushrooms, thinly sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "avocado",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 avocado, thinly sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "sesame-seeds",
+          "garnish": true,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp toasted sesame seeds",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "lunch"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "miso-mushroom-savoury-oats",
+      "steps": [
+        {
+          "text": "Warm a teaspoon of oil in a saucepan, then stir in the oats and one grated garlic clove.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour in the water, bring to a simmer, then cook on low, stirring often, until creamy.",
+          "timerSeconds": 540
+        },
+        {
+          "text": "Off the heat, stir in the miso and soy sauce until the oats taste savoury and rounded.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Cook the kale in a teaspoon of oil until tender and bright.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Stir the remaining garlic through the kale, then tip it into a bowl and keep it warm.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fry the mushrooms in the same pan with the last teaspoon of oil until golden and tender.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Divide the oats between two bowls and top with the kale, mushrooms and sliced avocado.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Scatter over the sesame seeds and serve; the savoury oats keep for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Miso mushroom savoury oats"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Indian",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 6,
+          "text": "6 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "1 large onion, finely diced",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp salt, divided",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp grated ginger",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 green chilli, minced",
+          "unit": "piece"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tomato, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "curry-powder",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp curry powder",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 20,
+          "text": "20 g chopped coriander",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "lunch"
+      ],
+      "prepMinutes": 5,
+      "servings": 4,
+      "slug": "masala-egg-bhurji",
+      "steps": [
+        {
+          "text": "Whisk the eggs with half the salt until evenly combined, then set the bowl aside.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Warm the oil in a wide, heavy pan and cook the onion with the remaining salt until soft and golden.",
+          "timerSeconds": 360
+        },
+        {
+          "text": "Stir in the ginger, garlic and chilli and cook until the raw smell fades and it turns fragrant.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Add the diced tomato and cook until it begins to soften and collapse into the onion.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Pour in the eggs and stir slowly and constantly until they form soft, moist curds.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Sprinkle over the curry powder and coriander, mix through, and serve hot with toast or flatbread.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Masala egg bhurji"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Korean",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 6,
+          "text": "6 eggs",
+          "unit": "piece"
+        },
+        {
+          "food": "carrot",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "40 g carrot, finely chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 spring onion, thinly sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.25,
+          "text": "1/4 tsp salt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp sesame oil",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil, for greasing the pan",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "snack"
+      ],
+      "prepMinutes": 5,
+      "servings": 4,
+      "slug": "korean-rolled-omelette",
+      "steps": [
+        {
+          "text": "Beat the eggs until smooth, then stir in the carrot, spring onion, salt and sesame oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Warm a nonstick pan over medium-low heat and wipe it lightly with oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour in a thin layer of egg, swirl to coat, and cook until set below but wet on top.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold about an inch of egg over, then keep rolling toward you, leaving a short tail.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Slide the roll aside, oil the space, pour a thin layer under the tail, and roll again.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Repeat with the remaining egg until the roll is thick, then rest it on a board to cool a little.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Slice the roll into eight thick pieces and serve it warm.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Korean rolled omelette"
+    },
+    {
+      "cookMinutes": 5,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp olive oil",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "40 g diced onion",
+          "unit": "gram"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tomatoes, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 jalapeno or green chilli, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 clove garlic, finely chopped",
+          "unit": "clove"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.25,
+          "text": "1/4 tsp salt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "eggs",
+          "garnish": false,
+          "optional": false,
+          "quantity": 5,
+          "text": "5 eggs, beaten",
+          "unit": "piece"
+        },
+        {
+          "food": "tortilla",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tortilla, torn into small pieces",
+          "unit": "piece"
+        },
+        {
+          "food": "cheddar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 50,
+          "text": "50 g grated cheddar",
+          "unit": "gram"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 10,
+          "text": "10 g chopped coriander",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "breakfast",
+        "lunch"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "tex-mex-migas",
+      "steps": [
+        {
+          "text": "Warm the olive oil in a nonstick skillet over medium heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the onion, tomatoes, chilli, garlic and salt and cook until softened and fragrant.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Pour in the beaten eggs with the torn tortilla pieces and stir gently to scramble.",
+          "timerSeconds": 90
+        },
+        {
+          "text": "Fold in the cheddar, take the pan off the heat, and let it melt into the eggs.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Scatter with coriander and serve straight away, tucked into warm tortillas if you like.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tex-Mex migas"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "sweetcorn",
+          "garnish": false,
+          "optional": false,
+          "quantity": 700,
+          "text": "700 g sweetcorn kernels, fresh or frozen",
+          "unit": "gram"
+        },
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g butter",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 garlic cloves, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "mayonnaise",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 ml mayonnaise",
+          "unit": "millilitre"
+        },
+        {
+          "food": "yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 ml plain yoghurt",
+          "unit": "millilitre"
+        },
+        {
+          "food": "parmesan",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "40 g grated parmesan",
+          "unit": "gram"
+        },
+        {
+          "food": "coriander",
+          "garnish": false,
+          "optional": false,
+          "quantity": 20,
+          "text": "20 g coriander leaves, chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 spring onions, sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp lime juice",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp salt",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch",
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 6,
+      "slug": "mexican-corn-salad",
+      "steps": [
+        {
+          "text": "Cut the kernels from the cobs if using fresh corn; frozen kernels can go straight into the pan.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Melt the butter in a wide pan over high heat, then stir in the garlic for ten seconds.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the corn and salt, and cook for about five minutes, stirring now and then, until golden in patches.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Tip the hot corn into a large bowl and stir in the mayonnaise, yoghurt, lime juice and parmesan until creamy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold through the coriander and spring onions, then taste for lime and salt and serve warm or at room temperature.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Mexican corn salad"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop",
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "quinoa",
+          "garnish": false,
+          "optional": false,
+          "quantity": 90,
+          "text": "90 g dry quinoa",
+          "unit": "gram"
+        },
+        {
+          "food": "kale",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g kale, stems removed and chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3.5,
+          "text": "3 1/2 tbsp olive oil, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 tbsp lemon juice",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "mixed-seeds",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g sunflower seeds",
+          "unit": "gram"
+        },
+        {
+          "food": "mustard",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp Dijon mustard",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp sugar",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp salt",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch",
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 3,
+      "slug": "lemony-quinoa-kale-salad-with-crispy-chickpeas",
+      "steps": [
+        {
+          "text": "Heat the oven to 220C and line a baking tray with parchment.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Simmer the quinoa in a cup of water for about 15 minutes, until all the water is absorbed.",
+          "timerSeconds": 900
+        },
+        {
+          "text": "Pat the chickpeas dry, toss with a tablespoon and a half of oil and salt, then spread out.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast the chickpeas for 15 to 20 minutes until crisp and golden, then cool so they crunch up further.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Whisk the lemon juice, remaining oil, mustard, sugar and a pinch of salt together in a large bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the kale and massage it with your hands for a few minutes until it darkens and softens.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss in the quinoa and seeds, then stir through the cooled chickpeas just before serving.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Lemony quinoa kale salad with crispy chickpeas"
+    },
+    {
+      "cookMinutes": 5,
+      "cuisine": "American",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 225,
+          "text": "225 g green beans, cut into 2.5 cm pieces",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 ml olive oil",
+          "unit": "millilitre"
+        },
+        {
+          "food": "vinegar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 ml apple cider vinegar",
+          "unit": "millilitre"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 garlic cloves, grated",
+          "unit": "clove"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 g red onion, very thinly sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "chickpeas-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g canned chickpeas, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "kidney-beans-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g canned kidney beans, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "celery",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 celery ribs, thinly sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "parsley",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "30 g parsley, finely chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp salt",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch",
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "three-bean-salad",
+      "steps": [
+        {
+          "text": "Boil the green beans in well salted water for 2 minutes, until bright green and just tender.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Lift the beans into iced water to stop the cooking, then drain and pat them dry.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Whisk the oil, vinegar, grated garlic and salt together in a large bowl until cloudy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the chickpeas, kidney beans, parsley, celery, onion and green beans with the dressing until everything glistens.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Serve now or chill an hour first; the bean salad keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Three bean salad"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Italian",
+      "dietFlags": [
+        "vegetarian",
+        "mediterranean"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "mozzarella",
+          "garnish": false,
+          "optional": false,
+          "quantity": 220,
+          "text": "220 g baby mozzarella balls, halved",
+          "unit": "gram"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 500,
+          "text": "500 g cherry tomatoes, halved",
+          "unit": "gram"
+        },
+        {
+          "food": "basil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 15,
+          "text": "15 g basil leaves, torn",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 small garlic clove, minced",
+          "unit": "clove"
+        },
+        {
+          "food": "mustard",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp Dijon mustard",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2.5,
+          "text": "2 1/2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "vinegar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp white wine vinegar",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "oregano",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.25,
+          "text": "1/4 tsp dried oregano",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp salt",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "lunch",
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 6,
+      "slug": "caprese-salad",
+      "steps": [
+        {
+          "text": "Shake the garlic, mustard, oil, vinegar, oregano and salt in a jar until the dressing turns cloudy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Put the halved tomatoes, mozzarella and most of the basil into a large bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour over the dressing and toss gently so the cheese stays whole.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Move everything to a shallow bowl, scatter over the remaining basil and serve straight away.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Caprese salad"
+    },
+    {
+      "cookMinutes": 4,
+      "cuisine": "British",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "couscous",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g couscous",
+          "unit": "gram"
+        },
+        {
+          "food": "broccoli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "250 g broccoli, 1 small head",
+          "unit": "gram"
+        },
+        {
+          "food": "feta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 20,
+          "text": "20 g feta, crumbled",
+          "unit": "gram"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 garlic clove",
+          "unit": "clove"
+        },
+        {
+          "food": "almonds",
+          "garnish": false,
+          "optional": false,
+          "quantity": 15,
+          "text": "15 g flaked almonds",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "orange",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 orange, juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "mint",
+          "garnish": false,
+          "optional": false,
+          "quantity": 15,
+          "text": "15 g mint leaves, chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "lunch"
+      ],
+      "prepMinutes": 6,
+      "servings": 1,
+      "slug": "broccoli-orange-couscous-salad",
+      "steps": [
+        {
+          "text": "Put the couscous and salt in a bowl, cover with boiling water and a plate, and leave to swell.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Boil the whole broccoli head for about four minutes, until bright green and tender.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Lift out the broccoli and leave it to steam dry in a colander for a minute or two.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Grate the garlic into a jar and add the almonds, olive oil, orange juice and most of the chopped mint.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Seal the jar and shake until the dressing looks glossy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Chop the broccoli finely, fluff the couscous with a fork, then mix the two together.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spoon over half the dressing, crumble on the feta and scatter with the remaining mint.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Broccoli orange couscous salad"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Mexican",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "avocado",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 ripe avocados, peeled, pitted and diced",
+          "unit": "piece"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "1/4 cup chopped onion",
+          "unit": "gram"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 hot green chilli, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "coriander",
+          "garnish": false,
+          "optional": false,
+          "quantity": 15,
+          "text": "15 g torn coriander",
+          "unit": "gram"
+        },
+        {
+          "food": "tomato",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 medium tomato, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 big pinches of salt",
+          "unit": "pinch"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "chunky-guacamole",
+      "steps": [
+        {
+          "text": "Chop the onion, chilli, coriander and a big pinch of salt together on a board.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Press and smear the pile with the flat of the knife until it turns into a rough green paste.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Scrape the paste into a bowl, add the diced avocado and mash with a spoon, leaving it chunky.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the diced tomato, then taste and add more salt until the flavours sing.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Chunky guacamole"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Greek",
+      "dietFlags": [
+        "vegetarian",
+        "mediterranean"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "480 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 medium cucumbers",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 cloves garlic, crushed",
+          "unit": "clove"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "Juice of half a lemon",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 pinches of salt",
+          "unit": "pinch"
+        },
+        {
+          "food": "pita",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 pita breads",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "tzatziki-with-warm-pita",
+      "steps": [
+        {
+          "text": "Grate or finely dice the cucumbers and squeeze out the extra water with your hands.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Crush the garlic and stir it into the yoghurt with the oil, lemon juice and salt.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Fold in the cucumber, then serve now or chill for an hour so the dip thickens.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Warm the pita until soft and cut into wedges; the tzatziki keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Tzatziki with warm pita"
+    },
+    {
+      "cookMinutes": 0,
+      "cuisine": "Chinese",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [],
+      "ingredients": [
+        {
+          "food": "cucumber",
+          "garnish": false,
+          "optional": false,
+          "quantity": 600,
+          "text": "600 g cucumbers",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.75,
+          "text": "3/4 tsp salt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 small shallot or onion, very thinly sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 spring onions, green parts finely sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "chilli-flakes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp chilli flakes",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-seeds",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp toasted sesame seeds",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "vinegar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.5,
+          "text": "1 1/2 tbsp rice vinegar",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp soy sauce",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp toasted sesame oil",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "snack"
+      ],
+      "prepMinutes": 37,
+      "servings": 4,
+      "slug": "smashed-cucumber-salad",
+      "steps": [
+        {
+          "text": "Bash the cucumbers with a rolling pin until the skins split, then halve and cut into chunks.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the chunks with the salt and leave them for 30 minutes so the water drains out.",
+          "timerSeconds": 1800
+        },
+        {
+          "text": "Pour away the liquid, then whisk the vinegar, soy sauce and sesame oil until slightly thick.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the cucumber with the dressing, thinly sliced onion, spring onion, chilli flakes and sesame seeds until glossy.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Smashed cucumber salad"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Southeast Asian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "tempeh",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g tempeh, torn into chunks",
+          "unit": "gram"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red onion, finely sliced",
+          "unit": "piece"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 garlic cloves, roughly chopped",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 10,
+          "text": "2 cm piece of ginger, roughly chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 red chilli, roughly chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "broccoli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 150,
+          "text": "150 g broccoli, cut into small florets",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp soy sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.5,
+          "text": "1 1/2 tbsp sugar",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "brown-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 80,
+          "text": "80 g brown rice, cooked, or a 200 g cooked pouch",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "sticky-tempeh-stir-fry",
+      "steps": [
+        {
+          "text": "Fry the tempeh in hot oil in a wok until golden and charred, then lift out.",
+          "timerSeconds": 210
+        },
+        {
+          "text": "Stir-fry the sliced onion in the same pan until softened, then add garlic, ginger and chilli until fragrant.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the broccoli with a splash of water, cover briefly and steam until bright green and just tender.",
+          "timerSeconds": 210
+        },
+        {
+          "text": "Stir in the soy sauce and sugar, return the tempeh and toss until everything is sticky and glossy.",
+          "timerSeconds": 150
+        },
+        {
+          "text": "Serve the stir-fry over warm cooked brown rice.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Sticky tempeh stir-fry"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Indian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp cumin seeds",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 garlic cloves, crushed",
+          "unit": "clove"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 15,
+          "text": "1 thumb-sized piece of ginger, grated",
+          "unit": "gram"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": false,
+          "quantity": 3,
+          "text": "3 green chillies, chopped",
+          "unit": "piece"
+        },
+        {
+          "food": "canned-tomatoes",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 g tin chopped tomatoes",
+          "unit": "gram"
+        },
+        {
+          "food": "turmeric",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp turmeric",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "kidney-beans-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 480,
+          "text": "2 tins red kidney beans, drained and rinsed",
+          "unit": "gram"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 ml hot water",
+          "unit": "millilitre"
+        },
+        {
+          "food": "coriander",
+          "garnish": true,
+          "optional": false,
+          "quantity": 15,
+          "text": "1 handful chopped coriander",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 4,
+      "slug": "simple-rajma-curry",
+      "steps": [
+        {
+          "text": "Warm the oil in a lidded pan and let the cumin seeds sizzle for about 20 seconds.",
+          "timerSeconds": 20
+        },
+        {
+          "text": "Add the garlic for a minute, then stir in the tomatoes, ginger, chilli and turmeric.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Turn the heat up and cook, breaking up the tomato, for about 10 minutes until thick and jammy.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Add the drained beans and water, cover, and simmer until the beans are soft and the sauce clings.",
+          "timerSeconds": 1080
+        },
+        {
+          "text": "Stir through the coriander, loosen with a little water if needed; the rajma keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Simple rajma curry"
+    },
+    {
+      "cookMinutes": 20,
+      "cuisine": "Indian",
+      "dietFlags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-rice",
+          "garnish": false,
+          "optional": false,
+          "quantity": 100,
+          "text": "100 g basmati rice",
+          "unit": "gram"
+        },
+        {
+          "food": "cauliflower",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g cauliflower, cut into bite-sized pieces",
+          "unit": "gram"
+        },
+        {
+          "food": "onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 onion, diced",
+          "unit": "piece"
+        },
+        {
+          "food": "bell-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 red pepper, cubed",
+          "unit": "piece"
+        },
+        {
+          "food": "green-beans",
+          "garnish": false,
+          "optional": false,
+          "quantity": 60,
+          "text": "60 g green beans, trimmed and halved",
+          "unit": "gram"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 10,
+          "text": "1 thumb of ginger, finely chopped",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp olive oil",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "curry-powder",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp curry powder",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "coconut-milk-canned",
+          "garnish": false,
+          "optional": false,
+          "quantity": 400,
+          "text": "400 ml tin coconut milk",
+          "unit": "millilitre"
+        },
+        {
+          "food": "lime",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 lime, juiced",
+          "unit": "piece"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "easy-coconut-cauliflower-curry",
+      "steps": [
+        {
+          "text": "Cook the rice following the packet instructions so it is ready when the curry is.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Soften the onion, pepper and ginger in the oil over medium heat until the onion turns translucent.",
+          "timerSeconds": 420
+        },
+        {
+          "text": "Stir in the curry powder for a minute, then pour in the coconut milk and bring to a boil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Add the cauliflower, turn down the heat and simmer for 5 minutes, then add the green beans.",
+          "timerSeconds": 300
+        },
+        {
+          "text": "Simmer for 10 more minutes until the cauliflower is tender and the sauce is creamy.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Squeeze in the lime juice and serve over the rice; the curry keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Easy coconut cauliflower curry"
+    },
+    {
+      "cookMinutes": 25,
+      "cuisine": "Russian",
+      "dietFlags": [
+        "vegetarian"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "mushroom",
+          "garnish": false,
+          "optional": false,
+          "quantity": 680,
+          "text": "680 g portobello and shiitake mushrooms, sliced",
+          "unit": "gram"
+        },
+        {
+          "food": "butter",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 tbsp butter, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp salt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "flour",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp plain flour",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "vegetable-stock",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 ml mushroom or vegetable stock",
+          "unit": "millilitre"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp soy sauce",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "mustard",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp Dijon mustard",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "greek-yoghurt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 120,
+          "text": "120 g Greek yoghurt",
+          "unit": "gram"
+        },
+        {
+          "food": "egg-noodles",
+          "garnish": false,
+          "optional": false,
+          "quantity": 300,
+          "text": "300 g egg noodles, to serve",
+          "unit": "gram"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp chopped parsley",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 4,
+      "slug": "mushroom-stroganoff",
+      "steps": [
+        {
+          "text": "Slice the mushrooms into thick strips, then halve each strip so the pieces hold their shape.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Brown the portobellos in half the butter with salt, then the shiitakes in the rest, until golden but firm.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Return everything to the pan, sprinkle over the flour and toss for 30 seconds until it coats the mushrooms.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir in the stock, soy sauce and mustard, scraping up the browned bits, and simmer until slightly thickened.",
+          "timerSeconds": 660
+        },
+        {
+          "text": "Meanwhile cook the egg noodles in salted water following the packet, then drain.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Remove the pan from the heat and stir in the yoghurt and parsley until creamy.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Serve over the noodles; the stroganoff keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Mushroom stroganoff"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Moroccan",
+      "dietFlags": [
+        "pescatarian",
+        "mediterranean"
+      ],
+      "equipment": [
+        "oven"
+      ],
+      "ingredients": [
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 lemons",
+          "unit": "piece"
+        },
+        {
+          "food": "paprika",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp paprika",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cumin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tsp ground cumin",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 large garlic clove, crushed",
+          "unit": "clove"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 4,
+          "text": "4 spring onions, thinly sliced, divided",
+          "unit": "piece"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "salmon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 250,
+          "text": "2 boneless, skinless salmon fillets",
+          "unit": "gram"
+        },
+        {
+          "food": "couscous",
+          "garnish": false,
+          "optional": false,
+          "quantity": 140,
+          "text": "140 g couscous",
+          "unit": "gram"
+        },
+        {
+          "food": "honey",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp honey",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "mint",
+          "garnish": false,
+          "optional": false,
+          "quantity": 10,
+          "text": "1 small handful mint leaves, finely sliced",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 15,
+      "servings": 2,
+      "slug": "spiced-honey-salmon-with-lemon-couscous",
+      "steps": [
+        {
+          "text": "Heat the oven to 200C (180C fan) and line a baking tray with foil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Zest one lemon, then mix zest, half the juice, spices, garlic, half the spring onions and 2 tsp oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Spoon the mixture over the salmon in a shallow dish and leave for 10 minutes.",
+          "timerSeconds": 600
+        },
+        {
+          "text": "Mix the couscous with the leftover lemon juice, remaining oil, spring onions and 150 ml boiling water, then cover.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Roast the salmon on the foil with its marinade, drizzling with honey for the last 5 minutes.",
+          "timerSeconds": 900
+        },
+        {
+          "text": "Fluff the couscous with a fork, fold in the mint, and serve with the salmon and lemon wedges.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Spiced honey salmon with lemon couscous"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "Japanese",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "pork-loin",
+          "garnish": false,
+          "optional": false,
+          "quantity": 225,
+          "text": "225 g thinly sliced pork loin",
+          "unit": "gram"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp vegetable oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 30,
+          "text": "5 cm fresh ginger, finely grated",
+          "unit": "gram"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.5,
+          "text": "1 1/2 tbsp soy sauce, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "miso",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 tbsp miso",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "sugar",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp sugar",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp water, divided",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "cabbage",
+          "garnish": false,
+          "optional": true,
+          "quantity": 100,
+          "text": "100 g shredded cabbage, to serve",
+          "unit": "gram"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 20,
+      "servings": 2,
+      "slug": "miso-ginger-pork",
+      "steps": [
+        {
+          "text": "Grate the ginger, squeeze its juice into a bowl, and set a teaspoon of the pulp aside.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Toss the pork in the ginger juice with half a tablespoon of soy sauce and 1 tablespoon of water.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Whisk the remaining soy sauce and water with the miso, sugar and reserved ginger in a small bowl.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Heat the oil in a wide frying pan over medium-high heat until it shimmers.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Lay the pork in a single layer in the hot oil and leave it until golden underneath.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Flip the pork and cook until no pink remains.",
+          "timerSeconds": 90
+        },
+        {
+          "text": "Pour in the sauce and turn the pork until glossy and coated.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pile the pork beside shredded cabbage on plates; the miso ginger pork keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Miso ginger pork"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Chinese",
+      "dietFlags": [
+        "pescatarian"
+      ],
+      "equipment": [
+        "oven",
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "white-fish",
+          "garnish": false,
+          "optional": false,
+          "quantity": 360,
+          "text": "2 white fish fillets (180 g each), about 1.5 cm thick",
+          "unit": "gram"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch salt",
+          "unit": "pinch"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 pinch black pepper",
+          "unit": "pinch"
+        },
+        {
+          "food": "spring-onion",
+          "garnish": false,
+          "optional": false,
+          "quantity": 40,
+          "text": "4 spring onions, green parts, sliced on the diagonal",
+          "unit": "gram"
+        },
+        {
+          "food": "ginger",
+          "garnish": false,
+          "optional": false,
+          "quantity": 20,
+          "text": "20 g fresh ginger, cut into fine matchsticks",
+          "unit": "gram"
+        },
+        {
+          "food": "chilli",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 red chilli, deseeded and cut into fine strips",
+          "unit": "piece"
+        },
+        {
+          "food": "soy-sauce",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp soy sauce",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "sesame-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tsp toasted sesame oil",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "vegetable-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp vegetable oil",
+          "unit": "tablespoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 5,
+      "servings": 2,
+      "slug": "sizzling-ginger-steamed-fish",
+      "steps": [
+        {
+          "text": "Heat the oven to 200C (180C fan) and lay each fillet on baking paper over foil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Season both sides of the fish with salt and pepper, then fold the paper and foil into sealed parcels.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Bake the parcels until the fish flakes easily when pressed with a fork.",
+          "timerSeconds": 720
+        },
+        {
+          "text": "Fold the parcels open into boats and rest 3 minutes while the oil heats in a small pan.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Pile the spring onion, ginger and chilli on the fish and drizzle over the soy sauce and sesame oil.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Pour the hot oil over the topping so it sizzles loudly, then serve at once from the foil boats.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Sizzling ginger steamed fish"
+    },
+    {
+      "cookMinutes": 10,
+      "cuisine": "French",
+      "dietFlags": [],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "chicken-thigh",
+          "garnish": false,
+          "optional": false,
+          "quantity": 700,
+          "text": "700 g boneless, skinless chicken thighs",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1.5,
+          "text": "1 1/2 tbsp olive oil",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.75,
+          "text": "3/4 tsp salt, divided",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.5,
+          "text": "1/2 tsp black pepper, divided",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "cream",
+          "garnish": false,
+          "optional": false,
+          "quantity": 125,
+          "text": "125 ml double cream",
+          "unit": "millilitre"
+        },
+        {
+          "food": "mustard",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "1 tbsp Dijon mustard and 1 tbsp wholegrain mustard",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 to 2 tbsp water, to loosen the sauce",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "parsley",
+          "garnish": true,
+          "optional": true,
+          "quantity": 2,
+          "text": "2 tsp chopped parsley",
+          "unit": "teaspoon"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 5,
+      "servings": 4,
+      "slug": "creamy-mustard-chicken",
+      "steps": [
+        {
+          "text": "Season the chicken thighs on both sides with two thirds of the salt and half of the pepper.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Sear the chicken in the oil over medium-high heat, smooth side down, until deep golden.",
+          "timerSeconds": 240
+        },
+        {
+          "text": "Turn the chicken and cook the other side until cooked through, then move to a plate.",
+          "timerSeconds": 180
+        },
+        {
+          "text": "Scrape out any loose black specks, keeping the browned film stuck to the pan.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Stir the cream, both mustards and remaining seasoning into the pan over medium heat, scraping up the browned bits.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Thin with water if needed and spoon over the chicken; the mustard chicken keeps for 3 days in the fridge.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Creamy mustard chicken"
+    },
+    {
+      "cookMinutes": 15,
+      "cuisine": "Italian",
+      "dietFlags": [
+        "pescatarian",
+        "mediterranean"
+      ],
+      "equipment": [
+        "stovetop"
+      ],
+      "ingredients": [
+        {
+          "food": "pasta",
+          "garnish": false,
+          "optional": false,
+          "quantity": 200,
+          "text": "200 g spaghetti",
+          "unit": "gram"
+        },
+        {
+          "food": "canned-tuna",
+          "garnish": false,
+          "optional": false,
+          "quantity": 285,
+          "text": "285 g canned tuna in oil, drained",
+          "unit": "gram"
+        },
+        {
+          "food": "olive-oil",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 tbsp olive oil (or the oil from the tuna)",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "garlic",
+          "garnish": false,
+          "optional": false,
+          "quantity": 2,
+          "text": "2 garlic cloves, finely minced",
+          "unit": "clove"
+        },
+        {
+          "food": "chilli-flakes",
+          "garnish": false,
+          "optional": true,
+          "quantity": 0.5,
+          "text": "1/2 tsp chilli flakes, optional",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "parsley",
+          "garnish": false,
+          "optional": true,
+          "quantity": 1,
+          "text": "1 tbsp chopped parsley",
+          "unit": "tablespoon"
+        },
+        {
+          "food": "lemon",
+          "garnish": false,
+          "optional": false,
+          "quantity": 1,
+          "text": "1 lemon, zested and juiced",
+          "unit": "piece"
+        },
+        {
+          "food": "salt",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.25,
+          "text": "1/4 tsp salt",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "black-pepper",
+          "garnish": false,
+          "optional": false,
+          "quantity": 0.25,
+          "text": "1/4 tsp black pepper",
+          "unit": "teaspoon"
+        },
+        {
+          "food": "water",
+          "garnish": false,
+          "optional": false,
+          "quantity": 240,
+          "text": "240 ml starchy pasta cooking water, reserved",
+          "unit": "millilitre"
+        }
+      ],
+      "mealTypes": [
+        "dinner"
+      ],
+      "prepMinutes": 10,
+      "servings": 2,
+      "slug": "lemony-canned-tuna-pasta",
+      "steps": [
+        {
+          "text": "Boil the pasta in well salted water for a minute less than the packet says.",
+          "timerSeconds": 540
+        },
+        {
+          "text": "Scoop out a mug of the starchy cooking water, then drain the pasta.",
+          "timerSeconds": null
+        },
+        {
+          "text": "Warm the oil in the empty pot with the garlic and chilli flakes for a minute.",
+          "timerSeconds": 60
+        },
+        {
+          "text": "Tip in the pasta with a splash of the cooking water and toss until it turns glossy.",
+          "timerSeconds": 120
+        },
+        {
+          "text": "Off the heat, fold in the tuna, parsley, lemon zest and juice, salt and pepper, keeping some chunks.",
+          "timerSeconds": null
+        }
+      ],
+      "title": "Lemony canned tuna pasta"
     }
   ]
 }
