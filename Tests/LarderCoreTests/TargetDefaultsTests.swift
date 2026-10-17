@@ -105,11 +105,10 @@ struct TargetDefaultsTests {
         #expect(Kitchen.isClose(protein.max, 70))
     }
 
-    @Test func hypertensionWithEatBetterUsesWHOSodium() throws {
-        let profile = Kitchen.profile(goal: .eatBetter)
-
+    @Test(arguments: Goal.allCases)
+    func hypertensionUsesWHOSodiumForEveryGoal(goal: Goal) throws {
         let targets = NutrientTargets.defaults(
-            for: profile, constraints: [Kitchen.constraint(.medical(.hypertension))], referenceYear: 2026
+            for: Kitchen.profile(goal: goal), constraints: [Kitchen.constraint(.medical(.hypertension))], referenceYear: 2026
         )
 
         let sodium = try #require(target(.sodium, in: targets))
@@ -117,10 +116,17 @@ struct TargetDefaultsTests {
         #expect(sodium.source == .who)
     }
 
-    @Test func hypertensionWithoutEatBetterKeepsDGASodium() {
+    @Test func hypertensionKeepsAChildsLowerDGASodium() {
         let targets = NutrientTargets.defaults(
-            for: Kitchen.profile(goal: .saveMoney), constraints: [Kitchen.constraint(.medical(.hypertension))], referenceYear: 2026
+            for: Kitchen.profile(birthYear: 2017), constraints: [Kitchen.constraint(.medical(.hypertension))], referenceYear: 2026
         )
+
+        #expect(target(.sodium, in: targets)?.max == 1800)
+        #expect(target(.sodium, in: targets)?.source == .dga2025)
+    }
+
+    @Test func withoutHypertensionEatBetterKeepsDGASodium() {
+        let targets = NutrientTargets.defaults(for: Kitchen.profile(goal: .eatBetter), constraints: [], referenceYear: 2026)
 
         #expect(target(.sodium, in: targets)?.max == 2300)
         #expect(target(.sodium, in: targets)?.source == .dga2025)

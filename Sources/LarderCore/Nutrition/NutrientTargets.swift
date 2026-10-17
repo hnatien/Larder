@@ -26,7 +26,7 @@ public enum NutrientTargets {
         }
         targets.append(protein(weightKg: weightKg, capped: age < 18 || flags.contains(.chronicKidneyDisease)))
         targets.append(NutrientTarget(nutrient: .fiber, basis: .per1000kcal, target: 14, priority: 2, source: .dga2025))
-        targets.append(sodium(age: age, whoLimit: profile.goal == .eatBetter && flags.contains(.hypertension)))
+        targets.append(sodium(age: age, whoLimit: flags.contains(.hypertension)))
         targets.append(NutrientTarget(nutrient: .saturatedFat, basis: .percentEnergy, max: 10, priority: 2, source: .dga2025))
         // DGA 2025 sets no daily added-sugar amount (only 10 g per meal); the 10 % energy cap is WHO's free-sugars limit.
         targets.append(NutrientTarget(nutrient: .addedSugar, basis: .percentEnergy, max: 10, priority: 2, source: .who))
@@ -84,7 +84,7 @@ public enum NutrientTargets {
         )
     }
 
-    /// DGA limits by age (1,200 / 1,500 / 1,800 / 2,300 mg); WHO's 2,000 mg replaces a higher limit when asked for.
+    /// DGA limits by age (1,200 / 1,500 / 1,800 / 2,300 mg); with hypertension WHO's 2,000 mg replaces a higher limit, whatever the goal.
     private static func sodium(age: Int, whoLimit: Bool) -> NutrientTarget {
         let dgaMax: Double = switch age {
         case ...3: 1200
