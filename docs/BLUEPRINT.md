@@ -44,7 +44,7 @@ Rejected: a hard paywall (cuts the top of funnel the Mealime shutdown just opene
 | Project | XcodeGen `project.yml`, generated `.xcodeproj` git-ignored, one local SwiftPM package with many targets | Tuist, hand-maintained pbxproj |
 | Images | Imported recipe photos downloaded once, downsampled with ImageIO and read from local files | Nuke 13 (nothing loads remotely at display time); `AsyncImage` (caching only on iOS 27) |
 | Monetisation | StoreKit 2 with `SubscriptionStoreView`, trial, annual, monthly, win-back; proxy verifies JWS | RevenueCat (reconsider for paywall experiments) |
-| System | App Intents (entities for recipes, plans, "what's for dinner"), one interactive widget, HealthKit nutrition write | Live Activities, Watch, Mac target (v2) |
+| System | App Intents (entities for recipes, plans, "what's for dinner"), one interactive widget; a HealthKit nutrition write for cooked meals is deferred, and the entitlement ships only with it (2026-10-17) | Live Activities, Watch, Mac target (v2) |
 | On-device AI | Foundation Models behind `AssistantBackend` for pantry parsing, tagging, OCR and barcode flows; deterministic fallback | Depending on Apple Intelligence availability for core planning |
 | Cloud AI | Claude through a thin proxy that holds the key, checks App Attest and entitlement, meters per user, caches prompts | Shipping the key; direct App Attest path (iOS 27 only, no metering) |
 | Proxy runtime | Cloudflare Worker, TypeScript, `@anthropic-ai/sdk`, Zod structured outputs | Vercel or Supabase edge functions (either works; Workers has KV for quotas and the smallest cold start) |
@@ -139,7 +139,7 @@ WCAG 2.2 AA written bar, Apple's Nutrition Label criteria as the release gate. M
 
 ## 9. Privacy
 
-On-device-first storage; the sensitive profile (medical, religious) never leaves the device and never enters analytics; a consent screen before the first cloud assistant call; PII-free prompt builder; medical disclaimer at condition setup; HealthKit writes only user-logged data; request zero data retention from Anthropic once on a paid plan.
+On-device-first storage; the sensitive profile (medical, religious) never leaves the device and never enters analytics; a consent screen before the first cloud assistant call; PII-free prompt builder; medical disclaimer at condition setup; HealthKit, when it ships, writes only user-logged data; request zero data retention from Anthropic once on a paid plan.
 
 ## 10. Risks and the checks that catch them
 

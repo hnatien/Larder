@@ -42,10 +42,10 @@ Ordered by importance.
 2. Three seed foods have no defensible FDC match and stay `seedApproximate`: cream (FDC has no double cream), mixed seeds (no fixed blend) and vinegar (no white wine vinegar). Added sugar is `null` for every food because neither dataset reports it.
 3. `Tools/validate-seed.py` allows FDC foods a 20% energy tolerance (15% for approximate foods), sugar up to 5% above carbohydrate, and no energy check for foods tagged `alcohol`, because FDC's own records need it.
 4. The medical disclaimer, allergen wording and paywall copy need a registered dietitian and counsel review (GDPR Article 9, Washington MHMDA, App Store 1.4.1).
-5. Live camera scanning UI (DataScannerViewController) is not wired; image-based barcode and receipt reading exists. Add food offers typing and one-tap staples only.
+5. Barcode scanning in Add food matches `Food.gtin` only, and no seed food has a barcode yet, so every scan currently asks for a name. Open Food Facts lookup was declined on 2026-10-17 because it would send each barcode to a third party; a local table that remembers a barcode once the user names it is the next step. The live scanner is untested on a device; the Simulator has none and shows the photo fallback.
 6. `App/Larder/RootView.swift` and the App Intents (`WhatsForDinnerIntent`, `OpenTonightIntent`, `LarderShortcuts`) still use local strings; App Intents strings probably belong in an app-target catalogue.
 7. The App Group container for the widget is unverified without code signing; the widget shows "Nothing planned" when the container is unavailable.
-8. `ParsedPantryLine` has no best-by field, so model-extracted best-by hints are dropped.
+8. HealthKit is not declared: the entitlement and usage strings were removed on 2026-10-17 because nothing wrote to Health. The cooked-meal nutrition write (blueprint section 3) needs them back, with a portion-eaten model, when it is built.
 9. The parse-pantry system prompt is under the 512-token caching minimum; it will not cache.
 10. Not run: a real StoreKit sandbox purchase, VoiceOver and Voice Control manual passes, a physical device.
 11. Pantry amounts are stored in grams; counts such as "6 eggs" are derived from the food's countable portion, so an item without one shows grams.
