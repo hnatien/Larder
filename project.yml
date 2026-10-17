@@ -35,7 +35,6 @@ targets:
       path: App/Larder/Larder.entitlements
       properties:
         com.apple.developer.devicecheck.appattest-environment: production
-        com.apple.developer.healthkit: true
         com.apple.security.application-groups:
           - group.com.larder.app
     dependencies:
@@ -74,10 +73,6 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: >-
           UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown
           UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
-        INFOPLIST_KEY_NSHealthShareUsageDescription: >-
-          Larder does not read data from Health. If a feature ever needs to, Larder will ask you before reading anything.
-        INFOPLIST_KEY_NSHealthUpdateUsageDescription: >-
-          Larder saves the nutrients of meals you mark as cooked to Health. It only writes what you log.
         INFOPLIST_KEY_NSCameraUsageDescription: >-
           Larder uses the camera to scan barcodes and receipts so you can add food to your pantry. Images stay on this device.
         TARGETED_DEVICE_FAMILY: "1,2"
