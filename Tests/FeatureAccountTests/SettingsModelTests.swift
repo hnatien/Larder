@@ -38,6 +38,7 @@ struct SettingsModelTests {
         #expect(model.profile == sampleProfile)
         #expect(model.constraints == [peanut])
         #expect(model.error == nil)
+        #expect(model.hasLoaded)
     }
 
     @Test func loadFailureSetsError() async {
@@ -49,9 +50,11 @@ struct SettingsModelTests {
             exporter: ExportBuilder(profiles: repository, recipes: library, pantry: library, plans: library),
             preferences: ComfortPreferences(store: flags), dates: FixedDates(), deleteAllData: {}
         )
+        #expect(!model.hasLoaded)
         await model.load()
         #expect(model.error == .loadFailed)
         #expect(model.profile == nil)
+        #expect(model.hasLoaded)
     }
 
     @Test func showNumbersPersists() async {
@@ -148,6 +151,28 @@ struct SettingsModelTests {
         await model.add(.allergen(.egg))
         await model.add(.intolerance("   "))
         #expect(await repository.storedConstraints.count == 1)
+    }
+
+    @Test func typedRepeatsMatchIgnoringCaseAndAccents() async {
+        let (model, repository) = await loaded()
+        await model.add(.dislike(.name("Olives")))
+        await model.add(.dislike(.name(" olives ")))
+        await model.add(.intolerance("Lactose"))
+        await model.add(.intolerance("LACTOSE"))
+        await model.add(.intolerance("Crème fraîche"))
+        #expect(model.contains(.intolerance("creme fraiche")))
+        #expect(!model.contains(.intolerance("  ")))
+        #expect(await repository.storedConstraints.map(\.kind)
+            == [.dislike(.name("Olives")), .intolerance("Lactose"), .intolerance("Crème fraîche")])
+    }
+
+    @Test func clearingTheErrorHidesIt() async {
+        let (model, repository) = await loaded()
+        await repository.setFailsSaves(true)
+        await model.setShowsNumbers(true)
+        #expect(model.error == .saveFailed)
+        model.clearError()
+        #expect(model.error == nil)
     }
 
     @Test func removingAMedicalAllergenNeedsConfirmation() async {

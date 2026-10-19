@@ -18,6 +18,8 @@ public final class SettingsModel {
     public private(set) var profile: UserProfile?
     public private(set) var constraints: [DietaryConstraint] = []
     public private(set) var isLoading = false
+    /// False until the first load has finished, so the screen doesn't show its lower sections before the profile.
+    public private(set) var hasLoaded = false
     public private(set) var error: SettingsError?
     /// A medical constraint waiting for the user to confirm its removal.
     public private(set) var pendingRemoval: DietaryConstraint?
@@ -68,7 +70,10 @@ public final class SettingsModel {
     /// Loads the profile and constraints.
     public func load() async {
         isLoading = true
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            hasLoaded = true
+        }
         do {
             profile = try await profiles.profile()
             constraints = try await profiles.constraints()
@@ -117,9 +122,10 @@ public final class SettingsModel {
         constraints.filter { $0.axis == axis }
     }
 
-    /// Whether a constraint of `kind` already exists.
+    /// Whether a constraint of `kind` already exists; typed names match ignoring case, accents and outer spaces.
     public func contains(_ kind: ConstraintKind) -> Bool {
-        constraints.contains { $0.kind == kind }
+        guard let kind = Self.normalised(kind) else { return false }
+        return constraints.contains { Self.isSame($0.kind, kind) }
     }
 
     /// Adds a user constraint on its kind's axis; blank text and repeats are ignored.
@@ -194,6 +200,11 @@ public final class SettingsModel {
         lastRemoved = nil
     }
 
+    /// Clears the current error.
+    public func clearError() {
+        error = nil
+    }
+
     @discardableResult
     private func updateProfile(_ change: (inout UserProfile) -> Void) async -> Bool {
         guard var updated = profile else { return false }
@@ -240,6 +251,15 @@ public final class SettingsModel {
             return trimmed.isEmpty ? nil : .dislike(.name(trimmed))
         default:
             return kind
+        }
+    }
+
+    private static func isSame(_ lhs: ConstraintKind, _ rhs: ConstraintKind) -> Bool {
+        switch (lhs, rhs) {
+        case let (.intolerance(left), .intolerance(right)), let (.dislike(.name(left)), .dislike(.name(right))):
+            left.compare(right, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
+        default:
+            lhs == rhs
         }
     }
 }
