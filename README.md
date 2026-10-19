@@ -19,7 +19,7 @@ A fresh install starts at onboarding. The seed foods and recipes load on first l
 
 ### Assistant proxy
 
-`LarderProxyBaseURL` in the app's Info.plist comes from the `LARDER_PROXY_BASE_URL` build setting in `project.yml`: Debug uses `http://localhost:8787`, where `npx wrangler dev` in `Server/larder-proxy` serves the proxy (see its README), and Release uses the placeholder `https://proxy.larder.app` until the proxy is deployed.
+`LarderProxyBaseURL` in the app's Info.plist comes from the `LARDER_PROXY_BASE_URL` build setting in `project.yml`: Debug uses `http://localhost:8787`, where `Scripts/proxy.sh` serves the proxy (see its README), and Release uses the placeholder `https://proxy.larder.app` until the proxy is deployed.
 Devices prove themselves with App Attest: the app attests a Secure Enclave key once, then signs an assertion for each session. The Simulator has no App Attest, so Debug builds there send the development attestation secret from the `LARDER_DEV_CLIENT_SECRET` environment variable instead. `Scripts/generate.sh` puts it in the scheme's Run environment, taking it from that variable or else from `DEV_CLIENT_SECRET` in `Server/larder-proxy/.dev.vars`; the generated project is git-ignored, so the secret never reaches source. Run the app from Xcode to get it; `simctl launch` needs `SIMCTL_CHILD_LARDER_DEV_CLIENT_SECRET` instead. Release builds never send it.
 The cloud assistant is only called after the user allows AI help; everything else runs on device.
 
@@ -34,6 +34,7 @@ The `Larder` scheme's Run action uses `App/Larder/Resources/Larder.storekit`, so
 | `Scripts/test-packages.sh` | `swift test` for every LarderKit target; extra arguments pass through, e.g. `--filter LarderCoreTests` |
 | `Scripts/generate.sh` | Generates `Larder.xcodeproj` from `project.yml` |
 | `Scripts/build-app.sh` | Builds the Larder app and widget for the first available iPhone simulator |
+| `Scripts/proxy.sh` | Serves the assistant proxy on `http://localhost:8787` for Debug builds; needs `Server/larder-proxy/.dev.vars`, installs its packages on first run, and passes extra arguments to `wrangler dev` |
 | `Scripts/test-app.sh` | Runs the UI tests on the same simulator: accessibility audits of every tab, Settings and onboarding, an AX3 Dynamic Type pass and the screenshots; extra arguments pass to `xcodebuild`, e.g. `-only-testing:LarderUITests/LarderUITests/testDynamicTypeAX3` |
 | `Scripts/screenshots.sh` | Runs only the screenshot test, writing every screen (welcome, setup, each tab, empty states, the planned week, meal sheet, recipe detail, cooking, adding and editing food, Settings) in light and dark mode to `docs/screenshots/<screen>-<light\|dark>.png` |
 
