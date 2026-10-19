@@ -66,6 +66,8 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Acknowledgements"].waitForExistence(timeout: Self.loadTimeout), "Acknowledgements did not open")
         let grdb = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Gwendal Roué")).firstMatch
         XCTAssertTrue(grdb.exists, "The GRDB licence is missing")
+        // At rest the warranty paragraph sits against the bottom of the sheet, where the audit reports it as clipped
+        // although it wraps freely; scrolled clear of that edge, the same paragraph and the font licences pass.
         app.swipeUp()
         try auditSettled(app)
     }
