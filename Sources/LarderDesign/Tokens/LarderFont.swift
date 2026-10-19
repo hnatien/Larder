@@ -35,6 +35,18 @@ public enum LarderFont {
         return hasBundledFonts
     }
 
+    /// The licence files shipped next to the fonts, unchanged, Fraunces first.
+    static let licenceFileNames = ["Fraunces-OFL", "CommitMono-OFL"]
+
+    /// The full text of each bundled font's licence, for the acknowledgements screen; a file missing from the bundle is left out.
+    public static var licenceTexts: [String] {
+        licenceFileNames.compactMap { name in
+            let url = Bundle.module.url(forResource: name, withExtension: "txt")
+                ?? Bundle.module.url(forResource: name, withExtension: "txt", subdirectory: "Fonts")
+            return url.flatMap { try? String(contentsOf: $0, encoding: .utf8) }
+        }
+    }
+
     /// Fraunces static instance for display text, scaling with Dynamic Type; falls back to the system serif.
     public static func display(_ style: Font.TextStyle) -> Font {
         let spec = displaySpec(for: style)

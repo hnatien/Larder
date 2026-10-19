@@ -19,6 +19,12 @@ struct FontRegistrationTests {
         #expect(LarderFont.hasBundledFonts)
     }
 
+    @Test func everyFontLicenceShipsInTheBundle() {
+        let texts = LarderFont.licenceTexts
+        #expect(texts.count == LarderFont.licenceFileNames.count)
+        for text in texts { #expect(text.contains("SIL OPEN FONT LICENSE")) }
+    }
+
     @Test func everyRequestedNameResolvesToThatExactFont() {
         #expect(LarderFont.registerBundledFonts())
         #expect(Self.requestedNames.count == 4)
