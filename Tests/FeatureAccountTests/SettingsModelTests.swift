@@ -175,6 +175,21 @@ struct SettingsModelTests {
         #expect(model.error == nil)
     }
 
+    @Test func equipmentSummaryListsWhatIsOnInCatalogueOrder() {
+        #expect(SettingsView.equipmentSummary([.stovetop, .oven]) == "Oven and Stovetop")
+        #expect(SettingsView.equipmentSummary([]) == "Not set")
+    }
+
+    @Test func theMedicalAddMenuKeepsAllergensAndConditionsApart() {
+        let sections = SettingsView.menuSections(SettingsView.addableKinds(on: .medical))
+        #expect(sections.map(\.title) == ["Allergies", "Health conditions"])
+        #expect(sections[0].kinds.allSatisfy { if case .allergen = $0 { true } else { false } })
+        #expect(sections[1].kinds.allSatisfy { if case .medical = $0 { true } else { false } })
+        let religious = SettingsView.menuSections(SettingsView.addableKinds(on: .religious))
+        #expect(religious.count == 1)
+        #expect(religious[0].title == nil)
+    }
+
     @Test func removingAMedicalAllergenNeedsConfirmation() async {
         let peanut = DietaryConstraint.userSet(.allergen(.peanut), at: referenceNow)
         let (model, repository) = await loaded(constraints: [peanut])

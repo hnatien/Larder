@@ -21,27 +21,28 @@ public struct SettingsView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: LarderSpacing.xl) {
-                if let error = model.error {
-                    InlineBanner(
-                        AccountCopy.message(for: error),
-                        action: error == .loadFailed ? .init(title: AccountCopy.Settings.tryAgain) { Task { await model.load() } } : nil
-                    )
-                }
-                if let profile = model.profile {
-                    // What Larder leaves out comes first: it is the safety setting, and setup may have been left for later.
-                    ForEach(SettingsModel.editableAxes, id: \.self) { axis in
-                        constraintSection(axis)
+                if !model.hasLoaded {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, LarderSpacing.xxl)
+                } else {
+                    if let profile = model.profile {
+                        // What Larder leaves out comes first: it is the safety setting, and setup may have been left for later.
+                        ForEach(SettingsModel.editableAxes, id: \.self) { axis in
+                            constraintSection(axis)
+                        }
+                        profileSection(profile)
                     }
-                    profileSection(profile)
+                    plusSection
+                    dataSection
+                    aboutSection
+                    deleteSection
                 }
-                plusSection
-                dataSection
-                aboutSection
-                deleteSection
             }
             .padding(LarderSpacing.l)
         }
         .background(LarderColor.surface.canvas)
+        .safeAreaInset(edge: .top, spacing: 0) { SettingsErrorBanner(model: model) }
         .larderToast(removalToast, onExpire: model.dismissRemovalUndo)
         .navigationTitle(AccountCopy.Settings.title)
         .task { await model.load() }
@@ -93,22 +94,24 @@ public struct SettingsView: View {
             }
             StackedPicker(
                 AccountCopy.Onboarding.cookTimeLabel,
+                value: Copy.Ledger.spokenMinutes(profile.maxCookMinutes),
                 selection: binding(profile.maxCookMinutes) { await model.setMaxCookMinutes($0) }
             ) {
                 ForEach(ProfileDefaults.cookMinuteChoices, id: \.self) { Text(Copy.Ledger.spokenMinutes($0)).tag($0) }
             }
-            StackedPicker(AccountCopy.Settings.goal, selection: binding(profile.goal) { await model.setGoal($0) }) {
+            StackedPicker(
+                AccountCopy.Settings.goal,
+                value: AccountCopy.name(of: profile.goal),
+                selection: binding(profile.goal) { await model.setGoal($0) }
+            ) {
                 ForEach(Goal.allCases, id: \.self) { Text(AccountCopy.name(of: $0)).tag($0) }
             }
-            DisclosureGroup(AccountCopy.Settings.equipment) {
-                ForEach(Equipment.allCases, id: \.self) { item in
-                    Toggle(
-                        AccountCopy.name(of: item),
-                        isOn: binding(profile.equipment.contains(item)) { await model.setEquipment(item, included: $0) }
-                    )
-                    .tint(LarderColor.accent.second)
-                }
+            NavigationLink {
+                EquipmentSettings(model: model)
+            } label: {
+                DrillInRow(AccountCopy.Settings.equipment, detail: Self.equipmentSummary(profile.equipment))
             }
+            .buttonStyle(.plain)
         }
         SettingsGroup(AccountCopy.Settings.nutrition) {
             LabelledToggle(
@@ -119,6 +122,7 @@ public struct SettingsView: View {
             VStack(alignment: .leading, spacing: LarderSpacing.xs) {
                 StackedPicker(
                     AccountCopy.Onboarding.birthYearLabel,
+                    value: model.displayedBirthYear.map(String.init) ?? AccountCopy.preferNotToSay,
                     selection: binding(model.displayedBirthYear) { await model.setBirthYear($0) }
                 ) {
                     Text(AccountCopy.preferNotToSay).tag(Int?.none)
@@ -171,25 +175,37 @@ public struct SettingsView: View {
         let options = Self.addableKinds(on: axis).filter { !model.contains($0) }
         if !options.isEmpty {
             Menu {
-                ForEach(options, id: \.self) { kind in
-                    Button(AccountCopy.name(of: kind)) { Task { await model.add(kind) } }
+                ForEach(Self.menuSections(options), id: \.title) { section in
+                    if let title = section.title {
+                        Section(title) { addButtons(section.kinds) }
+                    } else {
+                        addButtons(section.kinds)
+                    }
                 }
             } label: {
                 Label(AccountCopy.Settings.add(to: AccountCopy.name(of: axis)), systemImage: "plus.circle")
+                    .foregroundStyle(LarderColor.accent.second)
                     .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .contentShape(Rectangle())
             }
         }
         switch axis {
         case .medical:
-            DraftField(AccountCopy.Settings.addIntolerance, text: $intoleranceDraft) {
+            DraftField(AccountCopy.Settings.addIntolerance, text: $intoleranceDraft, isListed: { model.contains(.intolerance($0)) }) {
                 await model.add(.intolerance($0))
             }
         case .preference:
-            DraftField(AccountCopy.Settings.addDislike, text: $dislikeDraft) {
+            DraftField(AccountCopy.Settings.addDislike, text: $dislikeDraft, isListed: { model.contains(.dislike(.name($0))) }) {
                 await model.add(.dislike(.name($0)))
             }
         case .religious, .ethical, .goal:
             EmptyView()
+        }
+    }
+
+    private func addButtons(_ kinds: [ConstraintKind]) -> some View {
+        ForEach(kinds, id: \.self) { kind in
+            Button(AccountCopy.name(of: kind)) { Task { await model.add(kind) } }
         }
     }
 
@@ -249,21 +265,23 @@ public struct SettingsView: View {
 
     private var aboutSection: some View {
         SettingsGroup(AccountCopy.Settings.about) {
-            if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-                Text(AccountCopy.Settings.version(version))
+            if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+               let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+                Text(AccountCopy.Settings.version(version, build: build))
+                    .foregroundStyle(LarderColor.ink.secondary)
+                    .textSelection(.enabled)
             }
-            Text(AccountCopy.Settings.grdbLicence)
-            if LarderFont.hasBundledFonts {
-                Text(AccountCopy.Settings.fontLicence)
+            NavigationLink {
+                AcknowledgementsView()
+            } label: {
+                DrillInRow(AccountCopy.Settings.acknowledgements)
             }
-            Text(AccountCopy.Settings.usdaAttribution)
+            .buttonStyle(.plain)
             if let terms = LegalLinks.terms {
-                Link(AccountCopy.Settings.terms, destination: terms)
-                    .frame(minHeight: 44)
+                ExternalLinkRow(AccountCopy.Settings.terms, destination: terms)
             }
             if let privacy = LegalLinks.privacy {
-                Link(AccountCopy.Settings.privacy, destination: privacy)
-                    .frame(minHeight: 44)
+                ExternalLinkRow(AccountCopy.Settings.privacy, destination: privacy)
             }
         }
     }
@@ -282,6 +300,20 @@ public struct SettingsView: View {
         Binding(get: { value }, set: { newValue in Task { await save(newValue) } })
     }
 
+    /// The equipment that is on, as a sentence-style list, or "Not set" when plans don't check equipment at all.
+    static func equipmentSummary(_ equipment: Set<Equipment>) -> String {
+        let names = Equipment.allCases.filter(equipment.contains).map { AccountCopy.name(of: $0) }
+        return names.isEmpty ? AccountCopy.Settings.equipmentNotSet : names.formatted(.list(type: .and))
+    }
+
+    /// The Add menu's groups: allergens and health conditions apart, every other axis in one untitled group.
+    static func menuSections(_ kinds: [ConstraintKind]) -> [(title: String?, kinds: [ConstraintKind])] {
+        let allergens = kinds.filter { if case .allergen = $0 { true } else { false } }
+        let conditions = kinds.filter { if case .medical = $0 { true } else { false } }
+        guard !allergens.isEmpty || !conditions.isEmpty else { return [(nil, kinds)] }
+        return [(AccountCopy.Settings.allergies, allergens), (AccountCopy.Settings.conditions, conditions)].filter { !$0.kinds.isEmpty }
+    }
+
     /// The kinds offered under "Add" for an axis; an eating-disorder history is never offered.
     static func addableKinds(on axis: ConstraintAxis) -> [ConstraintKind] {
         switch axis {
@@ -297,14 +329,14 @@ public struct SettingsView: View {
     }
 }
 
-/// A titled card of settings rows with a hairline between rows, like an inset grouped list; the title is secondary ink
-/// so it keeps its contrast on the paper canvas.
-private struct SettingsGroup<Content: View>: View {
-    private let title: String
+/// A card of settings rows with a hairline between rows, like an inset grouped list; the optional title is secondary
+/// ink so it keeps its contrast on the paper canvas.
+struct SettingsGroup<Content: View>: View {
+    private let title: String?
     private let footer: String?
     private let content: Content
 
-    init(_ title: String, footer: String? = nil, @ViewBuilder content: () -> Content) {
+    init(_ title: String? = nil, footer: String? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
         self.footer = footer
         self.content = content()
@@ -312,12 +344,14 @@ private struct SettingsGroup<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: LarderSpacing.s) {
-            Text(title)
-                .font(LarderFont.body(.subheadline, weight: .semibold))
-                .foregroundStyle(LarderColor.ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, LarderSpacing.l)
-                .accessibilityAddTraits(.isHeader)
+            if let title {
+                Text(title)
+                    .font(LarderFont.body(.subheadline, weight: .semibold))
+                    .foregroundStyle(LarderColor.ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, LarderSpacing.l)
+                    .accessibilityAddTraits(.isHeader)
+            }
             PaperCard(padded: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     Group(subviews: content) { rows in
@@ -345,14 +379,36 @@ private struct SettingsGroup<Content: View>: View {
     }
 }
 
-/// A menu picker with its label above it, so a long label or value wraps instead of clipping.
+/// The settings error, pinned above the scroll view so a failed save far down the page is still seen.
+private struct SettingsErrorBanner: View {
+    let model: SettingsModel
+
+    var body: some View {
+        if let error = model.error {
+            InlineBanner(
+                AccountCopy.message(for: error),
+                action: error == .loadFailed ? .init(title: AccountCopy.Settings.tryAgain) { Task { await model.load() } } : nil,
+                dismissTitle: AccountCopy.Settings.dismiss,
+                onDismiss: model.clearError
+            )
+            .padding(.horizontal, LarderSpacing.l)
+            .padding(.vertical, LarderSpacing.s)
+            .background(LarderColor.surface.canvas)
+        }
+    }
+}
+
+/// A menu picker with its label above it, so a long label or value wraps instead of clipping. The value is drawn here
+/// rather than by the system picker so it lines up with the label.
 private struct StackedPicker<Value: Hashable, Options: View>: View {
     private let label: String
+    private let value: String
     @Binding private var selection: Value
     private let options: Options
 
-    init(_ label: String, selection: Binding<Value>, @ViewBuilder options: () -> Options) {
+    init(_ label: String, value: String, selection: Binding<Value>, @ViewBuilder options: () -> Options) {
         self.label = label
+        self.value = value
         self._selection = selection
         self.options = options()
     }
@@ -363,54 +419,172 @@ private struct StackedPicker<Value: Hashable, Options: View>: View {
                 .font(LarderFont.body(.body))
                 .foregroundStyle(LarderColor.ink.primary)
                 .fixedSize(horizontal: false, vertical: true)
-            Picker(label, selection: $selection) { options }
-                .labelsHidden()
-                .pickerStyle(.menu)
+                .accessibilityHidden(true)
+            Menu {
+                Picker(label, selection: $selection) { options }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+            } label: {
+                HStack(spacing: LarderSpacing.xs) {
+                    Text(value)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .imageScale(.small)
+                        .accessibilityHidden(true)
+                }
+                .foregroundStyle(LarderColor.accent.second)
+                .frame(minHeight: 44, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .accessibilityLabel(label)
+            .accessibilityValue(value)
         }
     }
 }
 
-/// A text field with an Add button that submits trimmed, non-empty text and clears itself.
+/// A row that opens another settings page: a title, an optional summary under it and a chevron.
+private struct DrillInRow: View {
+    private let title: String
+    private let detail: String?
+
+    init(_ title: String, detail: String? = nil) {
+        self.title = title
+        self.detail = detail
+    }
+
+    var body: some View {
+        HStack(spacing: LarderSpacing.m) {
+            VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+                Text(title)
+                    .foregroundStyle(LarderColor.ink.primary)
+                if let detail {
+                    HintText(detail)
+                }
+            }
+            Spacer(minLength: 0)
+            Image(systemName: "chevron.right")
+                .font(LarderFont.body(.footnote, weight: .semibold))
+                .foregroundStyle(LarderColor.ink.tertiary)
+                .accessibilityHidden(true)
+        }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// A row that opens a web page outside Larder, marked with an arrow so it reads as a link.
+private struct ExternalLinkRow: View {
+    private let title: String
+    private let destination: URL
+
+    init(_ title: String, destination: URL) {
+        self.title = title
+        self.destination = destination
+    }
+
+    var body: some View {
+        Link(destination: destination) {
+            HStack(spacing: LarderSpacing.m) {
+                Text(title)
+                Spacer(minLength: 0)
+                Image(systemName: "arrow.up.right")
+                    .font(LarderFont.body(.footnote, weight: .semibold))
+                    .accessibilityHidden(true)
+            }
+            .foregroundStyle(LarderColor.accent.second)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .accessibilityAddTraits(.isLink)
+    }
+}
+
+/// A text field with an Add button that submits trimmed, non-empty text and clears itself; text already on the list
+/// is not added and says so.
 private struct DraftField: View {
     private let label: String
     @Binding private var text: String
+    private let isListed: (String) -> Bool
     private let submit: (String) async -> Void
 
-    init(_ label: String, text: Binding<String>, submit: @escaping (String) async -> Void) {
+    init(_ label: String, text: Binding<String>, isListed: @escaping (String) -> Bool, submit: @escaping (String) async -> Void) {
         self.label = label
         self._text = text
+        self.isListed = isListed
         self.submit = submit
     }
 
     private var trimmed: String { text.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private var isDuplicate: Bool { !trimmed.isEmpty && isListed(trimmed) }
 
     var body: some View {
-        HStack {
-            // Vertical so it grows with Dynamic Type instead of clipping; Return adds rather than starting a new line.
-            TextField(label, text: $text, axis: .vertical)
-                .onSubmit(send)
-                .onChange(of: text) { _, new in
-                    if new.contains("\n") {
-                        text = new.replacingOccurrences(of: "\n", with: "")
-                        send()
+        VStack(alignment: .leading, spacing: LarderSpacing.xs) {
+            HStack {
+                // Vertical so it grows with Dynamic Type instead of clipping; Return adds rather than starting a new line.
+                TextField(label, text: $text, axis: .vertical)
+                    .onSubmit(send)
+                    .onChange(of: text) { _, new in
+                        if new.contains("\n") {
+                            text = new.replacingOccurrences(of: "\n", with: "")
+                            send()
+                        }
                     }
-                }
-                .padding(LarderSpacing.m)
-                .frame(minHeight: 44)
-                .background(LarderColor.surface.sunken, in: RoundedRectangle(cornerRadius: LarderRadius.field))
-            Button(AccountCopy.Settings.add, action: send)
-                .buttonStyle(.larderQuiet)
-                .disabled(trimmed.isEmpty)
-                .accessibilityLabel(label)
-                .accessibilityInputLabels([label, AccountCopy.Settings.add])
+                    .padding(LarderSpacing.m)
+                    .frame(minHeight: 44)
+                    .background(LarderColor.surface.sunken, in: RoundedRectangle(cornerRadius: LarderRadius.field))
+                Button(AccountCopy.Settings.add, action: send)
+                    .buttonStyle(.larderQuiet)
+                    .disabled(trimmed.isEmpty || isDuplicate)
+                    .accessibilityLabel(label)
+                    .accessibilityInputLabels([label, AccountCopy.Settings.add])
+            }
+            if isDuplicate {
+                HintText(AccountCopy.Settings.alreadyListed)
+            }
+        }
+        .onChange(of: isDuplicate) { _, duplicate in
+            if duplicate { AccessibilityNotification.Announcement(AccountCopy.Settings.alreadyListed).post() }
         }
     }
 
     private func send() {
         let value = trimmed
-        guard !value.isEmpty else { return }
+        guard !value.isEmpty, !isListed(value) else { return }
         text = ""
         Task { await submit(value) }
+    }
+}
+
+/// The equipment switches on their own page, so the list doesn't stretch the main settings page.
+private struct EquipmentSettings: View {
+    let model: SettingsModel
+
+    var body: some View {
+        ScrollView {
+            if let profile = model.profile {
+                SettingsGroup(footer: AccountCopy.Settings.equipmentHint) {
+                    ForEach(Equipment.allCases, id: \.self) { item in
+                        Toggle(
+                            AccountCopy.name(of: item),
+                            isOn: Binding(
+                                get: { profile.equipment.contains(item) },
+                                set: { included in Task { await model.setEquipment(item, included: included) } }
+                            )
+                        )
+                        .tint(LarderColor.accent.second)
+                    }
+                }
+                .padding(LarderSpacing.l)
+            }
+        }
+        .background(LarderColor.surface.canvas)
+        .safeAreaInset(edge: .top, spacing: 0) { SettingsErrorBanner(model: model) }
+        .navigationTitle(AccountCopy.Settings.equipment)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

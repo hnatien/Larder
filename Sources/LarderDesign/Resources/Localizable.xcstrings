@@ -598,6 +598,17 @@
         }
       }
     },
+    "Acknowledgements": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledgements"
+          }
+        }
+      }
+    },
     "Add": {
       "extractionState": "manual",
       "localizations": {
@@ -928,6 +939,17 @@
         }
       }
     },
+    "Allergies": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allergies"
+          }
+        }
+      }
+    },
     "Allergies and health": {
       "extractionState": "manual",
       "localizations": {
@@ -968,6 +990,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow AI help?"
+          }
+        }
+      }
+    },
+    "Already on the list.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already on the list."
           }
         }
       }
@@ -3778,6 +3811,17 @@
         }
       }
     },
+    "Not set": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set"
+          }
+        }
+      }
+    },
     "Not sure about this one": {
       "extractionState": "manual",
       "localizations": {
@@ -4302,6 +4346,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Planning your first week is free. Larder Plus plans every week and reads recipes and receipts from a photo."
+          }
+        }
+      }
+    },
+    "Plans skip recipes that need equipment you've turned off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans skip recipes that need equipment you've turned off."
           }
         }
       }
@@ -6419,13 +6474,13 @@
         }
       }
     },
-    "Version %@": {
+    "Version %@ (%@)": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Version %@"
+            "value": "Version %@ (%@)"
           }
         }
       }

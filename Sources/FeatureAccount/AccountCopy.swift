@@ -176,6 +176,7 @@ nonisolated enum AccountCopy {
         static var removedRule: String { String(localized: "Removed. Plans can include it again.", bundle: Copy.bundle) }
         static var undo: String { String(localized: "Undo", bundle: Copy.bundle) }
         static var tryAgain: String { String(localized: "Try again", bundle: Copy.bundle) }
+        static var dismiss: String { String(localized: "Dismiss", bundle: Copy.bundle) }
         static var deleteFooter: String { String(localized: "Erases everything on this iPhone and starts setup again.", bundle: Copy.bundle) }
 
         /// The Add menu under one group, named for it so each one reads differently.
@@ -185,9 +186,16 @@ nonisolated enum AccountCopy {
         static var dangerZone: String { String(localized: "Start over", bundle: Copy.bundle) }
         static var goal: String { String(localized: "What matters most", bundle: Copy.bundle) }
         static var equipment: String { String(localized: "Equipment", bundle: Copy.bundle) }
+        static var equipmentHint: String {
+            String(localized: "Plans skip recipes that need equipment you've turned off.", bundle: Copy.bundle)
+        }
+        static var equipmentNotSet: String { String(localized: "Not set", bundle: Copy.bundle) }
         static var leaveOut: String { String(localized: "What we leave out", bundle: Copy.bundle) }
         static var nothingLeftOut: String { String(localized: "Nothing yet.", bundle: Copy.bundle) }
         static var add: String { String(localized: "Add", bundle: Copy.bundle) }
+        static var alreadyListed: String { String(localized: "Already on the list.", bundle: Copy.bundle) }
+        static var allergies: String { String(localized: "Allergies", bundle: Copy.bundle) }
+        static var conditions: String { String(localized: "Health conditions", bundle: Copy.bundle) }
         static var removeShort: String { String(localized: "Remove", bundle: Copy.bundle) }
         static var addIntolerance: String { String(localized: "Add something else to leave out", bundle: Copy.bundle) }
         static var addDislike: String { String(localized: "Add a food you'd rather skip", bundle: Copy.bundle) }
@@ -214,7 +222,10 @@ nonisolated enum AccountCopy {
         }
         static var deleteConfirm: String { String(localized: "Delete everything", bundle: Copy.bundle) }
         static var about: String { String(localized: "About", bundle: Copy.bundle) }
-        static func version(_ version: String) -> String { String(localized: "Version \(version)", bundle: Copy.bundle) }
+        static func version(_ version: String, build: String) -> String {
+            String(localized: "Version \(version) (\(build))", bundle: Copy.bundle)
+        }
+        static var acknowledgements: String { String(localized: "Acknowledgements", bundle: Copy.bundle) }
         static var grdbLicence: String { String(localized: "GRDB, MIT License", bundle: Copy.bundle) }
         static var fontLicence: String { String(localized: "Fraunces and Commit Mono, SIL Open Font License", bundle: Copy.bundle) }
         static var usdaAttribution: String { String(localized: "Contains data from USDA FoodData Central.", bundle: Copy.bundle) }

@@ -44,6 +44,32 @@ final class LarderUITests: XCTestCase {
         try audit(app)
     }
 
+    /// The Settings pages past its first screen: Equipment and Acknowledgements.
+    @MainActor
+    func testSettingsPagesPassAccessibilityAudit() throws {
+        let app = launch()
+        open(.tonight, in: app)
+        app.navigationBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: Self.loadTimeout), "Settings did not open")
+
+        let equipment = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Equipment")).firstMatch
+        scroll(app, toHit: equipment)
+        equipment.tap()
+        XCTAssertTrue(app.navigationBars["Equipment"].waitForExistence(timeout: Self.loadTimeout), "Equipment did not open")
+        XCTAssertTrue(app.switches["Oven"].exists, "Equipment has no Oven switch")
+        try auditSettled(app)
+        app.navigationBars["Equipment"].buttons.element(boundBy: 0).tap()
+
+        let acknowledgements = app.buttons["Acknowledgements"]
+        scroll(app, toHit: acknowledgements)
+        acknowledgements.tap()
+        XCTAssertTrue(app.navigationBars["Acknowledgements"].waitForExistence(timeout: Self.loadTimeout), "Acknowledgements did not open")
+        let grdb = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Gwendal Roué")).firstMatch
+        XCTAssertTrue(grdb.exists, "The GRDB licence is missing")
+        app.swipeUp()
+        try auditSettled(app)
+    }
+
     @MainActor
     func testOnboardingPassesAccessibilityAudit() throws {
         let app = launch(["-LarderUITestOnboarding"])
@@ -366,6 +392,17 @@ final class LarderUITests: XCTestCase {
         XCTAssertTrue(button.waitForExistence(timeout: Self.launchTimeout), "No \(tab.rawValue) tab")
         button.tap()
         XCTAssertTrue(tab.loadedElement(in: app).waitForExistence(timeout: Self.loadTimeout), "\(tab.rawValue) did not finish loading")
+    }
+
+    /// Swipes up until `element` can be tapped, at most twenty times.
+    @MainActor
+    private func scroll(_ app: XCUIApplication, toHit element: XCUIElement) {
+        var swipes = 0
+        while !element.isHittable, swipes < 20 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(element.isHittable, "\(element) never came into view")
     }
 
     /// Lets a sheet finish presenting or resizing before the audit, which otherwise measures it scaled mid-animation.
