@@ -50,7 +50,7 @@ nonisolated enum AppStartupError: Error {
 @MainActor
 final class AppDependencies {
     /// Bump when the bundled seed files change so existing installs load them again.
-    static let seedVersion = 4
+    static let seedVersion = 5
     static let seedVersionKey = "seedVersion"
     private static let uiTestDefaultsSuite = "com.larder.Larder.uitest"
     private static let onDeviceWarmUpDelay = Duration.seconds(2)
